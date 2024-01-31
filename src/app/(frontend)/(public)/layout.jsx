@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} flex `}>
         <Navbar />
         <SideBar />
-        <main className="ml-56">{children}</main>
+        <main className="ml-60">{children}</main>
       </body>
     </html>
   );
