@@ -39,7 +39,7 @@ export default function ListVolume() {
           <FormBorder title={"List of Volume of Milk"}>
             <div className="flex flex-col   ">
               <div className=" flex justify-end">
-                <Link href={"/pasteurization/addPasteurization"}>
+                <Link href={"/volumeOfMilk/addVolumeOfMilk"}>
                   <button className="text-white bg-red-600 hover:bg-[#004a89] px-4 py-3 rounded-lg font-bold ">
                     + Add
                   </button>
@@ -49,17 +49,16 @@ export default function ListVolume() {
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3 px-2">
+                  <td className="py-3">
                     <input type="checkbox" name="" id="" />
                   </td>
-                  <td className="py-3 px-2">Id</td>
-                  <td className="py-3 px-2">Number of Donor </td>
-                  <td className="py-3 px-2">Pooling Date</td>
-                  <td className="py-3 px-2">Pooling Condition</td>
-                  <td className="py-3 px-2">Batch Name</td>
-                  <td className="py-3 px-2">Bottle Name</td>
-                  <td className="py-3 px-2">Expiry Date</td>
-                  <td className="py-3 px-2">Action</td>
+                  <td className="py-3">Id</td>
+                  <td className="py-3">Donor Name</td>
+                  <td className="py-3">Gestational Age</td>
+                  <td className="py-3">Date</td>
+                  <td className="py-3">Time</td>
+                  <td className="py-3">ML</td>
+                  <td className="py-3">Action</td>
                 </tr>
               </table>
             </div>
