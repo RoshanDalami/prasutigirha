@@ -1,0 +1,141 @@
+import FormBorder from "./reusableForm";
+
+export default function Stepper1() {
+  return (
+    <>
+      <form>
+        <FormBorder title={"Add Donor Records"}>
+          <div className="md:grid-cols-2 grid text-lg gap-4">
+            <div className="grid">
+              <label>
+                {" "}
+                Hospital Registration Number
+                <span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Hospital Registration Number"
+                className="inputStyle"
+              />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Date<span className="text-red-600">*</span>
+              </label>
+              <input type="date" placeholder="" className="inputStyle" />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Time<span className="text-red-600">*</span>
+              </label>
+              <input type="time" placeholder="" className="inputStyle" />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Donor Full Name<span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Donar Full Name"
+                className="inputStyle"
+              />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Donor Age<span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Donar Age"
+                className="inputStyle"
+              />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Education<span className="text-red-600">*</span>
+              </label>
+              <select className="inputStyle">
+                <option></option>
+              </select>
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Education<span className="text-red-600">*</span>
+              </label>
+              <select className="inputStyle">
+                <option></option>
+              </select>
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Address<span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Address"
+                className="inputStyle"
+              />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Contact Number<span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Contact Number"
+                className="inputStyle"
+              />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Present Age of Child (DOL)
+                <span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Present Age of Child"
+                className="inputStyle"
+              />
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Gestational Age ( WOG)<span className="text-red-600">*</span>
+              </label>
+              <select className="inputStyle">
+                <option></option>
+              </select>
+            </div>
+            <div className="grid">
+              <label>
+                {" "}
+                Mode Of Delivery<span className="text-red-600">*</span>
+              </label>
+              <select className="inputStyle">
+                <option></option>
+              </select>
+            </div>
+            <div className="grid">
+              <label>
+                {" "} 
+                Parity<span className="text-red-600">*</span>
+              </label>
+              <select className="inputStyle">
+                <option></option>
+              </select>
+            </div>
+          </div>
+        </FormBorder>
+      </form>
+    </>
+  );
+}
