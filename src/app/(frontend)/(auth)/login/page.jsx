@@ -74,7 +74,7 @@ const Login = () => {
             </div>
           </div>
           <div>
-            <button className="bg-red-600 text-white w-full rounded-md py-2 hover:bg-[#0b5ed7]">
+            <button className="bg-red-600 text-white w-full rounded-md py-2 hover:bg-[#052c65]">
               Login
             </button>
           </div>
@@ -84,4 +84,3 @@ const Login = () => {
   );
 };
 export default Login;
-
