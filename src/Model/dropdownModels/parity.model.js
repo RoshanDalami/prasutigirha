@@ -6,7 +6,7 @@ const paritySchema = new Schema({
         required:true
     },
     parityName:{
-        type:Number,
+        type:String,
         required:true
     }
 })

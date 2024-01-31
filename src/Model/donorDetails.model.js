@@ -1,4 +1,4 @@
 import mongoose , {Schema} from 'mongoose'
 
 
-export const DaanDarta = new mongoose.model("DaanDarta", daanDartaSchema);
+export const DaanDarta = mongoose.models.DaanDarta || mongoose.model("DaanDarta", daanDartaSchema);
