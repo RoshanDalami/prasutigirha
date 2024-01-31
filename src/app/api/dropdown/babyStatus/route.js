@@ -7,7 +7,7 @@ connect()
 export async function GET(){
     try {
         const babyStatusList = await BabyStatus.find({})
-        console.log(babyStatusList)
+        
         return NextResponse.json(babyStatusList,{status:200})
     } catch (error) {
         return NextResponse.json({message:"Internal Server Error"},{status:500})

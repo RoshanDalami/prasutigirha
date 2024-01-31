@@ -15,4 +15,3 @@ const babyTransferSchema = new Schema({
 const BabyTransfer = mongoose.models.BabyTransfer || mongoose.model('BabyTransfer',babyTransferSchema)
 export {BabyTransfer}
 
-

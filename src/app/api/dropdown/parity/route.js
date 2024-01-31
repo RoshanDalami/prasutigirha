@@ -5,8 +5,8 @@ connect();
 
 export async function GET(){
     try {
-        const parityList = await Parity.find({});
-        return NextResponse.json(parityList,{status:200})
+        const parity = await Parity.find({})
+        return NextResponse.json(parity,{status:200})
     } catch (error) {
         return NextResponse.json({message:"Internal Server Error"},{status:500})
     }
