@@ -1,18 +1,24 @@
-const RadioInput = ({ label }) => {
+
+import * as React from "react";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+
+export default function RadioInput({ label }) {
   return (
-    <div className="grid gap-2">
-      <label htmlFor="">{label}:</label>
-      <div className="flex gap-4">
-        <div className="flex gap-1">
-          <input type="radio" />
-          <label>Yes</label>
-        </div>
-        <div className="flex gap-1">
-          <input type="radio" />
-          <label>No</label>
-        </div>
-      </div>
-    </div>
+    <FormControl>
+      <FormLabel id="demo-radio-buttons-group-label">{label}</FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-radio-buttons-group-label"
+        defaultValue=""
+        name="radio-buttons-group"
+      >
+        <FormControlLabel value={true} control={<Radio />} label="Yes" />
+        <FormControlLabel value={false} control={<Radio />} label="No" />
+      </RadioGroup>
+    </FormControl>
   );
-};
-export default RadioInput;
+}
