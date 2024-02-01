@@ -25,7 +25,6 @@ ChartJS.register(
   Legend
 );
 
-
 export const baroptions = {
   responsive: true,
   plugins: {
@@ -113,15 +112,14 @@ export default function Dashboard() {
     },
   ];
 
-
   return (
     <div className="my-10 mx-10">
-      <div className="flex items-center justify-center gap-5 ">
+      <div className="flex items-center justify-center gap-5  ">
         {dashboarddata?.map((items) => {
           return (
             <div
               key={items.id}
-              className="shadow-md shadow-[#004a89] drop-shadow-xl"
+              className="shadow-md hover:scale-105 transform transition-transform ease-in-out duration-300 shadow-[#004a89] drop-shadow-xl"
             >
               <DashboardCard
                 title={items.title}
@@ -132,7 +130,7 @@ export default function Dashboard() {
           );
         })}
       </div>
-      <div className="grid md:grid-cols-2 grid-cols-1 my-10 gap-10 shadow-md ">
+      <div className="grid md:grid-cols-2 grid-cols-1 my-10 gap-10  ">
         <div className="w-[40vw] ">
           <Bar data={bardata} options={baroptions} />
         </div>
