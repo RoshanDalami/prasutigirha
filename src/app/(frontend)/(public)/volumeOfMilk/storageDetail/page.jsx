@@ -19,13 +19,7 @@ export default function Storagedetail() {
               </label>
               <input className="inputStyle" type="time" placeholder="." />
             </div>
-            <div className="grid">
-              <label className="text-lg">
-                Store By
-                <span className="text-lg text-red-600">*</span>
-              </label>
-              <input className="inputStyle" type="text" placeholder="." />
-            </div>
+            
           </div>
           <button className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-6 hover:bg-[#052c65]">
             Submit

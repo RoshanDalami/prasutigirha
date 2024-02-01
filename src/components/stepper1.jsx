@@ -1,12 +1,36 @@
+"use client";
+import { useState } from "react";
+import Button from "./button";
 import FormBorder from "./reusableForm";
-
 export default function Stepper1() {
+  const [isExternal, setIsExternal] = useState(false);
+  function handleExternal(e) {
+    setIsExternal(!isExternal);
+    e.preventDefault(false);
+  }
   return (
     <>
       <form>
+        {isExternal ? (
+          <div
+            className="font-bold text-xl flex justify-end"
+            onClick={handleExternal}
+          >
+            <Button>Internal</Button>
+          </div>
+        ) : (
+          <div
+            className="font-bold text-xl flex justify-end"
+            onClick={handleExternal}
+          >
+            <Button>External</Button>
+          </div>
+        )}
+
         <FormBorder title={"Add Donor Records"}>
           <div className="md:grid-cols-2 grid text-lg gap-4">
-            <div className="grid">
+            {/* <div className="grid"> */}
+            <div className={`grid ${isExternal ? "hidden" : "block"}`}>
               <label>
                 {" "}
                 Hospital Registration Number
@@ -126,7 +150,7 @@ export default function Stepper1() {
             </div>
             <div className="grid">
               <label>
-                {" "} 
+                {" "}
                 Parity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
