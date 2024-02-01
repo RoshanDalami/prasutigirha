@@ -17,10 +17,12 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} flex `}>
         <Navbar />
         <SideBar />
-        <main className="md:ml-60 mb-10">{children}</main>
-        <div className="flex justify-center  ">
-          <Footer />
-        </div>
+        <main className="md:ml-60 mb-10">
+          {children}
+          <div className="flex justify-center mt-10  ">
+            <Footer />
+          </div>
+        </main>
       </body>
     </html>
   );
