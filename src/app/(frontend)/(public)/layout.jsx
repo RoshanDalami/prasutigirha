@@ -2,6 +2,7 @@ import SideBar from "../../../components/SideBar";
 import { Inter } from "next/font/google";
 import "../../globals.css";
 import Navbar from "@/components/navbar";
+import Footer from "src/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,10 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} flex `}>
         <Navbar />
         <SideBar />
-        <main className="md:ml-60">{children}</main>
+        <main className="md:ml-60 mb-10">{children}</main>
+        <div className="flex justify-center  ">
+          <Footer />
+        </div>
       </body>
     </html>
   );
