@@ -1,108 +1,38 @@
 
-import { useEffect, useState } from "react";
+"use client";
+import { useState } from "react";
+import Button from "./button";
 import FormBorder from "./reusableForm";
-import { useForm } from "react-hook-form";
-import { FaStethoscope } from "react-icons/fa";
-import axios from "axios";
-import { urls } from "src/services/apiHelpers";
-
-const educationList = [
-  {id:1,name:"School Level"},
-  {id:2,name:"High School"},
-  {id:3,name:"Bachelor Degree"},
-  {id:4,name:"Master Degree"},
-  {id:5,name:"Doctorate"},
-  {id:6,name:"Other"},
-]
-export default async function Stepper1() {
-
-  const [gestiationlData, setGestiationalData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data, status } = await axios.get("/api/dropdown/gestational");
-      if (status === 200) {
-        setGestiationalData(data);
-      }
-    };
-    fetchData();
-  }, []);
-  
-
-  //mode of delivery
-  const [deliveryList,setDeliveryList]=useState([]);
-  useEffect(()=>{
-    const fetchData = async()=>{
-      const {data,status} = await axios.get(urls.getDelivery)
-      if(status === 200){
-        setDeliveryList(data)
-      }
-    }
-    fetchData()
-  },[])
-
-//   //mode of delivery options 
-  const deliveryOptions = deliveryList?.map((item,index)=>{
-   return(
-    <option key={index} value={item.deliveryId}>
-      {item.deliveryName}
-    </option>
-   )
-  })
-//   //education option
-  const educationOptions = educationList?.map((item,index)=>{
-    return(
-      <option key={index} value={item.name} >
-        {item.name}
-      </option>
-    )
-  })
-//   //parity
-  const [parityList,setParityList]=useState([]);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await axios.get(urls.getParity)
-      if(status === 200){
-        setParityList(data)
-      }
-    }
-    fetchData()
-  },[])
-// //parity options
-  const parityOptions = parityList?.map((item,index)=>{
-    return(
-      <option key={index} value={item.parityId}>
-        {item.parityName}
-      </option>
-    )
-  })
-
-  //ethnicity
-  const[ethnicityList,setEthnicityList]=useState([]);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await axios.get(urls.getEthnicity) 
-      if(status === 200){
-        setEthnicityList(data)
-      }
-    }
-    fetchData()
-  },[])
-//ethnicityOptions
-  const ethnicityOptions = ethnicityList?.map((item,index)=>{
-    return(
-      <option key={index} value={item.ethnicityName}>
-        {item.ethnicityName}
-      </option>
-    )
-  })
-
+export default function Stepper1() {
+  const [isExternal, setIsExternal] = useState(false);
+  function handleExternal(e) {
+    setIsExternal(!isExternal);
+    e.preventDefault(false);
+  }
 
   return (
     <>
       <form>
+        {isExternal ? (
+          <div
+            className="font-bold text-xl flex justify-end"
+            onClick={handleExternal}
+          >
+            <Button>Internal</Button>
+          </div>
+        ) : (
+          <div
+            className="font-bold text-xl flex justify-end"
+            onClick={handleExternal}
+          >
+            <Button>External</Button>
+          </div>
+        )}
+
         <FormBorder title={"Add Donor Records"}>
           <div className="md:grid-cols-2 grid text-lg gap-4">
-            <div className="grid">
+            {/* <div className="grid"> */}
+            <div className={`grid ${isExternal ? "hidden" : "block"}`}>
               <label>
                 {" "}
                 Hospital Registration Number
