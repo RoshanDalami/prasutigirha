@@ -1,6 +1,102 @@
-import FormBorder from "./reusableForm";
 
-export default function Stepper1() {
+import { useEffect, useState } from "react";
+import FormBorder from "./reusableForm";
+import { useForm } from "react-hook-form";
+import { FaStethoscope } from "react-icons/fa";
+import axios from "axios";
+import { urls } from "src/services/apiHelpers";
+
+const educationList = [
+  {id:1,name:"School Level"},
+  {id:2,name:"High School"},
+  {id:3,name:"Bachelor Degree"},
+  {id:4,name:"Master Degree"},
+  {id:5,name:"Doctorate"},
+  {id:6,name:"Other"},
+]
+export default async function Stepper1() {
+
+  const [gestiationlData, setGestiationalData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, status } = await axios.get("/api/dropdown/gestational");
+      if (status === 200) {
+        setGestiationalData(data);
+      }
+    };
+    fetchData();
+  }, []);
+  
+
+  //mode of delivery
+  const [deliveryList,setDeliveryList]=useState([]);
+  useEffect(()=>{
+    const fetchData = async()=>{
+      const {data,status} = await axios.get(urls.getDelivery)
+      if(status === 200){
+        setDeliveryList(data)
+      }
+    }
+    fetchData()
+  },[])
+
+//   //mode of delivery options 
+  const deliveryOptions = deliveryList?.map((item,index)=>{
+   return(
+    <option key={index} value={item.deliveryId}>
+      {item.deliveryName}
+    </option>
+   )
+  })
+//   //education option
+  const educationOptions = educationList?.map((item,index)=>{
+    return(
+      <option key={index} value={item.name} >
+        {item.name}
+      </option>
+    )
+  })
+//   //parity
+  const [parityList,setParityList]=useState([]);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status} = await axios.get(urls.getParity)
+      if(status === 200){
+        setParityList(data)
+      }
+    }
+    fetchData()
+  },[])
+// //parity options
+  const parityOptions = parityList?.map((item,index)=>{
+    return(
+      <option key={index} value={item.parityId}>
+        {item.parityName}
+      </option>
+    )
+  })
+
+  //ethnicity
+  const[ethnicityList,setEthnicityList]=useState([]);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status} = await axios.get(urls.getEthnicity) 
+      if(status === 200){
+        setEthnicityList(data)
+      }
+    }
+    fetchData()
+  },[])
+//ethnicityOptions
+  const ethnicityOptions = ethnicityList?.map((item,index)=>{
+    return(
+      <option key={index} value={item.ethnicityName}>
+        {item.ethnicityName}
+      </option>
+    )
+  })
+
+
   return (
     <>
       <form>
@@ -60,16 +156,18 @@ export default function Stepper1() {
                 Education<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Education--</option>
+                {educationOptions}
               </select>
             </div>
             <div className="grid">
               <label>
                 {" "}
-                Education<span className="text-red-600">*</span>
+                Ethnicity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Ethnicity--</option>
+                {ethnicityOptions}
               </select>
             </div>
             <div className="grid">
@@ -112,7 +210,16 @@ export default function Stepper1() {
                 Gestational Age ( WOG)<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>
+                  -- Select Gestiational --
+                </option>
+                {gestiationlData?.map((item, index) => {
+                  return (
+                    <option key={index} value={item.gestationalId}>
+                      {item.gestationalName}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div className="grid">
@@ -121,16 +228,18 @@ export default function Stepper1() {
                 Mode Of Delivery<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Mode of Delivery--</option>
+                {deliveryOptions}
               </select>
             </div>
             <div className="grid">
               <label>
-                {" "} 
+                {" "}
                 Parity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option>--Select Parity--</option>
+                {parityOptions}
               </select>
             </div>
           </div>
@@ -139,3 +248,5 @@ export default function Stepper1() {
     </>
   );
 }
+
+
