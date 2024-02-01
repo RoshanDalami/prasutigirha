@@ -25,6 +25,7 @@ ChartJS.register(
   Legend
 );
 
+
 export const baroptions = {
   responsive: true,
   plugins: {
@@ -111,6 +112,7 @@ export default function Dashboard() {
       imageName: "/assets/images/feeding-bottle.png",
     },
   ];
+
 
   return (
     <div className="my-10 mx-10">

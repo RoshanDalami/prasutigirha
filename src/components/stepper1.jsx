@@ -1,3 +1,4 @@
+
 "use client";
 import { useState } from "react";
 import Button from "./button";
@@ -8,6 +9,7 @@ export default function Stepper1() {
     setIsExternal(!isExternal);
     e.preventDefault(false);
   }
+
   return (
     <>
       <form>
@@ -84,16 +86,18 @@ export default function Stepper1() {
                 Education<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Education--</option>
+                {educationOptions}
               </select>
             </div>
             <div className="grid">
               <label>
                 {" "}
-                Education<span className="text-red-600">*</span>
+                Ethnicity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Ethnicity--</option>
+                {ethnicityOptions}
               </select>
             </div>
             <div className="grid">
@@ -136,7 +140,16 @@ export default function Stepper1() {
                 Gestational Age ( WOG)<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>
+                  -- Select Gestiational --
+                </option>
+                {gestiationlData?.map((item, index) => {
+                  return (
+                    <option key={index} value={item.gestationalId}>
+                      {item.gestationalName}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div className="grid">
@@ -145,7 +158,8 @@ export default function Stepper1() {
                 Mode Of Delivery<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Mode of Delivery--</option>
+                {deliveryOptions}
               </select>
             </div>
             <div className="grid">
@@ -154,7 +168,8 @@ export default function Stepper1() {
                 Parity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option>--Select Parity--</option>
+                {parityOptions}
               </select>
             </div>
           </div>
@@ -163,3 +178,5 @@ export default function Stepper1() {
     </>
   );
 }
+
+
