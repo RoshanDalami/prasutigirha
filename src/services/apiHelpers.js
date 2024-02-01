@@ -11,4 +11,5 @@ export const urls = {
     getEthnicity:`/api/dropdown/ethnicity`,
     login:`/api/user/login`,
     register:`/api/user/register`,
+    createOffice:`/api/office/createOffice`
 }
