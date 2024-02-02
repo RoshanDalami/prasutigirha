@@ -99,10 +99,10 @@ const donorPhysicalExaminationSchema = new mongoose.Schema({
 });
 
 const daanDartaSchema = new Schema({
-    userId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
-    },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   hosRegNo: {
     type: String,
   },
@@ -120,16 +120,14 @@ const daanDartaSchema = new Schema({
   donor_FullName: {
     type: String,
   },
-  donorAge:{
-    type:Number
+  donorAge: {
+    type: Number,
   },
   education: {
     type: String,
-    
   },
   ethnicity: {
     type: String,
-   
   },
   address: {
     type: String,
@@ -142,15 +140,12 @@ const daanDartaSchema = new Schema({
   },
   gestationalAge: {
     type: Number,
-    
   },
   modeOfDelivery: {
     type: Number,
-    
   },
   parity: {
     type: Number,
-    
   },
   isDonorActive: {
     type: Boolean,
@@ -175,7 +170,7 @@ const daanDartaSchema = new Schema({
   donorPhysicalExamination: donorPhysicalExaminationSchema,
 });
 
- const DaanDarta =
+const DaanDarta =
   mongoose.models.DaanDarta || mongoose.model("DaanDarta", daanDartaSchema);
 
-  export {DaanDarta}
+export { DaanDarta };
