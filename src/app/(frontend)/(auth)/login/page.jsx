@@ -12,23 +12,31 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
   const [showPw, setShowPw] = useState(false);
-  const router = useRouter()
-  const onSubmit = async(data)=>{
+  const router = useRouter();
+  const onSubmit = async (data) => {
     try {
-      const response = await axios.post(`${urls.login}`,data)
-      if(response.status === 200){
-        router.push('/')
+      const response = await axios.post(`${urls.login}`, data);
+      if (response.status === 200) {
+        router.push("/");
+        window.location.reload();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="flex gap-8 min-h-screen  justify-center items-center ">
-      <form className="md:w-[60%] w-full md:shadow-md  flex  items-center justify-center gap-8 " onSubmit={handleSubmit((data)=>onSubmit(data))} >
+      <form
+        className="md:w-[60%] w-full md:shadow-md  flex  items-center justify-center gap-8 "
+        onSubmit={handleSubmit((data) => onSubmit(data))}
+      >
         <div className="  md:block shadow-xl md:w-2/4 flex justify-center">
           <Image
             height={200}
@@ -50,7 +58,7 @@ const Login = () => {
           </div>
           <div className="grid gap-6">
             <p className="text-2xl my-4">Sign In</p>
-            
+
             <div className="grid relative ">
               <label>
                 Email <span className="text-red-600">*</span>
@@ -94,8 +102,11 @@ const Login = () => {
             </div>
           </div>
           <div>
-            <button className="bg-red-600 text-white w-full rounded-md py-2 hover:bg-[#052c65]" type="submit" >
-              Login
+            <button
+              className="bg-red-600 text-white w-full rounded-md py-2 hover:bg-[#052c65]"
+              type="submit"
+            >
+              {isSubmitting ? "Submitting ..." : "Login"}
             </button>
           </div>
         </div>

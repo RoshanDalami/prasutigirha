@@ -111,7 +111,7 @@ export default function Dashboard() {
       imageName: "/assets/images/feeding-bottle.png",
     },
   ];
-
+  
   return (
     <div className="my-10 mx-10">
       <div className="flex items-center justify-center gap-5  ">
@@ -119,7 +119,7 @@ export default function Dashboard() {
           return (
             <div
               key={items.id}
-              className="shadow-md hover:scale-105 transform transition-transform ease-in-out duration-300 shadow-[#004a89] drop-shadow-xl"
+              className="shadow-md  hover:scale-105 transform transition-transform ease-in-out duration-300 shadow-[#004a89] drop-shadow-xl"
             >
               <DashboardCard
                 title={items.title}
