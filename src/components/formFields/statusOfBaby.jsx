@@ -4,6 +4,7 @@ import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
 import FormBorder from "../reusableForm";
+
 const defaultValues = {
   birthDate: "",
   breastFeedingStat: "",
@@ -14,10 +15,13 @@ const defaultValues = {
   vdrlStat: "",
   testDate: "",
 };
-
+import { serologyAtom } from "src/recoil/serology/serologyAtom";
+import { useSetRecoilState , useRecoilValue } from "recoil";
 const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
+    const setSerologyPositive = useSetRecoilState(serologyAtom);
+    const serologyStatus = useRecoilValue(serologyAtom)
   const { userData, setUserData } = useContext(StepperContext);
   const { query } = useRouter();
   const {
@@ -57,15 +61,34 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     }
   }, [userData, setValue]);
 
-  const onSubmit = (data) => {
-    setUserData({ ...userData, ...data });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
-    handleClick("next");
-    console.log(userData, "This is data");
-  };
+  
+  
+ 
+
+    const onSubmit = (data) => {
+      if ( serologyStatus === "false"){
+        setUserData({ ...userData, ...data });
+      localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
+      handleClick("next");
+      console.log(userData, "This is data");
+      }
+      else {
+        setUserData({ ...userData, ...data });
+      localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
+      
+      
+      }
+    };
+  
 
   const watchAllFields = watch();
 
+  if(watchAllFields?.hivStat){
+    setSerologyPositive(watchAllFields?.hivStat)
+  }
+
+  
+  
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={" Status of Baby"}>
@@ -165,8 +188,9 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               })}
             >
               {" "}
-              <option>Yes</option>
-              <option>No</option>
+              <option selected disabled value={''}>--select HIV Status--</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
             {errors.hivStat && (
               <p className="errorMessages">{errors.hivStat.message}</p>
@@ -185,8 +209,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               })}
             >
               {" "}
-              <option>Yes</option>
-              <option>No</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
             {errors.hbsagStat && (
               <p className="errorMessages">{errors.hbsagStat.message}</p>
@@ -205,8 +229,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               })}
             >
               {" "}
-              <option>Yes</option>
-              <option>No</option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
             {errors.vdrlStat && (
               <p className="errorMessages">{errors.vdrlStat.message}</p>
@@ -231,7 +255,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           </div>
         </div>
       </FormBorder>
-
+{
+  (serologyStatus==="false") ? 
       <div className="mt-5">
         {currentStep !== steps.length && (
           <StepperControl
@@ -240,7 +265,16 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             steps={steps}
           />
         )}
+      </div> : <div className="mt-5">
+        {currentStep == steps.length && (
+          <StepperControl
+            handleClick={handleClick}
+            currentStep={currentStep}
+            steps={steps}
+          />
+        )}
       </div>
+}
     </form>
   );
 };
