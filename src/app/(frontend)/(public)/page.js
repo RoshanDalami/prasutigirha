@@ -1,9 +1,10 @@
 import React from 'react'
 
-export default function Dashboard() {
+export default async function Dashboard() {
+    
   return (
     <div>
-    
+    hello
     </div>
   )
 }
