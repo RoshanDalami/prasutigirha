@@ -71,7 +71,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       <FormBorder title={" Status of Baby"}>
         <p className="font-bold text-xl py-5 ">Add Status of Baby:</p>
         <div className="grid md:grid-cols-2 gap-4 text-lg">
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Date of Birth<span className="text-red-600">*</span>
@@ -80,16 +80,22 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="date"
               placeholder=""
               className="inputStyle"
-              {...register("birthDate")}
+              {...register("birthDate", { required: "DOB Required" })}
             />
+            {errors.birthDate && (
+              <p className="errorMessages">{errors.birthDate.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Baby Status
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("babyStat")}>
+            <select
+              className="inputStyle"
+              {...register("babyStat", { required: "Baby Status Required" })}
+            >
               <option>Select Your Baby Status</option>
               <option>Normal</option>
               <option>Birth Asphylexia</option>
@@ -98,24 +104,40 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <option>Jaundice</option>
               <option>Other</option>
             </select>
+            {errors.babyStat && (
+              <p className="errorMessages">{errors.babyStat.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               Baby Transfer Status
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("babyTransferStat")}>
+            <select
+              className="inputStyle"
+              {...register("babyTransferStat", {
+                required: "Baby Transfer Status Required",
+              })}
+            >
               <option>Select Your Baby Status</option>
               <option>NICU</option>
             </select>
+            {errors.babyTransferStat && (
+              <p className="errorMessages">{errors.babyTransferStat.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Baby Breast Feeding Status
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("breastFeedStat")}>
+            <select
+              className="inputStyle"
+              {...register("breastFeedStat", {
+                required: "Breast Feeding Stat Required",
+              })}
+            >
               <option>Select Your Baby Status</option>
               <option>Exclusive Breast Feeding</option>
               <option>Partial Breast Feeding</option>
@@ -123,6 +145,9 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <option>NPO</option>
               <option>PDHM</option>
             </select>
+            {errors.breastFeedStat && (
+              <p className="errorMessages">{errors.breastFeedStat.message}</p>
+            )}
           </div>
         </div>
         <p className="font-bold text-xl py-5 ">Serology Screening Records:</p>
@@ -133,37 +158,61 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               HIV Test
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("hivStat")}>
+            <select
+              className="inputStyle"
+              {...register("hivStat", {
+                required: "Yes/No Required",
+              })}
+            >
               {" "}
               <option>Yes</option>
               <option>No</option>
             </select>
+            {errors.hivStat && (
+              <p className="errorMessages">{errors.hivStat.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               HBSAG Test
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("hbsagStat")}>
+            <select
+              className="inputStyle"
+              {...register("hbsagStat", {
+                required: "Yes/No Required",
+              })}
+            >
               {" "}
               <option>Yes</option>
               <option>No</option>
             </select>
+            {errors.hbsagStat && (
+              <p className="errorMessages">{errors.hbsagStat.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               VDRL Test
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("vdrlStat")}>
+            <select
+              className="inputStyle"
+              {...register("vdrlStat", {
+                required: "Yes/No Required",
+              })}
+            >
               {" "}
               <option>Yes</option>
               <option>No</option>
             </select>
+            {errors.vdrlStat && (
+              <p className="errorMessages">{errors.vdrlStat.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Date of Test
@@ -172,8 +221,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             <input
               type="date"
               className="inputStyle"
-              {...register("testDate")}
+              {...register("testDate", {
+                required: "Yes/No Required",
+              })}
             />
+            {errors.testDate && (
+              <p className="errorMessages">{errors.testDate.message}</p>
+            )}
           </div>
         </div>
       </FormBorder>

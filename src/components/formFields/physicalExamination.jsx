@@ -71,7 +71,7 @@ const PhysicalExamination = ({
     setUserData({ ...userData, ...data });
     localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
     handleClick("next");
-    console.log(userData,data, "This is data");
+    console.log(userData, data, "This is data");
   };
 
   const fileInputRef = useRef(null);
@@ -96,13 +96,17 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("mastitis")}
+                {...register("mastitis", {
+                  required: true,
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("mastitis")}
+                {...register("mastitis", {
+                  required: true,
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -120,13 +124,17 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("localLesions")}
+                {...register("localLesions", {
+                  required: true,
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("localLesions")}
+                {...register("localLesions", {
+                  required: true,
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -144,13 +152,17 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("fugalInNipple")}
+                {...register("fugalInNipple", {
+                  required: true,
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("fugalInNipple")}
+                {...register("fugalInNipple", {
+                  required: true,
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -168,13 +180,17 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("herpes")}
+                {...register("herpes", {
+                  required: true,
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("herpes")}
+                {...register("herpes", {
+                  required: true,
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -190,13 +206,17 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("others")}
+                {...register("others", {
+                  required: true,
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("others")}
+                {...register("others", {
+                  required: true,
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -214,12 +234,17 @@ const PhysicalExamination = ({
             {...register("signature")}
           />
         </div>
-        <div className="grid grid-cols-2 mt-5">
+        <div className="flex flex-col mt-5">
           <input
             className="inputStyle"
             placeholder="Breast Feeding Helper Employee Name"
-            {...register("helperEmployee")}
+            {...register("helperEmployee", {
+              required: "Name Required",
+            })}
           />
+          {errors.helperEmployee && (
+            <p className="errorMessages">{errors.helperEmployee.message}</p>
+          )}
         </div>
       </FormBorder>
       <div className=" mt-5 ">
