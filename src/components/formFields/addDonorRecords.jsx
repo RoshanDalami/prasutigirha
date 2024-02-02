@@ -170,7 +170,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
         </div>
         <div className="md:grid-cols-2 grid text-lg gap-4">
           {/* <div className="grid"> */}
-          <div className={`grid ${isExternal ? "hidden" : "block"}`}>
+          <div className={`flex flex-col ${isExternal ? "hidden" : "block"}`}>
             <label>
               {" "}
               Hospital Registration Number
@@ -180,10 +180,15 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Hospital Registration Number"
               className="inputStyle"
-              {...register("hosRegNo")}
+              {...register("hosRegNo", {
+                required: "Hospital Registration Number is required",
+              })}
             />
+            {errors.hosRegNo && (
+              <p className="errorMessages">{errors.hosRegNo.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Date<span className="text-red-600">*</span>
@@ -192,10 +197,13 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="date"
               placeholder=""
               className="inputStyle"
-              {...register("date")}
+              {...register("date", { required: "Date is Required" })}
             />
+            {errors.date && (
+              <p className="errorMessages">{errors.date.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Time<span className="text-red-600">*</span>
@@ -204,10 +212,13 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="time"
               placeholder=""
               className="inputStyle"
-              {...register("time")}
+              {...register("time", { required: "Time is Required" })}
             />
+            {errors.time && (
+              <p className="errorMessages">{errors.time.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Donor Full Name<span className="text-red-600">*</span>
@@ -216,10 +227,15 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Donar Full Name"
               className="inputStyle"
-              {...register("donor_FullName")}
+              {...register("donor_FullName", {
+                required: "Donor Name Required",
+              })}
             />
+            {errors.donor_FullName && (
+              <p className="errorMessages">{errors.donor_FullName.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Donor Age<span className="text-red-600">*</span>
@@ -228,28 +244,43 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Donar Age"
               className="inputStyle"
-              {...register("donorAge")}
+              {...register("donorAge", { required: "Donor Age Required" })}
             />
+            {errors.donorAge && (
+              <p className="errorMessages">{errors.donorAge.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Education<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("education")}>
-              <option></option>
+            <select
+              className="inputStyle"
+              {...register("education", { required: "Education Required" })}
+            >
+              <option>test</option>
             </select>
+            {errors.education && (
+              <p className="errorMessages">{errors.education.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Ethnicity<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("ethnicity")}>
+            <select
+              className="inputStyle"
+              {...register("ethnicity", { required: "Ethnicity Required" })}
+            >
               <option>test</option>
             </select>
+            {errors.ethnicity && (
+              <p className="errorMessages">{errors.ethnicity.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Address<span className="text-red-600">*</span>
@@ -258,10 +289,13 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Address"
               className="inputStyle"
-              {...register("address")}
+              {...register("address", { required: "Address Required" })}
             />
+            {errors.address && (
+              <p className="errorMessages">{errors.address.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Contact Number<span className="text-red-600">*</span>
@@ -270,10 +304,15 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Contact Number"
               className="inputStyle"
-              {...register("contactNo")}
+              {...register("contactNo", {
+                required: "Contact Number Required",
+              })}
             />
+            {errors.contactNo && (
+              <p className="errorMessages">{errors.contactNo.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Present Age of Child in Days (DOL)
@@ -283,35 +322,60 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Present Age of Child"
               className="inputStyle"
-              {...register("ageOfChild")}
+              {...register("ageOfChild", { required: "Age Required" })}
             />
+            {errors.ageOfChild && (
+              <p className="errorMessages">{errors.ageOfChild.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Gestational Age ( WOG)<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("gestationalAge")}>
+            <select
+              className="inputStyle"
+              {...register("gestationalAge", {
+                required: " Gestational Age Required",
+              })}
+            >
               <option>test</option>
             </select>
+            {errors.gestationalAge && (
+              <p className="errorMessages">{errors.gestationalAge.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Mode Of Delivery<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("modeOfDelivery")}>
+            <select
+              className="inputStyle"
+              {...register("modeOfDelivery", {
+                required: "Mode of Delivery Required",
+              })}
+            >
               <option>test</option>
             </select>
+            {errors.modeOfDelivery && (
+              <p className="errorMessages">{errors.modeOfDelivery.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Parity<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("parity")}>
+            <select
+              className="inputStyle"
+              {...register("parity", { required: "Parity Required" })}
+            >
               <option>test</option>
             </select>
+            {errors.parity && (
+              <p className="errorMessages">{errors.parity.message}</p>
+            )}
           </div>
         </div>
       </FormBorder>

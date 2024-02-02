@@ -103,13 +103,18 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("acuteInfection")}
+                {...register("acuteInfection", {
+                  required: "This field required",
+                })}
               />
+
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("acuteInfection")}
+                {...register("acuteInfection", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -127,13 +132,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("chronicInfection")}
+                {...register("chronicInfection", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("chronicInfection")}
+                {...register("chronicInfection", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -151,13 +160,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("cancer")}
+                {...register("cancer", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("cancer")}
+                {...register("cancer", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -175,13 +188,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("emunDisease")}
+                {...register("emunDisease", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("emunDisease")}
+                {...register("emunDisease", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -199,13 +216,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("cough")}
+                {...register("cough", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("cough")}
+                {...register("cough", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -223,13 +244,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("chickenPox")}
+                {...register("chickenPox", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("chickenPox")}
+                {...register("chickenPox", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -248,13 +273,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("std")}
+                {...register("std", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("std")}
+                {...register("std", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -272,13 +301,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("medicineTaken")}
+                {...register("medicineTaken", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("medicineTaken")}
+                {...register("medicineTaken", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -296,13 +329,17 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("bloodTaken")}
+                {...register("bloodTaken", {
+                  required: "This field required",
+                })}
               />
               <FormControlLabel
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("bloodTaken")}
+                {...register("bloodTaken", {
+                  required: "This field required",
+                })}
               />
             </RadioGroup>
           </FormControl>
@@ -310,15 +347,30 @@ const VerbalExamination = ({
             <label htmlFor=""> Life Style ( Smoking/Drinking/Drugs):</label>
             <div className="flex gap-4">
               <div className="flex gap-1">
-                <input type="radio" {...register("habits")} />
+                <input
+                  type="radio"
+                  {...register("habits", {
+                    required: "This field required",
+                  })}
+                />
                 <label>Smoking</label>
               </div>
               <div className="flex gap-1">
-                <input type="radio" {...register("habits")} />
+                <input
+                  type="radio"
+                  {...register("habits", {
+                    required: "This field required",
+                  })}
+                />
                 <label>Drinking</label>
               </div>
               <div className="flex gap-1">
-                <input type="radio" {...register("habits")} />
+                <input
+                  type="radio"
+                  {...register("habits", {
+                    required: "This field required",
+                  })}
+                />
                 <label>Drugs</label>
               </div>
             </div>
