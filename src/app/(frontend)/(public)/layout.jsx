@@ -16,6 +16,9 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <title>Amrit Kosh</title>
+      </head>
       <RecoilRoot>
 
       <body className={`${inter.className} flex `}>
