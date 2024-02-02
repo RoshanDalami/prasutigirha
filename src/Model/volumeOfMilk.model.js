@@ -9,23 +9,33 @@ const volumeOfMilkSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'DaanDarta'
     },
+    donorName:{
+        type:String,
+        required:true
+    },
     gestationalAge:{
         type: Number ,
+        required:true
     },
-    data:{
+    date:{
         type:String,
+        required:true
     },
     time:{
         type:String,
+        required:true
     },
     quantity:{
         type:String,
+        required:true
     },
     storedBy:{
-        type:String
+        type:String,
+        required:true
     },
     temp:{
-        type:String
+        type:Number,
+        required:true
     }
 },{timestamps:true})
 const MilkVolume = mongoose.models.MilkVolume || mongoose.model('MilkVolume',volumeOfMilkSchema)
