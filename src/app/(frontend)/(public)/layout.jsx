@@ -1,4 +1,4 @@
-import SideBar from '../../../components/SideBar'
+import SideBar from "../../../components/SideBar";
 import { Inter } from "next/font/google";
 import "../../globals.css";
 import Navbar from "@/components/navbar";
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} flex `}>
         <Navbar />
         <SideBar />
-        <main className="ml-60">{children}</main>
+        <main className="md:ml-60">{children}</main>
       </body>
     </html>
   );

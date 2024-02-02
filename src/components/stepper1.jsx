@@ -1,12 +1,38 @@
-import FormBorder from "./reusableForm";
 
+"use client";
+import { useState } from "react";
+import Button from "./button";
+import FormBorder from "./reusableForm";
 export default function Stepper1() {
+  const [isExternal, setIsExternal] = useState(false);
+  function handleExternal(e) {
+    setIsExternal(!isExternal);
+    e.preventDefault(false);
+  }
+
   return (
     <>
       <form>
+        {isExternal ? (
+          <div
+            className="font-bold text-xl flex justify-end"
+            onClick={handleExternal}
+          >
+            <Button>Internal</Button>
+          </div>
+        ) : (
+          <div
+            className="font-bold text-xl flex justify-end"
+            onClick={handleExternal}
+          >
+            <Button>External</Button>
+          </div>
+        )}
+
         <FormBorder title={"Add Donor Records"}>
           <div className="md:grid-cols-2 grid text-lg gap-4">
-            <div className="grid">
+            {/* <div className="grid"> */}
+            <div className={`grid ${isExternal ? "hidden" : "block"}`}>
               <label>
                 {" "}
                 Hospital Registration Number
@@ -60,16 +86,18 @@ export default function Stepper1() {
                 Education<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Education--</option>
+                {educationOptions}
               </select>
             </div>
             <div className="grid">
               <label>
                 {" "}
-                Education<span className="text-red-600">*</span>
+                Ethnicity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Ethnicity--</option>
+                {ethnicityOptions}
               </select>
             </div>
             <div className="grid">
@@ -112,7 +140,16 @@ export default function Stepper1() {
                 Gestational Age ( WOG)<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>
+                  -- Select Gestiational --
+                </option>
+                {gestiationlData?.map((item, index) => {
+                  return (
+                    <option key={index} value={item.gestationalId}>
+                      {item.gestationalName}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div className="grid">
@@ -121,16 +158,18 @@ export default function Stepper1() {
                 Mode Of Delivery<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option selected disabled>--Select Mode of Delivery--</option>
+                {deliveryOptions}
               </select>
             </div>
             <div className="grid">
               <label>
-                {" "} 
+                {" "}
                 Parity<span className="text-red-600">*</span>
               </label>
               <select className="inputStyle">
-                <option></option>
+                <option>--Select Parity--</option>
+                {parityOptions}
               </select>
             </div>
           </div>
@@ -139,3 +178,5 @@ export default function Stepper1() {
     </>
   );
 }
+
+

@@ -10,7 +10,7 @@ export default function AddVolume() {
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-2">
               <div className="grid">
                 <label className="text-lg">
-                  Select Donor
+                  Gestational Age (WOG)
                   <span className="text-lg text-red-600">*</span>
                 </label>
                 <select className="inputStyle">
@@ -22,11 +22,17 @@ export default function AddVolume() {
               </div>
               <div className="grid">
                 <label className="text-lg">
-                  Gestational Age (WOG)
+                  Select Donor
                   <span className="text-lg text-red-600">*</span>
                 </label>
-                <input className="inputStyle" type="text" placeholder="." />
+                <select className="inputStyle">
+                  <option>test1</option>
+                  <option>test2</option>
+                  <option>test2</option>
+                  <option>test2</option>
+                </select>
               </div>
+
               <div className="grid">
                 <label className="text-lg">
                   Date
@@ -44,6 +50,13 @@ export default function AddVolume() {
               <div className="grid">
                 <label className="text-lg">
                   ML
+                  <span className="text-lg text-red-600">*</span>
+                </label>
+                <input className="inputStyle" type="text" placeholder="." />
+              </div>
+              <div className="grid">
+                <label className="text-lg">
+                  Store By
                   <span className="text-lg text-red-600">*</span>
                 </label>
                 <input className="inputStyle" type="text" placeholder="." />

@@ -1,10 +1,108 @@
 import mongoose, { Schema } from "mongoose";
-import { Gestational } from "../Model/dropdownModels/gestational.model.js";
-import { BabyStatus } from "../Model/dropdownModels/babyStatus.model.js";
-import { Parity } from "../Model/dropdownModels/parity.model.js";
-import { Delivery } from "../Model/dropdownModels/delivery.model.js";
 
-const daanDartaSchema = new mongoose.Schema({
+const babyStatusSchema = new mongoose.Schema({
+  dateOfBirth: {
+    type: Date,
+  },
+  babyStatus: {
+    type: Number,
+  },
+  babyTransfer: {
+    type: Number,
+  },
+  babyFeeding: {
+    type: Number,
+  },
+});
+const serologyScreeningSchema = new mongoose.Schema({
+  hiv: {
+    type: Boolean,
+  },
+  hbsag: {
+    type: Boolean,
+  },
+  vdrl: {
+    type: Boolean,
+  },
+  dateOfTest: {
+    type: Date,
+  },
+
+  // helperName: {
+  //   type: String,
+  // },
+
+  // helperSignature: {},
+});
+const verbalExaminationSchema = new mongoose.Schema({
+  acuteInfection: {
+    type: Boolean,
+  },
+  chronicInfection: {
+    type: Boolean,
+  },
+  cancerTreatmentWithinThreeYears: {
+    type: Boolean,
+  },
+  autoImmuneDisease: {
+    type: Boolean,
+  },
+  coughMoreThanTwoWeeks: {
+    type: Boolean,
+  },
+  chickenpox: {
+    type: Boolean,
+  },
+  stdLastOneYear: {
+    type: Boolean,
+  },
+  medCancerAntisicotikRadioactiveThyroid: {
+    type: Boolean,
+  },
+  transplantAndBloodTaken: {
+    type: Boolean,
+  },
+  BadLifeStyle: {
+    type: Boolean,
+  },
+  examinationDocName: {
+    type: String,
+  },
+  examDate: {
+    type: Date,
+  },
+
+  testAfterSomeDays: {
+    type: Number,
+  },
+});
+
+const donorPhysicalExaminationSchema = new mongoose.Schema({
+  mastitis: {
+    type: Boolean,
+  },
+  localLesions: {
+    type: Boolean,
+  },
+  fugalInNippleAreola: {
+    type: Boolean,
+  },
+  herpesZoster: {
+    type: Boolean,
+  },
+  doctorName: {
+    type: String,
+  },
+  examinationDate: {
+    type: Date,
+  },
+});
+
+const daanDartaSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   hosRegNo: {
     type: String,
   },
@@ -22,6 +120,9 @@ const daanDartaSchema = new mongoose.Schema({
   donor_FullName: {
     type: String,
   },
+  donorAge: {
+    type: Number,
+  },
   education: {
     type: String,
   },
@@ -38,31 +139,38 @@ const daanDartaSchema = new mongoose.Schema({
     type: Number,
   },
   gestationalAge: {
-    type: Schema.Types.ObjectId,
-    ref: Gestational,
+    type: Number,
   },
   modeOfDelivery: {
-    type: Schema.Types.ObjectId,
-    ref: Delivery,
+    type: Number,
   },
   parity: {
-    type: Schema.Types.ObjectId,
-    ref: Parity,
+    type: Number,
+  },
+  isDonorActive: {
+    type: Boolean,
+    default: true,
+  },
+  isSerologyPositive: {
+    type: Boolean,
+  },
+  verbalStatus: {
+    type: Boolean,
+  },
+  physicalStatus: {
+    type: Boolean,
+  },
+  remarks: {
+    type: String,
   },
 
-  babyStatus: {
-    type: Schema.Types.ObjectId,
-    ref: BabyStatus,
-  },
-
-  // serologyRecords: serologyScreeningSchema,
-
-  // verbalExamination: {
-  //   type: verbalExaminationSchema,
-  // },
-
-  // donorPhysicalExamination: donorPhysicalExaminationSchema,
+  babyStatus: babyStatusSchema,
+  serologyRecords: serologyScreeningSchema,
+  verbalExamination: verbalExaminationSchema,
+  donorPhysicalExamination: donorPhysicalExaminationSchema,
 });
 
-export const DaanDarta =
+const DaanDarta =
   mongoose.models.DaanDarta || mongoose.model("DaanDarta", daanDartaSchema);
+
+export { DaanDarta };
