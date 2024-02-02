@@ -3,9 +3,9 @@ import Image from "next/image";
 export default function DashboardCard({ number, title, imageSrc }) {
   return (
     <>
-      <div className="flex ">
+      <div className="flex  ">
         <div
-          className={`flex  justify-between  items-center border-2 rounded-md shadow-md border-[#004a89] py-4 px-4 relative  gap-14  `}
+          className={`flex  justify-between  items-center border-2 rounded-md  border-[#004a89] py-4 px-4 relative  gap-14  `}
         >
           <div className="leading-10">
             <p className="text-gray-600">{title}</p>

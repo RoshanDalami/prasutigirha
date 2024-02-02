@@ -157,21 +157,17 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={"Add Donor Records"}>
-        {isExternal ? (
-          <div
-            className="font-bold text-xl flex justify-end"
-            onClick={handleExternal}
-          >
-            <Button>Internal</Button>
-          </div>
-        ) : (
-          <div
-            className="font-bold text-xl flex justify-end"
-            onClick={handleExternal}
-          >
-            <Button>External</Button>
-          </div>
-        )}
+        <div className="flex justify-end">
+          {isExternal ? (
+            <div className="font-bold  text-xl  " onClick={handleExternal}>
+              <Button>Internal</Button>
+            </div>
+          ) : (
+            <div className="font-bold text-xl " onClick={handleExternal}>
+              <Button>External</Button>
+            </div>
+          )}
+        </div>
         <div className="md:grid-cols-2 grid text-lg gap-4">
           {/* <div className="grid"> */}
           <div className={`grid ${isExternal ? "hidden" : "block"}`}>

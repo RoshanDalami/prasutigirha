@@ -1,10 +1,10 @@
-'use client'
+"use client";
 import SideBar from "../../../components/SideBar";
 import { Inter } from "next/font/google";
 import "../../globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "src/components/footer";
-import {Toaster} from 'react-hot-toast'
+import { Toaster } from "react-hot-toast";
 import { RecoilRoot } from "recoil";
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,18 +20,17 @@ export default function RootLayout({ children }) {
         <title>Amrit Kosh</title>
       </head>
       <RecoilRoot>
-
-      <body className={`${inter.className} flex `}>
-        <Navbar />
-        <SideBar />
-        <Toaster position="top-right" />
-        <main className="md:ml-60 mb-10">
-          {children}
-          <div className="flex justify-center mt-10  ">
-            <Footer />
-          </div>
-        </main>
-      </body>
+        <body className={`${inter.className} flex `}>
+          <Navbar />
+          <SideBar />
+          <Toaster position="top-right" />
+          <main className="md:ml-60 mb-10">
+            {children}
+            <div className="flex justify-center mt-10  ">
+              <Footer />
+            </div>
+          </main>
+        </body>
       </RecoilRoot>
     </html>
   );
