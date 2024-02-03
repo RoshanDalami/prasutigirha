@@ -63,7 +63,7 @@ const verbalExaminationSchema = new mongoose.Schema({
     type: Boolean,
   },
   BadLifeStyle: {
-    type: Boolean,
+    type: String,
   },
   examinationDocName: {
     type: String,
@@ -162,6 +162,9 @@ const daanDartaSchema = new Schema({
   },
   remarks: {
     type: String,
+  },
+  isExternal: {
+    type: Boolean,
   },
 
   babyStatus: babyStatusSchema,

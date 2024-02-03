@@ -24,25 +24,24 @@ export async function POST(req, res) {
       donorRegNo: newDonorRegNo,
     });
 
-    if (newDaanDarta.serologyRecords.hiv === true) {
+    if (newDaanDarta.serologyRecords.hiv == true) {
       newDaanDarta.isSerologyPositive = true;
-    } else if (newDaanDarta.serologyRecords.hbsag === true) {
-      newDaanDarta.isSerologyPositive = true;
-    }
-    if (newDaanDarta.serologyRecords.vdrl === true) {
+    } else if (newDaanDarta.serologyRecords.hbsag == true) {
       newDaanDarta.isSerologyPositive = true;
     }
+    if (newDaanDarta.serologyRecords.vdrl == true) {
+      newDaanDarta.isSerologyPositive = true;
+    }
+    // if (
+    //   newDaanDarta.verbalExamination === true &&
+    //   newDaanDarta.donorPhysicalExamination === true
+    // ) {
+    //   newDaanDarta.isDonorActive = true;
+    // } else {
+    //   newDaanDarta.isDonorActive = false;
+    // }
 
-    if (
-      newDaanDarta.verbalExamination === true &&
-      newDaanDarta.donorPhysicalExamination === true
-    ) {
-      newDaanDarta.isDonorActive = true;
-    } else {
-      newDaanDarta.isDonorActive = false;
-    }
-
-    console.log(newDaanDarta.isSerologyPositive);
+    
 
     if (newDaanDarta.isSerologyPositive === true) {
       return NextResponse.json(

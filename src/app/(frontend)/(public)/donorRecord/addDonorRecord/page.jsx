@@ -22,7 +22,7 @@ export default function CreateDisabled({ clickedIdData }){
   }, [currentStep]);
 
   const steps =
-  (serologyStatus === 'false')?
+  (serologyStatus == 'false')?
   [
     "Add Donor Records",
     "Baby Status",

@@ -5,6 +5,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 export default function Navbar() {
+  const userInfo =  (typeof localStorage !== 'undefined') ?
+    JSON.parse(localStorage.getItem('userInfo')) : {username:'Softech'}
+  
+  
   const router = useRouter();
   const logoutHandler = async (e) => {
     e.preventDefault();
@@ -23,7 +27,7 @@ export default function Navbar() {
     setIsShowButton(!showButton);
   };
   return (
-    <div className="  shadow-xl sticky  inset-0 z-50 flex  items-center justify-between bg-white ">
+    <div className="  shadow-xl sticky  inset-0 z-50 flex  items-center justify-between bg-white " >
       {/* <div className="">
         <HiOutlineBars3 />
       </div> */}
@@ -39,7 +43,7 @@ export default function Navbar() {
 
       <div className="flex items-center gap-5 relative  ">
         <p className="text-lg">
-          Welcome!! <span className="text-red-600 font-bold ">Softech</span>{" "}
+          Welcome!! <span className="text-red-600 font-bold ">{userInfo?.username}</span>{" "}
         </p>
         <div className="">
           <div className=" cursor-pointer " onClick={handleClick}>

@@ -14,14 +14,16 @@ import StepperControl from "../stepper/StepperControl";
 import { StepperContext } from "../stepper/StepperContext";
 import FormBorder from "../reusableForm";
 import RadioInput from "../radioInput";
+import axios from 'axios'
+import { urls } from "src/services/apiHelpers";
 const defaultValues = {
   mastitis: "",
   localLesions: "",
-  fugalInNipple: "",
-  herpes: "",
+  fugalInNippleAreola: "",
+  herpesZoster: "",
   others: "",
   signature: "",
-  helperEmployee: "",
+  doctorName: "",
 };
 
 const PhysicalExamination = ({
@@ -33,7 +35,7 @@ const PhysicalExamination = ({
   const { userData, setUserData } = useContext(StepperContext);
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
-  const { query } = useRouter();
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -49,29 +51,60 @@ const PhysicalExamination = ({
       setDefaultValuesWithUserData({
         mastitis: userData.mastitis || "",
         localLesions: userData.localLesions || "",
-        fugalInNipple: userData.fugalInNipple || "",
-        herpes: userData.herpes || "",
+        fugalInNippleAreola: userData.fugalInNippleAreola || "",
+        herpesZoster: userData.herpesZoster || "",
         others: userData.others || "",
-        helperEmployee: userData.helperEmployee || "",
+        doctorName: userData.doctorName || "",
         signature: userData.signature || "",
       });
       setValue("mastitis", userData.mastitis || ""); // pass setValue to the dependencies array and use it directly
       setValue("localLesions", userData.localLesions || "");
-      setValue("fugalInNipple", userData.fugalInNipple || "");
-      setValue("herpes", userData.herpes || "");
+      setValue("fugalInNippleAreola", userData.fugalInNippleAreola || "");
+      setValue("herpesZoster", userData.herpesZoster || "");
       setValue("others", userData.others || "");
-      setValue("helperEmployee", userData.helperEmployee || "");
+      setValue("doctorName", userData.doctorName || "");
       setValue("signature", userData.signature || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
   }, [userData, setValue]);
 
-  const onSubmit = (data) => {
-    setUserData({ ...userData, ...data });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
-    handleClick("next");
-    console.log(userData, data, "This is data");
+  const onSubmit = async(data) => {
+    setUserData({ ...userData, donorPhysicalExamination:{
+      mastitis:JSON.parse(data.mastitis),
+      localLesions:JSON.parse(data.localLesions),
+      fugalInNippleAreola:JSON.parse(data.fugalInNippleAreola),
+      herpesZoster:JSON.parse(data.herpesZoster),
+      doctorName: data.doctorName
+    }});
+    localStorage.setItem("userData", JSON.stringify({ ...userData, donorPhysicalExamination:{
+      mastitis:JSON.parse(data.mastitis),
+      localLesions:JSON.parse(data.localLesions),
+      fugalInNippleAreola:JSON.parse(data.fugalInNippleAreola),
+      herpesZoster:JSON.parse(data.herpesZoster),
+      doctorName: data.doctorName
+    } }));
+     data = {
+      ...userData,
+      donorPhysicalExamination:{
+        mastitis:JSON.parse(data.mastitis),
+        localLesions:JSON.parse(data.localLesions),
+        fugalInNippleAreola:JSON.parse(data.fugalInNippleAreola),
+        herpesZoster:JSON.parse(data.herpesZoster),
+        doctorName: data.doctorName
+      }
+     }
+     console.log(data,'response')
+     try {
+        const response = await axios.post(`${urls.createDanaDarta}`,data)
+        if(response.status === 200){
+          router.push('/donorRecord/viewDonorRecord')
+        }
+     } catch (error) {
+      console.log(error,'response')
+     }
+
+    
   };
 
   const fileInputRef = useRef(null);
@@ -152,7 +185,7 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("fugalInNipple", {
+                {...register("fugalInNippleAreola", {
                   required: true,
                 })}
               />
@@ -160,7 +193,7 @@ const PhysicalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("fugalInNipple", {
+                {...register("fugalInNippleAreola", {
                   required: true,
                 })}
               />
@@ -180,7 +213,7 @@ const PhysicalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("herpes", {
+                {...register("herpesZoster", {
                   required: true,
                 })}
               />
@@ -188,7 +221,7 @@ const PhysicalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("herpes", {
+                {...register("herpesZoster", {
                   required: true,
                 })}
               />
@@ -238,12 +271,12 @@ const PhysicalExamination = ({
           <input
             className="inputStyle"
             placeholder="Breast Feeding Helper Employee Name"
-            {...register("helperEmployee", {
+            {...register("doctorName", {
               required: "Name Required",
             })}
           />
-          {errors.helperEmployee && (
-            <p className="errorMessages">{errors.helperEmployee.message}</p>
+          {errors.doctorName && (
+            <p className="errorMessages">{errors.doctorName.message}</p>
           )}
         </div>
       </FormBorder>

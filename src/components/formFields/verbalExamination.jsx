@@ -18,14 +18,14 @@ import {
 const defaultValues = {
   acuteInfection: "",
   chronicInfection: "",
-  cancer: "",
-  emunDisease: "",
-  cough: "",
-  chickenPox: "",
-  std: "",
-  medicineTaken: "",
-  bloodTaken: "",
-  habits: "",
+  cancerTreatmentWithinThreeYears: "",
+  autoImmuneDisease: "",
+  coughMoreThanTwoWeeks: "",
+  chickenpox: "",
+  stdLastOneYear: "",
+  medCancerAntisicotikRadioactiveThyroid: "",
+  transplantAndBloodTaken: "",
+  BadLifeStyle: "",
 };
 
 const VerbalExamination = ({
@@ -54,36 +54,58 @@ const VerbalExamination = ({
       setDefaultValuesWithUserData({
         acuteInfection: userData.acuteInfection || "",
         chronicInfection: userData.chronicInfection || "",
-        cancer: userData.cancer || "",
-        emunDisease: userData.emunDisease || "",
-        cough: userData.cough || "",
-        chickenPox: userData.chickenPox || "",
-        std: userData.std || "",
-        medicineTaken: userData.medicineTaken || "",
-        bloodTaken: userData.bloodTaken || "",
-        habits: userData.habits || "",
+        cancerTreatmentWithinThreeYears: userData.cancerTreatmentWithinThreeYears || "",
+        autoImmuneDisease: userData.autoImmuneDisease || "",
+        coughMoreThanTwoWeeks: userData.coughMoreThanTwoWeeks || "",
+        chickenpox: userData.chickenpox || "",
+        stdLastOneYear: userData.stdLastOneYear || "",
+        medCancerAntisicotikRadioactiveThyroid: userData.medCancerAntisicotikRadioactiveThyroid || "",
+        transplantAndBloodTaken: userData.transplantAndBloodTaken || "",
+        BadLifeStyle: userData.BadLifeStyle || "",
       });
       setValue("acuteInfection", userData.acuteInfection || "");
       setValue("chronicInfection", userData.chronicInfection || "");
-      setValue("cancer", userData.cancer || "");
-      setValue("emunDisease", userData.emunDisease || "");
-      setValue("cough", userData.cough || "");
-      setValue("chickenPox", userData.chickenPox || "");
-      setValue("std", userData.std || "");
-      setValue("chickenPox", userData.chickenPox || "");
-      setValue("medicineTaken", userData.medicineTaken || "");
-      setValue("bloodTaken", userData.bloodTaken || "");
-      setValue("habits", userData.habits || "");
+      setValue("cancerTreatmentWithinThreeYears", userData.cancerTreatmentWithinThreeYears || "");
+      setValue("autoImmuneDisease", userData.autoImmuneDisease || "");
+      setValue("coughMoreThanTwoWeeks", userData.coughMoreThanTwoWeeks || "");
+      setValue("chickenpox", userData.chickenpox || "");
+      setValue("stdLastOneYear", userData.stdLastOneYear || "");
+      
+      setValue("medCancerAntisicotikRadioactiveThyroid", userData.medCancerAntisicotikRadioactiveThyroid || "");
+      setValue("transplantAndBloodTaken", userData.transplantAndBloodTaken || "");
+      setValue("BadLifeStyle", userData.BadLifeStyle || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
   }, [userData, setValue]);
 
   const onSubmit = (data) => {
-    setUserData({ ...userData, ...data });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
+    setUserData({ ...userData, verbalExamination:{
+      acuteInfection:JSON.parse(data.acuteInfection),
+      chronicInfection:JSON.parse(data.chronicInfection),
+      cancerTreatmentWithinThreeYears:JSON.parse(data.cancerTreatmentWithinThreeYears),
+      autoImmuneDisease:JSON.parse(data.autoImmuneDisease),
+      coughMoreThanTwoWeeks:JSON.parse(data.coughMoreThanTwoWeeks),
+      chickenpox:JSON.parse(data.chickenpox),
+      stdLastOneYear:JSON.parse(data.stdLastOneYear),
+      medCancerAntisicotikRadioactiveThyroid:JSON.parse(data.medCancerAntisicotikRadioactiveThyroid),
+      transplantAndBloodTaken:JSON.parse(data.transplantAndBloodTaken),
+      BadLifeStyle:data.BadLifeStyle
+    } });
+    localStorage.setItem("userData", JSON.stringify({ ...userData, verbalExamination:{
+      acuteInfection:JSON.parse(data.acuteInfection),
+      chronicInfection:JSON.parse(data.chronicInfection),
+      cancerTreatmentWithinThreeYears:JSON.parse(data.cancerTreatmentWithinThreeYears),
+      autoImmuneDisease:JSON.parse(data.autoImmuneDisease),
+      coughMoreThanTwoWeeks:JSON.parse(data.coughMoreThanTwoWeeks),
+      chickenpox:JSON.parse(data.chickenpox),
+      stdLastOneYear:JSON.parse(data.stdLastOneYear),
+      medCancerAntisicotikRadioactiveThyroid:JSON.parse(data.medCancerAntisicotikRadioactiveThyroid),
+      transplantAndBloodTaken:JSON.parse(data.transplantAndBloodTaken),
+      BadLifeStyle:data.BadLifeStyle
+    }  }));
     handleClick("next");
-    console.log(userData, "This is data");
+    console.log(userData, "response");
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -160,7 +182,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("cancer", {
+                {...register("cancerTreatmentWithinThreeYears", {
                   required: "This field required",
                 })}
               />
@@ -168,7 +190,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("cancer", {
+                {...register("cancerTreatmentWithinThreeYears", {
                   required: "This field required",
                 })}
               />
@@ -188,7 +210,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("emunDisease", {
+                {...register("autoImmuneDisease", {
                   required: "This field required",
                 })}
               />
@@ -196,7 +218,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("emunDisease", {
+                {...register("autoImmuneDisease", {
                   required: "This field required",
                 })}
               />
@@ -216,7 +238,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("cough", {
+                {...register("coughMoreThanTwoWeeks", {
                   required: "This field required",
                 })}
               />
@@ -224,7 +246,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("cough", {
+                {...register("coughMoreThanTwoWeeks", {
                   required: "This field required",
                 })}
               />
@@ -244,7 +266,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("chickenPox", {
+                {...register("chickenpox", {
                   required: "This field required",
                 })}
               />
@@ -252,7 +274,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("chickenPox", {
+                {...register("chickenpox", {
                   required: "This field required",
                 })}
               />
@@ -273,7 +295,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("std", {
+                {...register("stdLastOneYear", {
                   required: "This field required",
                 })}
               />
@@ -281,7 +303,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("std", {
+                {...register("stdLastOneYear", {
                   required: "This field required",
                 })}
               />
@@ -301,7 +323,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("medicineTaken", {
+                {...register("medCancerAntisicotikRadioactiveThyroid", {
                   required: "This field required",
                 })}
               />
@@ -309,7 +331,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("medicineTaken", {
+                {...register("medCancerAntisicotikRadioactiveThyroid", {
                   required: "This field required",
                 })}
               />
@@ -329,7 +351,7 @@ const VerbalExamination = ({
                 value={true}
                 control={<Radio />}
                 label="Yes"
-                {...register("bloodTaken", {
+                {...register("transplantAndBloodTaken", {
                   required: "This field required",
                 })}
               />
@@ -337,7 +359,7 @@ const VerbalExamination = ({
                 value={false}
                 control={<Radio />}
                 label="No"
-                {...register("bloodTaken", {
+                {...register("transplantAndBloodTaken", {
                   required: "This field required",
                 })}
               />
@@ -348,8 +370,10 @@ const VerbalExamination = ({
             <div className="flex gap-4">
               <div className="flex gap-1">
                 <input
-                  type="radio"
-                  {...register("habits", {
+                    id="smoking"
+                    type="radio"
+                    value="smoking"
+                  {...register("BadLifeStyle", {
                     required: "This field required",
                   })}
                 />
@@ -357,8 +381,10 @@ const VerbalExamination = ({
               </div>
               <div className="flex gap-1">
                 <input
+                  id="drinking"
                   type="radio"
-                  {...register("habits", {
+                  value="drinking"
+                  {...register("BadLifeStyle", {
                     required: "This field required",
                   })}
                 />
@@ -366,8 +392,11 @@ const VerbalExamination = ({
               </div>
               <div className="flex gap-1">
                 <input
-                  type="radio"
-                  {...register("habits", {
+
+                 id="drugs"
+                    type="radio"
+                    value="drugs"
+                  {...register("BadLifeStyle", {
                     required: "This field required",
                   })}
                 />
