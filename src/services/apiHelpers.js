@@ -11,4 +11,8 @@ export const urls = {
     getEthnicity:`/api/dropdown/ethnicity`,
     login:`/api/user/login`,
     register:`/api/user/register`,
+    createOffice:`/api/office/createOffice`,
+    createVolumeOfMilk :`/api/volumeOfMilk/addVolumeOfMilk`,
+    getDonor:`/api/donorDetails/getDonor`,
+    createDanaDarta : `/api/daanDartaRecord/create`
 }

@@ -33,10 +33,7 @@ export default function SideBar({ isOpen }) {
       link: "/volumeOfMilk/addVolumeOfMilk",
       name: "Add Volume of Milk",
     },
-    {
-      link: "/volumeOfMilk/storageDetail",
-      name: "Storage Detail",
-    },
+   
     {
       link: "/volumeOfMilk/volumeMilk",
       name: "List of Volume Milk",

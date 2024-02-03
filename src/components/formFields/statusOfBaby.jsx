@@ -4,22 +4,89 @@ import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
 import FormBorder from "../reusableForm";
+import { urls } from "src/services/apiHelpers";
+import axios from "axios";
 const defaultValues = {
-  birthDate: "",
-  breastFeedingStat: "",
-  babyTransferStat: "",
-  babyStat: "",
-  hivStat: "",
-  hbsagStat: "",
-  vdrlStat: "",
-  testDate: "",
+  dateOfBirth: "",
+  babyFeeding: "",
+  babyTransfer: "",
+  babyStatus: "",
+  hiv: "",
+  hbsag: "",
+  vdrl: "",
+  dateOfTest: "",
 };
-
+import {
+  serologyAtom,
+  serologyAtom1,
+  serologyAtom2,
+} from "src/recoil/serology/serologyAtom";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
+  const setSerologyPositive = useSetRecoilState(serologyAtom);
+  const setSerologyPositive1 = useSetRecoilState(serologyAtom1);
+  const setSerologyPositive2 = useSetRecoilState(serologyAtom2);
+  const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
-  const { query } = useRouter();
+  const router= useRouter();
+
+  //babyStatus
+  const [babyStatusList, setBabyStatusList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getBabyStatus}`);
+      if (status === 200) {
+        setBabyStatusList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const babyStatusOptions = babyStatusList?.map((item, index) => {
+    return (
+      <option key={index} value={item.babyStatusId}>
+        {item.babyStatusName}
+      </option>
+    );
+  });
+  //babyTransfer
+  const [babyTransferList, setBabyTranferList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getBabyTransfer}`);
+      if (status === 200) {
+        setBabyTranferList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const babyTransferOptions = babyTransferList?.map((item, index) => {
+    return (
+      <option key={index} value={item.babyTransferId}>
+        {item.babyTransferName}
+      </option>
+    );
+  });
+  //babyTransfer
+  const [breastFeedingList, setBreastFeedingList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getBreastFeeding}`);
+      if (status === 200) {
+        setBreastFeedingList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const breastFeedingOptions = breastFeedingList?.map((item, index) => {
+    return (
+      <option key={index} value={item.feedingId}>
+        {item.feedingName}
+      </option>
+    );
+  });
+
   const {
     control,
     handleSubmit,
@@ -35,43 +102,146 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   useEffect(() => {
     if (userData) {
       setDefaultValuesWithUserData({
-        birthDate: userData.birthDate || "",
-        breastFeedingStat: userData.breastFeedingStat || "",
-        babyTransferStat: userData.babyTransferStat || "",
-        babyStat: userData.babyStat || "",
-        hivStat: userData.hivStat || "",
-        hbsagStat: userData.hbsagStat || "",
-        vdrlStat: userData.vdrlStat || "",
-        testDate: userData.testDate || "",
+        dateOfBirth: userData.dateOfBirth || "",
+        babyFeeding: userData.babyFeeding || "",
+        babyTransfer: userData.babyTransfer || "",
+        babyStatus: userData.babyStatus || "",
+        hiv: userData.hiv || "",
+        hbsag: userData.hbsag || "",
+        vdrl: userData.vdrl || "",
+        dateOfTest: userData.dateOfTest || "",
       });
-      setValue("birthDate", userData.birthDate || "");
-      setValue("breastFeedingStat", userData.breastFeedingStat || "");
-      setValue("babyTransferStat", userData.babyTransferStat || "");
-      setValue("babyStat", userData.babyStat || "");
-      setValue("hivStat", userData.hivStat || "");
-      setValue("hbsagStat", userData.hbsagStat || "");
-      setValue("vdrlStat", userData.vdrlStat || "");
-      setValue("testDate", userData.testDate || "");
+      setValue("dateOfBirth", userData.dateOfBirth || "");
+      setValue("babyFeeding", userData.babyFeeding || "");
+      setValue("babyTransfer", userData.babyTransfer || "");
+      setValue("babyStatus", userData.babyStatus || "");
+      setValue("hiv", userData.hiv || "");
+      setValue("hbsag", userData.hbsag || "");
+      setValue("vdrl", userData.vdrl || "");
+      setValue("dateOfTest", userData.dateOfTest || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
   }, [userData, setValue]);
 
-  const onSubmit = (data) => {
-    setUserData({ ...userData, ...data });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
-    handleClick("next");
-    console.log(userData, "This is data");
+  const onSubmit = async(data) => {
+    if (serologyStatus === "false") {
+      setUserData({
+        ...userData,
+        babyStatus: {
+          dateOfBirth: data.dateOfBirth,
+          babyStatus: data.babyStatus,
+          babyTransfer: data.babyTransfer,
+          babyFeeding: data.babyFeeding,
+        },
+        serologyRecords: {
+          hiv: JSON.parse(data.hiv),
+          hbsag: JSON.parse(data.hbsag),
+          vdrl: JSON.parse(data.vdrl),
+          dateOfTest: data.dateOfTest,
+        },
+      });
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          ...userData,
+          babyStatus: {
+            dateOfBirth: data.dateOfBirth,
+            babyStatus: data.babyStatus,
+            babyTransfer: data.babyTransfer,
+            babyFeeding: data.babyFeeding,
+          },
+          serologyRecords: {
+            hiv: JSON.parse(data.hiv),
+            hbsag: JSON.parse(data.hbsag),
+            vdrl: JSON.parse(data.vdrl),
+            dateOfTest: data.dateOfTest,
+          },
+        })
+      );
+      handleClick("next");
+      console.log(userData, "response");
+    } else {
+      setUserData({ ...userData,  babyStatus: {
+        dateOfBirth: data.dateOfBirth,
+        babyStatus: data.babyStatus,
+        babyTransfer: data.babyTransfer,
+        babyFeeding: data.babyFeeding,
+      },
+      serologyRecords: {
+        hiv: JSON.parse(data.hiv),
+        hbsag: JSON.parse(data.hbsag),
+        vdrl: JSON.parse(data.vdrl),
+        dateOfTest: data.dateOfTest,
+      }, });
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          ...userData,
+          babyStatus: {
+            dateOfBirth: data.dateOfBirth,
+            babyStatus: data.babyStatus,
+            babyTransfer: data.babyTransfer,
+            babyFeeding: data.babyFeeding,
+          },
+          serologyRecords: {
+            hiv: JSON.parse(data.hiv),
+            hbsag: JSON.parse(data.hbsag),
+            vdrl: JSON.parse(data.vdrl),
+            dateOfTest: data.dateOfTest,
+          },
+        })
+      );
+      data = {
+        ...userData,
+        babyStatus: {
+          dateOfBirth: data.dateOfBirth,
+          babyStatus: data.babyStatus,
+          babyTransfer: data.babyTransfer,
+          babyFeeding: data.babyFeeding,
+        },
+        serologyRecords: {
+          hiv: JSON.parse(data.hiv),
+          hbsag: JSON.parse(data.hbsag),
+          vdrl: JSON.parse(data.vdrl),
+          dateOfTest: data.dateOfTest,
+        },
+      }
+      try {
+          const response = await axios.post(`${urls.createDanaDarta}`,data)
+          console.log(response,'response')
+          if(response.status === 200){
+            router.push('/donorRecord/viewDonorRecord')
+          }
+      } catch (error) {
+        console.log(error) 
+      }
+    }
   };
-
+  
   const watchAllFields = watch();
+  useEffect(() => {
+    if (watchAllFields?.hiv) {
+      setSerologyPositive(watchAllFields?.hiv);
+    }
+  }, [setSerologyPositive, watchAllFields?.hiv]);
+  useEffect(() => {
+    if (watchAllFields?.hbsag) {
+      setSerologyPositive1(watchAllFields?.hbsag);
+    }
+  }, [setSerologyPositive1, watchAllFields?.hbsag]);
+  useEffect(() => {
+    if (watchAllFields?.vdrl) {
+      setSerologyPositive2(watchAllFields?.vdrl);
+    }
+  }, [setSerologyPositive2, watchAllFields?.vdrl]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={" Status of Baby"}>
         <p className="font-bold text-xl py-5 ">Add Status of Baby:</p>
         <div className="grid md:grid-cols-2 gap-4 text-lg">
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Date of Birth<span className="text-red-600">*</span>
@@ -80,49 +250,71 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="date"
               placeholder=""
               className="inputStyle"
-              {...register("birthDate")}
+              {...register("dateOfBirth", { required: "DOB Required" })}
             />
+            {errors.dateOfBirth && (
+              <p className="errorMessages">{errors.dateOfBirth.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Baby Status
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("babyStat")}>
-              <option>Select Your Baby Status</option>
-              <option>Normal</option>
-              <option>Birth Asphylexia</option>
-              <option>Preterm </option>
-              <option>Sepsis</option>
-              <option>Jaundice</option>
-              <option>Other</option>
+            <select
+              className="inputStyle"
+              {...register("babyStatus", { required: "Baby Status Required",valueAsNumber:true })}
+            >
+              <option selected value={""} disabled>
+                --Select Your Baby Status--
+              </option>
+              {babyStatusOptions}
             </select>
+            {errors.babyStatus && (
+              <p className="errorMessages">{errors.babyStatus.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               Baby Transfer Status
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("babyTransferStat")}>
-              <option>Select Your Baby Status</option>
-              <option>NICU</option>
+            <select
+              className="inputStyle"
+              {...register("babyTransfer", {
+                required: "Baby Transfer Status Required",
+                valueAsNumber:true
+              })}
+            >
+              <option selected disabled value={""}>
+                --Select Baby Transfer Status--
+              </option>
+              {babyTransferOptions}
             </select>
+            {errors.babyTransfer && (
+              <p className="errorMessages">{errors.babyTransfer.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Baby Breast Feeding Status
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("breastFeedStat")}>
-              <option>Select Your Baby Status</option>
-              <option>Exclusive Breast Feeding</option>
-              <option>Partial Breast Feeding</option>
-              <option>Formula Milk Only </option>
-              <option>NPO</option>
-              <option>PDHM</option>
+            <select
+              className="inputStyle"
+              {...register("babyFeeding", {
+                required: "Breast Feeding Stat Required",
+                valueAsNumber:true
+              })}
+            >
+              <option>--Select Breast Feeding Status--</option>
+              {breastFeedingOptions}
             </select>
+            {errors.babyFeeding && (
+              <p className="errorMessages">{errors.babyFeeding.message}</p>
+            )}
           </div>
         </div>
         <p className="font-bold text-xl py-5 ">Serology Screening Records:</p>
@@ -133,37 +325,70 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               HIV Test
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("hivStat")}>
+            <select
+              className="inputStyle"
+              {...register("hiv", {
+                required: "Yes/No Required",
+              })}
+            >
               {" "}
-              <option>Yes</option>
-              <option>No</option>
+              <option selected disabled value={""}>
+                --select HIV Status--
+              </option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
+            {errors.hiv && (
+              <p className="errorMessages">{errors.hiv.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               HBSAG Test
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("hbsagStat")}>
+            <select
+              className="inputStyle"
+              {...register("hbsag", {
+                required: "Yes/No Required",
+              })}
+            >
               {" "}
-              <option>Yes</option>
-              <option>No</option>
+              <option selected disabled value={""}>
+                --select HBSAG Status--
+              </option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
+            {errors.hbsag && (
+              <p className="errorMessages">{errors.hbsag.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               VDRL Test
               <span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("vdrlStat")}>
+            <select
+              className="inputStyle"
+              {...register("vdrl", {
+                required: "Yes/No Required",
+              })}
+            >
               {" "}
-              <option>Yes</option>
-              <option>No</option>
+              <option selected disabled value={""}>
+                --select VDRL Status--
+              </option>
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
             </select>
+            {errors.vdrl && (
+              <p className="errorMessages">{errors.vdrl.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Date of Test
@@ -172,21 +397,37 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             <input
               type="date"
               className="inputStyle"
-              {...register("testDate")}
+              {...register("dateOfTest", {
+                required: "Yes/No Required",
+              })}
             />
+            {errors.dateOfTest && (
+              <p className="errorMessages">{errors.dateOfTest.message}</p>
+            )}
           </div>
         </div>
       </FormBorder>
-
-      <div className="mt-5">
-        {currentStep !== steps.length && (
-          <StepperControl
-            handleClick={handleClick}
-            currentStep={currentStep}
-            steps={steps}
-          />
-        )}
-      </div>
+      {serologyStatus == "false" ? (
+        <div className="mt-5">
+          {currentStep !== steps.length && (
+            <StepperControl
+              handleClick={handleClick}
+              currentStep={currentStep}
+              steps={steps}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="mt-5">
+          {currentStep == steps.length && (
+            <StepperControl
+              handleClick={handleClick}
+              currentStep={currentStep}
+              steps={steps}
+            />
+          )}
+        </div>
+      )}
     </form>
   );
 };
