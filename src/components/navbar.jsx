@@ -9,8 +9,6 @@ import Cookies from "js-cookie";
 export default function Navbar() {
   const userInfo =  (typeof localStorage !== 'undefined') ?
     JSON.parse(localStorage.getItem('userInfo')) : {username:'Softech'}
-  
-  
   const router = useRouter();
   const logoutHandler = async (e) => {
     e.preventDefault();
