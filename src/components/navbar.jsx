@@ -15,10 +15,8 @@ export default function Navbar() {
     e.preventDefault();
     try {
       const response = await axios.get(`${urls.logout}`);
-
-      if (response.status === 200) {
         router.push("/login");
-      }
+      
     } catch (error) {
       console.log(error);
     }
