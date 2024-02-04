@@ -11,6 +11,7 @@ export const urls = {
   getEthnicity: `/api/dropdown/ethnicity`,
   login: `/api/user/login`,
   register: `/api/user/register`,
+  logout:`/api/user/logout`,
   createOffice: `/api/office/createOffice`,
   getOffice: `/api/office/getOffice`,
   createDepartment: `/api/office/department/createDepartment`,
