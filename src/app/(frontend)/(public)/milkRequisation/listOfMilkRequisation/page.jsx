@@ -48,20 +48,50 @@ export default function ListVolume() {
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">
+                  <td className="py-3 px-3">
                     <input type="checkbox" name="" id="" />
                   </td>
-                  <td className="py-3">Id</td>
-                  <td className="py-3">Baby Name</td>
-                  <td className="py-3">Date of Birth</td>
-                  <td className="py-3">Gestation Age</td>
-                  <td className="py-3">Birth Weight</td>
-                  <td className="py-3">Baby Status</td>
-                  <td className="py-3">Bottle Name</td>
-                  <td className="py-3">Date of Bottle</td>
-                  <td className="py-3">Time</td>
-                  <td className="py-3">ML</td>
-                  <td className="py-3">Action</td>
+                  <td className="py-3 ">Id</td>
+                  <td className="py-3 ">
+                    Baby <br /> Name
+                  </td>
+                  <td className="py-3 ">
+                    Date of <br /> Birth
+                  </td>
+                  <td className="py-3 ">
+                    Gestation <br /> Age
+                  </td>
+                  <td className="py-3 ">
+                    Birth <br /> Weight
+                  </td>
+                  <td className="py-3 ">
+                    Baby <br /> Status
+                  </td>
+                  <td className="py-3 ">
+                    Bottle <br /> Name
+                  </td>
+                  <td className="py-3 ">
+                    Date of <br /> Bottle
+                  </td>
+                  <td className="py-3 ">Time</td>
+                  <td className="py-3 ">ML</td>
+                  <td className="py-3 ">Action</td>
+                </tr>
+                <tr className=" border border-x-gray text-center">
+                  <td className="py-3 text-center">
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
                 </tr>
               </table>
             </div>
