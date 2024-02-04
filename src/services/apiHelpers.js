@@ -22,5 +22,6 @@ export const urls = {
   createVolumeOfMilk: `/api/volumeOfMilk/addVolumeOfMilk`,
   getDonor: `/api/daanDartaRecord/get`,
   createDanaDarta: `/api/daanDartaRecord/create`,
-  getVolumeOfMilk:`/api/volumeOfMilk/getVolumeOfMilk`
+  getVolumeOfMilk:`/api/volumeOfMilk/getVolumeOfMilk`,
+
 };
