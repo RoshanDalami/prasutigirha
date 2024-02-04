@@ -11,10 +11,10 @@ import { serologyAtom } from "src/recoil/serology/serologyAtom";
 import { useRecoilValue } from "recoil";
 
 // import ListHeader from "../../reusableDesign/ListHeader";
-export default function CreateDisabled({ clickedIdData }){
+export default function CreateAddDonor({ clickedIdData }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [userData, setUserData] = useState({});
-  const serologyStatus = useRecoilValue(serologyAtom)
+  const serologyStatus = useRecoilValue(serologyAtom);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("userData"));
@@ -22,16 +22,14 @@ export default function CreateDisabled({ clickedIdData }){
   }, [currentStep]);
 
   const steps =
-  (serologyStatus == 'false')?
-  [
-    "Add Donor Records",
-    "Baby Status",
-    "Verbal Examination Record",
-    "Physical Examination Record ",
-  ]  : [
-    "Add Donor Records",
-    "Baby Status",
-  ] 
+    serologyStatus == "false"
+      ? [
+          "Add Donor Records",
+          "Baby Status",
+          "Verbal Examination Record",
+          "Physical Examination Record ",
+        ]
+      : ["Add Donor Records", "Baby Status"];
 
   const displayStep = (step) => {
     switch (step) {
