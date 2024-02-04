@@ -4,6 +4,7 @@ import { HiOutlineBars3 } from "react-icons/hi2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { urls } from "src/services/apiHelpers";
 export default function Navbar() {
   const userInfo =  (typeof localStorage !== 'undefined') ?
     JSON.parse(localStorage.getItem('userInfo')) : {username:'Softech'}
@@ -13,7 +14,7 @@ export default function Navbar() {
   const logoutHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get("/api/user/logout");
+      const response = await axios.get(`${urls.logout}`);
 
       if (response.status === 200) {
         router.push("/login");
