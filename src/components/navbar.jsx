@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { urls } from "src/services/apiHelpers";
+import Cookies from "js-cookie";
 export default function Navbar() {
   const userInfo =  (typeof localStorage !== 'undefined') ?
     JSON.parse(localStorage.getItem('userInfo')) : {username:'Softech'}
@@ -15,6 +16,7 @@ export default function Navbar() {
     e.preventDefault();
     try {
       const response = await axios.get(`${urls.logout}`);
+      Cookies.remove('token')
         router.push("/login");
       
     } catch (error) {
