@@ -15,9 +15,12 @@ export default function Navbar() {
   const logoutHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(`${urls.logout}`);
-      Cookies.remove('token')
-        router.push("/login");
+      const {data} = await axios.get(`${urls.logout}`);
+      if(data.success === true){
+        console.log('logout','response')
+        router.push('/login')
+      }
+        // router.push("/login");
       
     } catch (error) {
       console.log(error);
