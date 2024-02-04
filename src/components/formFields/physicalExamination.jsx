@@ -10,12 +10,15 @@ import {
   RadioGroup,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+
 import StepperControl from "../stepper/StepperControl";
 import { StepperContext } from "../stepper/StepperContext";
 import FormBorder from "../reusableForm";
 import RadioInput from "../radioInput";
 import axios from 'axios'
 import { urls } from "src/services/apiHelpers";
+import { submittingAtom } from "src/recoil/isSubmiting/submittingAtom";
+import { useSetRecoilState } from "recoil";
 const defaultValues = {
   mastitis: "",
   localLesions: "",
@@ -35,6 +38,8 @@ const PhysicalExamination = ({
   const { userData, setUserData } = useContext(StepperContext);
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
+    const setSubmitting = useSetRecoilState(submittingAtom);
+
   const router = useRouter();
   const {
     control,
@@ -45,6 +50,9 @@ const PhysicalExamination = ({
   } = useForm({
     defaultValues: defaultValuesWithUserData,
   });
+  useEffect(()=>{
+    setSubmitting(isSubmitting)
+  },[isSubmitting, setSubmitting])
 
   useEffect(() => {
     if (userData) {
@@ -94,7 +102,7 @@ const PhysicalExamination = ({
         doctorName: data.doctorName
       }
      }
-     console.log(data,'response')
+    
      try {
         const response = await axios.post(`${urls.createDanaDarta}`,data)
         if(response.status === 200){

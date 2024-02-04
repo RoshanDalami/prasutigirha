@@ -6,6 +6,12 @@ connect();
 
 export async function POST(req,res){
     try {
+      let officeId = 1
+      const latestOffice = await Office.findOne({},{},{sort:{officeId:-1}})
+      if(latestOffice){
+        const latestOfficeId = latestOffice?.officeId;
+         officeId = latestOfficeId + 1
+      }
      const {
          office_name,
          office_code,
@@ -27,7 +33,8 @@ export async function POST(req,res){
         office_email,
         stateId,
         districtId,
-        palikaId
+        palikaId,
+        officeId
       })
       await newOffice.save()
       return NextResponse.json({message:"Office Created Successfully"},{status:200})

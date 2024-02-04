@@ -9,10 +9,19 @@ export const urls = {
     getDelivery:`/api/dropdown/delivery`,
     getParity:`/api/dropdown/parity`,
     getEthnicity:`/api/dropdown/ethnicity`,
+  
     login:`/api/user/login`,
     register:`/api/user/register`,
+
     createOffice:`/api/office/createOffice`,
+    getOffice:`/api/office/getOffice`,
+    createDepartment:`/api/office/department/createDepartment`,
+    getDepartment:`/api/office/department/getDepartment`,
+    createPost:`/api/office/post/createPost`,
+    getPost:`/api/office/post/getPost`,
+    createEmployee:`/api/office/employee/createEmployee`,
+    getEmployee:`/api/office/employee/getEmployee`,
     createVolumeOfMilk :`/api/volumeOfMilk/addVolumeOfMilk`,
     getDonor:`/api/donorDetails/getDonor`,
-    createDanaDarta : `/api/daanDartaRecord/create`
+    createDanaDarta : `/api/daanDartaRecord/create`,
 }
