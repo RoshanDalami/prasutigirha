@@ -4,10 +4,6 @@ const postSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'User'
     },
-    officeId:{
-        type:Number,
-        requird:true
-    },
     departmentId:{
         type:Number,
         required:true

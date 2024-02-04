@@ -1,10 +1,33 @@
 "use client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { urls } from "src/services/apiHelpers";
 export default function ListVolume() {
   const FormBorder = dynamic(() => import("@/components/reusableForm"), {
     ssr: false,
   });
+  const [volumeList, setVolumeList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
+      if (status === 200) {
+        setVolumeList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const [gestationalAgeList, setGestationalAge] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (status === 200) {
+        setGestationalAge(data);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <>
       <div>
@@ -49,9 +72,9 @@ export default function ListVolume() {
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">
+                  {/* <td className="py-3">
                     <input type="checkbox" name="" id="" />
-                  </td>
+                  </td> */}
                   <td className="py-3">Id</td>
                   <td className="py-3">Donor Name</td>
                   <td className="py-3">Gestational Age</td>
@@ -60,6 +83,35 @@ export default function ListVolume() {
                   <td className="py-3">ML</td>
                   <td className="py-3">Action</td>
                 </tr>
+                {volumeList?.map((item, index) => {
+                  return (
+                    <tr
+                      className=" border border-x-gray text-center"
+                      key={index}
+                    >
+                      {/* <td className="py-3 text-center">
+                    <input type="checkbox" name="" id="" />
+                  </td> */}
+                      <td className="py-3">{index+1}</td>
+                      <td className="py-3">{item.donorName}</td>
+                      {
+                        gestationalAgeList?.map((age,index)=>{
+                          if(age.gestationalId === item.gestationalAge){
+
+                            return(
+                              
+                              <td className="py-3" key={index}>{age.gestationalName}</td>
+                            )
+                          }
+                        })
+                      }
+                      <td className="py-3">{item.date}</td>
+                      <td className="py-3">{item.time}</td>
+                      <td className="py-3">{item.quantity}{" "}ml</td>
+                      <td className="py-3">test</td>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
           </FormBorder>
