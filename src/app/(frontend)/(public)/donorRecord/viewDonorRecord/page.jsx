@@ -1,11 +1,24 @@
 "use client";
 import dynamic from "next/dynamic";
+import { useState, useEffect } from "react";
+import { urls } from "src/services/apiHelpers";
 import Link from "next/link";
 import Button from "src/components/button";
+import axios from "axios";
 export default function ViewDonor() {
   const FormBorder = dynamic(() => import("@/components/reusableForm"), {
     ssr: false,
   });
+  const [donorList, setDonorList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getDonor}`);
+      if (status === 200) {
+        setDonorList(data);
+      }
+    }
+    fetchData();
+  }, []);
   return (
     <>
       <div>
@@ -48,25 +61,34 @@ export default function ViewDonor() {
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">
+                  {/* <td className="py-3">
                     <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3">Id</td>
+                  </td> */}
+                  <td className="py-3">Reg. No</td>
                   <td className="py-3">Donar Name</td>
                   <td className="py-3">Age</td>
                   <td className="py-3">Address</td>
+                  <td className="py-3">Contact</td>
                   <td className="py-3">Action</td>
                 </tr>
-                <tr className=" border border-x-gray text-center">
-                  <td className="py-3 text-center">
+                {donorList?.map((item, index) => {
+                  return (
+                    <tr
+                      className=" border border-x-gray text-center"
+                      key={index}
+                    >
+                      {/* <td className="py-3 text-center">
                     <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                </tr>
+                  </td> */}
+                      <td className="py-3">{item.donorRegNo}</td>
+                      <td className="py-3">{item.donor_FullName}</td>
+                      <td className="py-3">{item.donorAge}</td>
+                      <td className="py-3">{item.address}</td>
+                      <td className="py-3">{item.contactNo}</td>
+                      <td className="py-3"></td>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
           </FormBorder>

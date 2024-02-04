@@ -7,10 +7,11 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from 'react-hot-toast'
 export default function AddVolume() {
-  const { register, handleSubmit, watch,setValue } = useForm();
+  const { register, handleSubmit, watch,setValue , formState:{isSubmitting} } = useForm();
   const router = useRouter();
   const watchFields = watch();
   const [gestational, setGestational] = useState([]);
+  const userInfo = (typeof localStorage !== 'undefined') ? JSON.parse(localStorage.getItem('userInfo')) : ''
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getGestational}`);
@@ -21,11 +22,7 @@ export default function AddVolume() {
     fetchData();
   }, []);
   
-  const data = [
-    { gestationalId: 1, name: "Aakash", id: 1 },
-    { gestationalId: 2, name: "Roshan", id: 2 },
-    { gestationalId: 3, name: "Madhav", id: 3 },
-  ];
+
   
   useEffect(() => {
     gestational.forEach((item) => {
@@ -49,9 +46,10 @@ export default function AddVolume() {
   const onSubmit = async(data)=>{
     data={
       ...data,
-      userId:'65b74d30f2c002b81675e4fd',
-      donorId:'65b757b1031779ed57fac9c6',
+      userId:userInfo?._id,
+      donorId:watchFields?.donorId.split('-')[1],
       gestationalAge:parseInt(watchFields?.donorId.split('-')[0]),
+      donorName:watchFields?.donorId.split('-')[2],
 
     }
     
@@ -83,7 +81,7 @@ export default function AddVolume() {
                     --Select Donor--
                   </option>
                   {donorList?.map((item, index) => {
-                    const combinedValue = `${item.gestationalId}-${item._id}-${item.donor_FullName}`;
+                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donor_FullName}`;
                     return (
                       <option key={index} value={combinedValue}>
                         {item.donor_FullName}
@@ -142,7 +140,7 @@ export default function AddVolume() {
               </div>
             </div>
             <button className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]">
-              Submit
+              {isSubmitting ? 'Submitting ...':'Submit'}
             </button>
           </div>
         </FormBorder>
