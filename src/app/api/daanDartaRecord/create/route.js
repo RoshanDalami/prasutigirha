@@ -6,30 +6,35 @@ connect();
 export async function POST(req, res) {
   const body = await req.json();
   try {
-    const latestDaanDarta = await DaanDarta.findOne(
-      {},
-      {},
-      { sort: { donorRegNo: -1 } }
-    );
+    // const latestDaanDarta = await DaanDarta.findOne(
+    //   {},
+    //   {},
+    //   { sort: { donorRegNo: -1 } }
+    // );
 
     let newDonorRegNo = "001";
-    if (latestDaanDarta) {
-      const lastDonorRegNo = latestDaanDarta.donorRegNo;
-      const numericPart = parseInt(lastDonorRegNo, 10);
-      newDonorRegNo = (numericPart + 1).toString().padStart(3, "0");
-    }
 
+    if (!body._id) {
+      // Generate a new donorRegNo for create (if not provided in the body).
+      const latestDaanDarta = await DaanDarta.findOne({}, {}, { sort: { donorRegNo: -1 } });
+    
+      if (latestDaanDarta) {
+        const lastDonorRegNo = latestDaanDarta.donorRegNo;
+        const numericPart = parseInt(lastDonorRegNo, 10);
+        newDonorRegNo = (numericPart + 1).toString().padStart(3, "0");
+      }
+    }
+    
     const newDaanDarta = new DaanDarta({
       ...body,
-      donorRegNo: newDonorRegNo,
+      donorRegNo: body._id ? body.donorRegNo : newDonorRegNo,
     });
 
     if (newDaanDarta.serologyRecords.hiv == true) {
       newDaanDarta.isSerologyPositive = true;
     } else if (newDaanDarta.serologyRecords.hbsag == true) {
       newDaanDarta.isSerologyPositive = true;
-    }
-    if (newDaanDarta.serologyRecords.vdrl == true) {
+    }else if (newDaanDarta.serologyRecords.vdrl == true) {
       newDaanDarta.isSerologyPositive = true;
     }
     // if (
@@ -49,7 +54,15 @@ export async function POST(req, res) {
         { status: 200 }
       );
     }
-    const savedDaanDarta = await newDaanDarta.save();
+    let savedDaanDarta;
+    if (body._id) {
+      // Update operation: Use findByIdAndUpdate for updates
+      savedDaanDarta = await DaanDarta.findByIdAndUpdate(body._id, newDaanDarta, { new: true });
+    } else {
+      // Create operation: Save the new document
+      savedDaanDarta = await newDaanDarta.save();
+    }
+  
 
     return NextResponse.json(
       savedDaanDarta,
