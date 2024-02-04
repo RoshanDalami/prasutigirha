@@ -191,6 +191,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             dateOfTest: data.dateOfTest,
           },
         })
+
       );
       data = {
         ...userData,
@@ -214,7 +215,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             router.push('/donorRecord/viewDonorRecord')
           }
       } catch (error) {
-        console.log(error) 
+        console.log(error,'response') 
       }
     }
   };

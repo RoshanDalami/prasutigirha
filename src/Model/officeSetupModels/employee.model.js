@@ -9,6 +9,10 @@ const employeeSchema = new Schema({
         type:Number,
         required:true
     },
+    postId:{
+        type:Number,
+        required:true
+    },
     employeeId:{
         type:Number,
         required:true
@@ -16,7 +20,16 @@ const employeeSchema = new Schema({
     employeeName:{
         type:String,
         required:true
+    },
+    employeeEmail:{
+        type:String,
+        required:true
+    },
+    employeePhone:{
+        type:String,
+        required:true
     }
+
 },{timestamps:true})
 
 const Employee = mongoose.models.Employee || mongoose.model('Employee',employeeSchema);
