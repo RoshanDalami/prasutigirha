@@ -33,7 +33,7 @@ export default function SideBar({ isOpen }) {
       link: "/volumeOfMilk/addVolumeOfMilk",
       name: "Add Volume of Milk",
     },
-   
+
     {
       link: "/volumeOfMilk/volumeMilk",
       name: "List of Volume Milk",
@@ -164,7 +164,7 @@ export default function SideBar({ isOpen }) {
           >
             <SiProcessingfoundation className="text-xl" />
 
-            <h1 className="text-xl">pasteurization</h1>
+            <h1 className="text-xl">Pasteurization</h1>
             <IoIosArrowUp
               className={` font-bold ${show3 ? "" : "rotate-180"}`}
             />

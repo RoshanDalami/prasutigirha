@@ -57,6 +57,16 @@ export default function ViewDonor() {
                   <td className="py-3">Address</td>
                   <td className="py-3">Action</td>
                 </tr>
+                <tr className=" border border-x-gray text-center">
+                  <td className="py-3 text-center">
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                </tr>
               </table>
             </div>
           </FormBorder>
