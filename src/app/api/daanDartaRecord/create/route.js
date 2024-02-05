@@ -28,9 +28,10 @@ export async function POST(req, res) {
       newDaanDarta.isSerologyPositive = true;
     } else if (newDaanDarta.serologyRecords.hbsag === true) {
       newDaanDarta.isSerologyPositive = true;
-    }
-    if (newDaanDarta.serologyRecords.vdrl === true) {
+    } else if (newDaanDarta.serologyRecords.vdrl === true) {
       newDaanDarta.isSerologyPositive = true;
+    } else {
+      newDaanDarta.isSerologyPositive = false;
     }
 
     if (
@@ -42,14 +43,31 @@ export async function POST(req, res) {
       newDaanDarta.isDonorActive = false;
     }
 
-    console.log(newDaanDarta.isSerologyPositive);
-
     if (newDaanDarta.isSerologyPositive === true) {
       return NextResponse.json(
         { message: "Serology Positive she can't donate milk" },
         { status: 200 }
       );
     }
+
+    if (
+      newDaanDarta.verbalExamination === true &&
+      newDaanDarta.donorPhysicalExamination === true
+    ) {
+      return NextResponse.json(
+        {
+          message:
+            " She can’t donation milk right now she has to take tests after ………………… Days ",
+        },
+        { status: 200 }
+      );
+    }
+    if (verbalExamination === true) {
+      newDaanDarta.verbalExamination = true;
+    } else {
+      newDaanDarta.verbalExamination = false;
+    }
+
     const savedDaanDarta = await newDaanDarta.save();
 
     return NextResponse.json(
