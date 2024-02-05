@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Collection, Schema } from "mongoose";
 
 const babyStatusSchema = new mongoose.Schema({
   dateOfBirth: {
@@ -158,6 +158,9 @@ const daanDartaSchema = new Schema({
     type: Boolean,
   },
   physicalStatus: {
+    type: Boolean,
+  },
+  colostrumStatus: {
     type: Boolean,
   },
   remarks: {

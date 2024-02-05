@@ -19,57 +19,106 @@ export async function POST(req, res) {
       newDonorRegNo = (numericPart + 1).toString().padStart(3, "0");
     }
 
-    const newDaanDarta = new DaanDarta({
+    let newDaanDarta = new DaanDarta({
       ...body,
       donorRegNo: newDonorRegNo,
     });
 
+    if (newDaanDarta.gestationalAge <= 3) {
+      newDaanDarta.colostrumStatus = true;
+      console.log("colostrumStatus", newDaanDarta.colostrumStatus);
+    } else {
+      newDaanDarta.colostrumStatus = false;
+    }
+
+    // ===============================================================================================
+    // yadi serologyRecords positive aayo vane isSerologyPositive = true baschha
     if (newDaanDarta.serologyRecords.hiv === true) {
       newDaanDarta.isSerologyPositive = true;
+      newDaanDarta.remarks = "HIV Positive";
     } else if (newDaanDarta.serologyRecords.hbsag === true) {
       newDaanDarta.isSerologyPositive = true;
     } else if (newDaanDarta.serologyRecords.vdrl === true) {
       newDaanDarta.isSerologyPositive = true;
     } else {
+      // yadi serologyRecords negative  aayo vane isSerologyPositive = false baschha
       newDaanDarta.isSerologyPositive = false;
     }
 
-    if (
-      newDaanDarta.verbalExamination === true &&
-      newDaanDarta.donorPhysicalExamination === true
-    ) {
-      newDaanDarta.isDonorActive = true;
-    } else {
-      newDaanDarta.isDonorActive = false;
-    }
-
     if (newDaanDarta.isSerologyPositive === true) {
+      await newDaanDarta.save();
       return NextResponse.json(
         { message: "Serology Positive she can't donate milk" },
         { status: 200 }
       );
     }
 
+    // ===============================================================================================
+
     if (
-      newDaanDarta.verbalExamination === true &&
-      newDaanDarta.donorPhysicalExamination === true
+      newDaanDarta.verbalExamination.acuteInfection === true ||
+      newDaanDarta.verbalExamination.chronicInfection === true ||
+      newDaanDarta.verbalExamination.cancerTreatmentWithinThreeYears === true ||
+      newDaanDarta.verbalExamination.autoImmuneDisease === true ||
+      newDaanDarta.verbalExamination.coughMoreThanTwoWeeks === true ||
+      newDaanDarta.verbalExamination.chickenpox === true ||
+      newDaanDarta.verbalExamination.stdLastOneYear === true ||
+      newDaanDarta.verbalExamination.medCancerAntisicotikRadioactiveThyroid ===
+        true ||
+      newDaanDarta.verbalExamination.transplantAndBloodTaken === true ||
+      newDaanDarta.verbalExamination.BadLifeStyle === true
     ) {
+      newDaanDarta.verbalStatus = true;
+      newDaanDarta.remarks =
+        "She can’t donation milk right now she has to take tests after ………………… Days ";
+    } else {
+      newDaanDarta.verbalStatus = false;
+    }
+    if (newDaanDarta.verbalExamination === true) {
+      newDaanDarta.isDonorActive = true;
+    } else {
+      newDaanDarta.isDonorActive = false;
+    }
+
+    if (newDaanDarta.verbalStatus === true) {
+      await newDaanDarta.save();
       return NextResponse.json(
-        {
-          message:
-            " She can’t donation milk right now she has to take tests after ………………… Days ",
-        },
+        { message: "She can't milk right now" },
         { status: 200 }
       );
     }
-    if (verbalExamination === true) {
-      newDaanDarta.verbalExamination = true;
+
+    // ===============================================================================================
+
+    if (
+      newDaanDarta.donorPhysicalExamination.mastitis === true ||
+      newDaanDarta.donorPhysicalExamination.localLesions === true ||
+      newDaanDarta.donorPhysicalExamination.fugalInNippleAreola === true ||
+      newDaanDarta.donorPhysicalExamination.herpesZoster === true
+    ) {
+      newDaanDarta.physicalStatus = true;
+      newDaanDarta.remarks =
+        " She can’t donation milk right now she has to take tests after ………………… Days ";
     } else {
-      newDaanDarta.verbalExamination = false;
+      newDaanDarta.physicalStatus = false;
     }
 
-    const savedDaanDarta = await newDaanDarta.save();
+    if (newDaanDarta.donarPhysicalExaminatoin === true) {
+      newDaanDarta.isDonorActive = true;
+    } else {
+      newDaanDarta.isDonorActive = false;
+    }
 
+    if (newDaanDarta.physicalStatus === true) {
+      await newDaanDarta.save();
+      return NextResponse.json(
+        { message: "she can't donate milk right now !" },
+        { status: 200 }
+      );
+    }
+
+    // ===============================================================================================	  if (newDaanDarta.serologyRecords.hiv === true) {
+    const savedDaanDarta = await newDaanDarta.save();
     return NextResponse.json(
       savedDaanDarta,
       { message: "daanDarta created successfully" },
