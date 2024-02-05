@@ -46,6 +46,12 @@ export async function POST(req, res) {
     }
 
     if (newDaanDarta.isSerologyPositive === true) {
+      newDaanDarta.isDonorActive = false;
+    } else {
+      newDaanDarta.isDonorActive = true;
+    }
+
+    if (newDaanDarta.isSerologyPositive === true) {
       await newDaanDarta.save();
       return NextResponse.json(
         { message: "Serology Positive she can't donate milk" },
