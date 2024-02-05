@@ -4,16 +4,22 @@ import { HiOutlineBars3 } from "react-icons/hi2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { urls } from "src/services/apiHelpers";
+import Cookies from "js-cookie";
 export default function Navbar() {
+  const userInfo =  (typeof localStorage !== 'undefined') ?
+    JSON.parse(localStorage.getItem('userInfo')) : {username:'Softech'}
   const router = useRouter();
   const logoutHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get("/api/user/logout");
-
-      if (response.status === 200) {
-        router.push("/login");
+      const {data} = await axios.get(`${urls.logout}`);
+      if(data.success === true){
+        console.log('logout','response')
+        router.push('/login')
       }
+        // router.push("/login");
+      
     } catch (error) {
       console.log(error);
     }
@@ -23,7 +29,7 @@ export default function Navbar() {
     setIsShowButton(!showButton);
   };
   return (
-    <div className="  shadow-xl sticky  inset-0 z-50 flex  items-center justify-between bg-white ">
+    <div className="  shadow-xl sticky  inset-0 z-50 flex  items-center justify-between bg-white " >
       {/* <div className="">
         <HiOutlineBars3 />
       </div> */}
@@ -39,7 +45,7 @@ export default function Navbar() {
 
       <div className="flex items-center gap-5 relative  ">
         <p className="text-lg">
-          Welcome!! <span className="text-red-600 font-bold ">Softech</span>{" "}
+          Welcome!! <span className="text-red-600 font-bold ">{userInfo?.username}</span>{" "}
         </p>
         <div className="">
           <div className=" cursor-pointer " onClick={handleClick}>

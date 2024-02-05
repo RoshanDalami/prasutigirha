@@ -7,6 +7,10 @@ const officeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  officeId:{
+    type:Number,
+    required:true
+  },
   office_code: {
     type: Number,
     required: true,

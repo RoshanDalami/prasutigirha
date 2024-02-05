@@ -1,16 +1,23 @@
 "use client";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 export default function ListVolume() {
-  const FormBorder = dynamic(() => import("@/components/reusableForm"), {
+  const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
+  });
+  const router = useRouter();
+  const handleEdit = useCallback(() => {
+    router.push(`/pasteurization/addPasteurization`);
   });
   return (
     <>
       <div>
         <form className="my-5 mx-10 ">
           <p htmlFor="" className="text-red-600 text-2xl font-bold my-5 ">
-            Volume of Milk
+            Pasteurization
           </p>
           <div className="grid grid-cols-4 gap-4">
             <input
@@ -36,16 +43,20 @@ export default function ListVolume() {
           </div>
         </form>
         <div className="mx-10">
-          <FormBorder title={"List of Volume of Milk"}>
-            <div className="flex flex-col   ">
-              <div className=" flex justify-end">
-                <Link href={"/pasteurization/addPasteurization"}>
-                  <button className="text-white bg-red-600 hover:bg-[#004a89] px-4 py-3 rounded-lg font-bold ">
-                    + Add
-                  </button>
-                </Link>
+          <TableBorder
+            title={"List of Pasteurized Milk"}
+            title2={
+              <div className="flex flex-col   ">
+                <div className=" flex justify-end">
+                  <Link href={"/pasteurization/addPasteurization"}>
+                    <button className="text-white bg-red-600 hover:bg-[#004a89] px-4 py-3 rounded-lg font-bold ">
+                      + Add
+                    </button>
+                  </Link>
+                </div>
               </div>
-            </div>
+            }
+          >
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
@@ -61,9 +72,30 @@ export default function ListVolume() {
                   <td className="py-3 px-2">Expiry Date</td>
                   <td className="py-3 px-2">Action</td>
                 </tr>
+                <tr className=" border border-x-gray text-center">
+                  <td className="py-3 text-center">
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">
+                    <div className="flex justify-evenly text-xl">
+                      <PencilSquareIcon
+                        className="h-6 w-6"
+                        onClick={() => handleEdit()}
+                      />
+                      <TrashIcon className="h-6 w-6" />
+                    </div>
+                  </td>
+                </tr>
               </table>
             </div>
-          </FormBorder>
+          </TableBorder>
         </div>
       </div>
     </>

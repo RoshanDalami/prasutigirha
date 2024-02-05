@@ -1,10 +1,17 @@
 "use client";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 import Button from "src/components/button";
 export default function ListVolume() {
-  const FormBorder = dynamic(() => import("@/components/reusableForm"), {
+  const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
+  });
+  const router = useRouter();
+  const handleEdit = useCallback(() => {
+    router.push(`/milkRequisation/addMilkRequisation`);
   });
   return (
     <>
@@ -37,35 +44,77 @@ export default function ListVolume() {
           </div>
         </form>
         <div className="mx-10">
-          <FormBorder title={"List of Milk Requisition Form"}>
-            <div className="flex flex-col   ">
-              <div className=" flex justify-end">
-                <Link href={"/milkRequisation/addMilkRequisation"}>
-                  <Button>+Add </Button>
-                </Link>
+          <TableBorder
+            title={"List of Milk Requisition Form"}
+            title2={
+              <div className="flex flex-col   ">
+                <div className=" flex justify-end">
+                  <Link href={"/milkRequisation/addMilkRequisation"}>
+                    <Button>+Add </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
+            }
+          >
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">
+                  <td className="py-3 px-3">
                     <input type="checkbox" name="" id="" />
                   </td>
-                  <td className="py-3">Id</td>
-                  <td className="py-3">Baby Name</td>
-                  <td className="py-3">Date of Birth</td>
-                  <td className="py-3">Gestation Age</td>
-                  <td className="py-3">Birth Weight</td>
-                  <td className="py-3">Baby Status</td>
-                  <td className="py-3">Bottle Name</td>
-                  <td className="py-3">Date of Bottle</td>
-                  <td className="py-3">Time</td>
-                  <td className="py-3">ML</td>
-                  <td className="py-3">Action</td>
+                  <td className="py-3 ">Id</td>
+                  <td className="py-3 ">
+                    Baby <br /> Name
+                  </td>
+                  <td className="py-3 ">
+                    Date of <br /> Birth
+                  </td>
+                  <td className="py-3 ">
+                    Gestation <br /> Age
+                  </td>
+                  <td className="py-3 ">
+                    Birth <br /> Weight
+                  </td>
+                  <td className="py-3 ">
+                    Baby <br /> Status
+                  </td>
+                  <td className="py-3 ">
+                    Bottle <br /> Name
+                  </td>
+                  <td className="py-3 ">
+                    Date of <br /> Bottle
+                  </td>
+                  <td className="py-3 ">Time</td>
+                  <td className="py-3 ">ML</td>
+                  <td className="py-3 ">Action</td>
+                </tr>
+                <tr className=" border border-x-gray text-center">
+                  <td className="py-3 text-center">
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">test</td>
+                  <td className="py-3">
+                    <div className="flex justify-evenly text-xl">
+                      <PencilSquareIcon
+                        className="h-6 w-6"
+                        onClick={() => handleEdit()}
+                      />
+                      <TrashIcon className="h-6 w-6" />
+                    </div>
+                  </td>
                 </tr>
               </table>
             </div>
-          </FormBorder>
+          </TableBorder>
         </div>
       </div>
     </>

@@ -7,23 +7,29 @@ import StatusOfBaby from "src/components/formFields/statusOfBaby";
 import VerbalExamination from "src/components/formFields/verbalExamination";
 import { UseContextProvider } from "src/components/stepper/StepperContext";
 import Stepper from "src/components/stepper/stepper";
+import { serologyAtom } from "src/recoil/serology/serologyAtom";
+import { useRecoilValue } from "recoil";
 
 // import ListHeader from "../../reusableDesign/ListHeader";
-export default function CreateDisabled({ clickedIdData }) {
+export default function CreateAddDonor({ clickedIdData }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [userData, setUserData] = useState({});
+  const serologyStatus = useRecoilValue(serologyAtom);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("userData"));
     setUserData(data);
   }, [currentStep]);
 
-  const steps = [
-    "Add Donor Records",
-    "Baby Status",
-    "Verbal Examination Record",
-    "Physical Examination Record ",
-  ];
+  const steps =
+    serologyStatus == "false"
+      ? [
+          "Add Donor Records",
+          "Baby Status",
+          "Verbal Examination Record",
+          "Physical Examination Record ",
+        ]
+      : ["Add Donor Records", "Baby Status"];
 
   const displayStep = (step) => {
     switch (step) {

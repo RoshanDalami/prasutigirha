@@ -1,11 +1,37 @@
 "use client";
 import dynamic from "next/dynamic";
+import { useState, useEffect, useCallback } from "react";
+import { urls } from "src/services/apiHelpers";
 import Link from "next/link";
 import Button from "src/components/button";
+import axios from "axios";
+import { BiEdit } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+
 export default function ViewDonor() {
-  const FormBorder = dynamic(() => import("@/components/reusableForm"), {
+  const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
+  const router = useRouter();
+  const [donorList, setDonorList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getDonor}`);
+      if (status === 200) {
+        setDonorList(data);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const handleEdit = useCallback(
+    (id) => {
+      router.push(`/donorRecord/addDonorRecord/${id}`);
+    },
+    [router]
+  );
   return (
     <>
       <div>
@@ -37,29 +63,60 @@ export default function ViewDonor() {
           </div>
         </form>
         <div className="mx-10">
-          <FormBorder title={"List of Donar Records"}>
-            <div className="flex flex-col   ">
-              <div className=" flex justify-end">
-                <Link href={"/donorRecord/addDonorRecord"}>
-                  <Button>+Add </Button>
-                </Link>
+          <TableBorder
+            title={"List of Donar Records"}
+            title2={
+              <div className="flex flex-col   ">
+                <div className=" flex justify-end">
+                  <Link href={"/donorRecord/addDonorRecord"}>
+                    <Button>+Add </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
+            }
+          >
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">
+                  {/* <td className="py-3">
                     <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3">Id</td>
+                  </td> */}
+                  <td className="py-3">Reg. No</td>
                   <td className="py-3">Donar Name</td>
                   <td className="py-3">Age</td>
                   <td className="py-3">Address</td>
+                  <td className="py-3">Contact</td>
                   <td className="py-3">Action</td>
                 </tr>
+                {donorList?.map((item, index) => {
+                  return (
+                    <tr
+                      className=" border border-x-gray text-center"
+                      key={index}
+                    >
+                      {/* <td className="py-3 text-center">
+                    <input type="checkbox" name="" id="" />
+                  </td> */}
+                      <td className="py-3">{item.donorRegNo}</td>
+                      <td className="py-3">{item.donor_FullName}</td>
+                      <td className="py-3">{item.donorAge}</td>
+                      <td className="py-3">{item.address}</td>
+                      <td className="py-3">{item.contactNo}</td>
+                      <td className="py-3">
+                        <div className="flex justify-evenly text-xl">
+                          <PencilSquareIcon
+                            className="h-6 w-6"
+                            onClick={() => handleEdit(item._id)}
+                          />
+                          <TrashIcon className="h-6 w-6" />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
-          </FormBorder>
+          </TableBorder>
         </div>
       </div>
     </>

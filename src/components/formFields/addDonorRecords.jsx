@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import FormRender from "../form/FormRender";
 import FormBorder from "../reusableForm";
 import Button from "../button";
+import axios from "axios";
+import { urls } from "src/services/apiHelpers";
+import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 const defaultValues = {
   hosRegNo: "",
   donorRegNo: "",
@@ -23,79 +26,97 @@ const defaultValues = {
   modeOfDelivery: "",
   parity: "",
 };
-const formField = [
-  {
-    name: "fullNameEnglish",
-    label: "पुरानाम,थर(अंग्रेजीमा) ",
-    type: "text",
-    placeholder: "Enter your name in English",
-  },
-  {
-    name: "fullName_NepSchema",
-    label: "पुरानाम,थर(नेपालीमा)",
-    type: "text",
-    placeholder: "पुरानाम,थर(नेपालीमा)",
-  },
-  {
-    name: "gender",
-    label: "लिङ्ग",
-    type: "select",
-    defaultValue: "लिङ्ग छान्नुहोस् ",
-  },
-  {
-    name: "age",
-    label: "उमेर",
-    type: "number",
-    placeholder: "उमेर",
-  },
-  {
-    name: "mobileNo",
-    label: "मोबाइल नं.",
-    type: "number",
-    placeholder: "मोबाइल नं.",
-  },
-  {
-    name: "contact",
-    label: "मोबाइल नं.(optional)",
-    type: "number",
-    placeholder: "मोबाइल नं.(optional)",
-  },
-  {
-    name: "citznshipNo",
-    label: "ना.प्र.प.नं / ज.द.नं",
-    type: "text",
-    placeholder: "ना.प्र.प.नं / ज.द.नं",
-  },
-  {
-    name: "citznIssueDistrict",
-    label: "नागरिकता जारी गरिएको जिल्ला",
-    type: "select",
-    defaultValue: "--नागरिकता जारी गरिएको जिल्ला--",
-  },
-  {
-    name: "education",
-    label: "शिक्षा स्थर",
-    type: "select",
-    defaultValue: "--शिक्षा स्थर छान्नुहोस्--",
-  },
-  {
-    name: "occupation",
-    label: "पेशा",
-    type: "select",
-    defaultValue: "--पेशा छान्नुहोस्--",
-  },
-  {
-    name: "bloodGroup",
-    label: "रक्त समूह",
-    type: "select",
-    defaultValue: "--रक्त समूह छान्नुहोस्--",
-  },
+const educationList = [
+  { name: "School Level", id: 1 },
+  { name: "High School", id: 2 },
+  { name: "Bachelor Degree", id: 3 },
+  { name: "Master Degree", id: 4 },
+  { name: "Doctorate", id: 5 },
+  { name: "Other", id: 6 },
 ];
+
 const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const { userData, setUserData } = useContext(StepperContext);
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
-  const { query } = useRouter();
+  const router = useRouter();
+
+  //ethnicity
+  const [ethnicityList, setEthnicity] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getEthnicity}`);
+      if (status === 200) {
+        setEthnicity(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const ethnicityOptions = ethnicityList?.map((item, index) => {
+    return (
+      <option key={index} value={item.ethnicityName}>
+        {item.ethnicityName}
+      </option>
+    );
+  });
+
+  //gestationalAge
+  const [gestationalAgeList, setGestationalAgeList] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (status === 200) {
+        setGestationalAgeList(data);
+      }
+    };
+    fetchData();
+  }, []);
+  const gestationalOptions = gestationalAgeList?.map((item, index) => {
+    return (
+      <option key={index} value={item.gestationalId}>
+        {item.gestationalName}
+      </option>
+    );
+  });
+
+  //modeOfDelivery
+  const [modeOfDeliveryList, setModeOfDeliveryList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getDelivery}`);
+      if (status === 200) {
+        setModeOfDeliveryList(data);
+      }
+    }
+    fetchData();
+  }, []);
+
+  const deliveryOptions = modeOfDeliveryList?.map((item, index) => {
+    return (
+      <option key={index} value={item.deliveryId}>
+        {item.deliveryName}
+      </option>
+    );
+  });
+
+  //parity
+  const [parityList, setParityList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getParity}`);
+      if (status === 200) {
+        setParityList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const parityOptions = parityList?.map((item, index) => {
+    return (
+      <option key={index} value={item.parityId}>
+        {item.parityName}
+      </option>
+    );
+  });
 
   const {
     control,
@@ -111,25 +132,41 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   useEffect(() => {
     if (userData) {
       setDefaultValuesWithUserData({
-        fullName_Eng: userData.fullName_Eng || "",
-        fullName_Nep: userData.fullName_Nep || "",
-        mobileNo: userData.mobileNo || "",
-        citznshipNo: userData.citznshipNo || "",
-        age: userData.age || "",
-        gender: userData.gender || "",
+        hosRegNo: userData.hosRegNo || "",
+        donorRegNo: userData.donorRegNo || "",
+        date: userData.date || "",
+        time: userData.time || "",
+        donor_FullName: userData.donor_FullName || "",
+        donorAge: userData.donorAge || "",
         education: userData.education || "",
-        occupation: userData.occupation || "",
-        bloodGroup: userData.bloodGroup || "",
+        ethnicity: userData.ethnicity || "",
+        address: userData.address || "",
+        contactNo: userData.contactNo || "",
+        ageOfChild: userData.ageOfChild || "",
+        gestationalAge: userData.gestationalAge || "",
+        modeOfDelivery: userData.modeOfDelivery || "",
+        parity: userData.parity || "",
       });
-      setValue("fullName_Eng", userData.fullName_Eng || ""); // pass setValue to the dependencies array and use it directly
-      setValue("fullName_Nep", userData.fullName_Nep || "");
-      setValue("mobileNo", userData.mobileNo || "");
-      setValue("citznshipNo", userData.citznshipNo || "");
-      setValue("age", userData.age || "");
-      setValue("gender", userData.gender || defaultValues.gender);
+      setValue("hosRegNo", userData.hosRegNo || ""); // pass setValue to the dependencies array and use it directly
+      setValue("donorRegNo", userData.donorRegNo || "");
+      setValue("date", userData.date || "");
+      setValue("time", userData.time || "");
+      setValue("donor_FullName", userData.donor_FullName || "");
+      setValue("donorAge", userData.donorAge || defaultValues.donorAge);
       setValue("education", userData.education || defaultValues.education);
-      setValue("occupation", userData.occupation || defaultValues.occupation);
-      setValue("bloodGroup", userData.bloodGroup || defaultValues.bloodGroup);
+      setValue("ethnicity", userData.ethnicity || defaultValues.ethnicity);
+      setValue("address", userData.address || defaultValues.address);
+      setValue("contactNo", userData.contactNo || defaultValues.contactNo);
+      setValue("ageOfChild", userData.ageOfChild || defaultValues.ageOfChild);
+      setValue(
+        "modeOfDelivery",
+        userData.modeOfDelivery || defaultValues.modeOfDelivery
+      );
+      setValue(
+        "gestationalAge",
+        userData.gestationalAge || defaultValues.gestationalAge
+      );
+      setValue("parity", userData.parity || defaultValues.parity);
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
@@ -139,7 +176,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     setUserData({ ...userData, ...data });
     localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
     handleClick("next");
-    console.log(userData, "This is data");
+    console.log(userData, "response");
   };
   const [isExternal, setIsExternal] = useState(false);
   function handleExternal(e) {
@@ -170,7 +207,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
         </div>
         <div className="md:grid-cols-2 grid text-lg gap-4">
           {/* <div className="grid"> */}
-          <div className={`grid ${isExternal ? "hidden" : "block"}`}>
+          <div className={`flex flex-col ${isExternal ? "hidden" : "block"}`}>
             <label>
               {" "}
               Hospital Registration Number
@@ -180,10 +217,15 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Hospital Registration Number"
               className="inputStyle"
-              {...register("hosRegNo")}
+              {...register("hosRegNo", {
+                required: "Hospital Registration Number is required",
+              })}
             />
+            {errors.hosRegNo && (
+              <p className="errorMessages">{errors.hosRegNo.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Date<span className="text-red-600">*</span>
@@ -192,10 +234,13 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="date"
               placeholder=""
               className="inputStyle"
-              {...register("date")}
+              {...register("date", { required: "Date is Required" })}
             />
+            {errors.date && (
+              <p className="errorMessages">{errors.date.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Time<span className="text-red-600">*</span>
@@ -204,10 +249,13 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="time"
               placeholder=""
               className="inputStyle"
-              {...register("time")}
+              {...register("time", { required: "Time is Required" })}
             />
+            {errors.time && (
+              <p className="errorMessages">{errors.time.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Donor Full Name<span className="text-red-600">*</span>
@@ -216,40 +264,72 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Donar Full Name"
               className="inputStyle"
-              {...register("donor_FullName")}
+              {...register("donor_FullName", {
+                required: "Donor Name Required",
+              })}
             />
+            {errors.donor_FullName && (
+              <p className="errorMessages">{errors.donor_FullName.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Donor Age<span className="text-red-600">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               placeholder="Enter Donar Age"
               className="inputStyle"
-              {...register("donorAge")}
+              {...register("donorAge", { required: "Donor Age Required" })}
             />
+            {errors.donorAge && (
+              <p className="errorMessages">{errors.donorAge.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Education<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("education")}>
-              <option></option>
+            <select
+              className="inputStyle"
+              {...register("education", { required: "Education Required" })}
+            >
+              <option selected disabled>
+                --Select Education--
+              </option>
+              {educationList?.map((item, index) => {
+                return (
+                  <option key={index} value={item.name}>
+                    {item.name}
+                  </option>
+                );
+              })}
             </select>
+            {errors.education && (
+              <p className="errorMessages">{errors.education.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex flex-col">
             <label>
               {" "}
               Ethnicity<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("ethnicity")}>
-              <option>test</option>
+            <select
+              className="inputStyle"
+              {...register("ethnicity", { required: "Ethnicity Required" })}
+            >
+              <option selected disabled value={""}>
+                --Select Ethnicity--
+              </option>
+              {ethnicityOptions}
             </select>
+            {errors.ethnicity && (
+              <p className="errorMessages">{errors.ethnicity.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Address<span className="text-red-600">*</span>
@@ -258,60 +338,113 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Address"
               className="inputStyle"
-              {...register("address")}
+              {...register("address", { required: "Address Required" })}
             />
+            {errors.address && (
+              <p className="errorMessages">{errors.address.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Contact Number<span className="text-red-600">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               placeholder="Enter Contact Number"
               className="inputStyle"
-              {...register("contactNo")}
+              {...register("contactNo", {
+                required: "Contact Number Required",
+              })}
             />
+            {errors.contactNo && (
+              <p className="errorMessages">{errors.contactNo.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Present Age of Child in Days (DOL)
               <span className="text-red-600">*</span>
             </label>
             <input
-              type="text"
+              type="number"
               placeholder="Enter Present Age of Child"
               className="inputStyle"
-              {...register("ageOfChild")}
+              {...register("ageOfChild", { required: "Age Required" })}
             />
+            {errors.ageOfChild && (
+              <p className="errorMessages">{errors.ageOfChild.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Gestational Age ( WOG)<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("gestationalAge")}>
-              <option>test</option>
+            <select
+              className="inputStyle"
+              {...register("gestationalAge", {
+                required: " Gestational Age Required",
+                valueAsNumber: true,
+              })}
+            >
+              <option selected disabled value={""}>
+                --Select Gestational Age--
+              </option>
+              {gestationalOptions}
             </select>
+            {errors.gestationalAge && (
+              <p className="errorMessages">{errors.gestationalAge.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Mode Of Delivery<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("modeOfDelivery")}>
-              <option>test</option>
+            <select
+              className="inputStyle"
+              {...register("modeOfDelivery", {
+                required: "Mode of Delivery Required",
+                valueAsNumber: true,
+              })}
+            >
+              <option selected disabled value={""}>
+                --Select Mode Of Delivery--
+              </option>
+              {deliveryOptions}
             </select>
+            {errors.modeOfDelivery && (
+              <p className="errorMessages">{errors.modeOfDelivery.message}</p>
+            )}
           </div>
-          <div className="grid">
+          <div className="flex-col flex">
             <label>
               {" "}
               Parity<span className="text-red-600">*</span>
             </label>
-            <select className="inputStyle" {...register("parity")}>
-              <option>test</option>
+            <select
+              className="inputStyle"
+              {...register("parity", {
+                required: "Parity Required",
+                valueAsNumber: true,
+              })}
+            >
+              <option selected disabled value={""}>
+                --Select Parity--
+              </option>
+              {parityList?.map((item, index) => {
+                return (
+                  <option key={index} value={item.parityId}>
+                    {item.parityName}
+                  </option>
+                );
+              })}
             </select>
+            {errors.parity && (
+              <p className="errorMessages">{errors.parity.message}</p>
+            )}
           </div>
         </div>
       </FormBorder>
