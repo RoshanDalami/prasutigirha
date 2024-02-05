@@ -121,7 +121,6 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const {
     control,
     register,
-
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     setValue,
@@ -130,7 +129,23 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   });
 
   useEffect(() => {
-    if (userData) {
+    if (clickedIdData) {
+      setValue("_id", clickedIdData?._id);
+      setValue("hosRegNo", clickedIdData?.hosRegNo);
+      setValue("donorRegNo", clickedIdData?.donorRegNo);
+      setValue("date", clickedIdData?.date);
+      setValue("time", clickedIdData?.time);
+      setValue("donor_FullName", clickedIdData?.donor_FullName);
+      setValue("donorAge", clickedIdData?.donorAge);
+      setValue("education", clickedIdData?.education);
+      setValue("ethnicity", clickedIdData?.ethnicity);
+      setValue("address", clickedIdData?.address);
+      setValue("contactNo", clickedIdData?.contactNo);
+      setValue("ageOfChild", clickedIdData?.ageOfChild);
+      setValue("gestationalAge", clickedIdData?.gestationalAge);
+      setValue("modeOfDelivery", clickedIdData?.modeOfDelivery);
+      setValue("parity", clickedIdData?.parity);
+    } else if (userData) {
       setDefaultValuesWithUserData({
         hosRegNo: userData.hosRegNo || "",
         donorRegNo: userData.donorRegNo || "",
@@ -170,8 +185,8 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
-  }, [userData, setValue]);
-
+  }, [userData, clickedIdData, setValue]);
+  console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
     setUserData({ ...userData, ...data });
     localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
