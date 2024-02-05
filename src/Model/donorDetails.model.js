@@ -171,7 +171,7 @@ const daanDartaSchema = new Schema({
   serologyRecords: serologyScreeningSchema,
   verbalExamination: verbalExaminationSchema,
   donorPhysicalExamination: donorPhysicalExaminationSchema,
-});
+},{timestamps:true});
 
 const DaanDarta =
   mongoose.models.DaanDarta || mongoose.model("DaanDarta", daanDartaSchema);
