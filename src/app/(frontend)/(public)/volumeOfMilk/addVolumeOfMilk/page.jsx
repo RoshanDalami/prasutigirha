@@ -6,6 +6,9 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddVolume({ clickedData }) {
   const {
     register,
@@ -78,7 +81,9 @@ export default function AddVolume({ clickedData }) {
       }
     } catch (error) {}
   };
-
+  //Nepali Date
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
   return (
     <>
       <form
@@ -99,9 +104,13 @@ export default function AddVolume({ clickedData }) {
                   </option>
                   {donorList?.map((item, index) => {
                     const combinedValue = `${item.gestationalAge}-${item._id}-${item.donor_FullName}`;
-                    console.log(item?._id === clickedData?.donorId,'bool')
+                    console.log(item?._id === clickedData?.donorId, "bool");
                     return (
-                      <option key={index} value={combinedValue} selected={item?._id === clickedData?.donorId} >
+                      <option
+                        key={index}
+                        value={combinedValue}
+                        selected={item?._id === clickedData?.donorId}
+                      >
                         {item.donor_FullName}
                       </option>
                     );
@@ -126,11 +135,19 @@ export default function AddVolume({ clickedData }) {
                   Date
                   <span className="text-lg text-red-600">*</span>
                 </label>
-                <input
+                {/* <input
                   className="inputStyle"
                   type="date"
                   placeholder="."
                   {...register("date")}
+                /> */}
+                <NepaliDatePicker
+                  inputClassName="form-control  focus:outline-none"
+                  value={date}
+                  onChange={(e) => setDate(e)}
+                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  className="inputStyle"
+                  // {...register("dateOfBirth", { required: true })}
                 />
               </div>
               <div className="grid">

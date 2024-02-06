@@ -4,6 +4,9 @@ import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
 import FormBorder from "../reusableForm";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 const defaultValues = {
@@ -30,7 +33,12 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const setSerologyPositive2 = useSetRecoilState(serologyAtom2);
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
-  const router= useRouter();
+  const router = useRouter();
+  //Nepali date
+  const [birthDate, setBirthDate] = useState("");
+  const [testDate, setTestDate] = useState("");
+  const engDate = new BikramSambat(birthDate, "BS").toAD();
+  const engTestDate = new BikramSambat(testDate, "BS").toAD();
 
   //babyStatus
   const [babyStatusList, setBabyStatusList] = useState([]);
@@ -124,7 +132,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     }
   }, [userData, setValue]);
 
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     if (serologyStatus === "false") {
       setUserData({
         ...userData,
@@ -162,18 +170,21 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       handleClick("next");
       console.log(userData, "response");
     } else {
-      setUserData({ ...userData,  babyStatus: {
-        dateOfBirth: data.dateOfBirth,
-        babyStatus: data.babyStatus,
-        babyTransfer: data.babyTransfer,
-        babyFeeding: data.babyFeeding,
-      },
-      serologyRecords: {
-        hiv: JSON.parse(data.hiv),
-        hbsag: JSON.parse(data.hbsag),
-        vdrl: JSON.parse(data.vdrl),
-        dateOfTest: data.dateOfTest,
-      }, });
+      setUserData({
+        ...userData,
+        babyStatus: {
+          dateOfBirth: data.dateOfBirth,
+          babyStatus: data.babyStatus,
+          babyTransfer: data.babyTransfer,
+          babyFeeding: data.babyFeeding,
+        },
+        serologyRecords: {
+          hiv: JSON.parse(data.hiv),
+          hbsag: JSON.parse(data.hbsag),
+          vdrl: JSON.parse(data.vdrl),
+          dateOfTest: data.dateOfTest,
+        },
+      });
       localStorage.setItem(
         "userData",
         JSON.stringify({
@@ -191,7 +202,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             dateOfTest: data.dateOfTest,
           },
         })
-
       );
       data = {
         ...userData,
@@ -207,19 +217,19 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           vdrl: JSON.parse(data.vdrl),
           dateOfTest: data.dateOfTest,
         },
-      }
+      };
       try {
-          const response = await axios.post(`${urls.createDanaDarta}`,data)
-          console.log(response,'response')
-          if(response.status === 200){
-            router.push('/donorRecord/viewDonorRecord')
-          }
+        const response = await axios.post(`${urls.createDanaDarta}`, data);
+        console.log(response, "response");
+        if (response.status === 200) {
+          router.push("/donorRecord/viewDonorRecord");
+        }
       } catch (error) {
-        console.log(error,'response') 
+        console.log(error, "response");
       }
     }
   };
-  
+
   const watchAllFields = watch();
   useEffect(() => {
     if (watchAllFields?.hiv) {
@@ -247,11 +257,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               {" "}
               Date of Birth<span className="text-red-600">*</span>
             </label>
-            <input
-              type="date"
-              placeholder=""
+            <NepaliDatePicker
+              inputClassName="form-control  focus:outline-none"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e)}
+              options={{ calenderLocale: "ne", valueLocale: "en" }}
               className="inputStyle"
-              {...register("dateOfBirth", { required: "DOB Required" })}
+              // {...register("dateOfBirth", { required: true })}
             />
             {errors.dateOfBirth && (
               <p className="errorMessages">{errors.dateOfBirth.message}</p>
@@ -265,7 +277,10 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             </label>
             <select
               className="inputStyle"
-              {...register("babyStatus", { required: "Baby Status Required",valueAsNumber:true })}
+              {...register("babyStatus", {
+                required: "Baby Status Required",
+                valueAsNumber: true,
+              })}
             >
               <option selected value={""} disabled>
                 --Select Your Baby Status--
@@ -285,7 +300,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               className="inputStyle"
               {...register("babyTransfer", {
                 required: "Baby Transfer Status Required",
-                valueAsNumber:true
+                valueAsNumber: true,
               })}
             >
               <option selected disabled value={""}>
@@ -307,7 +322,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               className="inputStyle"
               {...register("babyFeeding", {
                 required: "Breast Feeding Stat Required",
-                valueAsNumber:true
+                valueAsNumber: true,
               })}
             >
               <option>--Select Breast Feeding Status--</option>
@@ -395,12 +410,20 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               Date of Test
               <span className="text-red-600">*</span>
             </label>
-            <input
+            {/* <input
               type="date"
               className="inputStyle"
               {...register("dateOfTest", {
                 required: "Yes/No Required",
               })}
+            /> */}
+            <NepaliDatePicker
+              inputClassName="form-control  focus:outline-none"
+              value={testDate}
+              onChange={(e) => setTestDate(e)}
+              options={{ calenderLocale: "ne", valueLocale: "en" }}
+              className="inputStyle"
+              // {...register("dateOfBirth", { required: true })}
             />
             {errors.dateOfTest && (
               <p className="errorMessages">{errors.dateOfTest.message}</p>

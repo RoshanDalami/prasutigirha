@@ -9,6 +9,10 @@ import FormBorder from "../reusableForm";
 import Button from "../button";
 import axios from "axios";
 import { urls } from "src/services/apiHelpers";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 const defaultValues = {
   hosRegNo: "",
@@ -191,6 +195,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     donorAge: { required: "Donor Age is required", pattern: /^\d+$/ }, // Example pattern for numeric input
     // Add validation rules for other fields as needed
   };
+  //Nepali date
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={"Add Donor Records"}>
@@ -230,11 +237,19 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               {" "}
               Date<span className="text-red-600">*</span>
             </label>
-            <input
+            {/* <input
               type="date"
               placeholder=""
               className="inputStyle"
               {...register("date", { required: "Date is Required" })}
+            /> */}
+            <NepaliDatePicker
+              inputClassName="form-control  focus:outline-none"
+              value={date}
+              onChange={(e) => setDate(e)}
+              options={{ calenderLocale: "ne", valueLocale: "en" }}
+              className="inputStyle"
+              // {...register("dateOfBirth", { required: true })}
             />
             {errors.date && (
               <p className="errorMessages">{errors.date.message}</p>

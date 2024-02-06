@@ -32,6 +32,20 @@ export default function ViewDonor() {
     },
     [router]
   );
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`${urls.getDonor}/${id}`);
+      console.log(response, "deleted");
+      if (response.status === 200) {
+        const { status, data } = await axios.get(`${urls.getDonor}`);
+        if (status === 200) {
+          setDonorList(data);
+        }
+      }
+    } catch (error) {
+      console.error("Error deleteing:", error);
+    }
+  };
   return (
     <>
       <div>
@@ -108,7 +122,10 @@ export default function ViewDonor() {
                             className="h-6 w-6"
                             onClick={() => handleEdit(item._id)}
                           />
-                          <TrashIcon className="h-6 w-6" />
+                          <TrashIcon
+                            className="h-6 w-6"
+                            onClick={() => handleDelete(item._id)}
+                          />
                         </div>
                       </td>
                     </tr>
