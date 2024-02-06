@@ -1,6 +1,7 @@
 import { connect } from "src/dbConfig/dbConfig";
 import { NextResponse, NextRequest } from "next/server";
 import { DaanDarta } from "src/Model/donorDetails.model";
+import { nanoid } from "nanoid";
 connect();
 
 export async function POST(req, res) {
@@ -13,16 +14,20 @@ export async function POST(req, res) {
     );
 
     let newDonorRegNo = "001";
+
     if (latestDaanDarta) {
       const lastDonorRegNo = latestDaanDarta.donorRegNo;
       const numericPart = parseInt(lastDonorRegNo, 10);
       newDonorRegNo = (numericPart + 1).toString().padStart(3, "0");
     }
 
+    let newUserID = nanoid(10);
     let newDaanDarta = new DaanDarta({
       ...body,
       donorRegNo: newDonorRegNo,
     });
+
+    console.log(newDaanDarta, "-->newDaanDarta");
 
     if (newDaanDarta.gestationalAge <= 3) {
       newDaanDarta.colostrumStatus = true;
@@ -80,11 +85,6 @@ export async function POST(req, res) {
     } else {
       newDaanDarta.verbalStatus = false;
     }
-    if (newDaanDarta.verbalExamination === true) {
-      newDaanDarta.isDonorActive = true;
-    } else {
-      newDaanDarta.isDonorActive = false;
-    }
 
     if (newDaanDarta.verbalStatus === true) {
       await newDaanDarta.save();
@@ -107,12 +107,6 @@ export async function POST(req, res) {
         " She can’t donation milk right now she has to take tests after ………………… Days ";
     } else {
       newDaanDarta.physicalStatus = false;
-    }
-
-    if (newDaanDarta.donarPhysicalExaminatoin === true) {
-      newDaanDarta.isDonorActive = true;
-    } else {
-      newDaanDarta.isDonorActive = false;
     }
 
     if (newDaanDarta.physicalStatus === true) {

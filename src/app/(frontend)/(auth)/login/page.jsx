@@ -23,9 +23,9 @@ const Login = () => {
     try {
       const response = await axios.post(`${urls.login}`, data);
       if (response.status === 200) {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== "undefined") {
           // Save user information in local storage
-          localStorage.setItem('userInfo', JSON.stringify(response.data));
+          localStorage.setItem("userInfo", JSON.stringify(response.data));
         } else {
           console.error("localStorage is not available in this environment");
         }
