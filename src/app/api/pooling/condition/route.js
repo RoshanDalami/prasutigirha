@@ -1,13 +1,10 @@
-import { DaanDarta } from "src/Model/donorDetails.model";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
+import { MilkVolume } from "src/Model/volumeOfMilk.model";
 
-export async function GET(req) {
-  const colostrum = req.nextUrl.searchParams.get("colostrum");
-  console.log(typeof JSON.parse(colostrum));
+export async function GET() {
   try {
-    const response = await DaanDarta.find({
-        isColostrum: JSON.parse(colostrum),
-    });
+    const response = await MilkVolume.find({});
+
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return NextResponse.json(
