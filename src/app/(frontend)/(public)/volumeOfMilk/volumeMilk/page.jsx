@@ -39,6 +39,12 @@ export default function ListVolume() {
     },
     [router]
   );
+  async function handleDelete(id) {
+    try {
+      const response = await axios.delete(`${urls.getVolumeOfMilk}/${id}`);
+      console.log(response, "deleted");
+    } catch (error) {}
+  }
   return (
     <>
       <div>
@@ -127,7 +133,10 @@ export default function ListVolume() {
                             className="h-6 w-6"
                             onClick={() => handleEdit(item._id)}
                           />
-                          <TrashIcon className="h-6 w-6" />
+                          <TrashIcon
+                            className="h-6 w-6"
+                            onClick={() => handleDelete(item._id)}
+                          />
                         </div>
                       </td>
                     </tr>

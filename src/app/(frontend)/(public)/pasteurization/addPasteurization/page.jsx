@@ -1,5 +1,11 @@
+"use client";
 import FormBorder from "@/components/reusableForm";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import { useState } from "react";
+
 export default function AddPasteurization() {
+  const [date, setDate] = useState("");
   return (
     <>
       <div className="mx-10">
@@ -32,8 +38,14 @@ export default function AddPasteurization() {
                 <label htmlFor="">
                   Pooling Date<span className="text-red-600">*</span>
                 </label>
-                <input type="date" className="inputStyle" />
-              </div>
+                <NepaliDatePicker
+                  inputClassName="form-control  focus:outline-none"
+                  value={date}
+                  onChange={(e) => setDate(e)}
+                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  className="inputStyle"
+                />
+              </div> 
             </div>
             <div>
               <button className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg ">

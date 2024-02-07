@@ -4,6 +4,9 @@ import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
 import FormBorder from "../reusableForm";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 const defaultValues = {
@@ -31,6 +34,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
   const router = useRouter();
+
+  //Nepali date
+  const [birthDate, setBirthDate] = useState("");
+  const [testDate, setTestDate] = useState("");
+  const engDate = new BikramSambat(birthDate, "BS").toAD();
+  const engTestDate = new BikramSambat(testDate, "BS").toAD();
+
 
   //babyStatus
   const [babyStatusList, setBabyStatusList] = useState([]);
@@ -132,7 +142,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setDefaultValuesWithUserData(defaultValues);
     }
   }, [userData, setValue]);
-  console.log(clickedIdData, "statusofbaby");
+
   const onSubmit = async (data) => {
     if (serologyStatus === "false") {
       setUserData({
@@ -258,11 +268,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               {" "}
               Date of Birth<span className="text-red-600">*</span>
             </label>
-            <input
-              type="date"
-              placeholder=""
+            <NepaliDatePicker
+              inputClassName="form-control  focus:outline-none"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e)}
+              options={{ calenderLocale: "ne", valueLocale: "en" }}
               className="inputStyle"
-              {...register("dateOfBirth", { required: "DOB Required" })}
+              // {...register("dateOfBirth", { required: true })}
             />
             {errors.dateOfBirth && (
               <p className="errorMessages">{errors.dateOfBirth.message}</p>
@@ -409,12 +421,20 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               Date of Test
               <span className="text-red-600">*</span>
             </label>
-            <input
+            {/* <input
               type="date"
               className="inputStyle"
               {...register("dateOfTest", {
                 required: "Yes/No Required",
               })}
+            /> */}
+            <NepaliDatePicker
+              inputClassName="form-control  focus:outline-none"
+              value={testDate}
+              onChange={(e) => setTestDate(e)}
+              options={{ calenderLocale: "ne", valueLocale: "en" }}
+              className="inputStyle"
+              // {...register("dateOfBirth", { required: true })}
             />
             {errors.dateOfTest && (
               <p className="errorMessages">{errors.dateOfTest.message}</p>
