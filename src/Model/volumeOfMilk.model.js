@@ -26,7 +26,7 @@ const volumeOfMilkSchema = new Schema({
         required:true
     },
     quantity:{
-        type:String,
+        type:Number,
         required:true
     },
     storedBy:{
@@ -34,6 +34,10 @@ const volumeOfMilkSchema = new Schema({
         required:true
     },
     temp:{
+        type:Number,
+        required:true
+    },
+    remaining:{
         type:Number,
         required:true
     }

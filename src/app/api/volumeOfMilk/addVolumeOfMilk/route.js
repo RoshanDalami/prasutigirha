@@ -7,8 +7,12 @@ export async function POST(req, res) {
   try {
     const isNewDocument = !body._id;
     const newMilkVolume = isNewDocument
-      ? new MilkVolume(body)
-      : await MilkVolume.findByIdAndUpdate(body._id, body, { new: true });
+      ? new MilkVolume({ ...body, remaining: body.quantity })
+      : await MilkVolume.findByIdAndUpdate(
+          body._id,
+          { ...body, remaining: body.quantity },
+          { new: true }
+        );
     const savedMilkVolume = await newMilkVolume.save();
     return NextResponse.json(savedMilkVolume, { status: 200 });
   } catch (error) {

@@ -6,10 +6,12 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddVolume({ clickedData }) {
+
   const {
     register,
     handleSubmit,
@@ -34,6 +36,7 @@ export default function AddVolume({ clickedData }) {
     fetchData();
   }, []);
 
+
   useEffect(() => {
     setValue("_id", clickedData?._id);
     setValue("donorId", clickedData?.donorId);
@@ -48,6 +51,7 @@ export default function AddVolume({ clickedData }) {
   useEffect(() => {
     gestational.forEach((item) => {
       if (item.gestationalId == watchFields.donorId?.split("-")[0]) {
+
         setValue("gestationalAge", item.gestationalName);
       }
     });
@@ -81,9 +85,11 @@ export default function AddVolume({ clickedData }) {
       }
     } catch (error) {}
   };
+
   //Nepali Date
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
+
   return (
     <>
       <form
@@ -135,11 +141,7 @@ export default function AddVolume({ clickedData }) {
                   Date
                   <span className="text-lg text-red-600">*</span>
                 </label>
-                {/* <input
-                  className="inputStyle"
-                  type="date"
-                  placeholder="."
-                  {...register("date")}
+
                 /> */}
                 <NepaliDatePicker
                   inputClassName="form-control  focus:outline-none"
@@ -147,7 +149,7 @@ export default function AddVolume({ clickedData }) {
                   onChange={(e) => setDate(e)}
                   options={{ calenderLocale: "ne", valueLocale: "en" }}
                   className="inputStyle"
-                  // {...register("dateOfBirth", { required: true })}
+
                 />
               </div>
               <div className="grid">
@@ -169,9 +171,15 @@ export default function AddVolume({ clickedData }) {
                 </label>
                 <input
                   className="inputStyle"
+
+                  type="number"
+                  placeholder="."
+                  {...register("quantity", { valueAsNumber: true })}
+
                   type="text"
                   placeholder="."
                   {...register("quantity")}
+
                 />
               </div>
               <div className="grid">
@@ -199,10 +207,12 @@ export default function AddVolume({ clickedData }) {
                 />
               </div>
             </div>
+
             <button
               className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]"
               type="submit"
             >
+
               {isSubmitting ? "Submitting ..." : "Submit"}
             </button>
           </div>
