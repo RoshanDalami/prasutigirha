@@ -24,5 +24,6 @@ export const urls = {
   getDonor: `/api/daanDartaRecord/get`,
   createDanaDarta: `/api/daanDartaRecord/create`,
   getVolumeOfMilk:`/api/volumeOfMilk/getVolumeOfMilk`,
+  
 
 };

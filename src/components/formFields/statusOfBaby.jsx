@@ -30,7 +30,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const setSerologyPositive2 = useSetRecoilState(serologyAtom2);
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
-  const router= useRouter();
+  const router = useRouter();
 
   //babyStatus
   const [babyStatusList, setBabyStatusList] = useState([]);
@@ -100,7 +100,16 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   });
 
   useEffect(() => {
-    if (userData) {
+    if (clickedIdData) {
+      setValue("dateOfBirth", clickedIdData?.babyStatus?.dateOfBirth || "");
+      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding || "");
+      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer || "");
+      setValue("babyStatus", clickedIdData?.babyStatus || "");
+      setValue("hiv", clickedIdData?.serologyRecords?.hiv || "");
+      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag || "");
+      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl || "");
+      setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest || "");
+    } else if (userData) {
       setDefaultValuesWithUserData({
         dateOfBirth: userData.dateOfBirth || "",
         babyFeeding: userData.babyFeeding || "",
@@ -123,8 +132,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setDefaultValuesWithUserData(defaultValues);
     }
   }, [userData, setValue]);
-
-  const onSubmit = async(data) => {
+  console.log(clickedIdData, "statusofbaby");
+  const onSubmit = async (data) => {
     if (serologyStatus === "false") {
       setUserData({
         ...userData,
@@ -162,18 +171,21 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       handleClick("next");
       console.log(userData, "response");
     } else {
-      setUserData({ ...userData,  babyStatus: {
-        dateOfBirth: data.dateOfBirth,
-        babyStatus: data.babyStatus,
-        babyTransfer: data.babyTransfer,
-        babyFeeding: data.babyFeeding,
-      },
-      serologyRecords: {
-        hiv: JSON.parse(data.hiv),
-        hbsag: JSON.parse(data.hbsag),
-        vdrl: JSON.parse(data.vdrl),
-        dateOfTest: data.dateOfTest,
-      }, });
+      setUserData({
+        ...userData,
+        babyStatus: {
+          dateOfBirth: data.dateOfBirth,
+          babyStatus: data.babyStatus,
+          babyTransfer: data.babyTransfer,
+          babyFeeding: data.babyFeeding,
+        },
+        serologyRecords: {
+          hiv: JSON.parse(data.hiv),
+          hbsag: JSON.parse(data.hbsag),
+          vdrl: JSON.parse(data.vdrl),
+          dateOfTest: data.dateOfTest,
+        },
+      });
       localStorage.setItem(
         "userData",
         JSON.stringify({
@@ -191,7 +203,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             dateOfTest: data.dateOfTest,
           },
         })
-
       );
       data = {
         ...userData,
@@ -207,19 +218,19 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           vdrl: JSON.parse(data.vdrl),
           dateOfTest: data.dateOfTest,
         },
-      }
+      };
       try {
-          const response = await axios.post(`${urls.createDanaDarta}`,data)
-          console.log(response,'response')
-          if(response.status === 200){
-            router.push('/donorRecord/viewDonorRecord')
-          }
+        const response = await axios.post(`${urls.createDanaDarta}`, data);
+        console.log(response, "response");
+        if (response.status === 200) {
+          router.push("/donorRecord/viewDonorRecord");
+        }
       } catch (error) {
-        console.log(error,'response') 
+        console.log(error, "response");
       }
     }
   };
-  
+
   const watchAllFields = watch();
   useEffect(() => {
     if (watchAllFields?.hiv) {
@@ -265,7 +276,10 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             </label>
             <select
               className="inputStyle"
-              {...register("babyStatus", { required: "Baby Status Required",valueAsNumber:true })}
+              {...register("babyStatus", {
+                required: "Baby Status Required",
+                valueAsNumber: true,
+              })}
             >
               <option selected value={""} disabled>
                 --Select Your Baby Status--
@@ -285,7 +299,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               className="inputStyle"
               {...register("babyTransfer", {
                 required: "Baby Transfer Status Required",
-                valueAsNumber:true
+                valueAsNumber: true,
               })}
             >
               <option selected disabled value={""}>
@@ -307,7 +321,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               className="inputStyle"
               {...register("babyFeeding", {
                 required: "Breast Feeding Stat Required",
-                valueAsNumber:true
+                valueAsNumber: true,
               })}
             >
               <option>--Select Breast Feeding Status--</option>
