@@ -1,11 +1,15 @@
 "use client";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { urls } from "src/services/apiHelpers";
+import { BiEdit } from "react-icons/bi";
+import { MdDeleteForever } from "react-icons/md";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 export default function ListVolume() {
-  const FormBorder = dynamic(() => import("@/components/reusableForm"), {
+  const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
   const [volumeList, setVolumeList] = useState([]);
@@ -28,6 +32,19 @@ export default function ListVolume() {
     }
     fetchData();
   }, []);
+  const router = useRouter();
+  const handleEdit = useCallback(
+    (id) => {
+      router.push(`/volumeOfMilk/addVolumeOfMilk/${id}`);
+    },
+    [router]
+  );
+  async function handleDelete(id) {
+    try {
+      const response = await axios.delete(`${urls.getVolumeOfMilk}/${id}`);
+      console.log(response, "deleted");
+    } catch (error) {}
+  }
   return (
     <>
       <div>
@@ -59,16 +76,20 @@ export default function ListVolume() {
           </div>
         </form>
         <div className="mx-10">
-          <FormBorder title={"List of Volume of Milk"}>
-            <div className="flex flex-col   ">
-              <div className=" flex justify-end">
-                <Link href={"/volumeOfMilk/addVolumeOfMilk"}>
-                  <button className="text-white bg-red-600 hover:bg-[#004a89] px-4 py-3 rounded-lg font-bold ">
-                    + Add
-                  </button>
-                </Link>
+          <TableBorder
+            title={"List of Volume of Milk"}
+            title2={
+              <div className="flex flex-col   ">
+                <div className=" flex justify-end">
+                  <Link href={"/volumeOfMilk/addVolumeOfMilk"}>
+                    <button className="text-white bg-red-600 hover:bg-[#004a89] px-4 py-3 rounded-lg font-bold ">
+                      + Add
+                    </button>
+                  </Link>
+                </div>
               </div>
-            </div>
+            }
+          >
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
@@ -92,29 +113,38 @@ export default function ListVolume() {
                       {/* <td className="py-3 text-center">
                     <input type="checkbox" name="" id="" />
                   </td> */}
-                      <td className="py-3">{index+1}</td>
+                      <td className="py-3">{index + 1}</td>
                       <td className="py-3">{item.donorName}</td>
-                      {
-                        gestationalAgeList?.map((age,index)=>{
-                          if(age.gestationalId === item.gestationalAge){
-
-                            return(
-                              
-                              <td className="py-3" key={index}>{age.gestationalName}</td>
-                            )
-                          }
-                        })
-                      }
+                      {gestationalAgeList?.map((age, index) => {
+                        if (age.gestationalId === item.gestationalAge) {
+                          return (
+                            <td className="py-3" key={index}>
+                              {age.gestationalName}
+                            </td>
+                          );
+                        }
+                      })}
                       <td className="py-3">{item.date}</td>
                       <td className="py-3">{item.time}</td>
-                      <td className="py-3">{item.quantity}{" "}ml</td>
-                      <td className="py-3">test</td>
+                      <td className="py-3">{item.quantity} ml</td>
+                      <td className="py-3">
+                        <div className="flex justify-evenly text-xl">
+                          <PencilSquareIcon
+                            className="h-6 w-6"
+                            onClick={() => handleEdit(item._id)}
+                          />
+                          <TrashIcon
+                            className="h-6 w-6"
+                            onClick={() => handleDelete(item._id)}
+                          />
+                        </div>
+                      </td>
                     </tr>
                   );
                 })}
               </table>
             </div>
-          </FormBorder>
+          </TableBorder>
         </div>
       </div>
     </>

@@ -6,7 +6,12 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-export default function AddVolume() {
+
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+export default function AddVolume({ clickedData }) {
+
   const {
     register,
     handleSubmit,
@@ -31,9 +36,22 @@ export default function AddVolume() {
     fetchData();
   }, []);
 
+
+  useEffect(() => {
+    setValue("_id", clickedData?._id);
+    setValue("donorId", clickedData?.donorId);
+    setValue("gestationalAge", clickedData?.gestationalAge);
+    setValue("quantity", clickedData?.quantity);
+    setValue("date", clickedData?.date);
+    setValue("storedBy", clickedData?.storedBy);
+    setValue("temp", clickedData?.temp);
+    setValue("time", clickedData?.time);
+  }, [clickedData, setValue]);
+
   useEffect(() => {
     gestational.forEach((item) => {
-      if (item.gestationalId == watchFields.donorId.split("-")[0]) {
+      if (item.gestationalId == watchFields.donorId?.split("-")[0]) {
+
         setValue("gestationalAge", item.gestationalName);
       }
     });
@@ -68,6 +86,10 @@ export default function AddVolume() {
     } catch (error) {}
   };
 
+  //Nepali Date
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
+
   return (
     <>
       <form
@@ -88,8 +110,13 @@ export default function AddVolume() {
                   </option>
                   {donorList?.map((item, index) => {
                     const combinedValue = `${item.gestationalAge}-${item._id}-${item.donor_FullName}`;
+                    console.log(item?._id === clickedData?.donorId, "bool");
                     return (
-                      <option key={index} value={combinedValue}>
+                      <option
+                        key={index}
+                        value={combinedValue}
+                        selected={item?._id === clickedData?.donorId}
+                      >
                         {item.donor_FullName}
                       </option>
                     );
@@ -114,11 +141,15 @@ export default function AddVolume() {
                   Date
                   <span className="text-lg text-red-600">*</span>
                 </label>
-                <input
+
+                /> */}
+                <NepaliDatePicker
+                  inputClassName="form-control  focus:outline-none"
+                  value={date}
+                  onChange={(e) => setDate(e)}
+                  options={{ calenderLocale: "ne", valueLocale: "en" }}
                   className="inputStyle"
-                  type="date"
-                  placeholder="."
-                  {...register("date")}
+
                 />
               </div>
               <div className="grid">
@@ -140,9 +171,15 @@ export default function AddVolume() {
                 </label>
                 <input
                   className="inputStyle"
+
                   type="number"
                   placeholder="."
                   {...register("quantity", { valueAsNumber: true })}
+
+                  type="text"
+                  placeholder="."
+                  {...register("quantity")}
+
                 />
               </div>
               <div className="grid">
@@ -170,7 +207,12 @@ export default function AddVolume() {
                 />
               </div>
             </div>
-            <button className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]">
+
+            <button
+              className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]"
+              type="submit"
+            >
+
               {isSubmitting ? "Submitting ..." : "Submit"}
             </button>
           </div>

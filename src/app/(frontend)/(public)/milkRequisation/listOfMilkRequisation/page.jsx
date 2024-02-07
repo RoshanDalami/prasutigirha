@@ -1,10 +1,17 @@
 "use client";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 import Button from "src/components/button";
 export default function ListVolume() {
-  const FormBorder = dynamic(() => import("@/components/reusableForm"), {
+  const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
+  });
+  const router = useRouter();
+  const handleEdit = useCallback(() => {
+    router.push(`/milkRequisation/addMilkRequisation`);
   });
   return (
     <>
@@ -37,14 +44,18 @@ export default function ListVolume() {
           </div>
         </form>
         <div className="mx-10">
-          <FormBorder title={"List of Milk Requisition Form"}>
-            <div className="flex flex-col   ">
-              <div className=" flex justify-end">
-                <Link href={"/milkRequisation/addMilkRequisation"}>
-                  <Button>+Add </Button>
-                </Link>
+          <TableBorder
+            title={"List of Milk Requisition Form"}
+            title2={
+              <div className="flex flex-col   ">
+                <div className=" flex justify-end">
+                  <Link href={"/milkRequisation/addMilkRequisation"}>
+                    <Button>+Add </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
+            }
+          >
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
@@ -91,11 +102,19 @@ export default function ListVolume() {
                   <td className="py-3">test</td>
                   <td className="py-3">test</td>
                   <td className="py-3">test</td>
-                  <td className="py-3">test</td>
+                  <td className="py-3">
+                    <div className="flex justify-evenly text-xl">
+                      <PencilSquareIcon
+                        className="h-6 w-6"
+                        onClick={() => handleEdit()}
+                      />
+                      <TrashIcon className="h-6 w-6" />
+                    </div>
+                  </td>
                 </tr>
               </table>
             </div>
-          </FormBorder>
+          </TableBorder>
         </div>
       </div>
     </>
