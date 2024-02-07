@@ -35,7 +35,7 @@ export default function AddVolume({ clickedData }) {
   }, []);
 
   useEffect(() => {
-    setValue("id", clickedData?._id);
+    setValue("_id", clickedData?._id);
     setValue("donorId", clickedData?.donorId);
     setValue("gestationalAge", clickedData?.gestationalAge);
     setValue("quantity", clickedData?.quantity);

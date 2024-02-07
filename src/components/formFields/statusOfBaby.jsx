@@ -34,11 +34,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
   const router = useRouter();
+
   //Nepali date
   const [birthDate, setBirthDate] = useState("");
   const [testDate, setTestDate] = useState("");
   const engDate = new BikramSambat(birthDate, "BS").toAD();
   const engTestDate = new BikramSambat(testDate, "BS").toAD();
+
 
   //babyStatus
   const [babyStatusList, setBabyStatusList] = useState([]);
@@ -108,7 +110,16 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   });
 
   useEffect(() => {
-    if (userData) {
+    if (clickedIdData) {
+      setValue("dateOfBirth", clickedIdData?.babyStatus?.dateOfBirth || "");
+      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding || "");
+      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer || "");
+      setValue("babyStatus", clickedIdData?.babyStatus || "");
+      setValue("hiv", clickedIdData?.serologyRecords?.hiv || "");
+      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag || "");
+      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl || "");
+      setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest || "");
+    } else if (userData) {
       setDefaultValuesWithUserData({
         dateOfBirth: userData.dateOfBirth || "",
         babyFeeding: userData.babyFeeding || "",
