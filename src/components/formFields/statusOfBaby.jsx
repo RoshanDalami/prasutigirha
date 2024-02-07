@@ -11,6 +11,7 @@ import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 const defaultValues = {
   dateOfBirth: "",
+  engDateBirth: "",
   babyFeeding: "",
   babyTransfer: "",
   babyStatus: "",
@@ -18,6 +19,7 @@ const defaultValues = {
   hbsag: "",
   vdrl: "",
   dateOfTest: "",
+  engDateTest: "",
 };
 import {
   serologyAtom,
@@ -112,6 +114,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   useEffect(() => {
     if (clickedIdData) {
       setValue("dateOfBirth", clickedIdData?.babyStatus?.dateOfBirth || "");
+      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth || "");
       setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding || "");
       setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer || "");
       setValue("babyStatus", clickedIdData?.babyStatus || "");
@@ -119,9 +122,12 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("hbsag", clickedIdData?.serologyRecords?.hbsag || "");
       setValue("vdrl", clickedIdData?.serologyRecords?.vdrl || "");
       setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest || "");
+      setValue("engDateTest", clickedIdData?.serologyRecords?.engDateTest || "");
     } else if (userData) {
       setDefaultValuesWithUserData({
         dateOfBirth: userData.dateOfBirth || "",
+        engDateBirth: userData.engDateBirth || "",
+        engDate: userData.engDate || "",
         babyFeeding: userData.babyFeeding || "",
         babyTransfer: userData.babyTransfer || "",
         babyStatus: userData.babyStatus || "",
@@ -129,8 +135,10 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         hbsag: userData.hbsag || "",
         vdrl: userData.vdrl || "",
         dateOfTest: userData.dateOfTest || "",
+        engDateTest: userData.engDateTest || "",
       });
       setValue("dateOfBirth", userData.dateOfBirth || "");
+      setValue("engDateBirth", userData.engDateBirth || "");
       setValue("babyFeeding", userData.babyFeeding || "");
       setValue("babyTransfer", userData.babyTransfer || "");
       setValue("babyStatus", userData.babyStatus || "");
@@ -138,6 +146,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("hbsag", userData.hbsag || "");
       setValue("vdrl", userData.vdrl || "");
       setValue("dateOfTest", userData.dateOfTest || "");
+      setValue("engDateTest", userData.engDateTest || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
@@ -148,7 +157,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setUserData({
         ...userData,
         babyStatus: {
-          dateOfBirth: data.dateOfBirth,
+          dateOfBirth: birthDate,
+          engDateBirth: engDate ,
           babyStatus: data.babyStatus,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
@@ -157,25 +167,28 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest: data.dateOfTest,
+          dateOfTest:testDate,
+          engDateTest : engDate
         },
       });
       localStorage.setItem(
         "userData",
         JSON.stringify({
           ...userData,
-          babyStatus: {
-            dateOfBirth: data.dateOfBirth,
-            babyStatus: data.babyStatus,
-            babyTransfer: data.babyTransfer,
-            babyFeeding: data.babyFeeding,
-          },
-          serologyRecords: {
-            hiv: JSON.parse(data.hiv),
-            hbsag: JSON.parse(data.hbsag),
-            vdrl: JSON.parse(data.vdrl),
-            dateOfTest: data.dateOfTest,
-          },
+        babyStatus: {
+          dateOfBirth: birthDate,
+          engDateBirth: engDate ,
+          babyStatus: data.babyStatus,
+          babyTransfer: data.babyTransfer,
+          babyFeeding: data.babyFeeding,
+        },
+        serologyRecords: {
+          hiv: JSON.parse(data.hiv),
+          hbsag: JSON.parse(data.hbsag),
+          vdrl: JSON.parse(data.vdrl),
+          dateOfTest:testDate,
+          engDateTest : engDate
+        },
         })
       );
       handleClick("next");
@@ -184,7 +197,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setUserData({
         ...userData,
         babyStatus: {
-          dateOfBirth: data.dateOfBirth,
+          dateOfBirth: birthDate,
+          engDateBirth: engDate ,
           babyStatus: data.babyStatus,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
@@ -193,7 +207,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest: data.dateOfTest,
+          dateOfTest:testDate,
+          engDateTest : engDate
         },
       });
       localStorage.setItem(

@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddPasteurization() {
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
   const {
     register,
@@ -37,6 +42,12 @@ export default function AddPasteurization() {
 
   let milkVolume = sum(watchVolume);
   const onSubmit = async (data) => {
+    data={
+      ...data,
+      date,
+      engDate
+    }
+ 
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
       if (response.status === 200) {
@@ -87,18 +98,6 @@ export default function AddPasteurization() {
   //     fetchData();
   //   });
   // }, [watchArray]);
-
-
-  
-
- 
-
-import { NepaliDatePicker } from "nepali-datepicker-reactjs";
-import "nepali-datepicker-reactjs/dist/index.css";
-import { useState } from "react";
-
-export default function AddPasteurization() {
-  const [date, setDate] = useState("");
 
   return (
     <>
@@ -160,6 +159,7 @@ export default function AddPasteurization() {
               )}
 
               {fields.map((field, index) => {
+                const watchInput = watch(`donorDetailsForPooling.${index}.volumeOfMilkPooled`)
                 return (
                   <div
                     key={field.id}
