@@ -44,6 +44,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
   const router = useRouter();
+   //Nepali date
+   const [date, setDate] = useState("");
+   const engDate = new BikramSambat(date, "BS").toAD();
 
   //ethnicity
   const [ethnicityList, setEthnicity] = useState([]);
@@ -138,6 +141,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("hosRegNo", clickedIdData?.hosRegNo);
       setValue("donorRegNo", clickedIdData?.donorRegNo);
       setValue("date", clickedIdData?.date);
+      setValue("engDate", clickedIdData?.engDate);
       setValue("time", clickedIdData?.time);
       setValue("donor_FullName", clickedIdData?.donor_FullName);
       setValue("donorAge", clickedIdData?.donorAge);
@@ -154,6 +158,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
         hosRegNo: userData.hosRegNo || "",
         donorRegNo: userData.donorRegNo || "",
         date: userData.date || "",
+        engDate: userData.engDate || "",
         time: userData.time || "",
         donor_FullName: userData.donor_FullName || "",
         donorAge: userData.donorAge || "",
@@ -169,6 +174,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("hosRegNo", userData.hosRegNo || ""); // pass setValue to the dependencies array and use it directly
       setValue("donorRegNo", userData.donorRegNo || "");
       setValue("date", userData.date || "");
+      setValue("engDate", userData.engDate || "");
       setValue("time", userData.time || "");
       setValue("donor_FullName", userData.donor_FullName || "");
       setValue("donorAge", userData.donorAge || defaultValues.donorAge);
@@ -192,7 +198,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, clickedIdData, setValue]);
   console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
-    setUserData({ ...userData, ...data });
+    setUserData({ ...userData, ...data,date:date, engDate });
     localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
     handleClick("next");
     console.log(userData, "response");
@@ -210,9 +216,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     donorAge: { required: "Donor Age is required", pattern: /^\d+$/ }, // Example pattern for numeric input
     // Add validation rules for other fields as needed
   };
-  //Nepali date
-  const [date, setDate] = useState("");
-  const engDate = new BikramSambat(date, "BS").toAD();
+ 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={"Add Donor Records"}>

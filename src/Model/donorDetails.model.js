@@ -2,7 +2,11 @@ import mongoose, { Schema } from "mongoose";
 
 const babyStatusSchema = new mongoose.Schema({
   dateOfBirth: {
-    type: Date,
+    type: String,
+  },
+  engDateBirth:{
+    type:String,
+    required:true
   },
   babyStatus: {
     type: Number,
@@ -25,8 +29,11 @@ const serologyScreeningSchema = new mongoose.Schema({
     type: Boolean,
   },
   dateOfTest: {
-    type: Date,
+    type: String,
   },
+  engDateTest:{
+    type:String
+  }
 
   // helperName: {
   //   type: String,
@@ -112,7 +119,10 @@ const daanDartaSchema = new Schema({
     required: true,
   },
   date: {
-    type: Date,
+    type: String,
+  },
+  engDate:{
+    type:String
   },
   time: {
     type: String,

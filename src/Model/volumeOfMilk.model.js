@@ -21,6 +21,10 @@ const volumeOfMilkSchema = new Schema({
         type:String,
         required:true
     },
+    engDate:{
+        type:String,
+        required:true
+    },
     time:{
         type:String,
         required:true

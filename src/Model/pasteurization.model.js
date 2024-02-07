@@ -15,8 +15,12 @@ const pasteurizatonSchema = new Schema(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
+    },
+    engDate:{
+      type:String,
+      required:true
     },
     donorDetailsForPooling: [donorDetailsForPooling],
   },

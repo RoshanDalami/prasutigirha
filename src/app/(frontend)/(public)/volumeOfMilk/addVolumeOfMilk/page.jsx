@@ -67,6 +67,8 @@ export default function AddVolume({ clickedData }) {
     }
     fetchData();
   }, []);
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
 
   const onSubmit = async (data) => {
     data = {
@@ -75,8 +77,9 @@ export default function AddVolume({ clickedData }) {
       donorId: watchFields?.donorId.split("-")[1],
       gestationalAge: parseInt(watchFields?.donorId.split("-")[0]),
       donorName: watchFields?.donorId.split("-")[2],
+      date,
+      engDate
     };
-
     try {
       const response = await axios.post(`${urls.createVolumeOfMilk}`, data);
       if (response.status === 200) {
@@ -87,8 +90,7 @@ export default function AddVolume({ clickedData }) {
   };
 
   //Nepali Date
-  const [date, setDate] = useState("");
-  const engDate = new BikramSambat(date, "BS").toAD();
+ 
 
   return (
     <>
@@ -142,13 +144,14 @@ export default function AddVolume({ clickedData }) {
                   <span className="text-lg text-red-600">*</span>
                 </label>
 
-                /> */}
+             
                 <NepaliDatePicker
                   inputClassName="form-control  focus:outline-none"
                   value={date}
                   onChange={(e) => setDate(e)}
-                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  options={{ calenderLocale: "ne", valueLocale: "en"  }}
                   className="inputStyle"
+                  
 
                 />
               </div>
@@ -176,9 +179,7 @@ export default function AddVolume({ clickedData }) {
                   placeholder="."
                   {...register("quantity", { valueAsNumber: true })}
 
-                  type="text"
-                  placeholder="."
-                  {...register("quantity")}
+                 
 
                 />
               </div>
