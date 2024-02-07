@@ -1,3 +1,6 @@
+
+
+
 "use client";
 import FormBorder from "@/components/reusableForm";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -67,30 +70,63 @@ export default function AddPasteurization() {
     fetchData();
   }, []);
   //remaining
-  // const [remainingVolume, setRemainingVolume] = useState([
-  //   {
-  //     remaining: 10,
-  //   },
-  // ]);
+  const [remainingVolume, setRemainingVolume] = useState([
+    {
+      donorId:'',
+      volume:0,
+      remaining: 0,
+    },
+  ]);
 
-  // useEffect(() => {
-  //   watchArray?.forEach((item) => {
-  //     async function fetchData() {
-  //       const { data, status } = await axios.get(
-  //         `${urls.remainingVolumeByDonorId}/${item.donorId}`
-  //       );
-  //       if (status === 200) {
-  //         setRemainingVolume([{...remaining,remaining:data}])
-  //       }
-  //     }
-  //     fetchData();
-  //   });
-  // }, [watchArray]);
+  useEffect(() => {
+    watchArray?.forEach((item) => {
+      async function fetchData() {
+        const { data, status } = await axios.get(
+          `${urls.remainingVolumeByDonorId}/${item.donorId}`
+        );
+        if (status === 200) {
+          setRemainingVolume([{...remaining,remaining:data}])
+        }
+      }
+      fetchData();
+    });
+  }, [watchArray]);
 
 
   
 
- 
+  const handleRemaining = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...remainingVolume];
+    list[index][name] = value;
+    setRemainingVolume(list);
+  };
+  const handleDonorChange = (e,index)=>{
+    const {name,value} = e.target;
+    const list = [...remainingVolume]
+    list[index][name] = value;
+    setRemainingVolume(list)
+  }
+  const handleVolume = (e,index)=>{
+    const {name,value} = e.target;
+    const list = [...remainingVolume]
+    list[index][name] = value;
+    setRemainingVolume(list)
+  }
+  const handleAddForm = (e) =>{
+    e.preventDefault()
+    setRemainingVolume([...remainingVolume,{
+      donorId:'',
+      volume:0,
+      remaining: 0,
+    }])
+  }
+  const handleDeleteForm = (e,index)=>{
+    e.preventDefault()
+    const list = [...remainingVolume];
+    list.splice(index,1);
+    setRemainingVolume(list)
+  }
   return (
     <>
       <div className="mx-10">
@@ -104,7 +140,6 @@ export default function AddPasteurization() {
                 <select
                   className="inputStyle"
                   {...register("poolingCondition")}
-                  required
                 >
                   <option selected disabled value={""}>
                     --Select Condition--
@@ -126,31 +161,21 @@ export default function AddPasteurization() {
                   type="date"
                   className="inputStyle"
                   {...register("date")}
-                  required
                 />
               </div>
             </div>
             <div>
-              {fields?.length < 6 ? (
-                <div className=" flex justify-end">
-                  <button
-                    className="bg-indigo-600 rounded-md shadow-md px-6 py-2 font-bold text-white"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      append({ donorId: "", volumeOfMilkPooled: 0 });
-                    }}
-                  >
-                    add donor
-                  </button>
-                </div>
-              ) : (
-                <></>
-              )}
-
-              {fields.map((field, index) => {
+              {
+                remainingVolume.length < 6 ? 
+              <button className="bg-indigo-600 rounded-md shadow-md  font-bold text-white px-6 py-2 " onClick={(e)=>handleAddForm(e)} >
+                add donor
+              </button> :<></>
+              }
+              
+              {remainingVolume.map((field, index) => {
                 return (
                   <div
-                    key={field.id}
+                    key={index}
                     className="flex items-center gap-3 justify-between"
                   >
                     <div className="flex flex-col w-2/4">
@@ -158,9 +183,10 @@ export default function AddPasteurization() {
                         Donor Name<span className="text-red-600">*</span>
                       </label>
                       <select
-                        className={`inputStyle`}
-                        required
-                        {...register(`donorDetailsForPooling.${index}.donorId`)}
+                        className="inputStyle"
+                        // {...register(`donorDetailsForPooling.${index}.donorId`)}
+                        value={field.donorId}
+                        onChange={(e)=>handleDonorChange(e,index)}
                       >
                         <option selected disabled value={""}>
                           --Select Donor--
@@ -168,7 +194,7 @@ export default function AddPasteurization() {
                         {donorList?.map((item, index) => {
                           return (
                             <option key={index} value={item.donorId}>
-                              {item.donorName} (Remaining Volume:{item.remaining}ml)
+                              {item.remaining}
                             </option>
                           );
                         })}
@@ -182,15 +208,17 @@ export default function AddPasteurization() {
                         type="number"
                         className="inputStyle"
                         placeholder="Volume of Milk"
-                        required
-                        {...register(
-                          `donorDetailsForPooling.${index}.volumeOfMilkPooled`,
-                          { valueAsNumber: true }
-                        )}
+                        // {...register(
+                        //   `donorDetailsForPooling.${index}.volumeOfMilkPooled`,
+                        //   { valueAsNumber: true }
+                        // )}
+                        value={field.volume}
+                        onChange={(e)=>handleVolume(e,index)}
+
                       />
                     </div>
                     
-                        {/* <div key={index}>
+                        <div key={index}>
                           <label htmlFor="" className="text-xs">
                             Remaining Volume
                           </label>
@@ -198,18 +226,19 @@ export default function AddPasteurization() {
                             type="number"
                             readOnly
                             className="inputStyle"
-                            {...register(`donorDetailsForPooling.${index}.remaining`)}
-                           
+                            value={field.remaining}
+                            onChange={(e)=>handleRemaining(e,index)}
                           />
-                        </div> */}
-                     
-                    {fields?.length <= 1 ? (
+                        </div>
+                      
+
+                    {remainingVolume?.length <= 1 ? (
                       <></>
                     ) : (
                       <div className="flex items-center mt-5 ">
                         <button
                           className="bg-red-600 rounded-md shadow-md px-6 py-2 font-bold text-white"
-                          onClick={(e) => removeHandler(e, index)}
+                          onClick={(e) => handleDeleteForm(e, index)}
                         >
                           Remove
                         </button>
@@ -235,4 +264,3 @@ export default function AddPasteurization() {
     </>
   );
 }
-
