@@ -10,6 +10,10 @@ const donorDetailsForPooling = new Schema(
 
 const pasteurizatonSchema = new Schema(
   {
+    userId:{
+      type:Schema.Types.ObjectId,
+      ref:'User'
+    },
     poolingCondition: {
       type: Number,
       required: true,
