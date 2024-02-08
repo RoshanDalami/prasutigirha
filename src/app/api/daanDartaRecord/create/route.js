@@ -21,20 +21,10 @@ export async function POST(req, res) {
       newDonorRegNo = (numericPart + 1).toString().padStart(3, "0");
     }
 
-    let newUserID = nanoid(10);
     let newDaanDarta = new DaanDarta({
       ...body,
       donorRegNo: newDonorRegNo,
     });
-
-    console.log(newDaanDarta, "-->newDaanDarta");
-
-    if (newDaanDarta.gestationalAge <= 3) {
-      newDaanDarta.colostrumStatus = true;
-      console.log("colostrumStatus", newDaanDarta.colostrumStatus);
-    } else {
-      newDaanDarta.colostrumStatus = false;
-    }
 
     // ===============================================================================================
     // yadi serologyRecords positive aayo vane isSerologyPositive = true baschha

@@ -9,17 +9,18 @@ export async function GET(req, { params }) {
 
     const filteredData = response.filter((item) => item.gestationalAge == id);
 
-    console.log("filteredData", filteredData);
     const extractedData = filteredData.map((item) => ({
       donarId: item.donorId,
       donorName: item.donorName,
       quantity: item.quantity,
+      engDate: item.engDate,
+      storedBy: item.storedBy,
     }));
 
     return NextResponse.json(extractedData, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: "Internal Server Erro vyo" },
+      { message: "Internal Server Error vyo" },
       { status: 500 }
     );
   }

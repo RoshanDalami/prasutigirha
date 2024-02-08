@@ -11,7 +11,7 @@ export const urls = {
   getEthnicity: `/api/dropdown/ethnicity`,
   login: `/api/user/login`,
   register: `/api/user/register`,
-  logout:`/api/user/logout`,
+  logout: `/api/user/logout`,
   createOffice: `/api/office/createOffice`,
   getOffice: `/api/office/getOffice`,
   createDepartment: `/api/office/department/createDepartment`,
@@ -26,6 +26,8 @@ export const urls = {
   getVolumeOfMilk:`/api/volumeOfMilk/getVolumeOfMilk`,
   createPooling:`/api/pooling/create`,
   remainingVolumeByDonorId:`/api/volumeOfMilk/volumeByDonorId`,
-  createMilkRequistion:`/api/requsition/create`
-
+  createMilkRequistion:`/api/requsition/create`,
+  getDonorListByCondition: `/api/pooling/condition`,
+  createPooling: `/api/pooling/create`,
+  remainingVolumeByDonorId: `/api/volumeOfMilk/volumeByDonorId`,
 };
