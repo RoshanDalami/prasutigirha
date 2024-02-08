@@ -50,29 +50,62 @@ const VerbalExamination = ({
   });
 
   useEffect(() => {
-    if (userData) {
+    if (clickedIdData) {
+      setValue("acuteInfection", clickedIdData?.verbalExamination?.acuteInfection || "");
+      setValue("chronicInfection", clickedIdData?.verbalExamination?.chronicInfection || "");
+      setValue(
+        "cancerTreatmentWithinThreeYears",
+        clickedIdData?.verbalExamination?.cancerTreatmentWithinThreeYears || ""
+      );
+      setValue("autoImmuneDisease", clickedIdData?.verbalExamination?.autoImmuneDisease || "");
+      setValue(
+        "coughMoreThanTwoWeeks",
+        clickedIdData?.verbalExamination?.coughMoreThanTwoWeeks || ""
+      );
+      setValue("chickenpox", clickedIdData?.verbalExamination?.chickenpox || "");
+      setValue("stdLastOneYear", clickedIdData?.verbalExamination?.stdLastOneYear || "");
+      setValue(
+        "medCancerAntisicotikRadioactiveThyroid",
+        clickedIdData?.verbalExamination?.medCancerAntisicotikRadioactiveThyroid || ""
+      );
+      setValue(
+        "transplantAndBloodTaken",
+        clickedIdData?.verbalExamination?.transplantAndBloodTaken || ""
+      );
+      setValue("BadLifeStyle", clickedIdData?.verbalExamination?.BadLifeStyle || "");
+    } else if (userData) {
       setDefaultValuesWithUserData({
         acuteInfection: userData.acuteInfection || "",
         chronicInfection: userData.chronicInfection || "",
-        cancerTreatmentWithinThreeYears: userData.cancerTreatmentWithinThreeYears || "",
+        cancerTreatmentWithinThreeYears:
+          userData.cancerTreatmentWithinThreeYears || "",
         autoImmuneDisease: userData.autoImmuneDisease || "",
         coughMoreThanTwoWeeks: userData.coughMoreThanTwoWeeks || "",
         chickenpox: userData.chickenpox || "",
         stdLastOneYear: userData.stdLastOneYear || "",
-        medCancerAntisicotikRadioactiveThyroid: userData.medCancerAntisicotikRadioactiveThyroid || "",
+        medCancerAntisicotikRadioactiveThyroid:
+          userData.medCancerAntisicotikRadioactiveThyroid || "",
         transplantAndBloodTaken: userData.transplantAndBloodTaken || "",
         BadLifeStyle: userData.BadLifeStyle || "",
       });
       setValue("acuteInfection", userData.acuteInfection || "");
       setValue("chronicInfection", userData.chronicInfection || "");
-      setValue("cancerTreatmentWithinThreeYears", userData.cancerTreatmentWithinThreeYears || "");
+      setValue(
+        "cancerTreatmentWithinThreeYears",
+        userData.cancerTreatmentWithinThreeYears || ""
+      );
       setValue("autoImmuneDisease", userData.autoImmuneDisease || "");
       setValue("coughMoreThanTwoWeeks", userData.coughMoreThanTwoWeeks || "");
       setValue("chickenpox", userData.chickenpox || "");
       setValue("stdLastOneYear", userData.stdLastOneYear || "");
-      
-      setValue("medCancerAntisicotikRadioactiveThyroid", userData.medCancerAntisicotikRadioactiveThyroid || "");
-      setValue("transplantAndBloodTaken", userData.transplantAndBloodTaken || "");
+      setValue(
+        "medCancerAntisicotikRadioactiveThyroid",
+        userData.medCancerAntisicotikRadioactiveThyroid || ""
+      );
+      setValue(
+        "transplantAndBloodTaken",
+        userData.transplantAndBloodTaken || ""
+      );
       setValue("BadLifeStyle", userData.BadLifeStyle || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
@@ -80,30 +113,47 @@ const VerbalExamination = ({
   }, [userData, setValue]);
 
   const onSubmit = (data) => {
-    setUserData({ ...userData, verbalExamination:{
-      acuteInfection:JSON.parse(data.acuteInfection),
-      chronicInfection:JSON.parse(data.chronicInfection),
-      cancerTreatmentWithinThreeYears:JSON.parse(data.cancerTreatmentWithinThreeYears),
-      autoImmuneDisease:JSON.parse(data.autoImmuneDisease),
-      coughMoreThanTwoWeeks:JSON.parse(data.coughMoreThanTwoWeeks),
-      chickenpox:JSON.parse(data.chickenpox),
-      stdLastOneYear:JSON.parse(data.stdLastOneYear),
-      medCancerAntisicotikRadioactiveThyroid:JSON.parse(data.medCancerAntisicotikRadioactiveThyroid),
-      transplantAndBloodTaken:JSON.parse(data.transplantAndBloodTaken),
-      BadLifeStyle:data.BadLifeStyle
-    } });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, verbalExamination:{
-      acuteInfection:JSON.parse(data.acuteInfection),
-      chronicInfection:JSON.parse(data.chronicInfection),
-      cancerTreatmentWithinThreeYears:JSON.parse(data.cancerTreatmentWithinThreeYears),
-      autoImmuneDisease:JSON.parse(data.autoImmuneDisease),
-      coughMoreThanTwoWeeks:JSON.parse(data.coughMoreThanTwoWeeks),
-      chickenpox:JSON.parse(data.chickenpox),
-      stdLastOneYear:JSON.parse(data.stdLastOneYear),
-      medCancerAntisicotikRadioactiveThyroid:JSON.parse(data.medCancerAntisicotikRadioactiveThyroid),
-      transplantAndBloodTaken:JSON.parse(data.transplantAndBloodTaken),
-      BadLifeStyle:data.BadLifeStyle
-    }  }));
+    setUserData({
+      ...userData,
+      verbalExamination: {
+        acuteInfection: JSON.parse(data.acuteInfection),
+        chronicInfection: JSON.parse(data.chronicInfection),
+        cancerTreatmentWithinThreeYears: JSON.parse(
+          data.cancerTreatmentWithinThreeYears
+        ),
+        autoImmuneDisease: JSON.parse(data.autoImmuneDisease),
+        coughMoreThanTwoWeeks: JSON.parse(data.coughMoreThanTwoWeeks),
+        chickenpox: JSON.parse(data.chickenpox),
+        stdLastOneYear: JSON.parse(data.stdLastOneYear),
+        medCancerAntisicotikRadioactiveThyroid: JSON.parse(
+          data.medCancerAntisicotikRadioactiveThyroid
+        ),
+        transplantAndBloodTaken: JSON.parse(data.transplantAndBloodTaken),
+        BadLifeStyle: data.BadLifeStyle,
+      },
+    });
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        ...userData,
+        verbalExamination: {
+          acuteInfection: JSON.parse(data.acuteInfection),
+          chronicInfection: JSON.parse(data.chronicInfection),
+          cancerTreatmentWithinThreeYears: JSON.parse(
+            data.cancerTreatmentWithinThreeYears
+          ),
+          autoImmuneDisease: JSON.parse(data.autoImmuneDisease),
+          coughMoreThanTwoWeeks: JSON.parse(data.coughMoreThanTwoWeeks),
+          chickenpox: JSON.parse(data.chickenpox),
+          stdLastOneYear: JSON.parse(data.stdLastOneYear),
+          medCancerAntisicotikRadioactiveThyroid: JSON.parse(
+            data.medCancerAntisicotikRadioactiveThyroid
+          ),
+          transplantAndBloodTaken: JSON.parse(data.transplantAndBloodTaken),
+          BadLifeStyle: data.BadLifeStyle,
+        },
+      })
+    );
     handleClick("next");
     console.log(userData, "response");
   };
@@ -370,9 +420,9 @@ const VerbalExamination = ({
             <div className="flex gap-4">
               <div className="flex gap-1">
                 <input
-                    id="smoking"
-                    type="radio"
-                    value="smoking"
+                  id="smoking"
+                  type="radio"
+                  value="smoking"
                   {...register("BadLifeStyle", {
                     required: "This field required",
                   })}
@@ -392,10 +442,9 @@ const VerbalExamination = ({
               </div>
               <div className="flex gap-1">
                 <input
-
-                 id="drugs"
-                    type="radio"
-                    value="drugs"
+                  id="drugs"
+                  type="radio"
+                  value="drugs"
                   {...register("BadLifeStyle", {
                     required: "This field required",
                   })}

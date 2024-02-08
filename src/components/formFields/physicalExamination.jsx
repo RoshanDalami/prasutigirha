@@ -15,7 +15,7 @@ import StepperControl from "../stepper/StepperControl";
 import { StepperContext } from "../stepper/StepperContext";
 import FormBorder from "../reusableForm";
 import RadioInput from "../radioInput";
-import axios from 'axios'
+import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { submittingAtom } from "src/recoil/isSubmiting/submittingAtom";
 import { useSetRecoilState } from "recoil";
@@ -38,7 +38,7 @@ const PhysicalExamination = ({
   const { userData, setUserData } = useContext(StepperContext);
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
-    const setSubmitting = useSetRecoilState(submittingAtom);
+  const setSubmitting = useSetRecoilState(submittingAtom);
 
   const router = useRouter();
   const {
@@ -50,12 +50,38 @@ const PhysicalExamination = ({
   } = useForm({
     defaultValues: defaultValuesWithUserData,
   });
-  useEffect(()=>{
-    setSubmitting(isSubmitting)
-  },[isSubmitting, setSubmitting])
+  useEffect(() => {
+    setSubmitting(isSubmitting);
+  }, [isSubmitting, setSubmitting]);
 
   useEffect(() => {
-    if (userData) {
+    if (clickedIdData) {
+      setValue(
+        "mastitis",
+        clickedIdData?.donorPhysicalExamination?.mastitis || ""
+      ); // pass setValue to the dependencies array and use it directly
+      setValue(
+        "localLesions",
+        clickedIdData?.donorPhysicalExamination?.localLesions || ""
+      );
+      setValue(
+        "fugalInNippleAreola",
+        clickedIdData?.donorPhysicalExamination?.fugalInNippleAreola || ""
+      );
+      setValue(
+        "herpesZoster",
+        clickedIdData?.donorPhysicalExamination?.herpesZoster || ""
+      );
+      setValue("others", clickedIdData?.donorPhysicalExamination?.others || "");
+      setValue(
+        "doctorName",
+        clickedIdData?.donorPhysicalExamination?.doctorName || ""
+      );
+      setValue(
+        "signature",
+        clickedIdData?.donorPhysicalExamination?.signature || ""
+      );
+    } else if (userData) {
       setDefaultValuesWithUserData({
         mastitis: userData.mastitis || "",
         localLesions: userData.localLesions || "",
@@ -77,42 +103,49 @@ const PhysicalExamination = ({
     }
   }, [userData, setValue]);
 
-  const onSubmit = async(data) => {
-    setUserData({ ...userData, donorPhysicalExamination:{
-      mastitis:JSON.parse(data.mastitis),
-      localLesions:JSON.parse(data.localLesions),
-      fugalInNippleAreola:JSON.parse(data.fugalInNippleAreola),
-      herpesZoster:JSON.parse(data.herpesZoster),
-      doctorName: data.doctorName
-    }});
-    localStorage.setItem("userData", JSON.stringify({ ...userData, donorPhysicalExamination:{
-      mastitis:JSON.parse(data.mastitis),
-      localLesions:JSON.parse(data.localLesions),
-      fugalInNippleAreola:JSON.parse(data.fugalInNippleAreola),
-      herpesZoster:JSON.parse(data.herpesZoster),
-      doctorName: data.doctorName
-    } }));
-     data = {
+  const onSubmit = async (data) => {
+    setUserData({
       ...userData,
-      donorPhysicalExamination:{
-        mastitis:JSON.parse(data.mastitis),
-        localLesions:JSON.parse(data.localLesions),
-        fugalInNippleAreola:JSON.parse(data.fugalInNippleAreola),
-        herpesZoster:JSON.parse(data.herpesZoster),
-        doctorName: data.doctorName
-      }
-     }
-    
-     try {
-        const response = await axios.post(`${urls.createDanaDarta}`,data)
-        if(response.status === 200){
-          router.push('/donorRecord/viewDonorRecord')
-        }
-     } catch (error) {
-      console.log(error,'response')
-     }
+      donorPhysicalExamination: {
+        mastitis: JSON.parse(data.mastitis),
+        localLesions: JSON.parse(data.localLesions),
+        fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
+        herpesZoster: JSON.parse(data.herpesZoster),
+        doctorName: data.doctorName,
+      },
+    });
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        ...userData,
+        donorPhysicalExamination: {
+          mastitis: JSON.parse(data.mastitis),
+          localLesions: JSON.parse(data.localLesions),
+          fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
+          herpesZoster: JSON.parse(data.herpesZoster),
+          doctorName: data.doctorName,
+        },
+      })
+    );
+    data = {
+      ...userData,
+      donorPhysicalExamination: {
+        mastitis: JSON.parse(data.mastitis),
+        localLesions: JSON.parse(data.localLesions),
+        fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
+        herpesZoster: JSON.parse(data.herpesZoster),
+        doctorName: data.doctorName,
+      },
+    };
 
-    
+    try {
+      const response = await axios.post(`${urls.createDanaDarta}`, data);
+      if (response.status === 200) {
+        router.push("/donorRecord/viewDonorRecord");
+      }
+    } catch (error) {
+      console.log(error, "response");
+    }
   };
 
   const fileInputRef = useRef(null);
