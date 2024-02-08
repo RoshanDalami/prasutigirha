@@ -4,7 +4,6 @@ const donorDetailsForPooling = new Schema(
   {
     donorId: { type: Schema.Types.ObjectId, ref: "DaanDarta" },
     volumeOfMilkPooled:{type:Number,required:true},
-    
   },
   { timestamps: true }
 );
@@ -16,8 +15,12 @@ const pasteurizatonSchema = new Schema(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
+    },
+    engDate:{
+      type:String,
+      required:true
     },
     donorDetailsForPooling: [donorDetailsForPooling],
   },
