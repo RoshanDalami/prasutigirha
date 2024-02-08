@@ -1,4 +1,5 @@
-import mongoose ,{Schema} from 'mongoose'
+import mongoose, { Schema } from "mongoose";
+
 
 const volumeOfMilkSchema = new Schema({
     userId:{
@@ -48,3 +49,4 @@ const volumeOfMilkSchema = new Schema({
 },{timestamps:true})
 const MilkVolume = mongoose.models.MilkVolume || mongoose.model('MilkVolume',volumeOfMilkSchema)
 export {MilkVolume}
+
