@@ -112,7 +112,6 @@ export default function AddVolume({ clickedData }) {
                   </option>
                   {donorList?.map((item, index) => {
                     const combinedValue = `${item.gestationalAge}-${item._id}-${item.donor_FullName}`;
-                    console.log(item?._id === clickedData?.donorId, "bool");
                     return (
                       <option
                         key={index}

@@ -6,7 +6,7 @@ import StepperControl from "../stepper/StepperControl";
 import FormBorder from "../reusableForm";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
-import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+import BikramSambat from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 const defaultValues = {
