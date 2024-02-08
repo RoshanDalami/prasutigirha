@@ -15,7 +15,6 @@ export async function GET(req, { params }) {
       quantity: item.quantity,
       engDate: item.engDate,
       storedBy: item.storedBy,
-      remaining: item.remaining,
     }));
 
     return NextResponse.json(extractedData, { status: 200 });

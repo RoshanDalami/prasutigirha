@@ -4,9 +4,9 @@ const babyStatusSchema = new mongoose.Schema({
   dateOfBirth: {
     type: String,
   },
-  engDateBirth:{
-    type:String,
-    required:true
+  engDateBirth: {
+    type: String,
+    required: true,
   },
   babyStatus: {
     type: Number,
@@ -31,9 +31,9 @@ const serologyScreeningSchema = new mongoose.Schema({
   dateOfTest: {
     type: String,
   },
-  engDateTest:{
-    type:String
-  }
+  engDateTest: {
+    type: String,
+  },
 
   // helperName: {
   //   type: String,
@@ -105,7 +105,6 @@ const donorPhysicalExaminationSchema = new mongoose.Schema({
   },
 });
 
-<<<<<<< HEAD
 const daanDartaSchema = new Schema(
   {
     userId: {
@@ -179,79 +178,6 @@ const daanDartaSchema = new Schema(
     isExternal: {
       type: Boolean,
     },
-=======
-const daanDartaSchema = new Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  hosRegNo: {
-    type: String,
-  },
-  donorRegNo: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  date: {
-    type: String,
-  },
-  engDate:{
-    type:String
-  },
-  time: {
-    type: String,
-  },
-  donor_FullName: {
-    type: String,
-  },
-  donorAge: {
-    type: Number,
-  },
-  education: {
-    type: String,
-  },
-  ethnicity: {
-    type: String,
-  },
-  address: {
-    type: String,
-  },
-  contactNo: {
-    type: String,
-  },
-  ageOfChild: {
-    type: Number,
-  },
-  gestationalAge: {
-    type: Number,
-  },
-  modeOfDelivery: {
-    type: Number,
-  },
-  parity: {
-    type: Number,
-  },
-  isDonorActive: {
-    type: Boolean,
-    default: true,
-  },
-  isSerologyPositive: {
-    type: Boolean,
-  },
-  verbalStatus: {
-    type: Boolean,
-  },
-  physicalStatus: {
-    type: Boolean,
-  },
-  remarks: {
-    type: String,
-  },
-  isExternal: {
-    type: Boolean,
-  },
->>>>>>> 67370a563da65ace55c1bd7c1f04ad2f5dcebcac
 
     babyStatus: babyStatusSchema,
     serologyRecords: serologyScreeningSchema,
