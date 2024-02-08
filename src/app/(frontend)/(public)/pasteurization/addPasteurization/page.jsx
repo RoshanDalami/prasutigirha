@@ -1,6 +1,5 @@
 "use client";
 import FormBorder from "@/components/reusableForm";
-
 import { useFieldArray, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -18,10 +17,13 @@ export default function AddPasteurization() {
     handleSubmit,
     watch,
     formState: { isSubmitting },
+    setValue,
     control,
   } = useForm({
     defaultValues: {
-      donorDetailsForPooling: [{ donorId: "", volumeOfMilkPooled: 0 }],
+      donorDetailsForPooling: [
+        { donorId: "", volumeOfMilkPooled: 0, remaining: 0 },
+      ],
     },
   });
   const watchFields = watch();
@@ -39,21 +41,20 @@ export default function AddPasteurization() {
   const watchVolume = watchArray.map((item, index) => {
     return item?.volumeOfMilkPooled;
   });
-
   let milkVolume = sum(watchVolume);
   const onSubmit = async (data) => {
-    data={
+    data = {
       ...data,
       date,
-      engDate
-    }
- 
-    try {
-      const response = await axios.post(`${urls.createPooling}`, data);
-      if (response.status === 200) {
-        router.push("/pasteurization/pasteurizationList");
-      }
-    } catch (error) {}
+      engDate,
+    };
+    console.log(data, "response");
+    // try {
+    //   const response = await axios.post(`${urls.createPooling}`, data);
+    //   if (response.status === 200) {
+    //     router.push("/pasteurization/pasteurizationList");
+    //   }
+    // } catch (error) {}
   };
 
   const poolingCondition = [
@@ -69,6 +70,7 @@ export default function AddPasteurization() {
   //  },[watchFields?.donorDetailsForPooling])
 
   const [donorList, setDonorList] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
@@ -78,26 +80,17 @@ export default function AddPasteurization() {
     }
     fetchData();
   }, []);
-  //remaining
-  // const [remainingVolume, setRemainingVolume] = useState([
-  //   {
-  //     remaining: 10,
-  //   },
-  // ]);
 
-  // useEffect(() => {
-  //   watchArray?.forEach((item) => {
-  //     async function fetchData() {
-  //       const { data, status } = await axios.get(
-  //         `${urls.remainingVolumeByDonorId}/${item.donorId}`
-  //       );
-  //       if (status === 200) {
-  //         setRemainingVolume([{...remaining,remaining:data}])
-  //       }
-  //     }
-  //     fetchData();
-  //   });
-  // }, [watchArray]);
+  useEffect(() => {
+    watchArray.forEach((item, index) => {
+      donorList.forEach((donor, index) => {
+        if(item.donorId === donor.donorId){
+          setValue(`donorDetailsForPooling.${index}.remaining`,donor.remaining)
+          
+        }
+      });
+    });
+  }, [donorList, setValue, watchArray]);
 
   return (
     <>
@@ -138,8 +131,7 @@ export default function AddPasteurization() {
                   options={{ calenderLocale: "ne", valueLocale: "en" }}
                   className="inputStyle"
                 />
-              </div> 
-
+              </div>
             </div>
             <div>
               {fields?.length < 6 ? (
@@ -148,7 +140,11 @@ export default function AddPasteurization() {
                     className="bg-indigo-600 rounded-md shadow-md px-6 py-2 font-bold text-white"
                     onClick={(e) => {
                       e.preventDefault();
-                      append({ donorId: "", volumeOfMilkPooled: 0 });
+                      append({
+                        donorId: "",
+                        volumeOfMilkPooled: 0,
+                        remaining: 0,
+                      });
                     }}
                   >
                     add donor
@@ -159,7 +155,10 @@ export default function AddPasteurization() {
               )}
 
               {fields.map((field, index) => {
-                const watchInput = watch(`donorDetailsForPooling.${index}.volumeOfMilkPooled`)
+                const watchInput = watch(
+                  `donorDetailsForPooling.${index}.volumeOfMilkPooled`
+                );
+
                 return (
                   <div
                     key={field.id}
@@ -178,9 +177,12 @@ export default function AddPasteurization() {
                           --Select Donor--
                         </option>
                         {donorList?.map((item, index) => {
+                          const combinedValue = `${item.donorId}`;
+                          
                           return (
-                            <option key={index} value={item.donorId}>
-                              {item.donorName} (Remaining Volume:{item.remaining}ml)
+                            <option key={index} value={combinedValue}>
+                              {item.donorName} (Remaining Volume:
+                              {item.remaining}ml)
                             </option>
                           );
                         })}
@@ -201,8 +203,19 @@ export default function AddPasteurization() {
                         )}
                       />
                     </div>
-                    
-                        {/* <div key={index}>
+                    {/* remaining  */}
+                    {/* <div>
+                      <label htmlFor="">Remaining</label>
+                      <input
+                        type="text"
+                        className="inputStyle"
+                        {...register(
+                          `donorDetailsForPooling.${index}.remaining`
+                        )}
+                      />
+                    </div> */}
+
+                    {/* <div key={index}>
                           <label htmlFor="" className="text-xs">
                             Remaining Volume
                           </label>
@@ -214,7 +227,7 @@ export default function AddPasteurization() {
                            
                           />
                         </div> */}
-                     
+
                     {fields?.length <= 1 ? (
                       <></>
                     ) : (
@@ -247,4 +260,3 @@ export default function AddPasteurization() {
     </>
   );
 }
-
