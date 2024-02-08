@@ -98,80 +98,87 @@ const donorPhysicalExaminationSchema = new mongoose.Schema({
   },
 });
 
-const daanDartaSchema = new Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  hosRegNo: {
-    type: String,
-  },
-  donorRegNo: {
-    type: String,
-    unique: true,
-    required: true,
-  },
-  date: {
-    type: Date,
-  },
-  time: {
-    type: String,
-  },
-  donor_FullName: {
-    type: String,
-  },
-  donorAge: {
-    type: Number,
-  },
-  education: {
-    type: String,
-  },
-  ethnicity: {
-    type: String,
-  },
-  address: {
-    type: String,
-  },
-  contactNo: {
-    type: String,
-  },
-  ageOfChild: {
-    type: Number,
-  },
-  gestationalAge: {
-    type: Number,
-  },
-  modeOfDelivery: {
-    type: Number,
-  },
-  parity: {
-    type: Number,
-  },
-  isDonorActive: {
-    type: Boolean,
-    default: true,
-  },
-  isSerologyPositive: {
-    type: Boolean,
-  },
-  verbalStatus: {
-    type: Boolean,
-  },
-  physicalStatus: {
-    type: Boolean,
-  },
-  remarks: {
-    type: String,
-  },
-  isExternal: {
-    type: Boolean,
-  },
+const daanDartaSchema = new Schema(
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    hosRegNo: {
+      type: String,
+    },
+    donorRegNo: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    date: {
+      type: Date,
+    },
+    time: {
+      type: String,
+    },
+    donor_FullName: {
+      type: String,
+    },
+    donorAge: {
+      type: Number,
+    },
+    education: {
+      type: String,
+    },
+    ethnicity: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    contactNo: {
+      type: String,
+    },
+    ageOfChild: {
+      type: Number,
+    },
+    updatedAgeOFChild: {
+      type: Number,
+      default: 0,
+    },
+    gestationalAge: {
+      type: Number,
+    },
+    modeOfDelivery: {
+      type: Number,
+    },
+    parity: {
+      type: Number,
+    },
+    isDonorActive: {
+      type: Boolean,
+      default: true,
+    },
+    isSerologyPositive: {
+      type: Boolean,
+    },
+    verbalStatus: {
+      type: Boolean,
+    },
+    physicalStatus: {
+      type: Boolean,
+    },
+    remarks: {
+      type: String,
+    },
+    isExternal: {
+      type: Boolean,
+    },
 
-  babyStatus: babyStatusSchema,
-  serologyRecords: serologyScreeningSchema,
-  verbalExamination: verbalExaminationSchema,
-  donorPhysicalExamination: donorPhysicalExaminationSchema,
-},{timestamps:true});
+    babyStatus: babyStatusSchema,
+    serologyRecords: serologyScreeningSchema,
+    verbalExamination: verbalExaminationSchema,
+    donorPhysicalExamination: donorPhysicalExaminationSchema,
+  },
+  { timestamps: true }
+);
 
 const DaanDarta =
   mongoose.models.DaanDarta || mongoose.model("DaanDarta", daanDartaSchema);
