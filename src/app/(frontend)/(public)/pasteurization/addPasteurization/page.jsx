@@ -9,6 +9,10 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddPasteurization() {
+  const userInfo =
+  typeof localStorage !== "undefined"
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : "";
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
@@ -45,16 +49,16 @@ export default function AddPasteurization() {
   const onSubmit = async (data) => {
     data = {
       ...data,
+      userId:userInfo._id,
       date,
       engDate,
     };
-    console.log(data, "response");
-    // try {
-    //   const response = await axios.post(`${urls.createPooling}`, data);
-    //   if (response.status === 200) {
-    //     router.push("/pasteurization/pasteurizationList");
-    //   }
-    // } catch (error) {}
+    try {
+      const response = await axios.post(`${urls.createPooling}`, data);
+      if (response.status === 200) {
+        router.push("/pasteurization/pasteurizationList");
+      }
+    } catch (error) {}
   };
 
   const poolingCondition = [
