@@ -9,11 +9,12 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddPasteurization() {
-  const poolingCondition = [
-    { id: 1, name: "Less than 32 weeks (Extreme Preterm)" },
-    { id: 2, name: "32-37 weeks(Preterm)" },
-    { id: 3, name: "38-42 weeks (Term)" },
-  ];
+
+  const userInfo =
+  typeof localStorage !== "undefined"
+    ? JSON.parse(localStorage.getItem("userInfo"))
+    : "";
+
   const [date, setDate] = useState("");
   const [donar, setDonar] = useState([]);
   const [selectedCondition, setSelectedCondition] = useState([]);
@@ -53,16 +54,16 @@ export default function AddPasteurization() {
   const onSubmit = async (data) => {
     data = {
       ...data,
+      userId:userInfo._id,
       date,
       engDate,
     };
-    console.log(data, "response");
-    // try {
-    //   const response = await axios.post(`${urls.createPooling}`, data);
-    //   if (response.status === 200) {
-    //     router.push("/pasteurization/pasteurizationList");
-    //   }
-    // } catch (error) {}
+    try {
+      const response = await axios.post(`${urls.createPooling}`, data);
+      if (response.status === 200) {
+        router.push("/pasteurization/pasteurizationList");
+      }
+    } catch (error) {}
   };
 
   //  useEffect(()=>{
