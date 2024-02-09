@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
+import { BiVolume } from "react-icons/bi";
 import { DaanDarta } from "src/Model/donorDetails.model";
 import { MilkVolume } from "src/Model/volumeOfMilk.model";
 export async function GET() {
@@ -18,11 +19,12 @@ export async function GET() {
           const donarId = donar._id;
           const milkVolume = await MilkVolume.find();
           const filteredMilkVolume = milkVolume.filter((milk) => {
+            console.log(filteredMilkVolume, "filteredMilkVolume");
             if (milk.donorId == donarId) {
               return milk.donorId == donarId;
             }
           });
-          console.log("filteredMilkVolume", filteredMilkVolume);
+
           return filteredMilkVolume;
         }
       }
