@@ -112,7 +112,7 @@ export default function ViewDonor() {
                     <input type="checkbox" name="" id="" />
                   </td> */}
                       <td className="py-3">{item.donorRegNo}</td>
-                      <td className="py-3">{item.donor_FullName}</td>
+                      <td className="py-3">{item.donorName}</td>
                       <td className="py-3">{item.donorAge}</td>
                       <td className="py-3">{item.address}</td>
                       <td className="py-3">{item.contactNo}</td>

@@ -9,19 +9,23 @@ connect()
 export async function POST(req){
     try {
         const body = await req.json();
-        const donorList = body?.donorDetailsForPooling
-        donorList.forEach(async(item)=>{
-            const donor = await MilkVolume.findOne({donorId:item.donorId})
-            const newRemaining = donor.remaining - item.volumeOfMilkPooled ;
-            await MilkVolume.findOne({donorId:item.donorId}).then((doc)=>{
-                doc.remaining = newRemaining;
-                doc.save()
-            })
-        })
+        const donorList = body?.donorDetailsForPooling;
         const newPooling = new Pasteurization(body);
         const savedData = await newPooling.save()
+        if(savedData){
+            donorList.forEach(async(item)=>{
+                const donor = await MilkVolume.findOne({donorId:item.donorId})
+                const newRemaining = donor.remaining - item.volumeOfMilkPooled ;
+                await MilkVolume.findOne({donorId:item.donorId}).then((doc)=>{
+                    doc.remaining = newRemaining;
+                    doc.save()
+                })
+            })
+        }
+        
         return NextResponse.json(savedData,{status:200})
     } catch (error) {
+        console.log(error)
         return NextResponse.json({message:"Internal Server Error"},{status:500})
     }
 }

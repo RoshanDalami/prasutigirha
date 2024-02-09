@@ -5,16 +5,14 @@ import { DaanDarta } from "src/Model/donorDetails.model";
 export async function GET(req, { params }) {
   const id = params.id;
   try {
-    const response = await MilkVolume.find({});
-
-    const filteredData = response.filter((item) => item.gestationalAge == id);
-
-    const extractedData = filteredData.map((item) => ({
-      donarId: item.donorId,
+    const response = await MilkVolume.find({gestationalAge:id});
+    const extractedData = response.map((item) => ({
+      donorId: item.donorId,
       donorName: item.donorName,
       quantity: item.quantity,
       engDate: item.engDate,
       storedBy: item.storedBy,
+      remaining: item.remaining
     }));
 
     return NextResponse.json(extractedData, { status: 200 });

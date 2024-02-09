@@ -19,7 +19,7 @@ const defaultValues = {
   donorRegNo: "",
   date: "",
   time: "",
-  donor_FullName: "",
+  donorName: "",
   donorAge: "",
   education: "",
   ethnicity: "",
@@ -143,7 +143,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("date", clickedIdData?.date);
       setValue("engDate", clickedIdData?.engDate);
       setValue("time", clickedIdData?.time);
-      setValue("donor_FullName", clickedIdData?.donor_FullName);
+      setValue("donorName", clickedIdData?.donorName);
       setValue("donorAge", clickedIdData?.donorAge);
       setValue("education", clickedIdData?.education);
       setValue("ethnicity", clickedIdData?.ethnicity);
@@ -160,7 +160,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
         date: userData.date || "",
         engDate: userData.engDate || "",
         time: userData.time || "",
-        donor_FullName: userData.donor_FullName || "",
+        donorName: userData.donorName || "",
         donorAge: userData.donorAge || "",
         education: userData.education || "",
         ethnicity: userData.ethnicity || "",
@@ -176,7 +176,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("date", userData.date || "");
       setValue("engDate", userData.engDate || "");
       setValue("time", userData.time || "");
-      setValue("donor_FullName", userData.donor_FullName || "");
+      setValue("donorName", userData.donorName || "");
       setValue("donorAge", userData.donorAge || defaultValues.donorAge);
       setValue("education", userData.education || defaultValues.education);
       setValue("ethnicity", userData.ethnicity || defaultValues.ethnicity);
@@ -199,7 +199,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
     setUserData({ ...userData, ...data,date:date, engDate });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data }));
+    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data,date:date, engDate  }));
     handleClick("next");
     console.log(userData, "response");
   };
@@ -298,12 +298,12 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="text"
               placeholder="Enter Donar Full Name"
               className="inputStyle"
-              {...register("donor_FullName", {
+              {...register("donorName", {
                 required: "Donor Name Required",
               })}
             />
-            {errors.donor_FullName && (
-              <p className="errorMessages">{errors.donor_FullName.message}</p>
+            {errors.donorName && (
+              <p className="errorMessages">{errors.donorName.message}</p>
             )}
           </div>
           <div className="flex flex-col">
