@@ -8,6 +8,7 @@ import { urls } from "src/services/apiHelpers";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+import toast from 'react-hot-toast'
 export default function AddPasteurization() {
 
   const userInfo =
@@ -16,8 +17,8 @@ export default function AddPasteurization() {
     : "";
 
   const [date, setDate] = useState("");
-  const [donar, setDonar] = useState([]);
-  const [selectedCondition, setSelectedCondition] = useState([]);
+
+
 
   const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function AddPasteurization() {
   } = useForm({
     defaultValues: {
       donorDetailsForPooling: [
-        { donorId: "", volumeOfMilkPooled: 0, remaining: 0 },
+        { donorId: "", volumeOfMilkPooled: 0 },
       ],
     },
   });
@@ -52,18 +53,31 @@ export default function AddPasteurization() {
   });
   let milkVolume = sum(watchVolume);
   const onSubmit = async (data) => {
+   const newArray = watchArray.map((item)=>({
+    ...item,
+      donorId : item.donorId.split('/')[0],
+      collectedDate:item.donorId.split('/')[1],
+
+    }))
     data = {
       ...data,
+      poolingCondition:data.gestationalAge,
       userId:userInfo._id,
       date,
       engDate,
+      collectedVolume:milkVolume,
+      donorDetailsForPooling:newArray
     };
+      
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
       if (response.status === 200) {
+        toast.success('Polling Created Successfully')
         router.push("/pasteurization/pasteurizationList");
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error('Pooling Creation Failed')
+    }
   };
 
   //  useEffect(()=>{
@@ -75,14 +89,17 @@ export default function AddPasteurization() {
   const [donorList, setDonorList] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
-      if (status === 200) {
-        setDonorList(data);
+    if(watchFields?.gestationalAge !== 0){
+
+      async function fetchData() {
+        const { status, data } =  watchFields?.gestationalAge == 4 ? await axios.get(`${urls.getColostrum}`) : await axios.get(`${urls.getGestationalPooling}/${watchFields?.gestationalAge}`)
+        if (status === 200) {
+          setDonorList(data);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, []);
+  }, [watchFields?.gestationalAge]);
 
   useEffect(() => {
     watchArray.forEach((item, index) => {
@@ -98,7 +115,7 @@ export default function AddPasteurization() {
   }, [donorList, setValue, watchArray]);
 
   const [gestationalAgeList, setGestationalAgeList] = useState([]);
-  const [selectedGestationalId, setSelectedGestationalId] = useState(null);
+  // const [selectedGestationalId, setSelectedGestationalId] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       const { data, status } = await axios.get(`${urls.getGestational}`);
@@ -116,23 +133,21 @@ export default function AddPasteurization() {
     );
   });
 
-  console.log(gestationalOptions, "gestationalOptions");
 
   // select donar by gestationalAge
-  useEffect(() => {
-    async function fetchData() {
-      const { status, data } = await axios.get(
-        `${urls.getDonorListByCondition}/${selectedGestationalId}`
-      );
-      if (status == 200) {
-        setDonar(data);
-      }
-    }
-    if (selectedGestationalId) {
-      fetchData();
-    }
-  }, [selectedGestationalId]);
-
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const { status, data } =   await axios.get(
+  //       `${urls.getDonorListByCondition}/${selectedGestationalId}`
+  //     );
+  //     if (status == 200) {
+  //       setDonar(data);
+  //     }
+  //   }
+  //   if (selectedGestationalId) {
+  //     fetchData();
+  //   }
+  // }, [selectedGestationalId]);
   return (
     <>
       <div className="mx-10">
@@ -147,12 +162,14 @@ export default function AddPasteurization() {
                   className="inputStyle"
                   {...register("gestationalAge", {
                     required: " Gestational Age Required",
-                    valueAsNumber: true,
                   })}
-                  onChange={(e) => setSelectedGestationalId(e.target.value)}
+                  
                 >
                   <option selected disabled value={""}>
                     --Select Condition--
+                  </option>
+                  <option value={4}>
+                    Colostrum
                   </option>
                   {gestationalOptions}
                 </select>
@@ -181,7 +198,7 @@ export default function AddPasteurization() {
                       append({
                         donorId: "",
                         volumeOfMilkPooled: 0,
-                        remaining: 0,
+                        
                       });
                     }}
                   >
@@ -214,8 +231,9 @@ export default function AddPasteurization() {
                         <option selected disabled value={""}>
                           --Select Donor--
                         </option>
-                        {donar?.map((item, index) => {
-                          const combinedValue = `${item.donorId}`;
+                        {donorList?.map((item, index) => {
+                          const combinedValue = `${item.donorId}/${item.date}`;
+                          // console.log(item,'response')
 
                           return (
                             <option key={index} value={combinedValue}>

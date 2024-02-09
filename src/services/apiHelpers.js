@@ -30,4 +30,6 @@ export const urls = {
   getDonorListByCondition: `/api/pooling/condition`,
   createPooling: `/api/pooling/create`,
   remainingVolumeByDonorId: `/api/volumeOfMilk/volumeByDonorId`,
+  getColostrum:`/api/pooling/colostrum`,
+  getGestationalPooling:`/api/pooling/condition`
 };
