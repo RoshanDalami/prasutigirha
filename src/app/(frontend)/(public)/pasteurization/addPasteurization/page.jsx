@@ -53,14 +53,22 @@ export default function AddPasteurization() {
   });
   let milkVolume = sum(watchVolume);
   const onSubmit = async (data) => {
+   const newArray = watchArray.map((item)=>({
+    ...item,
+      donorId : item.donorId.split('/')[0],
+      collectedDate:item.donorId.split('/')[1],
+
+    }))
     data = {
       ...data,
       poolingCondition:data.gestationalAge,
       userId:userInfo._id,
       date,
       engDate,
+      collectedVolume:milkVolume,
+      donorDetailsForPooling:newArray
     };
-    
+      
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
       if (response.status === 200) {
@@ -140,7 +148,6 @@ export default function AddPasteurization() {
   //     fetchData();
   //   }
   // }, [selectedGestationalId]);
-console.log(donorList,'response')
   return (
     <>
       <div className="mx-10">
@@ -191,7 +198,7 @@ console.log(donorList,'response')
                       append({
                         donorId: "",
                         volumeOfMilkPooled: 0,
-                        remaining: 0,
+                        
                       });
                     }}
                   >
@@ -225,7 +232,8 @@ console.log(donorList,'response')
                           --Select Donor--
                         </option>
                         {donorList?.map((item, index) => {
-                          const combinedValue = `${item.donorId}`;
+                          const combinedValue = `${item.donorId}/${item.date}`;
+                          // console.log(item,'response')
 
                           return (
                             <option key={index} value={combinedValue}>

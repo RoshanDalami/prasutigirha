@@ -12,7 +12,9 @@ export async function GET(req, { params }) {
       quantity: item.quantity,
       engDate: item.engDate,
       storedBy: item.storedBy,
-      remaining: item.remaining
+      remaining: item.remaining,
+      date:item.date
+      
     }));
 
     return NextResponse.json(extractedData, { status: 200 });

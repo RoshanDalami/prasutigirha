@@ -10,12 +10,28 @@ export async function POST(req){
     try {
         const body = await req.json();
         const donorList = body?.donorDetailsForPooling;
-        const newPooling = new Pasteurization(body);
+        let batchName = ''
+        if(body.poolingCondition == 4){
+            batchName = 'CA'
+        }else if(body.poolingCondition == 1){
+            batchName = 'EP'
+        }else if(body.poolingCondition == 2){
+            batchName = 'P'
+        }else{
+            batchName = 'T'
+        }
+        donorList.sort((a, b) => new Date(a.collectedDate) - new Date(b.collectedDate));
+        const currentDate = new Date(donorList[0].collectedDate);
+        let expireDate = new Date(currentDate);
+        expireDate.setMonth(currentDate?.getMonth() + 6)
+        expireDate = JSON.stringify(expireDate).split('T')[0].slice(1)
+       
+        const newPooling = new Pasteurization({...body,batchName:batchName,expireDate:expireDate});
         const savedData = await newPooling.save()
         if(savedData){
             donorList.forEach(async(item)=>{
                 const donor = await MilkVolume.findOne({donorId:item.donorId})
-                const newRemaining = donor.remaining - item.volumeOfMilkPooled ;
+                const newRemaining = donor?.remaining - item.volumeOfMilkPooled ;
                 await MilkVolume.findOne({donorId:item.donorId}).then((doc)=>{
                     doc.remaining = newRemaining;
                     doc.save()
