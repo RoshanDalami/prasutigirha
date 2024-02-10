@@ -19,10 +19,6 @@ export async function GET() {
           if (volume !== null) {
             filteredDonarData.push(volume);
           }
-          // filteredDonarData.push({
-          //   milkVolume,
-          //   donar,
-          // });
         }
       }
     }
