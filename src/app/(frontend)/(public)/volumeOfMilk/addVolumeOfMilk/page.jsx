@@ -6,7 +6,12 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddVolume({ clickedData }) {
+
   const {
     register,
     handleSubmit,
@@ -31,8 +36,9 @@ export default function AddVolume({ clickedData }) {
     fetchData();
   }, []);
 
+
   useEffect(() => {
-    setValue("id", clickedData?._id);
+    setValue("_id", clickedData?._id);
     setValue("donorId", clickedData?.donorId);
     setValue("gestationalAge", clickedData?.gestationalAge);
     setValue("quantity", clickedData?.quantity);
@@ -45,6 +51,7 @@ export default function AddVolume({ clickedData }) {
   useEffect(() => {
     gestational.forEach((item) => {
       if (item.gestationalId == watchFields.donorId?.split("-")[0]) {
+
         setValue("gestationalAge", item.gestationalName);
       }
     });
@@ -60,6 +67,8 @@ export default function AddVolume({ clickedData }) {
     }
     fetchData();
   }, []);
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
 
   const onSubmit = async (data) => {
     data = {
@@ -68,8 +77,9 @@ export default function AddVolume({ clickedData }) {
       donorId: watchFields?.donorId.split("-")[1],
       gestationalAge: parseInt(watchFields?.donorId.split("-")[0]),
       donorName: watchFields?.donorId.split("-")[2],
+      date,
+      engDate
     };
-
     try {
       const response = await axios.post(`${urls.createVolumeOfMilk}`, data);
       if (response.status === 200) {
@@ -78,6 +88,9 @@ export default function AddVolume({ clickedData }) {
       }
     } catch (error) {}
   };
+
+  //Nepali Date
+ 
 
   return (
     <>
@@ -98,11 +111,14 @@ export default function AddVolume({ clickedData }) {
                     --Select Donor--
                   </option>
                   {donorList?.map((item, index) => {
-                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donor_FullName}`;
-                    console.log(item?._id === clickedData?.donorId,'bool')
+                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donorName}`;
                     return (
-                      <option key={index} value={combinedValue} selected={item?._id === clickedData?.donorId} >
-                        {item.donor_FullName}
+                      <option
+                        key={index}
+                        value={combinedValue}
+                        selected={item?._id === clickedData?.donorId}
+                      >
+                        {item.donorName}
                       </option>
                     );
                   })}
@@ -126,11 +142,16 @@ export default function AddVolume({ clickedData }) {
                   Date
                   <span className="text-lg text-red-600">*</span>
                 </label>
-                <input
+
+             
+                <NepaliDatePicker
+                  inputClassName="form-control  focus:outline-none"
+                  value={date}
+                  onChange={(e) => setDate(e)}
+                  options={{ calenderLocale: "ne", valueLocale: "en"  }}
                   className="inputStyle"
-                  type="date"
-                  placeholder="."
-                  {...register("date")}
+                  
+
                 />
               </div>
               <div className="grid">
@@ -152,9 +173,13 @@ export default function AddVolume({ clickedData }) {
                 </label>
                 <input
                   className="inputStyle"
-                  type="text"
+
+                  type="number"
                   placeholder="."
-                  {...register("quantity")}
+                  {...register("quantity", { valueAsNumber: true })}
+
+                 
+
                 />
               </div>
               <div className="grid">
@@ -182,10 +207,12 @@ export default function AddVolume({ clickedData }) {
                 />
               </div>
             </div>
+
             <button
               className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]"
               type="submit"
             >
+
               {isSubmitting ? "Submitting ..." : "Submit"}
             </button>
           </div>
