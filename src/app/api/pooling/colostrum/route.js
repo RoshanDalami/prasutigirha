@@ -12,9 +12,7 @@ export async function GET() {
         const diffTime = Math.abs(currentDate - dob);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         donar.updatedAgeOFChild = diffDays;
-
         await donar.save();
-
         if (donar.updatedAgeOFChild <= 3) {
           const donarId = donar._id;
           const volume = await MilkVolume.findOne({ donorId: donarId });
