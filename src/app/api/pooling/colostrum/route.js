@@ -22,8 +22,6 @@ export async function GET() {
         }
       }
     }
-
-
     return NextResponse.json(filteredDonarData, { status: 200 });
   } catch (error) {
     console.log(error);
