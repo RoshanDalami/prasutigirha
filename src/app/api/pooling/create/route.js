@@ -1,7 +1,6 @@
 import { Pasteurization } from "src/Model/pasteurization.model";
 import { MilkVolume } from "src/Model/volumeOfMilk.model";
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
 import { connect } from "src/dbConfig/dbConfig";
 connect()
 
