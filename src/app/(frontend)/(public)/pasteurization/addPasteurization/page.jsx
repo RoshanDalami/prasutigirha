@@ -9,6 +9,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import toast from 'react-hot-toast'
+
 export default function AddPasteurization() {
 
   const userInfo =
@@ -74,6 +75,8 @@ export default function AddPasteurization() {
       if (response.status === 200) {
         toast.success('Polling Created Successfully')
         router.push("/pasteurization/pasteurizationList");
+      }else{
+        toast.error(response.message)
       }
     } catch (error) {
       toast.error('Pooling Creation Failed')
@@ -92,7 +95,7 @@ export default function AddPasteurization() {
     if(watchFields?.gestationalAge !== 0){
 
       async function fetchData() {
-        const { status, data } =  watchFields?.gestationalAge == 4 ? await axios.get(`${urls.getColostrum}`) : await axios.get(`${urls.getGestationalPooling}/${watchFields?.gestationalAge}`)
+        const { status, data } =  watchFields?.gestationalAge != 4 ? await axios.get(`${urls.getGestationalPooling}/${watchFields?.gestationalAge}`) : await axios.get(`${urls.getColostrum}`) 
         if (status === 200) {
           setDonorList(data);
         }

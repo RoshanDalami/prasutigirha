@@ -3,16 +3,43 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "src/components/button";
+import { urls } from "src/services/apiHelpers";
+import axios from "axios";
+import toast from "react-hot-toast";
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
   const router = useRouter();
+  const [requsitionList, setRequsitionList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getRequistion}`);
+      if (status === 200) {
+        setRequsitionList(data);
+        toast.success("List generated successfully");
+      } else {
+        toast.error("List generation failed");
+      }
+    }
+    fetchData();
+  }, []);
+  const [gestationalAgeList, setGestationalAgeList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (status === 200) {
+        setGestationalAgeList(data);
+      }
+    }
+    fetchData();
+  }, []);
   const handleEdit = useCallback(() => {
     router.push(`/milkRequisation/addMilkRequisation`);
-  });
+  }, [router]);
+
   return (
     <>
       <div>
@@ -59,10 +86,10 @@ export default function ListVolume() {
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3 px-3">
+                  {/* <td className="py-3 px-3">
                     <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3 ">Id</td>
+                  </td> */}
+                  <td className="py-3 ">S.N</td>
                   <td className="py-3 ">
                     Baby <br /> Name
                   </td>
@@ -84,34 +111,46 @@ export default function ListVolume() {
                   <td className="py-3 ">
                     Date of <br /> Bottle
                   </td>
-                  <td className="py-3 ">Time</td>
+
                   <td className="py-3 ">ML</td>
                   <td className="py-3 ">Action</td>
                 </tr>
-                <tr className=" border border-x-gray text-center">
-                  <td className="py-3 text-center">
-                    <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">
-                    <div className="flex justify-evenly text-xl">
-                      <PencilSquareIcon
-                        className="h-6 w-6"
-                        onClick={() => handleEdit()}
-                      />
-                      <TrashIcon className="h-6 w-6" />
-                    </div>
-                  </td>
-                </tr>
+                {requsitionList?.map((row, index) => {
+                  return (
+                    <tr
+                      className=" border border-x-gray text-center"
+                      key={index}
+                    >
+                      <td className="py-3">{index + 1}</td>
+                      <td className="py-3">{row?.babyEntry?.babyName}</td>
+                      <td className="py-3">{row?.babyEntry?.dateOfBaby}</td>
+                      {gestationalAgeList?.map((item, index) => {
+                        if (item.gestationalId === row.babyEntry?.gestationalAge) {
+                          return (
+                            <td className="py-3" key={index}>
+                              {item.gestationalName}
+                            </td>
+                          );
+                        }
+                      })}
+                      <td className="py-3">{row?.babyEntry?.babyWeight} grams</td>
+                      <td className="py-3">{row?.babyStatus}</td>
+                      <td className="py-3">{row?.feedingDetails?.bottleName}</td>
+                      <td className="py-3">{row?.feedingDetails?.feedingDate}</td>
+                      <td className="py-3">{row.feedingDetails.quantity}{" "} ml</td>
+
+                      <td className="py-3">
+                        <div className="flex justify-evenly text-xl">
+                          <PencilSquareIcon
+                            className="h-6 w-6"
+                            onClick={() => handleEdit()}
+                          />
+                          <TrashIcon className="h-6 w-6" />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
           </TableBorder>
