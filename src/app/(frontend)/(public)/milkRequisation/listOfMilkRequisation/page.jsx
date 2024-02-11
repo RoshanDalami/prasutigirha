@@ -12,6 +12,7 @@ export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
+  
   const router = useRouter();
   const [requsitionList, setRequsitionList] = useState([]);
   useEffect(() => {
@@ -36,10 +37,19 @@ export default function ListVolume() {
     }
     fetchData();
   }, []);
-  const handleEdit = useCallback(() => {
-    router.push(`/milkRequisation/addMilkRequisation`);
+  const handleEdit = useCallback((id) => {
+    router.push(`/milkRequisation/addMilkRequisation/${id}`);
   }, [router]);
-
+  const handleDelete = async(id) =>{
+    const response = await axios.delete(`${urls.getRequistion}/${id}`);
+    if(response.status === 200){
+      const { data, status } = await axios.get(`${urls.getRequistion}`);
+      if (status === 200) {
+        setRequsitionList(data);
+        
+      } 
+    }
+  }
   return (
     <>
       <div>
@@ -139,13 +149,19 @@ export default function ListVolume() {
                       <td className="py-3">{row?.feedingDetails?.feedingDate}</td>
                       <td className="py-3">{row.feedingDetails.quantity}{" "} ml</td>
 
-                      <td className="py-3">
-                        <div className="flex justify-evenly text-xl">
+                      <td className="py-3 ">
+                        <div className="flex justify-evenly items-center text-xl">
+                          <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
+
                           <PencilSquareIcon
-                            className="h-6 w-6"
-                            onClick={() => handleEdit()}
+                            className="h-6 w-6 text-white "
+                            onClick={() => handleEdit(row._id)}
                           />
-                          <TrashIcon className="h-6 w-6" />
+                          </div>
+                          <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
+
+                          <TrashIcon className="h-6 w-6 text-white" onClick={()=>handleDelete(row._id)}  />
+                          </div>
                         </div>
                       </td>
                     </tr>

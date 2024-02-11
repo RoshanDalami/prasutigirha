@@ -3,17 +3,18 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { urls } from "src/services/apiHelpers";
 import axios from 'axios'
+
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
   const router = useRouter();
-  const handleEdit = useCallback(() => {
-    router.push(`/pasteurization/addPasteurization`);
-  },[router]);
+  const handleEdit = (id) => {
+    router.push(`/pasteurization/addPasteurization/${id}`);
+  }
 
   const [poolingList,setPoolingList] = useState([]);
   useEffect(()=>{
@@ -25,6 +26,15 @@ export default function ListVolume() {
     }
     fetchData()
   },[])
+  const handleDelete =async(id)=>{
+    const response = await axios.delete(`${urls.getPooling}/${id}`)
+    if(response.status === 200){
+      const {data,status} = await axios.get(`${urls.getPooling}`);
+      if(status === 200){
+        setPoolingList(data)
+      }
+    }
+  }
   const [gestationalAge,setGestationalAge] = useState([]);
   useEffect(()=>{
     async function fetchData(){
@@ -35,6 +45,7 @@ export default function ListVolume() {
     }
     fetchData()
   },[])
+ 
   return (
     <>
       <div>
@@ -117,11 +128,17 @@ export default function ListVolume() {
                   <td className="py-3">{row.expireDate}</td>
                   <td className="py-3">
                     <div className="flex justify-evenly text-xl">
+                      <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
+                        
                       <PencilSquareIcon
-                        className="h-6 w-6 cursor-pointer hover:text-green-600"
-                        onClick={() => handleEdit()}
+                        className="h-6 w-6 text-white "
+                        onClick={() => handleEdit(row._id)}
                       />
-                      <TrashIcon className="h-6 w-6 cursor-pointer hover:text-red-600" />
+                      </div>
+                      <div className="cursor-pointer bg-red-600 rounded-md shadow-md px-2 py-1">
+
+                      <TrashIcon className="h-6 w-6 text-white"  onClick={()=>handleDelete(row._id)} />
+                      </div>
                     </div>
                   </td>
                 </tr>

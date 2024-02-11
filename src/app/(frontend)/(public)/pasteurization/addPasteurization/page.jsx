@@ -10,8 +10,8 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import toast from 'react-hot-toast'
 
-export default function AddPasteurization() {
-
+export default function AddPasteurization({clickedIdData}) {
+console.log(clickedIdData,'response')
   const userInfo =
   typeof localStorage !== "undefined"
     ? JSON.parse(localStorage.getItem("userInfo"))
@@ -53,6 +53,27 @@ export default function AddPasteurization() {
     return item?.volumeOfMilkPooled;
   });
   let milkVolume = sum(watchVolume);
+ 
+  useEffect(()=>{
+    if(router?.query?.id || clickedIdData){
+      setValue('_id',clickedIdData?._id)
+      setValue('gestationalAge',clickedIdData?.poolingCondition);
+      setDate(clickedIdData?.date)
+      clickedIdData?.donorDetailsForPooling?.forEach((item,index)=>{
+        setValue('_id',item._id)
+        setValue(`donorDetailsForPooling.${index}.donorId`,item.donorId);
+        setValue(`donorDetailsForPooling.${index}.collectedDate`,item.collectedDate);
+        setValue(`donorDetailsForPooling.${index}.volumeOfMilkPooled`,item.volumeOfMilkPooled)
+
+      })
+      setValue('expireDate',clickedIdData?.expireDate);
+      setValue('collectedVolume',clickedIdData?.collectedVolume);
+      setValue('batchName',clickedIdData?.batchName)
+    }
+  },[clickedIdData, router?.query?.id,setValue])
+
+
+
   const onSubmit = async (data) => {
    const newArray = watchArray.map((item)=>({
     ...item,
@@ -135,22 +156,6 @@ export default function AddPasteurization() {
       </option>
     );
   });
-
-
-  // select donar by gestationalAge
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const { status, data } =   await axios.get(
-  //       `${urls.getDonorListByCondition}/${selectedGestationalId}`
-  //     );
-  //     if (status == 200) {
-  //       setDonar(data);
-  //     }
-  //   }
-  //   if (selectedGestationalId) {
-  //     fetchData();
-  //   }
-  // }, [selectedGestationalId]);
   return (
     <>
       <div className="mx-10">
@@ -263,30 +268,6 @@ export default function AddPasteurization() {
                         )}
                       />
                     </div>
-                    {/* remaining  */}
-                    {/* <div>
-                      <label htmlFor="">Remaining</label>
-                      <input
-                        type="text"
-                        className="inputStyle"
-                        {...register(
-                          `donorDetailsForPooling.${index}.remaining`
-                        )}
-                      />
-                    </div> */}
-
-                    {/* <div key={index}>
-                          <label htmlFor="" className="text-xs">
-                            Remaining Volume
-                          </label>
-                          <input
-                            type="number"
-                            readOnly
-                            className="inputStyle"
-                            {...register(`donorDetailsForPooling.${index}.remaining`)}
-                           
-                          />
-                        </div> */}
 
                     {fields?.length <= 1 ? (
                       <></>
