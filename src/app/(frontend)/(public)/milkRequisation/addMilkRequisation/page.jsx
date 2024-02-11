@@ -9,8 +9,10 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
-export default function AddMilkReq() {
+import { useParams } from "next/navigation";
+export default function AddMilkReq({clickedIdData}) {
   const router= useRouter();
+  const {id} = useParams();
   const [birthDate, setBirthDate] = useState("");
   const [feedingDate, setFeedingDate] = useState("");
   const userInfo =
@@ -23,6 +25,7 @@ export default function AddMilkReq() {
     register,
     handleSubmit,
     formState: { isSubmitting },
+    setValue
   } = useForm();
 
   //gestationalAge
@@ -94,6 +97,27 @@ export default function AddMilkReq() {
       </option>
     );
   });
+
+  useEffect(()=>{
+    if(clickedIdData || id ){
+      setValue('_id',clickedIdData?._id);
+      setValue('babyStatus',clickedIdData?.babyStatus);
+      setValue('babyName',clickedIdData?.babyEntry?.babyName);
+      setValue('gestationalAge',clickedIdData?.babyEntry?.gestationalAge);
+      setValue('ipNumber',clickedIdData?.babyEntry?.ipNumber);
+      setValue('babyWeight',clickedIdData?.babyEntry?.babyWeight);
+      setValue('diagnosis',clickedIdData?.babyEntry?.diagnosis);
+      setValue('indications',clickedIdData?.babyEntry?.indications);
+      setBirthDate(clickedIdData?.babyEntry?.dateOfBaby);
+      setValue('batchNumber',clickedIdData?.feedingDetails?.batchNumber)
+      setValue('uniqueBottleNumber',clickedIdData?.feedingDetails?.uniqueBottleNumber)
+      setValue('bottleName',clickedIdData?.feedingDetails?.bottleName)
+      setValue('quantity',clickedIdData?.feedingDetails?.quantity)
+      setFeedingDate(clickedIdData?.feedingDetails?.feedingDate)
+    
+    }
+  },[clickedIdData, id , setValue])
+
   const onSubmit = async (data) => {
     data = {
       babyStatus: data.babyStatus,
