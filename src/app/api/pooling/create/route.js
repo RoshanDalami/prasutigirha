@@ -12,11 +12,11 @@ export async function POST(req) {
     if (body.poolingCondition == 4) {
       batchName = "CA";
     } else if (body.poolingCondition == 1) {
-      batchName = "EP";
+      batchName = "EPA";
     } else if (body.poolingCondition == 2) {
-      batchName = "P";
+      batchName = "PA";
     } else {
-      batchName = "T";
+      batchName = "TA";
     }
     donorList.sort(
       (a, b) => new Date(a.collectedDate) - new Date(b.collectedDate)
@@ -31,23 +31,40 @@ export async function POST(req) {
       batchName: batchName,
       expireDate: expireDate,
     });
-    const savedData = await newPooling.save();
-    if(savedData){
-    donorList.forEach(async (item) => {
+
+    // if(savedData){
+    // donorList.forEach(async (item) => {
+    //   const donor = await MilkVolume.findOne({ donorId: item.donorId });
+    //   if(donor?.remaining < item.volumeOfMilkPooled){
+    //     throw new Error
+    //   }
+    //   const newRemaining = donor?.remaining - item.volumeOfMilkPooled;
+    //   await MilkVolume.findOne({ donorId: item.donorId }).then((doc) => {
+    //     // if (newRemaining < 0) {
+    //     //   return NextResponse.json(
+    //     //     { message: "Invalid Milk volume" },
+    //     //     { status: 400 }
+    //     //   );
+    //     // }
+    //     doc.remaining = newRemaining;
+    //     doc.save();
+    //   });
+    // });
+    // }
+    for (const item of donorList) {
       const donor = await MilkVolume.findOne({ donorId: item.donorId });
+
+      if (donor?.remaining < item.volumeOfMilkPooled) {
+        throw new Error("Invalid Milk volume");
+      }
       const newRemaining = donor?.remaining - item.volumeOfMilkPooled;
-      await MilkVolume.findOne({ donorId: item.donorId }).then((doc) => {
-        // if (newRemaining < 0) {
-        //   return NextResponse.json(
-        //     { message: "Invalid Milk volume" },
-        //     { status: 400 }
-        //   );
-        // }
-        doc.remaining = newRemaining;
-        doc.save();
-      });
-    });
+      await MilkVolume.findOneAndUpdate(
+        { donorId: item.donorId },
+        { $set: { remaining: newRemaining } }
+      );
     }
+    const savedData = await newPooling.save();
+    
 
     return NextResponse.json(savedData, { status: 200 });
   } catch (error) {

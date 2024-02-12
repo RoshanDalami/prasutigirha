@@ -6,12 +6,10 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddVolume({ clickedData }) {
-
   const {
     register,
     handleSubmit,
@@ -36,10 +34,12 @@ export default function AddVolume({ clickedData }) {
     fetchData();
   }, []);
 
-
   useEffect(() => {
     setValue("_id", clickedData?._id);
-    setValue("donorId", clickedData?.donorId);
+    setValue(
+      "donorId",
+      `${clickedData.gestationalAge}-${clickedData?.donorId}`
+    );
     setValue("gestationalAge", clickedData?.gestationalAge);
     setValue("quantity", clickedData?.quantity);
     setValue("date", clickedData?.date);
@@ -51,7 +51,6 @@ export default function AddVolume({ clickedData }) {
   useEffect(() => {
     gestational.forEach((item) => {
       if (item.gestationalId == watchFields.donorId?.split("-")[0]) {
-
         setValue("gestationalAge", item.gestationalName);
       }
     });
@@ -78,7 +77,7 @@ export default function AddVolume({ clickedData }) {
       gestationalAge: parseInt(watchFields?.donorId.split("-")[0]),
       donorName: watchFields?.donorId.split("-")[2],
       date,
-      engDate
+      engDate,
     };
     try {
       const response = await axios.post(`${urls.createVolumeOfMilk}`, data);
@@ -90,7 +89,6 @@ export default function AddVolume({ clickedData }) {
   };
 
   //Nepali Date
- 
 
   return (
     <>
@@ -111,11 +109,11 @@ export default function AddVolume({ clickedData }) {
                     --Select Donor--
                   </option>
                   {donorList?.map((item, index) => {
-                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donorName}`;
+                    const combinedValue = `${item.gestationalAge}-${item._id}`;
                     return (
                       <option
                         key={index}
-                        value={combinedValue}
+                        value={item._id}
                         selected={item?._id === clickedData?.donorId}
                       >
                         {item.donorName}
@@ -134,7 +132,19 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                   readOnly
                   {...register("gestationalAge")}
+                  
                 />
+                {/* <select name="" id="" {...register("gestationalAge")}>
+                  {gestational?.map((item, index) => {
+                    if (
+                      item.gestationalId == watchFields.donorId.split("-")[0]
+                    ) {
+                      return (
+                        <option key={index}>{item.gestationalName}</option>
+                      );
+                    }
+                  })}
+                </select> */}
               </div>
 
               <div className="grid">
@@ -143,15 +153,12 @@ export default function AddVolume({ clickedData }) {
                   <span className="text-lg text-red-600">*</span>
                 </label>
 
-             
                 <NepaliDatePicker
                   inputClassName="form-control  focus:outline-none"
                   value={date}
                   onChange={(e) => setDate(e)}
-                  options={{ calenderLocale: "ne", valueLocale: "en"  }}
+                  options={{ calenderLocale: "ne", valueLocale: "en" }}
                   className="inputStyle"
-                  
-
                 />
               </div>
               <div className="grid">
@@ -173,13 +180,9 @@ export default function AddVolume({ clickedData }) {
                 </label>
                 <input
                   className="inputStyle"
-
                   type="number"
                   placeholder="."
                   {...register("quantity", { valueAsNumber: true })}
-
-                 
-
                 />
               </div>
               <div className="grid">
@@ -212,7 +215,6 @@ export default function AddVolume({ clickedData }) {
               className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]"
               type="submit"
             >
-
               {isSubmitting ? "Submitting ..." : "Submit"}
             </button>
           </div>
