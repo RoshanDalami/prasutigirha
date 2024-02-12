@@ -3,15 +3,49 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import {useEffect, useState } from "react";
+import { urls } from "src/services/apiHelpers";
+import axios from 'axios'
+
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
   const router = useRouter();
-  const handleEdit = useCallback(() => {
-    router.push(`/pasteurization/addPasteurization`);
-  });
+  const handleEdit = (id) => {
+    router.push(`/pasteurization/addPasteurization/${id}`);
+  }
+
+  const [poolingList,setPoolingList] = useState([]);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status} = await axios.get(`${urls.getPooling}`);
+      if(status === 200){
+        setPoolingList(data)
+      }
+    }
+    fetchData()
+  },[])
+  const handleDelete =async(id)=>{
+    const response = await axios.delete(`${urls.getPooling}/${id}`)
+    if(response.status === 200){
+      const {data,status} = await axios.get(`${urls.getPooling}`);
+      if(status === 200){
+        setPoolingList(data)
+      }
+    }
+  }
+  const [gestationalAge,setGestationalAge] = useState([]);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status} = await axios.get(`${urls.getGestational}`);
+      if(status === 200){
+        setGestationalAge(data)
+      }
+    }
+    fetchData()
+  },[])
+ 
   return (
     <>
       <div>
@@ -60,39 +94,57 @@ export default function ListVolume() {
             <div className=" my-5">
               <table className="w-full">
                 <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3 px-2">
-                    <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3 px-2">Id</td>
+                  <td className="py-3 px-2">S.N</td>
                   <td className="py-3 px-2">Number of Donor </td>
                   <td className="py-3 px-2">Pooling Date</td>
                   <td className="py-3 px-2">Pooling Condition</td>
+                  <td className="py-3 px-2">Volume Collected</td>
                   <td className="py-3 px-2">Batch Name</td>
-                  <td className="py-3 px-2">Bottle Name</td>
+                  {/* <td className="py-3 px-2">Bottle Name</td> */}
                   <td className="py-3 px-2">Expiry Date</td>
                   <td className="py-3 px-2">Action</td>
                 </tr>
-                <tr className=" border border-x-gray text-center">
-                  <td className="py-3 text-center">
-                    <input type="checkbox" name="" id="" />
-                  </td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
-                  <td className="py-3">test</td>
+                {
+                  poolingList?.map((row,index)=>{
+                    return(
+
+                <tr className=" border border-x-gray text-center" key={index} >
+                  
+                  <td className="py-3">{index + 1}</td>
+                  <td className="py-3">{row?.donorDetailsForPooling?.length}</td>
+                  <td className="py-3">{row?.date}</td>
+                  {
+                    row.poolingCondition == 4 ? 
+                    <td className="py-3">{'Colostrum'}</td> : gestationalAge?.map((item,index)=>{
+                      if(item.gestationalId == row.poolingCondition){
+                        return(
+                          <td className="py-3" key={index}>{item.gestationalName}</td>
+                        )
+                      }
+                    })
+                  }
+                  <td className="py-3">{row.collectedVolume}{" "}ml</td>
+                  <td className="py-3">{row.batchName}</td>
+                  <td className="py-3">{row.expireDate}</td>
                   <td className="py-3">
                     <div className="flex justify-evenly text-xl">
+                      <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
+                        
                       <PencilSquareIcon
-                        className="h-6 w-6"
-                        onClick={() => handleEdit()}
+                        className="h-6 w-6 text-white "
+                        onClick={() => handleEdit(row._id)}
                       />
-                      <TrashIcon className="h-6 w-6" />
+                      </div>
+                      <div className="cursor-pointer bg-red-600 rounded-md shadow-md px-2 py-1">
+
+                      <TrashIcon className="h-6 w-6 text-white"  onClick={()=>handleDelete(row._id)} />
+                      </div>
                     </div>
                   </td>
                 </tr>
+                    )
+                  })
+                }
               </table>
             </div>
           </TableBorder>

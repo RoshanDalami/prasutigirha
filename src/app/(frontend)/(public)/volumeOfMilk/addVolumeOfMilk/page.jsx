@@ -111,14 +111,14 @@ export default function AddVolume({ clickedData }) {
                     --Select Donor--
                   </option>
                   {donorList?.map((item, index) => {
-                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donor_FullName}`;
+                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donorName}`;
                     return (
                       <option
                         key={index}
                         value={combinedValue}
                         selected={item?._id === clickedData?.donorId}
                       >
-                        {item.donor_FullName}
+                        {item.donorName}
                       </option>
                     );
                   })}

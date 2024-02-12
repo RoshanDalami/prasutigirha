@@ -112,20 +112,26 @@ export default function ViewDonor() {
                     <input type="checkbox" name="" id="" />
                   </td> */}
                       <td className="py-3">{item.donorRegNo}</td>
-                      <td className="py-3">{item.donor_FullName}</td>
+                      <td className="py-3">{item.donorName}</td>
                       <td className="py-3">{item.donorAge}</td>
                       <td className="py-3">{item.address}</td>
                       <td className="py-3">{item.contactNo}</td>
                       <td className="py-3">
                         <div className="flex justify-evenly text-xl">
+                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600" >
+
                           <PencilSquareIcon
-                            className="h-6 w-6"
+                            className="h-6 w-6 text-white"
                             onClick={() => handleEdit(item._id)}
                           />
+                          </div>
+                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
+
                           <TrashIcon
-                            className="h-6 w-6"
+                            className="h-6 w-6 text-white"
                             onClick={() => handleDelete(item._id)}
                           />
+                          </div>
                         </div>
                       </td>
                     </tr>

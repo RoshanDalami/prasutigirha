@@ -120,12 +120,16 @@ const daanDartaSchema = new Schema(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
+    },
+    engDate:{
+type:String,
+
     },
     time: {
       type: String,
     },
-    donor_FullName: {
+    donorName: {
       type: String,
     },
     donorAge: {
