@@ -1,5 +1,4 @@
 import { NextResponse, NextRequest } from "next/server";
-import { BiVolume } from "react-icons/bi";
 import { DaanDarta } from "src/Model/donorDetails.model";
 import { MilkVolume } from "src/Model/volumeOfMilk.model";
 export async function GET() {
@@ -21,6 +20,7 @@ export async function GET() {
           const donarId = donar._id;
           const milkVolume = await MilkVolume.find({ donorId: donarId });
           filteredDonarData.push({
+            donar,
             milkVolume,
           });
         }
