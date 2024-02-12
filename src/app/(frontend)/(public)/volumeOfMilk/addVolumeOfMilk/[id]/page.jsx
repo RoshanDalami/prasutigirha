@@ -16,7 +16,7 @@ const AddVolumeId = () => {
       }
     }
     fetchData();
-  }, []);
+  }, [id]);
   console.log(milkVolume, "response");
   return <AddVolume clickedData={milkVolume} />;
 };

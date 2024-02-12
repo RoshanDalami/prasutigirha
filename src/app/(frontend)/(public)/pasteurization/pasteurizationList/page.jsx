@@ -15,6 +15,9 @@ export default function ListVolume() {
   const handleEdit = (id) => {
     router.push(`/pasteurization/addPasteurization/${id}`);
   }
+  const handleBottleDetails = (id) => {
+    router.push(`/pasteurization/pasteurizationList/${id}`);
+  }
 
   const [poolingList,setPoolingList] = useState([]);
   useEffect(()=>{
@@ -126,8 +129,8 @@ export default function ListVolume() {
                   <td className="py-3">{row.collectedVolume}{" "}ml</td>
                   <td className="py-3">{row.batchName}</td>
                   <td className="py-3">{row.expireDate}</td>
-                  <td className="py-3">
-                    <div className="flex justify-evenly text-xl">
+                  <td className="py-3 ">
+                    <div className="flex justify-evenly gap-3  text-xl">
                       <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
                         
                       <PencilSquareIcon
@@ -139,6 +142,10 @@ export default function ListVolume() {
 
                       <TrashIcon className="h-6 w-6 text-white"  onClick={()=>handleDelete(row._id)} />
                       </div>
+                      <button className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2" onClick={()=>handleBottleDetails(row._id)}  >
+                              Bottles
+                          </button>
+                        
                     </div>
                   </td>
                 </tr>
