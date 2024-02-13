@@ -131,13 +131,13 @@ export default function ListVolume() {
                   <td className="py-3">{row.expireDate}</td>
                   <td className="py-3 ">
                     <div className="flex justify-evenly gap-3  text-xl">
-                      <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
+                      {/* <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
                         
                       <PencilSquareIcon
                         className="h-6 w-6 text-white "
                         onClick={() => handleEdit(row._id)}
                       />
-                      </div>
+                      </div> */}
                       <div className="cursor-pointer bg-red-600 rounded-md shadow-md px-2 py-1">
 
                       <TrashIcon className="h-6 w-6 text-white"  onClick={()=>handleDelete(row._id)} />
