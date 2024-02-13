@@ -18,6 +18,7 @@ export default function ListVolume() {
       const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
       if (status === 200) {
         setVolumeList(data);
+        setFilteredVolumeList(data);
       }
     }
     fetchData();
@@ -39,6 +40,23 @@ export default function ListVolume() {
     },
     [router]
   );
+
+  // Search donar
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredVolumeList, setFilteredVolumeList] = useState([]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const filteredList = volumeList.filter(
+      (item) =>
+        item.donorId.contactNo
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        item.donorId.hosRegNo.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredVolumeList(filteredList);
+  };
+
   async function handleDelete(id) {
     try {
       const response = await axios.delete(`${urls.getVolumeOfMilk}/${id}`);
@@ -56,20 +74,21 @@ export default function ListVolume() {
             <input
               type="text"
               className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-              placeholder="Search by ID..."
+              placeholder="Search by Phone No/ Hospital Reg No..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <input
-              type="text"
-              placeholder="Search by Donor Name..."
-              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-            />
+
             <input
               type="date"
               placeholder="Search by ID..."
               className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
             />
             <div>
-              <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg ">
+              <button
+                onClick={handleSearch}
+                className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
+              >
                 SEARCH
               </button>
             </div>
@@ -99,12 +118,14 @@ export default function ListVolume() {
                   <td className="py-3">Id</td>
                   <td className="py-3">Donor Name</td>
                   <td className="py-3">Gestational Age</td>
+                  <td className="py-3">Contact</td>
                   <td className="py-3">Date</td>
                   <td className="py-3">Time</td>
                   <td className="py-3">ML</td>
                   <td className="py-3">Action</td>
                 </tr>
-                {volumeList?.map((item, index) => {
+
+                {filteredVolumeList?.map((item, index) => {
                   return (
                     <tr
                       className=" border border-x-gray text-center"
@@ -124,23 +145,23 @@ export default function ListVolume() {
                           );
                         }
                       })}
+                      <td className="py-3">{item.donorId.contactNo}</td>
                       <td className="py-3">{item.date}</td>
                       <td className="py-3">{item.time}</td>
                       <td className="py-3">{item.quantity} ml</td>
                       <td className="py-3">
                         <div className="flex justify-evenly text-xl">
                           <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">
-
-                          <PencilSquareIcon
-                            className="h-6 w-6 text-white"
-                            onClick={() => handleEdit(item._id)}
-                          />
+                            <PencilSquareIcon
+                              className="h-6 w-6 text-white"
+                              onClick={() => handleEdit(item._id)}
+                            />
                           </div>
                           <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
-                          <TrashIcon
-                            className="h-6 w-6 text-white"
-                            onClick={() => handleDelete(item._id)}
-                          />
+                            <TrashIcon
+                              className="h-6 w-6 text-white"
+                              onClick={() => handleDelete(item._id)}
+                            />
                           </div>
                           
 
