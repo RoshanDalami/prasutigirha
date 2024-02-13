@@ -200,7 +200,7 @@ export default function BottleDetails() {
             </div>
           );
         })}
-      </div> ̰
+      </div> 
     </div>
   </div>
    }</>
