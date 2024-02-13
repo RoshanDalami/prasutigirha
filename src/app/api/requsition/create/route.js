@@ -7,6 +7,12 @@ export async function POST(req){
     const body = await req.json();
     
     try {
+        const {_id} = body;
+        if(_id){
+            const response = await MilkRequsition.findByIdAndUpdate(_id,{...body},{new:true})
+            console.log(response)
+            return NextResponse.json(response,{status:200})
+        }
         const newMilkRequsition = new MilkRequsition(body);
         const response = await newMilkRequsition.save();
         return NextResponse.json(response,{status:200})

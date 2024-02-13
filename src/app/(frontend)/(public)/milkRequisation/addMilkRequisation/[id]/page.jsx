@@ -16,7 +16,7 @@ export default function AddMilkReqId() {
     }
     fetchData()
   },[id])
-  console.log(apiData,'response')
+
   return (
     <>
       {" "}
