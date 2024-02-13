@@ -63,6 +63,9 @@ export async function POST(req) {
         { $set: { remaining: newRemaining } }
       );
     }
+    if(body._id){
+      const response = await Pasteurization.findByIdAndUpdate(body._id,{})
+    }
     const savedData = await newPooling.save();
     
 
