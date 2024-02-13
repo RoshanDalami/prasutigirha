@@ -20,14 +20,17 @@ export default function BottleDetails() {
 
   const [bottles, setBottles] = useState({});
   useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
-      if (status === 200) {
-        setBottles(data);
+    if(pooling){
+
+      async function fetchData() {
+        const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
+        if (status === 200) {
+          setBottles(data);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, [id]);
+  }, [id,pooling]);
   //donor list
   const [getDonor, setGetDonor] = useState([]);
   useEffect(() => {
