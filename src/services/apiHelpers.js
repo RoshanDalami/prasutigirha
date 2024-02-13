@@ -33,5 +33,7 @@ export const urls = {
   getColostrum:`/api/pooling/colostrum`,
   getGestationalPooling:`/api/pooling/condition`,
   getPooling:`/api/pooling/list`,
-  getRequistion:`/api/requsition/list`
+  getRequistion:`/api/requsition/list`,
+  createBottle:`/api/bottle/create`,
+  getBottle:`/api/bottle/get`
 };

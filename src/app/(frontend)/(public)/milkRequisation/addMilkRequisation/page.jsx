@@ -99,7 +99,7 @@ export default function AddMilkReq({clickedIdData}) {
   });
 
   useEffect(()=>{
-    if(clickedIdData || id ){
+    if(clickedIdData){
       setValue('_id',clickedIdData?._id);
       setValue('babyStatus',clickedIdData?.babyStatus);
       setValue('babyName',clickedIdData?.babyEntry?.babyName);
@@ -120,6 +120,7 @@ export default function AddMilkReq({clickedIdData}) {
 
   const onSubmit = async (data) => {
     data = {
+      _id:data?._id,
       babyStatus: data.babyStatus,
       userId: userInfo._id,
       babyEntry: {
@@ -141,6 +142,7 @@ export default function AddMilkReq({clickedIdData}) {
         quantity: data.quantity,
       },
     };
+
     try {
       const {status} = await axios.post(`${urls.createMilkRequistion}`, data);
       if(status === 200){
