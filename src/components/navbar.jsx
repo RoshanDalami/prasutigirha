@@ -1,28 +1,31 @@
 "use client";
 import Image from "next/image";
-import { HiOutlineBars3 } from "react-icons/hi2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { urls } from "src/services/apiHelpers";
-import Cookies from "js-cookie";
+import CircularProgress from '@mui/material/CircularProgress';
 export default function Navbar() {
   const userInfo =
     typeof localStorage !== "undefined"
       ? JSON.parse(localStorage.getItem("userInfo"))
       : { username: "Softech" };
   const router = useRouter();
+  const [loading,setLoading] = useState(false)
   const logoutHandler = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const { data } = await axios.get(`${urls.logout}`);
       if (data.success === true) {
-        console.log("logout", "response");
         router.push("/login");
+        setLoading(false)
       }
       // router.push("/login");
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
   const [showButton, setIsShowButton] = useState(false);
@@ -68,7 +71,7 @@ export default function Navbar() {
                 className="bg-red-600 py-1.5 px-3 rounded-md shadow-md hover:bg-[#004a89] ease-in-out duration-300 text-white font-bold mx-10"
                 onClick={(e) => logoutHandler(e)}
               >
-                Logout
+               { loading ?  <CircularProgress size={20} /> : 'Logout'}
               </button>
             </div>
           )}
