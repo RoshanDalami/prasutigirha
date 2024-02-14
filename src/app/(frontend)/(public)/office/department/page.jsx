@@ -1,79 +1,86 @@
 "use client";
-import { useState ,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { IoClose } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { urls } from "src/services/apiHelpers";
-import axios from 'axios'
+import axios from "axios";
 import { useRouter } from "next/navigation";
 export default function Department() {
-  const router = useRouter()
+  const router = useRouter();
   const [openModel, setOpenModel] = useState(false);
-  const {register,handleSubmit , formState :{isSubmitting} } = useForm();
-  const userInfo = (typeof localStorage !== 'undefined')?(JSON.parse(localStorage.getItem('userInfo'))):''
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm();
+  const userInfo =
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("userInfo"))
+      : "";
 
-  const [officeList,setOfficeList] = useState([]);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await axios.get(`${urls.getOffice}`);
-      if(status === 200){
-        setOfficeList(data)
+  const [officeList, setOfficeList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getOffice}`);
+      if (status === 200) {
+        setOfficeList(data);
       }
     }
-    fetchData()
-  },[])
+    fetchData();
+  }, []);
 
- const onSubmit = async(data)=>{
-  data = {
-    ...data,
-    officeId: JSON.parse(data.officeId),
-    userId:userInfo?._id
-  }
-  
-  try {
-      const response = await axios.post(`${urls.createDepartment}`,data)
-      console.log(response,'response')
-      if(response.status === 200){
-        router.push('/')
+  const onSubmit = async (data) => {
+    data = {
+      ...data,
+      officeId: JSON.parse(data.officeId),
+      userId: userInfo?._id,
+    };
+
+    try {
+      const response = await axios.post(`${urls.createDepartment}`, data);
+      console.log(response, "response");
+      if (response.status === 200) {
+        router.push("/");
       }
-  } catch (error) {
-      console.log(error)
-  }
- }
- const addPost = async(data)=>{
-  data = {
-    ...data,
-    departmentId: JSON.parse(data.departmentId),
-    userId:userInfo?._id
-  }
-  try {
-      const response = await axios.post(`${urls.createPost}`,data)
-      console.log(response,'response')
-      if(response.status === 200){
-        router.push('/')
-      }
-  } catch (error) {
-      console.log(error)
-  }
- }
- const [departmentList,setDepartmentList] = useState([]);
- useEffect(()=>{
-  async function fetchData(){
-    const {data,status} = await axios.get(`${urls.getDepartment}`);
-    if(status === 200){
-      setDepartmentList(data)
+    } catch (error) {
+      console.log(error);
     }
-  }
-  fetchData()
- },[])
-const departmentOptions = departmentList?.map((item,index)=>{
-  return(
-    <option key={index} value={item.departmentId}>
-      {item.departmentName}
-    </option>
-  )
-})
+  };
+  const addPost = async (data) => {
+    data = {
+      ...data,
+      departmentId: JSON.parse(data.departmentId),
+      userId: userInfo?._id,
+    };
+    try {
+      const response = await axios.post(`${urls.createPost}`, data);
+      console.log(response, "response");
+      if (response.status === 200) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const [departmentList, setDepartmentList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getDepartment}`);
+      if (status === 200) {
+        setDepartmentList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  const departmentOptions = departmentList?.map((item, index) => {
+    return (
+      <option key={index} value={item.departmentId}>
+        {item.departmentName}
+      </option>
+    );
+  });
 
   const handleModel = (e) => {
     e.preventDefault();
@@ -94,32 +101,44 @@ const departmentOptions = departmentList?.map((item,index)=>{
                     className=" absolute hover:scale-125 right-2 text-2xl top-1 rounded-full "
                     onClick={handleClose}
                   />
-                  <form className="flex items-center justify-center " onSubmit={handleSubmit((data)=>addPost(data))} >
+                  <form
+                    className="flex items-center justify-center "
+                    onSubmit={handleSubmit((data) => addPost(data))}
+                  >
                     <div className="grid w-full mx-5 my-4 gap-4">
                       <div className="grid grid-cols-2 gap-3">
-
-                      <div className="grid gap-2">
-                        <label className="text-lg font-bold"> Post Name</label>
-                        <input
-                          type="text"
-                          placeholder="Enter Post Names"
-                          className="inputStyle"
-                          {...register('postName')}
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <label className="text-lg font-bold"> Select Department </label>
-                        <select
-                          className="inputStyle"
-                          {...register('departmentId')}
-                        >
-                          <option selected value={''} disabled >--Select Department--</option>
-                          {departmentOptions}
-                        </select>
-                      </div>
+                        <div className="grid gap-2">
+                          <label className="text-lg font-bold">
+                            {" "}
+                            Post Name
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Enter Post Names"
+                            className="inputStyle"
+                            {...register("postName")}
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <label className="text-lg font-bold">
+                            {" "}
+                            Select Department{" "}
+                          </label>
+                          <select
+                            className="inputStyle"
+                            {...register("departmentId")}
+                          >
+                            <option selected value={""} disabled>
+                              --Select Department--
+                            </option>
+                            {departmentOptions}
+                          </select>
+                        </div>
                       </div>
                       <div className="flex justify-end">
-                        <Button>{isSubmitting?"Submitting...":'Add'}</Button>
+                        <Button>
+                          {isSubmitting ? "Submitting..." : "Add"}
+                        </Button>
                       </div>
                     </div>
                   </form>
@@ -128,7 +147,10 @@ const departmentOptions = departmentList?.map((item,index)=>{
             </div>
           )}
         </div>
-        <form className="mx-10 relative" onSubmit={handleSubmit((data)=>onSubmit(data))} >
+        <form
+          className="mx-10 relative"
+          onSubmit={handleSubmit((data) => onSubmit(data))}
+        >
           <FormBorder title={"Department"}>
             <div className="flex justify-end  ">
               <div className=" absolute -top-4 right-8 ">
@@ -149,31 +171,42 @@ const departmentOptions = departmentList?.map((item,index)=>{
                   type="text"
                   placeholder="Department Name"
                   className="inputStyle"
-                  {...register("departmentName")}
+                  {...register("departmentName", {
+                    required: "Department name required",
+                  })}
                 />
+                {errors?.departmentName && (
+                  <p className="errorMessages">
+                    {errors?.departmentName.message}
+                  </p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Select Office <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("officeId")}  >
-                    <option value={''} selected disabled>
-                      --Select Office--
-                    </option>
-                    {
-                      officeList?.map((item,index)=>{
-                        return(
-                          <option key={index} value={item.officeId}>
-                            {item.office_name}
-                          </option>
-                        )
-                      })
-                    }
+                <select
+                  className="inputStyle"
+                  {...register("officeId", { required: "Office  is required" })}
+                >
+                  <option value={""} selected disabled>
+                    --Select Office--
+                  </option>
+                  {officeList?.map((item, index) => {
+                    return (
+                      <option key={index} value={item.officeId}>
+                        {item.office_name}
+                      </option>
+                    );
+                  })}
                 </select>
+                {errors?.officeId && (
+                  <p className="errorMessages">{errors?.officeId.message}</p>
+                )}
               </div>
             </div>
             <div className="text-lg font-bold my-5">
-              <Button>{isSubmitting?'Submitting...':'Submit'}</Button>
+              <Button>{isSubmitting ? "Submitting..." : "Submit"}</Button>
             </div>
           </FormBorder>
         </form>

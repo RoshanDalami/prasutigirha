@@ -8,18 +8,16 @@ import { urls } from "src/services/apiHelpers";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 
-export default function AddPasteurization({clickedIdData}) {
-console.log(clickedIdData,'response')
+export default function AddPasteurization({ clickedIdData }) {
+  console.log(clickedIdData, "response");
   const userInfo =
-  typeof localStorage !== "undefined"
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : "";
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("userInfo"))
+      : "";
 
   const [date, setDate] = useState("");
-
-
 
   const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
@@ -27,14 +25,12 @@ console.log(clickedIdData,'response')
     register,
     handleSubmit,
     watch,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     setValue,
     control,
   } = useForm({
     defaultValues: {
-      donorDetailsForPooling: [
-        { donorId: "", volumeOfMilkPooled: 0 },
-      ],
+      donorDetailsForPooling: [{ donorId: "", volumeOfMilkPooled: 0 }],
     },
   });
   const watchFields = watch();
@@ -53,54 +49,56 @@ console.log(clickedIdData,'response')
     return item?.volumeOfMilkPooled;
   });
   let milkVolume = sum(watchVolume);
- 
-  useEffect(()=>{
-    if(router?.query?.id || clickedIdData){
-      setValue('_id',clickedIdData?._id)
-      setValue('gestationalAge',clickedIdData?.poolingCondition);
-      setDate(clickedIdData?.date)
-      clickedIdData?.donorDetailsForPooling?.forEach((item,index)=>{
-        setValue('_id',item._id)
-        setValue(`donorDetailsForPooling.${index}.donorId`,item.donorId);
-        setValue(`donorDetailsForPooling.${index}.collectedDate`,item.collectedDate);
-        setValue(`donorDetailsForPooling.${index}.volumeOfMilkPooled`,item.volumeOfMilkPooled)
 
-      })
-      setValue('expireDate',clickedIdData?.expireDate);
-      setValue('collectedVolume',clickedIdData?.collectedVolume);
-      setValue('batchName',clickedIdData?.batchName)
+  useEffect(() => {
+    if (router?.query?.id || clickedIdData) {
+      setValue("_id", clickedIdData?._id);
+      setValue("gestationalAge", clickedIdData?.poolingCondition);
+      setDate(clickedIdData?.date);
+      clickedIdData?.donorDetailsForPooling?.forEach((item, index) => {
+        setValue("_id", item._id);
+        setValue(`donorDetailsForPooling.${index}.donorId`, item.donorId);
+        setValue(
+          `donorDetailsForPooling.${index}.collectedDate`,
+          item.collectedDate
+        );
+        setValue(
+          `donorDetailsForPooling.${index}.volumeOfMilkPooled`,
+          item.volumeOfMilkPooled
+        );
+      });
+      setValue("expireDate", clickedIdData?.expireDate);
+      setValue("collectedVolume", clickedIdData?.collectedVolume);
+      setValue("batchName", clickedIdData?.batchName);
     }
-  },[clickedIdData, router?.query?.id,setValue])
-
-
+  }, [clickedIdData, router?.query?.id, setValue]);
 
   const onSubmit = async (data) => {
-   const newArray = watchArray.map((item)=>({
-    ...item,
-      donorId : item.donorId.split('/')[0],
-      collectedDate:item.donorId.split('/')[1],
-
-    }))
+    const newArray = watchArray.map((item) => ({
+      ...item,
+      donorId: item.donorId.split("/")[0],
+      collectedDate: item.donorId.split("/")[1],
+    }));
     data = {
       ...data,
-      poolingCondition:data.gestationalAge,
-      userId:userInfo._id,
+      poolingCondition: data.gestationalAge,
+      userId: userInfo._id,
       date,
       engDate,
-      collectedVolume:milkVolume,
-      donorDetailsForPooling:newArray
+      collectedVolume: milkVolume,
+      donorDetailsForPooling: newArray,
     };
-      
+
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
       if (response.status === 200) {
-        toast.success('Polling Created Successfully')
+        toast.success("Polling Created Successfully");
         router.push("/pasteurization/pasteurizationList");
-      }else{
-        toast.error(response.message)
+      } else {
+        toast.error(response.message);
       }
     } catch (error) {
-      toast.error('Pooling Creation Failed')
+      toast.error("Pooling Creation Failed");
     }
   };
 
@@ -113,10 +111,14 @@ console.log(clickedIdData,'response')
   const [donorList, setDonorList] = useState([]);
 
   useEffect(() => {
-    if(watchFields?.gestationalAge !== 0){
-
+    if (watchFields?.gestationalAge !== 0) {
       async function fetchData() {
-        const { status, data } =  watchFields?.gestationalAge != 4 ? await axios.get(`${urls.getGestationalPooling}/${watchFields?.gestationalAge}`) : await axios.get(`${urls.getColostrum}`) 
+        const { status, data } =
+          watchFields?.gestationalAge != 4
+            ? await axios.get(
+                `${urls.getGestationalPooling}/${watchFields?.gestationalAge}`
+              )
+            : await axios.get(`${urls.getColostrum}`);
         if (status === 200) {
           setDonorList(data);
         }
@@ -171,16 +173,18 @@ console.log(clickedIdData,'response')
                   {...register("gestationalAge", {
                     required: " Gestational Age Required",
                   })}
-                  
                 >
                   <option selected disabled value={""}>
                     --Select Condition--
                   </option>
-                  <option value={4}>
-                    Colostrum
-                  </option>
+                  <option value={4}>Colostrum</option>
                   {gestationalOptions}
                 </select>
+                {errors?.gestationalAge && (
+                  <p className="errorMessages">
+                    {errors.gestationalAge.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
@@ -206,7 +210,6 @@ console.log(clickedIdData,'response')
                       append({
                         donorId: "",
                         volumeOfMilkPooled: 0,
-                        
                       });
                     }}
                   >
@@ -234,7 +237,10 @@ console.log(clickedIdData,'response')
                       <select
                         className={`inputStyle`}
                         required
-                        {...register(`donorDetailsForPooling.${index}.donorId`)}
+                        {...register(
+                          `donorDetailsForPooling.${index}.donorId`,
+                          { required: "Donor Name required" }
+                        )}
                       >
                         <option selected disabled value={""}>
                           --Select Donor--
@@ -251,6 +257,7 @@ console.log(clickedIdData,'response')
                           );
                         })}
                       </select>
+                      {errors?.donorId && <p>{errors.donorId.messsage}</p>}
                     </div>
                     <div className="flex flex-col w-2/4 ">
                       <label htmlFor="">
@@ -264,9 +271,20 @@ console.log(clickedIdData,'response')
                         required
                         {...register(
                           `donorDetailsForPooling.${index}.volumeOfMilkPooled`,
-                          { valueAsNumber: true }
+                          {
+                            valueAsNumber: true,
+                            min: 0, // Ensure the value is not negative
+                          }
                         )}
                       />
+                      {errors &&
+                        errors[
+                          `donorDetailsForPooling.${index}.volumeOfMilkPooled`
+                        ] && (
+                          <p className="errorMessages">
+                            Volume of milk is required.
+                          </p>
+                        )}
                     </div>
 
                     {fields?.length <= 1 ? (

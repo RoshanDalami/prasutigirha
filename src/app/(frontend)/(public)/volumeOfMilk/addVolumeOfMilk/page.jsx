@@ -15,7 +15,7 @@ export default function AddVolume({ clickedData }) {
     handleSubmit,
     watch,
     setValue,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm();
   const router = useRouter();
   const watchFields = watch();
@@ -38,7 +38,7 @@ export default function AddVolume({ clickedData }) {
     setValue("_id", clickedData?._id);
     setValue(
       "donorId",
-      `${clickedData.gestationalAge}-${clickedData?.donorId}`
+      `${clickedData?.gestationalAge}-${clickedData?.donorId}`
     );
     setValue("gestationalAge", clickedData?.gestationalAge);
     setValue("quantity", clickedData?.quantity);
@@ -99,12 +99,15 @@ export default function AddVolume({ clickedData }) {
         <FormBorder title={"Add Volume of Milk"}>
           <div className=" gap-5 px-5 rounded-md ">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-2">
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   Select Donor
                   <span className="text-lg text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("donorId")}>
+                <select
+                  className="inputStyle"
+                  {...register("donorId", { required: "Donor name required" })}
+                >
                   <option selected disabled value={""}>
                     --Select Donor--
                   </option>
@@ -121,8 +124,11 @@ export default function AddVolume({ clickedData }) {
                     );
                   })}
                 </select>
+                {errors?.donorId && (
+                  <p className="errorMessages">{errors?.donorId?.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   Gestational Age (WOG)
                   <span className="text-lg text-red-600">*</span>
@@ -131,9 +137,15 @@ export default function AddVolume({ clickedData }) {
                   type="text"
                   className="inputStyle"
                   readOnly
-                  {...register("gestationalAge")}
-                  
+                  {...register("gestationalAge", {
+                    required: "Gestational Age required",
+                  })}
                 />
+                {errors?.gestationalAge && (
+                  <p className="errorMessages">
+                    {errors?.gestationalAge?.message}
+                  </p>
+                )}
                 {/* <select name="" id="" {...register("gestationalAge")}>
                   {gestational?.map((item, index) => {
                     if (
@@ -147,7 +159,7 @@ export default function AddVolume({ clickedData }) {
                 </select> */}
               </div>
 
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   Date
                   <span className="text-lg text-red-600">*</span>
@@ -161,7 +173,7 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                 />
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   Time
                   <span className="text-lg text-red-600">*</span>
@@ -170,10 +182,13 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                   type="time"
                   placeholder="."
-                  {...register("time")}
+                  {...register("time", { required: "Time is required" })}
                 />
+                {errors?.time && (
+                  <p className="errorMessages">{errors?.time?.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   ML
                   <span className="text-lg text-red-600">*</span>
@@ -182,10 +197,13 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                   type="number"
                   placeholder="."
-                  {...register("quantity", { valueAsNumber: true })}
+                  {...register("quantity", { required: "Volume required" })}
                 />
+                {errors?.quantity && (
+                  <p className="errorMessages">{errors?.quantity?.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   Temperature
                   <span className="text-lg text-red-600">*</span>
@@ -194,10 +212,13 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                   type="Number"
                   placeholder=""
-                  {...register("temp")}
+                  {...register("temp", { required: "Temperature is required" })}
                 />
+                {errors?.temp && (
+                  <p className="errorMessages">{errors?.temp?.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label className="text-lg">
                   Store By
                   <span className="text-lg text-red-600">*</span>
@@ -206,8 +227,13 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                   type="text"
                   placeholder="."
-                  {...register("storedBy")}
+                  {...register("storedBy", {
+                    required: "This field is required",
+                  })}
                 />
+                {errors?.storedBy && (
+                  <p className="errorMessages">{errors?.storedBy?.message}</p>
+                )}
               </div>
             </div>
 
