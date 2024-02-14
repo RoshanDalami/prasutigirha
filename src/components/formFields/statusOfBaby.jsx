@@ -43,7 +43,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const engDate = new BikramSambat(birthDate, "BS").toAD();
   const engTestDate = new BikramSambat(testDate, "BS").toAD();
 
-
   //babyStatus
   const [babyStatusList, setBabyStatusList] = useState([]);
   useEffect(() => {
@@ -122,7 +121,10 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("hbsag", clickedIdData?.serologyRecords?.hbsag || "");
       setValue("vdrl", clickedIdData?.serologyRecords?.vdrl || "");
       setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest || "");
-      setValue("engDateTest", clickedIdData?.serologyRecords?.engDateTest || "");
+      setValue(
+        "engDateTest",
+        clickedIdData?.serologyRecords?.engDateTest || ""
+      );
     } else if (userData) {
       setDefaultValuesWithUserData({
         dateOfBirth: userData.dateOfBirth || "",
@@ -158,7 +160,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         ...userData,
         babyStatus: {
           dateOfBirth: birthDate,
-          engDateBirth: engDate ,
+          engDateBirth: engDate,
           babyStatus: data.babyStatus,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
@@ -167,28 +169,28 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest:testDate,
-          engDateTest : engDate
+          dateOfTest: testDate,
+          engDateTest: engDate,
         },
       });
       localStorage.setItem(
         "userData",
         JSON.stringify({
           ...userData,
-        babyStatus: {
-          dateOfBirth: birthDate,
-          engDateBirth: engDate ,
-          babyStatus: data.babyStatus,
-          babyTransfer: data.babyTransfer,
-          babyFeeding: data.babyFeeding,
-        },
-        serologyRecords: {
-          hiv: JSON.parse(data.hiv),
-          hbsag: JSON.parse(data.hbsag),
-          vdrl: JSON.parse(data.vdrl),
-          dateOfTest:testDate,
-          engDateTest : engDate
-        },
+          babyStatus: {
+            dateOfBirth: birthDate,
+            engDateBirth: engDate,
+            babyStatus: data.babyStatus,
+            babyTransfer: data.babyTransfer,
+            babyFeeding: data.babyFeeding,
+          },
+          serologyRecords: {
+            hiv: JSON.parse(data.hiv),
+            hbsag: JSON.parse(data.hbsag),
+            vdrl: JSON.parse(data.vdrl),
+            dateOfTest: testDate,
+            engDateTest: engDate,
+          },
         })
       );
       handleClick("next");
@@ -198,7 +200,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         ...userData,
         babyStatus: {
           dateOfBirth: birthDate,
-          engDateBirth: engDate ,
+          engDateBirth: engDate,
           babyStatus: data.babyStatus,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
@@ -207,8 +209,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest:testDate,
-          engDateTest : engDate
+          dateOfTest: testDate,
+          engDateTest: engDate,
         },
       });
       localStorage.setItem(

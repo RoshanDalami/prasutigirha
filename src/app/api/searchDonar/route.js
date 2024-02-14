@@ -1,13 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
 import { MilkVolume } from "src/Model/volumeOfMilk.model";
 
-export async function GET() {
+export async function GET(req, res) {
   try {
-    const response = await MilkVolume.find({}).populate(
-      "donorId",
-      "contactNo hosRegNo"
-    );
-
+    const response = await MilkVolume.find();
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return NextResponse.json(

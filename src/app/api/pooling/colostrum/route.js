@@ -15,6 +15,7 @@ export async function GET() {
         await donar.save();
         if (donar.updatedAgeOFChild <= 3) {
           const donarId = donar._id;
+
           const volume = await MilkVolume.findOne({ donorId: donarId });
           if (volume !== null) {
             filteredDonarData.push(volume);
@@ -22,6 +23,7 @@ export async function GET() {
         }
       }
     }
+
     return NextResponse.json(filteredDonarData, { status: 200 });
   } catch (error) {
     console.log(error);

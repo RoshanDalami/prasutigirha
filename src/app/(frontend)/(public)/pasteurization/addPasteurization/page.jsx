@@ -25,7 +25,7 @@ export default function AddPasteurization({ clickedIdData }) {
     register,
     handleSubmit,
     watch,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     setValue,
     control,
   } = useForm({
@@ -88,8 +88,6 @@ export default function AddPasteurization({ clickedIdData }) {
       collectedVolume: milkVolume,
       donorDetailsForPooling: newArray,
     };
-
-
 
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
@@ -182,6 +180,11 @@ export default function AddPasteurization({ clickedIdData }) {
                   <option value={4}>Colostrum</option>
                   {gestationalOptions}
                 </select>
+                {errors?.gestationalAge && (
+                  <p className="errorMessages">
+                    {errors.gestationalAge.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
@@ -234,7 +237,10 @@ export default function AddPasteurization({ clickedIdData }) {
                       <select
                         className={`inputStyle`}
                         required
-                        {...register(`donorDetailsForPooling.${index}.donorId`)}
+                        {...register(
+                          `donorDetailsForPooling.${index}.donorId`,
+                          { required: "Donor Name required" }
+                        )}
                       >
                         <option selected disabled value={""}>
                           --Select Donor--
@@ -251,6 +257,7 @@ export default function AddPasteurization({ clickedIdData }) {
                           );
                         })}
                       </select>
+                      {errors?.donorId && <p>{errors.donorId.messsage}</p>}
                     </div>
                     <div className="flex flex-col w-2/4 ">
                       <label htmlFor="">
@@ -264,9 +271,20 @@ export default function AddPasteurization({ clickedIdData }) {
                         required
                         {...register(
                           `donorDetailsForPooling.${index}.volumeOfMilkPooled`,
-                          { valueAsNumber: true }
+                          {
+                            valueAsNumber: true,
+                            min: 0, // Ensure the value is not negative
+                          }
                         )}
                       />
+                      {errors &&
+                        errors[
+                          `donorDetailsForPooling.${index}.volumeOfMilkPooled`
+                        ] && (
+                          <p className="errorMessages">
+                            Volume of milk is required.
+                          </p>
+                        )}
                     </div>
 
                     {fields?.length <= 1 ? (
