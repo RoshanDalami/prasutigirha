@@ -4,54 +4,63 @@ import { useParams } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import QRCode from "react-qr-code";
-import Barcode from "react-barcode";
+import CircularProgress from '@mui/material/CircularProgress';
 export default function BottleDetails() {
   const { id } = useParams();
   const [pooling, setPooling] = useState({});
+  const [poolingDone,setPoolingDone] = useState(false);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getPooling}/${id}`);
       if (status === 200) {
         setPooling(data);
+        setPoolingDone(true)
       }
     }
     fetchData();
   }, [id]);
 
   const [bottles, setBottles] = useState({});
+  const [bottle,setBottle] = useState(false)
   useEffect(() => {
-    if(pooling){
-
+    if (poolingDone) {
       async function fetchData() {
         const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
         if (status === 200) {
           setBottles(data);
+          setBottle(true)
         }
       }
       fetchData();
     }
-  }, [id,pooling]);
+  }, [id,poolingDone]);
   //donor list
   const [getDonor, setGetDonor] = useState([]);
   useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getVolumeOfMilk}`);
-      if (status === 200) {
-        setGetDonor(data);
+    if(bottle){
+
+      async function fetchData() {
+        const { data, status } = await axios.get(`${urls.getVolumeOfMilk}`);
+        if (status === 200) {
+          setGetDonor(data);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, []);
+  }, [bottle]);
   const [gestational, setGestational] = useState([]);
   useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getGestational}`);
-      if (status === 200) {
-        setGestational(data);
+    if(bottle){
+
+      async function fetchData() {
+        const { data, status } = await axios.get(`${urls.getGestational}`);
+        if (status === 200) {
+          setGestational(data);
+        }
       }
+      fetchData();
     }
-    fetchData();
-  }, []);
+  }, [bottle]);
 
   const onSubmit = async () => {
     const data = {
@@ -70,14 +79,18 @@ export default function BottleDetails() {
       }
     } catch (error) {}
   };
-  
-  const test = getDonor.filter((item,index)=>{
-    return pooling?.donorDetailsForPooling?.some((donor)=>item.donorId === donor.donorId)
-  })
-  
-  
+
+  // const test = getDonor.filter((item, index) => {
+  //   return pooling?.donorDetailsForPooling?.some(
+  //     (donor) => item.donorId === donor.donorId
+  //   );
+  // });
+
   return (
     <div>
+      {
+        poolingDone ? 
+        <>
       <div className="border-2 mx-3 rounded-md my-5 shadow-md p-3 border-black relative">
         <div className="text-xl font-semibold bg-indigo-700 rounded-md w-fit px-4 py-1 text-white absolute -top-4">
           Pasteurization Details
@@ -109,18 +122,20 @@ export default function BottleDetails() {
               Donor List
             </div>
             <div className="mt-4">
-              {
-              getDonor.filter((item,index)=>{
-                return pooling?.donorDetailsForPooling?.some((donor)=>item.donorId === donor.donorId)
-              }).map((row,index)=>{
-                return(
-                  <div key={index} className="flex items-center gap-2">
-                    <p>{index + 1}.</p>
-                    <p className="" >{row?.donorName}</p>
-                  </div>
-                )
-              })
-              }
+              {getDonor
+                .filter((item, index) => {
+                  return pooling?.donorDetailsForPooling?.some(
+                    (donor) => item.donorId === donor.donorId
+                  );
+                })
+                .map((row, index) => {
+                  return (
+                    <div key={index} className="flex items-center gap-2">
+                      <p>{index + 1}.</p>
+                      <p className="">{row?.donorName}</p>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -190,7 +205,15 @@ export default function BottleDetails() {
             );
           })}
         </div>
-      </div>
+      </div> 
+        </>
+      : <>
+            <div className="min-h-screen flex items-center  justify-center" >
+
+        <CircularProgress size={100} />
+            </div>
+      </>
+      }
     </div>
   );
 }

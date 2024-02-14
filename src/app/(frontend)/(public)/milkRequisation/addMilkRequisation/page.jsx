@@ -98,16 +98,17 @@ export default function AddMilkReq({ clickedIdData }) {
     );
   });
 
-  useEffect(() => {
-    if (clickedIdData || id) {
-      setValue("_id", clickedIdData?._id);
-      setValue("babyStatus", clickedIdData?.babyStatus);
-      setValue("babyName", clickedIdData?.babyEntry?.babyName);
-      setValue("gestationalAge", clickedIdData?.babyEntry?.gestationalAge);
-      setValue("ipNumber", clickedIdData?.babyEntry?.ipNumber);
-      setValue("babyWeight", clickedIdData?.babyEntry?.babyWeight);
-      setValue("diagnosis", clickedIdData?.babyEntry?.diagnosis);
-      setValue("indications", clickedIdData?.babyEntry?.indications);
+
+  useEffect(()=>{
+    if(clickedIdData){
+      setValue('_id',clickedIdData?._id);
+      setValue('babyStatus',clickedIdData?.babyStatus);
+      setValue('babyName',clickedIdData?.babyEntry?.babyName);
+      setValue('gestationalAge',clickedIdData?.babyEntry?.gestationalAge);
+      setValue('ipNumber',clickedIdData?.babyEntry?.ipNumber);
+      setValue('babyWeight',clickedIdData?.babyEntry?.babyWeight);
+      setValue('diagnosis',clickedIdData?.babyEntry?.diagnosis);
+      setValue('indications',clickedIdData?.babyEntry?.indications);
       setBirthDate(clickedIdData?.babyEntry?.dateOfBaby);
       setValue("batchNumber", clickedIdData?.feedingDetails?.batchNumber);
       setValue(
@@ -122,6 +123,7 @@ export default function AddMilkReq({ clickedIdData }) {
 
   const onSubmit = async (data) => {
     data = {
+      _id:data?._id,
       babyStatus: data.babyStatus,
       userId: userInfo._id,
       babyEntry: {
@@ -143,6 +145,7 @@ export default function AddMilkReq({ clickedIdData }) {
         quantity: data.quantity,
       },
     };
+
     try {
       const { status } = await axios.post(`${urls.createMilkRequistion}`, data);
       if (status === 200) {
