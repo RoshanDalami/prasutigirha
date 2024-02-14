@@ -10,6 +10,8 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 export default function AddVolume({ clickedData }) {
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
   const {
     register,
     handleSubmit,
@@ -42,10 +44,12 @@ export default function AddVolume({ clickedData }) {
     );
     setValue("gestationalAge", clickedData?.gestationalAge);
     setValue("quantity", clickedData?.quantity);
-    setValue("date", clickedData?.date);
+    
     setValue("storedBy", clickedData?.storedBy);
     setValue("temp", clickedData?.temp);
     setValue("time", clickedData?.time);
+    setDate(clickedData?.date)
+
   }, [clickedData, setValue]);
 
   useEffect(() => {
@@ -66,8 +70,7 @@ export default function AddVolume({ clickedData }) {
     }
     fetchData();
   }, []);
-  const [date, setDate] = useState("");
-  const engDate = new BikramSambat(date, "BS").toAD();
+
 
   const onSubmit = async (data) => {
     data = {

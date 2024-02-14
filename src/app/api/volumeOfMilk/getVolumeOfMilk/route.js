@@ -3,10 +3,11 @@ import { MilkVolume } from "src/Model/volumeOfMilk.model";
 
 export async function GET() {
   try {
-    const response = await MilkVolume.find({}).populate(
-      "donorId",
-      "contactNo hosRegNo"
-    );
+    const response = await MilkVolume.find({})
+    // .populate(
+    //   "donorId",
+    //   "contactNo hosRegNo"
+    // );
 
     return NextResponse.json(response, { status: 200 });
   } catch (error) {

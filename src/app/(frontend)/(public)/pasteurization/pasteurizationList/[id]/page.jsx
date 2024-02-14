@@ -35,24 +35,10 @@ export default function BottleDetails() {
     }
   }, [id,poolingDone]);
   //donor list
-  const [getDonor, setGetDonor] = useState([]);
-  useEffect(() => {
-    if(bottle){
-
-      async function fetchData() {
-        const { data, status } = await axios.get(`${urls.getVolumeOfMilk}`);
-        if (status === 200) {
-          console.log(data,'response')
-          setGetDonor(data);
-        }
-      }
-      fetchData();
-    }
-  }, [bottle]);
+ 
   const [gestational, setGestational] = useState([]);
   useEffect(() => {
     if(bottle){
-
       async function fetchData() {
         const { data, status } = await axios.get(`${urls.getGestational}`);
         if (status === 200) {

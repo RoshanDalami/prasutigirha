@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
@@ -9,6 +9,7 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
+import { useParams } from "next/navigation";
 const defaultValues = {
   dateOfBirth: "",
   engDateBirth: "",
@@ -36,6 +37,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
   const router = useRouter();
+  const {id} = useParams();
 
   //Nepali date
   const [birthDate, setBirthDate] = useState("");
@@ -109,21 +111,21 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     defaultValues: defaultValuesWithUserData,
     // resolver: addressValidation,
   });
-
   useEffect(() => {
-    if (clickedIdData) {
-      setValue("dateOfBirth", clickedIdData?.babyStatus?.dateOfBirth || "");
-      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth || "");
-      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding || "");
-      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer || "");
-      setValue("babyStatus", clickedIdData?.babyStatus || "");
-      setValue("hiv", clickedIdData?.serologyRecords?.hiv || "");
-      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag || "");
-      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl || "");
-      setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest || "");
+    if ( clickedIdData ) {
+        setBirthDate(clickedIdData?.babyStatus?.dateOfBirth)
+      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth );
+      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding );
+      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer );
+      setValue("babyStatus", clickedIdData?.babyStatus?.babyStatus);
+      setValue("hiv", clickedIdData?.serologyRecords?.hiv );
+      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag );
+      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl );
+      // setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest );
+    setTestDate(clickedIdData?.serologyRecords?.dateOfTest)
       setValue(
         "engDateTest",
-        clickedIdData?.serologyRecords?.engDateTest || ""
+        clickedIdData?.serologyRecords?.engDateTest 
       );
     } else if (userData) {
       setDefaultValuesWithUserData({
@@ -152,7 +154,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
-  }, [userData, setValue]);
+  }, [userData, setValue, clickedIdData]);
 
   const onSubmit = async (data) => {
     if (serologyStatus === "false") {
@@ -353,7 +355,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
                 valueAsNumber: true,
               })}
             >
-              <option>--Select Breast Feeding Status--</option>
+              <option selected disabled value={''} >--Select Breast Feeding Status--</option>
               {breastFeedingOptions}
             </select>
             {errors.babyFeeding && (

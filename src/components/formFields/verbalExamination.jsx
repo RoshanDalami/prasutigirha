@@ -3,10 +3,10 @@ import { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
-import FormRender from "../form/FormRender";
+
 import StepperControl from "../stepper/StepperControl";
 import FormBorder from "../reusableForm";
-import RadioInput from "../radioInput";
+
 import {
   FormControl,
   FormControlLabel,
@@ -51,28 +51,28 @@ const VerbalExamination = ({
 
   useEffect(() => {
     if (clickedIdData) {
-      setValue("acuteInfection", clickedIdData?.verbalExamination?.acuteInfection || "");
-      setValue("chronicInfection", clickedIdData?.verbalExamination?.chronicInfection || "");
+      setValue("acuteInfection", clickedIdData?.verbalExamination?.acuteInfection );
+      setValue("chronicInfection", clickedIdData?.verbalExamination?.chronicInfection );
       setValue(
         "cancerTreatmentWithinThreeYears",
-        clickedIdData?.verbalExamination?.cancerTreatmentWithinThreeYears || ""
+        clickedIdData?.verbalExamination?.cancerTreatmentWithinThreeYears 
       );
-      setValue("autoImmuneDisease", clickedIdData?.verbalExamination?.autoImmuneDisease || "");
+      setValue("autoImmuneDisease", clickedIdData?.verbalExamination?.autoImmuneDisease );
       setValue(
         "coughMoreThanTwoWeeks",
-        clickedIdData?.verbalExamination?.coughMoreThanTwoWeeks || ""
+        clickedIdData?.verbalExamination?.coughMoreThanTwoWeeks 
       );
-      setValue("chickenpox", clickedIdData?.verbalExamination?.chickenpox || "");
-      setValue("stdLastOneYear", clickedIdData?.verbalExamination?.stdLastOneYear || "");
+      setValue("chickenpox", clickedIdData?.verbalExamination?.chickenpox );
+      setValue("stdLastOneYear", clickedIdData?.verbalExamination?.stdLastOneYear );
       setValue(
         "medCancerAntisicotikRadioactiveThyroid",
-        clickedIdData?.verbalExamination?.medCancerAntisicotikRadioactiveThyroid || ""
+        clickedIdData?.verbalExamination?.medCancerAntisicotikRadioactiveThyroid 
       );
       setValue(
         "transplantAndBloodTaken",
-        clickedIdData?.verbalExamination?.transplantAndBloodTaken || ""
+        clickedIdData?.verbalExamination?.transplantAndBloodTaken 
       );
-      setValue("BadLifeStyle", clickedIdData?.verbalExamination?.BadLifeStyle || "");
+      setValue("BadLifeStyle", clickedIdData?.verbalExamination?.BadLifeStyle );
     } else if (userData) {
       setDefaultValuesWithUserData({
         acuteInfection: userData.acuteInfection || "",
