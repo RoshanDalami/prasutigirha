@@ -10,7 +10,7 @@ import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-
+import toast from 'react-hot-toast'
 const Login = () => {
   const {
     register,
@@ -31,9 +31,11 @@ const Login = () => {
           console.error("localStorage is not available in this environment");
         }
         router.push("/");
+        toast.success('Login successfull')
         window.location.reload();
       }
     } catch (error) {
+      toast.error('Invalid Credentials')
       console.log(error);
     }
   };
