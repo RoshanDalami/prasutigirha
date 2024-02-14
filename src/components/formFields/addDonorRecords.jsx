@@ -44,9 +44,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
   const router = useRouter();
-   //Nepali date
-   const [date, setDate] = useState("");
-   const engDate = new BikramSambat(date, "BS").toAD();
+  //Nepali date
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
 
   //ethnicity
   const [ethnicityList, setEthnicity] = useState([]);
@@ -134,7 +134,17 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   } = useForm({
     // defaultValues: defaultValuesWithUserData,
   });
-
+  // const [error, setError] = useState("");
+  // const handleDateChange = (e) => {
+  //   const newDate = e.target.value;
+  //   console.log("New Date", newDate);
+  //   setDate(newDate);
+  //   if (newDate === "") {
+  //     setError("Date is Required");
+  //   } else {
+  //     setError("");
+  //   }
+  // };
   useEffect(() => {
     if (clickedIdData) {
       setValue("_id", clickedIdData?._id);
@@ -198,8 +208,11 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, clickedIdData, setValue]);
   console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
-    setUserData({ ...userData, ...data,date:date, engDate });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data,date:date, engDate  }));
+    setUserData({ ...userData, ...data, date: date, engDate });
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ ...userData, ...data, date: date, engDate })
+    );
     handleClick("next");
     console.log(userData, "response");
   };
@@ -216,7 +229,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     donorAge: { required: "Donor Age is required", pattern: /^\d+$/ }, // Example pattern for numeric input
     // Add validation rules for other fields as needed
   };
- 
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={"Add Donor Records"}>
@@ -266,13 +279,11 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               inputClassName="form-control  focus:outline-none"
               value={date}
               onChange={(e) => setDate(e)}
+              // onChange={() => handleDateChange()}
               options={{ calenderLocale: "ne", valueLocale: "en" }}
               className="inputStyle"
-              // {...register("dateOfBirth", { required: true })}
             />
-            {errors.date && (
-              <p className="errorMessages">{errors.date.message}</p>
-            )}
+            {/* {error && <p className="errorMessages">{error}</p>} */}
           </div>
           <div className="flex flex-col">
             <label>
