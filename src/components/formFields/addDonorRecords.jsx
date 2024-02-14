@@ -150,7 +150,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("_id", clickedIdData?._id);
       setValue("hosRegNo", clickedIdData?.hosRegNo);
       setValue("donorRegNo", clickedIdData?.donorRegNo);
-      setValue("date", clickedIdData?.date);
+      setDate(clickedIdData?.date)
       setValue("engDate", clickedIdData?.engDate);
       setValue("time", clickedIdData?.time);
       setValue("donorName", clickedIdData?.donorName);

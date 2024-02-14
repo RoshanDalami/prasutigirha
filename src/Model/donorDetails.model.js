@@ -122,9 +122,8 @@ const daanDartaSchema = new Schema(
     date: {
       type: String,
     },
-    engDate:{
-type:String,
-
+    engDate: {
+      type: String,
     },
     time: {
       type: String,
