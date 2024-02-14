@@ -78,6 +78,8 @@ export default function AddPasteurization({ clickedIdData }) {
       ...item,
       donorId: item.donorId.split("/")[0],
       collectedDate: item.donorId.split("/")[1],
+      donorName: item.donorId.split("/")[2],
+
     }));
     data = {
       ...data,
@@ -246,7 +248,7 @@ export default function AddPasteurization({ clickedIdData }) {
                           --Select Donor--
                         </option>
                         {donorList?.map((item, index) => {
-                          const combinedValue = `${item.donorId}/${item.date}`;
+                          const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
                           // console.log(item,'response')
 
                           return (

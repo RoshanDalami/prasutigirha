@@ -60,7 +60,6 @@ export async function POST(req) {
     }
 
     // Output the array of bottles
-    console.log(bottles);
     const newBottle = new Bottle({
       poolingId,
       poolingCondition,

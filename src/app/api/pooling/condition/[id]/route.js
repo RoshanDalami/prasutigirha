@@ -7,7 +7,7 @@ export async function GET(req, { params }) {
   try {
 
     const response = await MilkVolume.find(
-      { gestationalAge: id } && { remaining: { $gt: 0 } }
+      { gestationalAge: id , remaining: { $gt: 0 } }
     );
 
     const extractedData = response.map((item) => ({
