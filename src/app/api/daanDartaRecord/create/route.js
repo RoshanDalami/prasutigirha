@@ -22,6 +22,7 @@ export async function POST(req, res) {
     }
 
     let newDaanDarta = new DaanDarta({
+      
       ...body,
       donorRegNo: newDonorRegNo,
     });
@@ -94,7 +95,7 @@ export async function POST(req, res) {
     ) {
       newDaanDarta.physicalStatus = true;
       newDaanDarta.remarks =
-        " She can’t donation milk right now she has to take tests after ………………… Days ";
+        " She can’t donation milk right now she has to take tests after ………………… Days";
     } else {
       newDaanDarta.physicalStatus = false;
     }
