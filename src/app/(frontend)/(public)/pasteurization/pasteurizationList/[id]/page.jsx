@@ -35,23 +35,10 @@ export default function BottleDetails() {
     }
   }, [id,poolingDone]);
   //donor list
-  const [getDonor, setGetDonor] = useState([]);
-  useEffect(() => {
-    if(bottle){
-
-      async function fetchData() {
-        const { data, status } = await axios.get(`${urls.getVolumeOfMilk}`);
-        if (status === 200) {
-          setGetDonor(data);
-        }
-      }
-      fetchData();
-    }
-  }, [bottle]);
+ 
   const [gestational, setGestational] = useState([]);
   useEffect(() => {
     if(bottle){
-
       async function fetchData() {
         const { data, status } = await axios.get(`${urls.getGestational}`);
         if (status === 200) {
@@ -122,20 +109,18 @@ export default function BottleDetails() {
               Donor List
             </div>
             <div className="mt-4">
-              {getDonor
-                .filter((item, index) => {
-                  return pooling?.donorDetailsForPooling?.some(
-                    (donor) => item.donorId === donor.donorId
-                  );
-                })
-                .map((row, index) => {
-                  return (
-                    <div key={index} className="flex items-center gap-2">
-                      <p>{index + 1}.</p>
-                      <p className="">{row?.donorName}</p>
+              {
+                pooling?.donorDetailsForPooling.map((item,index)=>{
+                  return(
+                    <div key={index} className="flex items-center gap-4" >
+                        <p> {index + 1}. </p>
+                        <p> {item.donorName} </p>
+                        <p>{item.volumeOfMilkPooled} ml</p>
                     </div>
-                  );
-                })}
+                  )
+                })
+              }
+                
             </div>
           </div>
         </div>

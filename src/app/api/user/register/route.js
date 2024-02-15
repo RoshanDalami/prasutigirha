@@ -26,7 +26,7 @@ export async function POST(req, res) {
     const hashedPassword = await bcryptjs.hash(password, 10);
     const newUser = new User({
         username:username,
-        email:email,
+        email:email.trim(),
         contactNo:contactNo,
         password: hashedPassword,
         confirmPassword: null,

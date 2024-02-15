@@ -10,22 +10,23 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
-export default function AddMilkReq({clickedIdData}) {
-  const router= useRouter();
-  const {id} = useParams();
-  const [birthDate, setBirthDate] = useState("");
-  const [feedingDate, setFeedingDate] = useState("");
+const aa = new BikramSambat(new Date()).toBS();
+export default function AddMilkReq({ clickedIdData }) {
+  const router = useRouter();
+  const { id } = useParams();
+  const [birthDate, setBirthDate] = useState(aa);
+  const [feedingDate, setFeedingDate] = useState(aa);
   const userInfo =
-  typeof localStorage !== "undefined"
-    ? JSON.parse(localStorage.getItem("userInfo"))
-    : "";
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("userInfo"))
+      : "";
   const engBirthDate = new BikramSambat(birthDate, "BS").toAD();
   const engFeedingDate = new BikramSambat(feedingDate, "BS").toAD();
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-    setValue
+    formState: { isSubmitting, errors },
+    setValue,
   } = useForm();
 
   //gestationalAge
@@ -98,6 +99,7 @@ export default function AddMilkReq({clickedIdData}) {
     );
   });
 
+
   useEffect(()=>{
     if(clickedIdData){
       setValue('_id',clickedIdData?._id);
@@ -109,14 +111,16 @@ export default function AddMilkReq({clickedIdData}) {
       setValue('diagnosis',clickedIdData?.babyEntry?.diagnosis);
       setValue('indications',clickedIdData?.babyEntry?.indications);
       setBirthDate(clickedIdData?.babyEntry?.dateOfBaby);
-      setValue('batchNumber',clickedIdData?.feedingDetails?.batchNumber)
-      setValue('uniqueBottleNumber',clickedIdData?.feedingDetails?.uniqueBottleNumber)
-      setValue('bottleName',clickedIdData?.feedingDetails?.bottleName)
-      setValue('quantity',clickedIdData?.feedingDetails?.quantity)
-      setFeedingDate(clickedIdData?.feedingDetails?.feedingDate)
-    
+      setValue("batchNumber", clickedIdData?.feedingDetails?.batchNumber);
+      setValue(
+        "uniqueBottleNumber",
+        clickedIdData?.feedingDetails?.uniqueBottleNumber
+      );
+      setValue("bottleName", clickedIdData?.feedingDetails?.bottleName);
+      setValue("quantity", clickedIdData?.feedingDetails?.quantity);
+      setFeedingDate(clickedIdData?.feedingDetails?.feedingDate);
     }
-  },[clickedIdData, id , setValue])
+  }, [clickedIdData, id, setValue]);
 
   const onSubmit = async (data) => {
     data = {
@@ -144,11 +148,10 @@ export default function AddMilkReq({clickedIdData}) {
     };
 
     try {
-      const {status} = await axios.post(`${urls.createMilkRequistion}`, data);
-      if(status === 200){
-        router.push('/milkRequisation/listOfMilkRequisation')
+      const { status } = await axios.post(`${urls.createMilkRequistion}`, data);
+      if (status === 200) {
+        router.push("/milkRequisation/listOfMilkRequisation");
       }
-      
     } catch (error) {
       console.log(error, "response");
     }
@@ -164,7 +167,7 @@ export default function AddMilkReq({clickedIdData}) {
           <FormBorder title={"Milk Requisition Form"}>
             <p className="text-xl font-bold py-6">1. Baby Entry Form:</p>
             <div className="grid md:grid-cols-2 grid-cols-1 text-lg gap-4">
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Name of the Baby <span className="text-red-600">*</span>
                 </label>
@@ -172,10 +175,15 @@ export default function AddMilkReq({clickedIdData}) {
                   type="text"
                   className="inputStyle"
                   placeholder="Enter the Name of the Baby"
-                  {...register("babyName")}
+                  {...register("babyName", {
+                    required: "Baby name is required",
+                  })}
                 />
+                {errors?.babyName && (
+                  <p className="errorMessages">{errors.babyName.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Date of Birth<span className="text-red-600">*</span>
                 </label>
@@ -189,18 +197,28 @@ export default function AddMilkReq({clickedIdData}) {
                   className="inputStyle"
                 />
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   GestationalAge <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("gestationalAge")}>
+                <select
+                  className="inputStyle"
+                  {...register("gestationalAge", {
+                    required: "Gestational Age required",
+                  })}
+                >
                   <option selected disabled value={""}>
                     --Select Gestational Age--
                   </option>
                   {gestationalOption}
                 </select>
+                {errors?.gestationalAge && (
+                  <p className="errorMessages">
+                    {errors.gestationalAge.message}
+                  </p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   IP Number<span className="text-red-600">*</span>
                 </label>
@@ -208,10 +226,15 @@ export default function AddMilkReq({clickedIdData}) {
                   type="Number"
                   className="inputStyle"
                   placeholder="Enter IP Number"
-                  {...register("ipNumber")}
+                  {...register("ipNumber", {
+                    required: "IP number is required",
+                  })}
                 />
+                {errors?.ipNumber && (
+                  <p className="errorMessages">{errors.ipNumber.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Birth Weight<span className="text-red-600">*</span>
                 </label>
@@ -219,30 +242,51 @@ export default function AddMilkReq({clickedIdData}) {
                   type="Number"
                   className="inputStyle"
                   placeholder="Enter Birth Weight"
-                  {...register("babyWeight")}
+                  {...register("babyWeight", {
+                    required: "Birth weight required",
+                  })}
                 />
+                {errors?.babyWeight && (
+                  <p className="errorMessages">{errors.babyWeight.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Diagnosis of recipient <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("diagnosis")}>
+                <select
+                  className="inputStyle"
+                  {...register("diagnosis", {
+                    required: "Diagnosis is required",
+                  })}
+                >
                   <option selected disabled value={""}>
                     --Select Diagnosis--
                   </option>
                   {diagnosisOptions}
                 </select>
+                {errors?.diagnosis && (
+                  <p className="errorMessages">{errors.diagnosis.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Indications <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("indications")}>
+                <select
+                  className="inputStyle"
+                  {...register("indications", {
+                    required: "Inidcations is required",
+                  })}
+                >
                   <option selected disabled value={""}>
                     --Select Indications--
                   </option>
                   {indicationOption}
                 </select>
+                {errors?.indications && (
+                  <p className="errorMessages">{errors.indications.message}</p>
+                )}
               </div>
             </div>
             <p className="text-xl font-bold py-6">2. Baby Status:</p>
@@ -251,12 +295,20 @@ export default function AddMilkReq({clickedIdData}) {
                 <label htmlFor="">
                   Baby Status <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("babyStatus")}>
+                <select
+                  className="inputStyle"
+                  {...register("babyStatus", {
+                    required: "Baby status is required",
+                  })}
+                >
                   <option selected disabled value={""}>
                     --Select Baby Status--
                   </option>
                   {babyStatusOptions}
                 </select>
+                {errors?.babyStatus && (
+                  <p className="errorMessages">{errors.babyStatus.message}</p>
+                )}
               </div>
             </div>
             <p className="text-xl font-bold py-6">3. Feeding Details:</p>
@@ -269,8 +321,13 @@ export default function AddMilkReq({clickedIdData}) {
                   type="Number"
                   className="inputStyle"
                   placeholder="Enter Batch Number"
-                  {...register("batchNumber")}
+                  {...register("batchNumber", {
+                    required: "Batch number is required",
+                  })}
                 />
+                {errors?.batchNumber && (
+                  <p className="errorMessages">{errors.batchNumber.message}</p>
+                )}
               </div>
               <div className="grid">
                 <label htmlFor="">
@@ -280,11 +337,18 @@ export default function AddMilkReq({clickedIdData}) {
                   type="text"
                   className="inputStyle"
                   placeholder="Enter Unique Bottle Number"
-                  {...register("uniqueBottleNumber")}
+                  {...register("uniqueBottleNumber", {
+                    required: "Bottle number is required",
+                  })}
                 />
+                {errors?.uniqueBottleNumber && (
+                  <p className="errorMessages">
+                    {errors.uniqueBottleNumber.message}
+                  </p>
+                )}
               </div>
 
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Bottle Name<span className="text-red-600">*</span>
                 </label>
@@ -292,10 +356,15 @@ export default function AddMilkReq({clickedIdData}) {
                   type="text"
                   className="inputStyle"
                   placeholder="Enter Bottle Name"
-                  {...register("bottleName")}
+                  {...register("bottleName", {
+                    required: "Bottle name is required",
+                  })}
                 />
+                {errors?.bottleName && (
+                  <p className="errorMessages">{errors.bottleName.message}</p>
+                )}
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   Feeding Date<span className="text-red-600">*</span>
                 </label>
@@ -307,7 +376,7 @@ export default function AddMilkReq({clickedIdData}) {
                   className="inputStyle"
                 />
               </div>
-              <div className="grid">
+              <div className="flex flex-col">
                 <label htmlFor="">
                   ML<span className="text-red-600">*</span>
                 </label>
@@ -315,8 +384,13 @@ export default function AddMilkReq({clickedIdData}) {
                   type="number"
                   className="inputStyle"
                   placeholder="Enter ML"
-                  {...register("quantity")}
+                  {...register("quantity", {
+                    required: "Quantity is required",
+                  })}
                 />
+                {errors?.quantity && (
+                  <p className="errorMessages">{errors.quantity.message}</p>
+                )}
               </div>
             </div>
             <div className="my-5 font-bold text-xl">

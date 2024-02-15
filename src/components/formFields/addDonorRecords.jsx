@@ -1,10 +1,9 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import StepperControl from "../stepper/StepperControl";
 import { useRouter } from "next/navigation";
-import FormRender from "../form/FormRender";
 import FormBorder from "../reusableForm";
 import Button from "../button";
 import axios from "axios";
@@ -12,8 +11,7 @@ import { urls } from "src/services/apiHelpers";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
-
-import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
+const aa = new BikramSambat(new Date()).toBS();
 const defaultValues = {
   hosRegNo: "",
   donorRegNo: "",
@@ -44,9 +42,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
   const router = useRouter();
-   //Nepali date
-   const [date, setDate] = useState("");
-   const engDate = new BikramSambat(date, "BS").toAD();
+  //Nepali date
+  const [date, setDate] = useState(aa);
+  const engDate = new BikramSambat(date, "BS").toAD();
 
   //ethnicity
   const [ethnicityList, setEthnicity] = useState([]);
@@ -134,13 +132,24 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   } = useForm({
     // defaultValues: defaultValuesWithUserData,
   });
-
+  // const [error, setError] = useState("");
+  // const handleDateChange = (e) => {
+  //   const newDate = e.target.value;
+  //   console.log("New Date", newDate);
+  //   setDate(newDate);
+  //   if (newDate === "") {
+  //     setError("Date is Required");
+  //   } else {
+  //     setError("");
+  //   }
+  // };
   useEffect(() => {
     if (clickedIdData) {
       setValue("_id", clickedIdData?._id);
       setValue("hosRegNo", clickedIdData?.hosRegNo);
       setValue("donorRegNo", clickedIdData?.donorRegNo);
-      setValue("date", clickedIdData?.date);
+      setDate(clickedIdData?.date)
+    
       setValue("engDate", clickedIdData?.engDate);
       setValue("time", clickedIdData?.time);
       setValue("donorName", clickedIdData?.donorName);
@@ -198,8 +207,11 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, clickedIdData, setValue]);
   console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
-    setUserData({ ...userData, ...data,date:date, engDate });
-    localStorage.setItem("userData", JSON.stringify({ ...userData, ...data,date:date, engDate  }));
+    setUserData({ ...userData, ...data, date: date, engDate });
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ ...userData, ...data, date: date, engDate })
+    );
     handleClick("next");
     console.log(userData, "response");
   };
@@ -216,7 +228,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     donorAge: { required: "Donor Age is required", pattern: /^\d+$/ }, // Example pattern for numeric input
     // Add validation rules for other fields as needed
   };
- 
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={"Add Donor Records"}>
@@ -266,13 +278,11 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               inputClassName="form-control  focus:outline-none"
               value={date}
               onChange={(e) => setDate(e)}
+              // onChange={() => handleDateChange()}
               options={{ calenderLocale: "ne", valueLocale: "en" }}
               className="inputStyle"
-              // {...register("dateOfBirth", { required: true })}
             />
-            {errors.date && (
-              <p className="errorMessages">{errors.date.message}</p>
-            )}
+            {/* {error && <p className="errorMessages">{error}</p>} */}
           </div>
           <div className="flex flex-col">
             <label>

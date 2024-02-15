@@ -9,6 +9,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import toast from "react-hot-toast";
+const aa = new BikramSambat(new Date()).toBS();
 
 export default function AddPasteurization({ clickedIdData }) {
   console.log(clickedIdData, "response");
@@ -17,7 +18,7 @@ export default function AddPasteurization({ clickedIdData }) {
       ? JSON.parse(localStorage.getItem("userInfo"))
       : "";
 
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(aa);
 
   const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function AddPasteurization({ clickedIdData }) {
     register,
     handleSubmit,
     watch,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     setValue,
     control,
   } = useForm({
@@ -78,6 +79,8 @@ export default function AddPasteurization({ clickedIdData }) {
       ...item,
       donorId: item.donorId.split("/")[0],
       collectedDate: item.donorId.split("/")[1],
+      donorName: item.donorId.split("/")[2],
+
     }));
     data = {
       ...data,
@@ -180,6 +183,11 @@ export default function AddPasteurization({ clickedIdData }) {
                   <option value={4}>Colostrum</option>
                   {gestationalOptions}
                 </select>
+                {errors?.gestationalAge && (
+                  <p className="errorMessages">
+                    {errors.gestationalAge.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
@@ -233,14 +241,17 @@ export default function AddPasteurization({ clickedIdData }) {
                       <select
                         className={`inputStyle`}
                         required
-                        {...register(`donorDetailsForPooling.${index}.donorId`)}
+                        {...register(
+                          `donorDetailsForPooling.${index}.donorId`,
+                          { required: "Donor Name required" }
+                        )}
                       >
                         <option selected disabled value={""}>
                           --Select Donor--
                         </option>
 
                         {donorList?.map((item, index) => {
-                          const combinedValue = `${item.donorId}/${item.date}`;
+                          const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
                           // console.log(item,'response')
 
                           return (
@@ -253,6 +264,7 @@ export default function AddPasteurization({ clickedIdData }) {
                           );
                         })}
                       </select>
+                      {errors?.donorId && <p>{errors.donorId.messsage}</p>}
                     </div>
                     <div className="flex flex-col w-2/4 ">
                       <label htmlFor="">
@@ -266,9 +278,20 @@ export default function AddPasteurization({ clickedIdData }) {
                         required
                         {...register(
                           `donorDetailsForPooling.${index}.volumeOfMilkPooled`,
-                          { valueAsNumber: true }
+                          {
+                            valueAsNumber: true,
+                            min: 0, // Ensure the value is not negative
+                          }
                         )}
                       />
+                      {errors &&
+                        errors[
+                          `donorDetailsForPooling.${index}.volumeOfMilkPooled`
+                        ] && (
+                          <p className="errorMessages">
+                            Volume of milk is required.
+                          </p>
+                        )}
                     </div>
 
                     {fields?.length <= 1 ? (

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
@@ -9,6 +9,8 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
+import { useParams } from "next/navigation";
+const aa = new BikramSambat(new Date()).toBS();
 const defaultValues = {
   dateOfBirth: "",
   engDateBirth: "",
@@ -36,13 +38,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
   const router = useRouter();
+  const {id} = useParams();
 
   //Nepali date
-  const [birthDate, setBirthDate] = useState("");
-  const [testDate, setTestDate] = useState("");
+  const [birthDate, setBirthDate] = useState(aa);
+  const [testDate, setTestDate] = useState(aa);
   const engDate = new BikramSambat(birthDate, "BS").toAD();
   const engTestDate = new BikramSambat(testDate, "BS").toAD();
-
 
   //babyStatus
   const [babyStatusList, setBabyStatusList] = useState([]);
@@ -110,19 +112,22 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     defaultValues: defaultValuesWithUserData,
     // resolver: addressValidation,
   });
-
   useEffect(() => {
-    if (clickedIdData) {
-      setValue("dateOfBirth", clickedIdData?.babyStatus?.dateOfBirth || "");
-      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth || "");
-      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding || "");
-      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer || "");
-      setValue("babyStatus", clickedIdData?.babyStatus || "");
-      setValue("hiv", clickedIdData?.serologyRecords?.hiv || "");
-      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag || "");
-      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl || "");
-      setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest || "");
-      setValue("engDateTest", clickedIdData?.serologyRecords?.engDateTest || "");
+    if ( clickedIdData ) {
+        setBirthDate(clickedIdData?.babyStatus?.dateOfBirth)
+      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth );
+      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding );
+      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer );
+      setValue("babyStatus", clickedIdData?.babyStatus?.babyStatus);
+      setValue("hiv", clickedIdData?.serologyRecords?.hiv );
+      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag );
+      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl );
+      // setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest );
+    setTestDate(clickedIdData?.serologyRecords?.dateOfTest)
+      setValue(
+        "engDateTest",
+        clickedIdData?.serologyRecords?.engDateTest 
+      );
     } else if (userData) {
       setDefaultValuesWithUserData({
         dateOfBirth: userData.dateOfBirth || "",
@@ -150,15 +155,15 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
-  }, [userData, setValue]);
+  }, [userData, setValue, clickedIdData]);
 
   const onSubmit = async (data) => {
-    if (serologyStatus === "false") {
+    if (serologyStatus == "false") {
       setUserData({
         ...userData,
         babyStatus: {
           dateOfBirth: birthDate,
-          engDateBirth: engDate ,
+          engDateBirth: engDate,
           babyStatus: data.babyStatus,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
@@ -167,28 +172,28 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest:testDate,
-          engDateTest : engDate
+          dateOfTest: testDate,
+          engDateTest: engDate,
         },
       });
       localStorage.setItem(
         "userData",
         JSON.stringify({
           ...userData,
-        babyStatus: {
-          dateOfBirth: birthDate,
-          engDateBirth: engDate ,
-          babyStatus: data.babyStatus,
-          babyTransfer: data.babyTransfer,
-          babyFeeding: data.babyFeeding,
-        },
-        serologyRecords: {
-          hiv: JSON.parse(data.hiv),
-          hbsag: JSON.parse(data.hbsag),
-          vdrl: JSON.parse(data.vdrl),
-          dateOfTest:testDate,
-          engDateTest : engDate
-        },
+          babyStatus: {
+            dateOfBirth: birthDate,
+            engDateBirth: engDate,
+            babyStatus: data.babyStatus,
+            babyTransfer: data.babyTransfer,
+            babyFeeding: data.babyFeeding,
+          },
+          serologyRecords: {
+            hiv: JSON.parse(data.hiv),
+            hbsag: JSON.parse(data.hbsag),
+            vdrl: JSON.parse(data.vdrl),
+            dateOfTest: testDate,
+            engDateTest: engDate,
+          },
         })
       );
       handleClick("next");
@@ -198,7 +203,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         ...userData,
         babyStatus: {
           dateOfBirth: birthDate,
-          engDateBirth: engDate ,
+          engDateBirth: engDate,
           babyStatus: data.babyStatus,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
@@ -207,8 +212,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest:testDate,
-          engDateTest : engDate
+          dateOfTest: testDate,
+          engDateTest: engDate,
         },
       });
       localStorage.setItem(
@@ -246,11 +251,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       };
       try {
         const response = await axios.post(`${urls.createDanaDarta}`, data);
-        console.log(response, "response");
+        console.log(response,'response')
         if (response.status === 200) {
           router.push("/donorRecord/viewDonorRecord");
+          setSerologyPositive('false')
         }
       } catch (error) {
+
         console.log(error, "response");
       }
     }
@@ -351,7 +358,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
                 valueAsNumber: true,
               })}
             >
-              <option>--Select Breast Feeding Status--</option>
+              <option selected disabled value={''} >--Select Breast Feeding Status--</option>
               {breastFeedingOptions}
             </select>
             {errors.babyFeeding && (

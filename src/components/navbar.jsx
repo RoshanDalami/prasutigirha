@@ -6,6 +6,7 @@ import { useState } from "react";
 import { urls } from "src/services/apiHelpers";
 import CircularProgress from '@mui/material/CircularProgress';
 export default function Navbar() {
+
   const userInfo =
     typeof localStorage !== "undefined"
       ? JSON.parse(localStorage.getItem("userInfo"))
@@ -21,7 +22,6 @@ export default function Navbar() {
         router.push("/login");
         setLoading(false)
       }
-      // router.push("/login");
     } catch (error) {
       console.log(error);
     }finally{

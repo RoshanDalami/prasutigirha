@@ -6,7 +6,6 @@ const babyStatusSchema = new mongoose.Schema({
   },
   engDateBirth: {
     type: String,
-    required: true,
   },
   babyStatus: {
     type: Number,
@@ -122,9 +121,8 @@ const daanDartaSchema = new Schema(
     date: {
       type: String,
     },
-    engDate:{
-type:String,
-
+    engDate: {
+      type: String,
     },
     time: {
       type: String,
