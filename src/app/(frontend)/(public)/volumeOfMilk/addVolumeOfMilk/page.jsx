@@ -58,7 +58,7 @@ export default function AddVolume({ clickedData }) {
     gestational.forEach((item) => {
       if (
         item.gestationalId == watchFields.donorId?.split("-")[0] ||
-        item.gestationalId == clickedData.gestationalAge
+        item?.gestationalId == clickedData?.gestationalAge
       ) {
         setValue("gestationalAge", item.gestationalName);
       }
