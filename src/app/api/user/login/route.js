@@ -15,7 +15,6 @@ export async function POST(req,res){
         if(!user){
             return NextResponse.json({message:"Email or password is Invalid"},{status:201})
         }
-
         const matchedPassword = await bcryptjs.compare(password,user.password)
        
         if(!matchedPassword){

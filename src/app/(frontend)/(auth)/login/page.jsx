@@ -20,6 +20,10 @@ const Login = () => {
   const [showPw, setShowPw] = useState(false);
   const router = useRouter();
   const onSubmit = async (data) => {
+    data={
+      ...data,
+      email:data?.email?.trim()
+    }
 // tets
     try {
       const response = await axios.post(`${urls.login}`, data);
@@ -33,7 +37,10 @@ const Login = () => {
         router.push("/");
         toast.success('Login successfull')
         window.location.reload();
+      }else{
+        toast.error('Invalid Credentials')
       }
+
     } catch (error) {
       toast.error('Invalid Credentials')
       console.log(error);

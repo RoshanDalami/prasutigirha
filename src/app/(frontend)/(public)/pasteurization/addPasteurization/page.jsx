@@ -9,6 +9,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import toast from "react-hot-toast";
+const aa = new BikramSambat(new Date()).toBS();
 
 export default function AddPasteurization({ clickedIdData }) {
   console.log(clickedIdData, "response");
@@ -17,7 +18,7 @@ export default function AddPasteurization({ clickedIdData }) {
       ? JSON.parse(localStorage.getItem("userInfo"))
       : "";
 
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(aa);
 
   const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();

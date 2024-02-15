@@ -101,7 +101,7 @@ const PhysicalExamination = ({
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
-  }, [userData, setValue]);
+  }, [userData, setValue, clickedIdData]);
 
   const onSubmit = async (data) => {
     setUserData({

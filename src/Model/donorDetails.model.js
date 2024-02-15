@@ -6,7 +6,6 @@ const babyStatusSchema = new mongoose.Schema({
   },
   engDateBirth: {
     type: String,
-    required: true,
   },
   babyStatus: {
     type: Number,

@@ -118,7 +118,7 @@ export default function ListVolume() {
                   <td className="py-3">Id</td>
                   <td className="py-3">Donor Name</td>
                   <td className="py-3">Gestational Age</td>
-                  <td className="py-3">Contact</td>
+                  {/* <td className="py-3">Contact</td> */}
                   <td className="py-3">Date</td>
                   <td className="py-3">Time</td>
                   <td className="py-3">ML</td>
@@ -145,7 +145,7 @@ export default function ListVolume() {
                           );
                         }
                       })}
-                      <td className="py-3">{item.donorId.contactNo}</td>
+                      {/* <td className="py-3">{item.donorId.contactNo}</td> */}
                       <td className="py-3">{item.date}</td>
                       <td className="py-3">{item.time}</td>
                       <td className="py-3">{item.quantity} ml</td>
