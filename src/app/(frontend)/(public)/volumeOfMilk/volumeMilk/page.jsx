@@ -8,6 +8,7 @@ import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import Loading from "./../../loader";
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
@@ -127,48 +128,76 @@ export default function ListVolume() {
 
                 {filteredVolumeList?.map((item, index) => {
                   return (
-                    <tr
-                      className=" border border-x-gray text-center"
-                      key={index}
-                    >
-                      {/* <td className="py-3 text-center">
-                    <input type="checkbox" name="" id="" />
-                  </td> */}
-                      <td className="py-3">{index + 1}</td>
-                      <td className="py-3">{item.donorName}</td>
-                      {gestationalAgeList?.map((age, index) => {
-                        if (age.gestationalId === item.gestationalAge) {
-                          return (
-                            <td className="py-3" key={index}>
-                              {age.gestationalName}
-                            </td>
-                          );
-                        }
-                      })}
-                      <td className="py-3">{item.donorId.contactNo}</td>
-                      <td className="py-3">{item.date}</td>
-                      <td className="py-3">{item.time}</td>
-                      <td className="py-3">{item.quantity} ml</td>
-                      <td className="py-3">
-                        <div className="flex justify-evenly text-xl">
-                          <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">
-                            <PencilSquareIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleEdit(item._id)}
-                            />
-                          </div>
-                          <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
-                            <TrashIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleDelete(item._id)}
-                            />
-                          </div>
-                          
-
-
-                        </div>
-                      </td>
-                    </tr>
+                    <>
+                      {item ? (
+                        <tr
+                          className=" border border-x-gray text-center"
+                          key={index}
+                        >
+                          {/* <td className="py-3 text-center">
+                      <input type="checkbox" name="" id="" />
+                    </td> */}
+                          <td className="py-3">{index + 1}</td>
+                          <td className="py-3">{item.donorName}</td>
+                          {gestationalAgeList?.map((age, index) => {
+                            if (age.gestationalId === item.gestationalAge) {
+                              return (
+                                <td className="py-3" key={index}>
+                                  {age.gestationalName}
+                                </td>
+                              );
+                            }
+                          })}
+                          <td className="py-3">{item.donorId.contactNo}</td>
+                          <td className="py-3">{item.date}</td>
+                          <td className="py-3">{item.time}</td>
+                          <td className="py-3">{item.quantity} ml</td>
+                          <td className="py-3">
+                            <div className="flex justify-evenly text-xl">
+                              <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">
+                                <PencilSquareIcon
+                                  className="h-6 w-6 text-white"
+                                  onClick={() => handleEdit(item._id)}
+                                />
+                              </div>
+                              <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
+                                <TrashIcon
+                                  className="h-6 w-6 text-white"
+                                  onClick={() => handleDelete(item._id)}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr key={index}>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                          <td>
+                            <Loading />
+                          </td>
+                        </tr>
+                      )}
+                    </>
                   );
                 })}
               </table>

@@ -89,8 +89,6 @@ export default function AddPasteurization({ clickedIdData }) {
       donorDetailsForPooling: newArray,
     };
 
-
-
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
       if (response.status === 200) {
@@ -201,7 +199,7 @@ export default function AddPasteurization({ clickedIdData }) {
               {fields?.length < 6 ? (
                 <div className=" flex justify-end">
                   <button
-                    className="bg-indigo-600 rounded-md shadow-md px-6 py-2 font-bold text-white"
+                    className="bg-[#004a89] rounded-md shadow-md px-6 py-2 font-bold text-white"
                     onClick={(e) => {
                       e.preventDefault();
                       append({
@@ -231,6 +229,7 @@ export default function AddPasteurization({ clickedIdData }) {
                       <label htmlFor="">
                         Donor Name<span className="text-red-600">*</span>
                       </label>
+
                       <select
                         className={`inputStyle`}
                         required
@@ -239,15 +238,18 @@ export default function AddPasteurization({ clickedIdData }) {
                         <option selected disabled value={""}>
                           --Select Donor--
                         </option>
+
                         {donorList?.map((item, index) => {
                           const combinedValue = `${item.donorId}/${item.date}`;
                           // console.log(item,'response')
 
                           return (
-                            <option key={index} value={combinedValue}>
-                              {item.donorName} (Remaining Volume:
-                              {item.remaining}ml)
-                            </option>
+                            <>
+                              <option key={index} value={combinedValue}>
+                                {item.donorName} (Remaining Volume:
+                                {item.remaining}ml)
+                              </option>
+                            </>
                           );
                         })}
                       </select>
