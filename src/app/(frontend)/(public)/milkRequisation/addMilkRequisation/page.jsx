@@ -10,11 +10,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
+const aa = new BikramSambat(new Date()).toBS();
 export default function AddMilkReq({ clickedIdData }) {
   const router = useRouter();
   const { id } = useParams();
-  const [birthDate, setBirthDate] = useState("");
-  const [feedingDate, setFeedingDate] = useState("");
+  const [birthDate, setBirthDate] = useState(aa);
+  const [feedingDate, setFeedingDate] = useState(aa);
   const userInfo =
     typeof localStorage !== "undefined"
       ? JSON.parse(localStorage.getItem("userInfo"))

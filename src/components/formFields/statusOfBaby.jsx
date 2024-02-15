@@ -10,6 +10,7 @@ import BikramSambat from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import { useParams } from "next/navigation";
+const aa = new BikramSambat(new Date()).toBS();
 const defaultValues = {
   dateOfBirth: "",
   engDateBirth: "",
@@ -40,8 +41,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const {id} = useParams();
 
   //Nepali date
-  const [birthDate, setBirthDate] = useState("");
-  const [testDate, setTestDate] = useState("");
+  const [birthDate, setBirthDate] = useState(aa);
+  const [testDate, setTestDate] = useState(aa);
   const engDate = new BikramSambat(birthDate, "BS").toAD();
   const engTestDate = new BikramSambat(testDate, "BS").toAD();
 
@@ -157,7 +158,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, setValue, clickedIdData]);
 
   const onSubmit = async (data) => {
-    if (serologyStatus === "false") {
+    if (serologyStatus == "false") {
       setUserData({
         ...userData,
         babyStatus: {
@@ -250,11 +251,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       };
       try {
         const response = await axios.post(`${urls.createDanaDarta}`, data);
-        console.log(response, "response");
+        console.log(response,'response')
         if (response.status === 200) {
           router.push("/donorRecord/viewDonorRecord");
+          setSerologyPositive('false')
         }
       } catch (error) {
+
         console.log(error, "response");
       }
     }

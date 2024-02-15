@@ -110,7 +110,7 @@ const VerbalExamination = ({
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
-  }, [userData, setValue]);
+  }, [userData, setValue, clickedIdData]);
 
   const onSubmit = (data) => {
     setUserData({

@@ -1,10 +1,9 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import StepperControl from "../stepper/StepperControl";
 import { useRouter } from "next/navigation";
-import FormRender from "../form/FormRender";
 import FormBorder from "../reusableForm";
 import Button from "../button";
 import axios from "axios";
@@ -12,8 +11,7 @@ import { urls } from "src/services/apiHelpers";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
-
-import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
+const aa = new BikramSambat(new Date()).toBS();
 const defaultValues = {
   hosRegNo: "",
   donorRegNo: "",
@@ -45,7 +43,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     useState("");
   const router = useRouter();
   //Nepali date
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(aa);
   const engDate = new BikramSambat(date, "BS").toAD();
 
   //ethnicity
@@ -151,6 +149,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("hosRegNo", clickedIdData?.hosRegNo);
       setValue("donorRegNo", clickedIdData?.donorRegNo);
       setDate(clickedIdData?.date)
+    
       setValue("engDate", clickedIdData?.engDate);
       setValue("time", clickedIdData?.time);
       setValue("donorName", clickedIdData?.donorName);
