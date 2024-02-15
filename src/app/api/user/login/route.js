@@ -1,7 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/Model/user.model";
-import { NextResponse, NextRequest } from "next/server";
-import { asyncHandler } from "@/utils/asyncHandler";
+import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 connect();
