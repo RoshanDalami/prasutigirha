@@ -9,8 +9,11 @@ import toast from "react-hot-toast";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+import { useParams } from "next/navigation";
+const aa = new BikramSambat(new Date()).toBS();
 export default function AddVolume({ clickedData }) {
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(aa);
+  const { id } = useParams();
   const engDate = new BikramSambat(date, "BS").toAD();
   const {
     register,
@@ -44,21 +47,23 @@ export default function AddVolume({ clickedData }) {
     );
     setValue("gestationalAge", clickedData?.gestationalAge);
     setValue("quantity", clickedData?.quantity);
-    
+
     setValue("storedBy", clickedData?.storedBy);
     setValue("temp", clickedData?.temp);
     setValue("time", clickedData?.time);
-    setDate(clickedData?.date)
-
+    setDate(clickedData?.date);
   }, [clickedData, setValue]);
 
   useEffect(() => {
     gestational.forEach((item) => {
-      if (item.gestationalId == watchFields.donorId?.split("-")[0]) {
+      if (
+        item.gestationalId == watchFields.donorId?.split("-")[0] ||
+        item.gestationalId == clickedData.gestationalAge
+      ) {
         setValue("gestationalAge", item.gestationalName);
       }
     });
-  }, [gestational, setValue, watchFields?.donorId]);
+  }, [gestational, setValue, watchFields?.donorId, clickedData]);
   //Donor
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
@@ -70,7 +75,6 @@ export default function AddVolume({ clickedData }) {
     }
     fetchData();
   }, []);
-
 
   const onSubmit = async (data) => {
     data = {
@@ -119,7 +123,7 @@ export default function AddVolume({ clickedData }) {
                     return (
                       <option
                         key={index}
-                        value={item._id}
+                        value={combinedValue}
                         selected={item?._id === clickedData?.donorId}
                       >
                         {item.donorName}
@@ -136,6 +140,7 @@ export default function AddVolume({ clickedData }) {
                   Gestational Age (WOG)
                   <span className="text-lg text-red-600">*</span>
                 </label>
+
                 <input
                   type="text"
                   className="inputStyle"
@@ -149,17 +154,6 @@ export default function AddVolume({ clickedData }) {
                     {errors?.gestationalAge?.message}
                   </p>
                 )}
-                {/* <select name="" id="" {...register("gestationalAge")}>
-                  {gestational?.map((item, index) => {
-                    if (
-                      item.gestationalId == watchFields.donorId.split("-")[0]
-                    ) {
-                      return (
-                        <option key={index}>{item.gestationalName}</option>
-                      );
-                    }
-                  })}
-                </select> */}
               </div>
 
               <div className="flex flex-col">
