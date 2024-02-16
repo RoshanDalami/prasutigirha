@@ -40,18 +40,20 @@ export default function AddVolume({ clickedData }) {
   }, []);
 
   useEffect(() => {
-    setValue("_id", clickedData?._id);
-    setValue(
-      "donorId",
-      `${clickedData?.gestationalAge}-${clickedData?.donorId}`
-    );
-    setValue("gestationalAge", clickedData?.gestationalAge);
-    setValue("quantity", clickedData?.quantity);
-
-    setValue("storedBy", clickedData?.storedBy);
-    setValue("temp", clickedData?.temp);
-    setValue("time", clickedData?.time);
-    setDate(clickedData?.date);
+    if(clickedData){
+      setValue("_id", clickedData?._id);
+      setValue(
+        "donorId",
+        `${clickedData?.gestationalAge}-${clickedData?.donorId}`
+      );
+      setValue("gestationalAge", clickedData?.gestationalAge);
+      setValue("quantity", clickedData?.quantity);
+  
+      setValue("storedBy", clickedData?.storedBy);
+      setValue("temp", clickedData?.temp);
+      setValue("time", clickedData?.time);
+      setDate(clickedData?.date);
+    }
   }, [clickedData, setValue]);
 
   useEffect(() => {

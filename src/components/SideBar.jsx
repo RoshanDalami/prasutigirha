@@ -51,6 +51,10 @@ export default function SideBar({ isOpen }) {
   ];
   const milkRequistionList = [
     {
+      link: "/milkRequisation/addBabyDetails",
+      name: "Add Baby Details",
+    },
+    {
       link: "/milkRequisation/addMilkRequisation",
       name: "Add Milk Requisition",
     },

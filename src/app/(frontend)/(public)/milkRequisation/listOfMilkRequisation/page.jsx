@@ -127,7 +127,7 @@ export default function ListVolume() {
                   <td className="py-3 ">ML</td>
                   <td className="py-3 ">Action</td>
                 </tr>
-                {requsitionList?.map((row, index) => {
+                {/* {requsitionList?.map((row, index) => {
                   return (
                     <tr
                       className=" border border-x-gray text-center"
@@ -177,7 +177,7 @@ export default function ListVolume() {
                       </td>
                     </tr>
                   );
-                })}
+                })} */}
               </table>
             </div>
           </TableBorder>

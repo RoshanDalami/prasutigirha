@@ -35,5 +35,7 @@ export const urls = {
   getPooling:`/api/pooling/list`,
   getRequistion:`/api/requsition/list`,
   createBottle:`/api/bottle/create`,
-  getBottle:`/api/bottle/get`
+  getBottle:`/api/bottle/get`,
+  createBaby:`/api/baby/create`,
+  getBaby:`/api/baby/get`
 };
