@@ -1,80 +1,49 @@
-import mongoose , {Schema} from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
-const babyEntrySchema = new Schema({
+const milkRequsitionSchema = new Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    babyId:{
+        type:Schema.Types.ObjectId,
+        ref:"BabyDetail"
+    },
     babyName:{
         type:String,
         required:true
     },
-    dateOfBaby:{
-        type:String,
-        required:[true,'Baby birth date is required']
+    batchNumber: {
+      type: String,
+      required: [true, "Batch number is required"],
     },
-    engDateOfBaby:{
-        type:String,
-        required:[true,'Baby english date is requied']
+    uniqueBottleNumber: {
+      type: String,
+      required: [true, "Unique Bottle Number is required"],
     },
-    gestationalAge:{
-        type:Number,
-        required:[true,'Gestational Age is requied']
+    bottleName: {
+      type: String,
+      required: true,
     },
-    ipNumber:{
-        type: String,
-        required:[true,'Ip number is required']
+    feedingDate: {
+      type: String,
+      required: true,
     },
-    babyWeight:{
-        type:String,
-        required:[true,'Baby weight is required']
+    engFeedingDate: {
+      type: String,
+      required: true,
     },
-    diagnosis:{
-        type:String,
-        required:[true,'Diagnosis recipient is required']
+    quantity: {
+      type: Number,
+      required: true,
     },
-    indications:{
-        type:String,
-        required:[true,"Indications is required"]
-    }
-},{timestamps:true})
+  },
+  { timestamps: true }
+);
 
-const feedingDetailsSchema = new Schema({
-    batchNumber:{
-        type:String,
-        required:[true,'Batch number is required']
-    },
-    uniqueBottleNumber :{
-        type:String,
-        required:[true,'Unique Bottle Number is required']
-    },
-    bottleName:{
-        type:String,
-        required:true
-    },
-    feedingDate:{
-        type:String,
-        required:true
-    },
-    engFeedingDate:{
-        type:String,
-        required:true
-    },
-    quantity:{
-        type:Number,
-        required:true
-    }
-},{timestamps:true})
+const MilkRequsition =
+  mongoose.models.MilkRequsition ||
+  mongoose.model("MilkRequsition", milkRequsitionSchema);
 
-const milkRequsitionSchema = new Schema({
-    userId:{
-        type: Schema.Types.ObjectId,
-        ref:'User'
-    },
-    babyEntry: babyEntrySchema,
-    babyStatus:{
-        type:String,
-        required:true
-    },
-    feedingDetails:feedingDetailsSchema
-},{timestamps:true})
-
-const MilkRequsition = mongoose.models.MilkRequsition || mongoose.model('MilkRequsition',milkRequsitionSchema)
-
-export{MilkRequsition}
+export { MilkRequsition };
