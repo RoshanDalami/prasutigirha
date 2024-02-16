@@ -7,6 +7,37 @@ connect();
 export async function POST(req, res) {
   const body = await req.json();
   try {
+    const { _id } = body;
+
+    if (_id) {
+      const existingDaanDarta = await DaanDarta.findOne({ _id });
+      if (existingDaanDarta) {
+        const updatedData = {
+          ...body,
+          isSerologyPositive:
+            body.serologyRecords.hiv ||
+            body.serologyRecords.hbsag ||
+            body.serologyRecords.vdrl,
+          isDonorActive: !(
+            body.serologyRecords.hiv ||
+            body.serologyRecords.hbsag ||
+            body.serologyRecords.vdrl
+          ),
+          remarks: body.serologyRecords.hiv
+            ? "HIV Positive"
+            : existingDaanDarta.remarks,
+        };
+        const response = await DaanDarta.findOneAndUpdate(
+          { _id },
+          updatedData,
+          {
+            new: true,
+          }
+        );
+        return NextResponse.json(response, { status: 200 });
+      }
+    }
+
     const latestDaanDarta = await DaanDarta.findOne(
       {},
       {},
@@ -22,7 +53,6 @@ export async function POST(req, res) {
     }
 
     let newDaanDarta = new DaanDarta({
-      
       ...body,
       donorRegNo: newDonorRegNo,
     });
