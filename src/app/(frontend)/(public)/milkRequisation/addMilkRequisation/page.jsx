@@ -26,7 +26,7 @@ export default function AddMilkReq({ clickedIdData }) {
     handleSubmit,
     formState: { isSubmitting, errors },
     setValue,
-    watch
+    watch,
   } = useForm();
 
   //gestationalAge
@@ -49,24 +49,23 @@ export default function AddMilkReq({ clickedIdData }) {
     );
   });
 
-const [babyList,setBabyList] = useState([]);
-useEffect(()=>{
-  async function fetchData(){
-    const {status,data} = await axios.get(`${urls.getBaby}`);
-    if(status === 200){
-      setBabyList(data);
+  const [babyList, setBabyList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getBaby}`);
+      if (status === 200) {
+        setBabyList(data);
+      }
     }
-  }
-  fetchData()
-},[])
-  
+    fetchData();
+  }, []);
 
-const watchFields = watch()
+  const watchFields = watch();
   const onSubmit = async (data) => {
     data = {
       ...data,
-      babyId: watchFields.babyId.split('/')[0]  ,
-      babyName: watchFields.babyId.split('/')[1]  ,
+      babyId: watchFields.babyId.split("/")[0],
+      babyName: watchFields.babyId.split("/")[1],
       _id: data?._id,
       userId: userInfo._id,
       feedingDate: feedingDate,
@@ -90,27 +89,30 @@ const watchFields = watch()
         </div> */}
         <form onSubmit={handleSubmit((data) => onSubmit(data))}>
           <FormBorder title={"Milk Requisition Form"}>
-            
             <p className="text-xl font-bold py-6">Feeding Details:</p>
             <div className="grid md:grid-cols-2 grid-cols-1 text-lg gap-4">
               <div className="grid">
                 <label htmlFor="">
-                  Baby  <span className="text-red-600">*</span>
+                  Baby <span className="text-red-600">*</span>
                 </label>
-               <select name="" id="" className="inputStyle" {...register('babyId')} >
-                <option value={''} selected disabled >--Select Baby--</option>
-                {
-                  babyList?.map((item,index)=>{
-                    const combinedValue = `${item._id}/${item.babyName}`
-                    return(
+                <select
+                  name=""
+                  id=""
+                  className="inputStyle"
+                  {...register("babyId")}
+                >
+                  <option value={""} selected disabled>
+                    --Select Baby--
+                  </option>
+                  {babyList?.map((item, index) => {
+                    const combinedValue = `${item._id}/${item.babyName}`;
+                    return (
                       <option key={index} value={combinedValue}>
                         {item.babyName}
                       </option>
-                    )
-                  })
-                }
-               </select>
-               
+                    );
+                  })}
+                </select>
               </div>
               <div className="grid">
                 <label htmlFor="">

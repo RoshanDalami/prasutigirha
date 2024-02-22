@@ -1,4 +1,4 @@
-import { connect } from "@/dbConfig/dbConfig";
+import { connect } from "./../../../../dbConfig/dbConfig";
 import User from "@/Model/user.model";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
@@ -6,7 +6,6 @@ import bcryptjs from "bcryptjs";
 connect();
 
 export async function POST(req, res) {
-
   let userDetail;
   try {
     const { email, password } = await req.json();
@@ -32,7 +31,7 @@ export async function POST(req, res) {
     }
     const token = jwt.sign(
       { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET
     );
 
     const response = NextResponse.json(
@@ -43,7 +42,7 @@ export async function POST(req, res) {
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 ,
+      maxAge: 60 * 60 * 24,
       path: "/",
     });
     return response;

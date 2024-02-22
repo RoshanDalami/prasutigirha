@@ -6,11 +6,11 @@ import {
   IoEyeOutline,
   IoEyeOffOutline,
 } from "react-icons/io5";
-import { urls } from "src/services/apiHelpers";
+import { urls } from "./../../../../services/apiHelpers";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
 const Login = () => {
   const {
     register,
@@ -20,29 +20,28 @@ const Login = () => {
   const [showPw, setShowPw] = useState(false);
   const router = useRouter();
   const onSubmit = async (data) => {
-    data={
+    data = {
       ...data,
-      email:data?.email?.trim()
-    }
-// tets
+      email: data?.email?.trim(),
+    };
+    // tets
     try {
       const response = await axios.post(`${urls.login}`, data);
       if (response.status === 200) {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== "undefined") {
           // Save user information in local storage
-          localStorage.setItem('userInfo', JSON.stringify(response.data));
+          localStorage.setItem("userInfo", JSON.stringify(response.data));
         } else {
           console.error("localStorage is not available in this environment");
         }
         router.push("/");
-        toast.success('Login successfull')
+        toast.success("Login successfull");
         window.location.reload();
-      }else{
-        toast.error('Invalid Credentials')
+      } else {
+        toast.error("Invalid Credentials");
       }
-
     } catch (error) {
-      toast.error('Invalid Credentials')
+      toast.error("Invalid Credentials");
       console.log(error);
     }
   };
