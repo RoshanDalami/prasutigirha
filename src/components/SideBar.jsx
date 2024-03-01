@@ -20,6 +20,7 @@ export default function SideBar() {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
   const pathname = usePathname();
+  console.log(pathname?.split('/'),'response')
   const handleOfficeOpen = () => {
     setShow0((prevState) => !prevState);
     setShow(false);
@@ -55,6 +56,13 @@ export default function SideBar() {
     setShow3(false);
     setShow(false);
   };
+  const handleDashboard = ()=>{
+    setShow4(false);
+    setShow0(false);
+    setShow1(false);
+    setShow3(false);
+    setShow(false);
+  }
   const DonorList = [
     {
       link: "/donorRecord/addDonorRecord",
@@ -108,8 +116,8 @@ export default function SideBar() {
   return (
     <div className="fixed min-h-screen w-60  bg-gray-100  ">
       <div className="mb-4 h-[90vh] overflow-auto">
-        <Link href={"/"}>
-          <div className="flex h-20  w-full items-center justify-center gap-8 bg-gray-100">
+        <Link href={"/"} onClick={handleDashboard}>
+          <div className={`flex h-20  w-full items-center justify-center gap-8 bg-gray-100 ${pathname.split('/')[1] === ''?'bg-[#034A88] font-bold text-white':''}`}>
             <FaTachometerAlt className="text-2xl" />
             <h1 className="text-xl font-normal ">Dashboard</h1>
           </div>
@@ -117,12 +125,12 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className="flex h-20 w-full   items-center justify-around bg-gray-100"
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'office'?'bg-[#034A88] font-bold text-white':''} `}
             onClick={handleOfficeOpen}
           >
             <div className="flex w-full  items-center justify-between">
               <HiMiniBuildingOffice className="ml-3 text-xl" />
-              <h1 className="text-xl">Office</h1>
+              <h1 className={`text-xl `}>Office</h1>
               <IoIosArrowUp
                 className={` font-bold ${show0 ? "" : "rotate-180"} mr-3`}
               />
@@ -148,7 +156,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className="flex h-20 w-full   items-center justify-around bg-gray-100"
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'donorRecord'?'bg-[#034A88] font-bold text-white':''} `}
             onClick={handleDonorOpen}
           >
             <FaUserAlt className="text-xl" />
@@ -177,7 +185,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className="flex h-20 w-full   items-center justify-around bg-gray-100"
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'volumeOfMilk'?'bg-[#034A88] font-bold text-white':''} `}
             onClick={handleVolumeOpen}
           >
             <FaPrescriptionBottle className="text-xl" />
@@ -206,7 +214,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className="flex h-20 w-full   items-center justify-around bg-gray-100"
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'pasteurization'?'bg-[#034A88] font-bold text-white':''} `}
             onClick={handlePoolingOpen}
           >
             <SiProcessingfoundation className="text-xl" />
@@ -236,7 +244,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className="flex h-20 w-full   items-center justify-around bg-gray-100"
+           className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'milkRequisation'?'bg-[#034A88] font-bold text-white':''} `}
             onClick={handleRequisitionOpen}
           >
             <GiBabyBottle className="text-2xl" />
