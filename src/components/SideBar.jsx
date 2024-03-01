@@ -117,7 +117,7 @@ export default function SideBar() {
     <div className="fixed min-h-screen w-60  bg-gray-100  ">
       <div className="mb-4 h-[90vh] overflow-auto">
         <Link href={"/"} onClick={handleDashboard}>
-          <div className={`flex h-20  w-full items-center justify-center gap-8 bg-gray-100 ${pathname.split('/')[1] === ''?'bg-blue-600 font-bold text-white':''}`}>
+          <div className={`flex h-20  w-full items-center justify-center gap-8  ${pathname.split('/')[1] === ''?'bg-blue-600 font-bold text-white':'bg-gray-100'}`}>
             <FaTachometerAlt className="text-2xl" />
             <h1 className="text-xl font-normal ">Dashboard</h1>
           </div>
@@ -125,7 +125,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'office'?'bg-blue-600 font-bold text-white':''} `}
+            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'office'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
             onClick={handleOfficeOpen}
           >
             <div className="flex w-full  items-center justify-between">
@@ -156,7 +156,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'donorRecord'?'bg-blue-600 font-bold text-white':''} `}
+            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'donorRecord'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
             onClick={handleDonorOpen}
           >
             <FaUserAlt className="text-xl" />
@@ -185,7 +185,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'volumeOfMilk'?'bg-blue-600 font-bold text-white':''} `}
+            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'volumeOfMilk'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
             onClick={handleVolumeOpen}
           >
             <FaPrescriptionBottle className="text-xl" />
@@ -214,7 +214,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'pasteurization'?'bg-blue-600  font-bold text-white':''} `}
+            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'pasteurization'?'bg-blue-600  font-bold text-white':'bg-gray-100'} `}
             onClick={handlePoolingOpen}
           >
             <SiProcessingfoundation className="text-xl" />
@@ -244,7 +244,7 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-           className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'milkRequisation'?'bg-blue-600 font-bold text-white':''} `}
+           className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'milkRequisation'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
             onClick={handleRequisitionOpen}
           >
             <GiBabyBottle className="text-2xl" />
