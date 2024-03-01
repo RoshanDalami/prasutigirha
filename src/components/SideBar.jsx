@@ -4,20 +4,65 @@ import Link from "next/link";
 import { IoIosArrowUp } from "react-icons/io";
 import { FaTachometerAlt, FaUserAlt } from "react-icons/fa";
 import { Divider } from "@mui/material";
-import { LuMilk } from "react-icons/lu";
+
 import { GiBabyBottle } from "react-icons/gi";
-import { Transition } from "@headlessui/react";
+
 import { IoMdStarOutline } from "react-icons/io";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 import { FaPrescriptionBottle } from "react-icons/fa6";
 import { SiProcessingfoundation } from "react-icons/si";
-
-export default function SideBar({ isOpen }) {
+import { usePathname } from "next/navigation";
+export default function SideBar() {
   const [show, setShow] = useState(false);
+
   const [show0, setShow0] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
+  const pathname = usePathname();
+  console.log(pathname?.split('/'),'response')
+  const handleOfficeOpen = () => {
+    setShow0((prevState) => !prevState);
+    setShow(false);
+    setShow1(false);
+    setShow3(false);
+    setShow4(false);
+  };
+  const handleDonorOpen = () => {
+    setShow((prevState) => !prevState);
+    setShow0(false);
+    setShow1(false);
+    setShow3(false);
+    setShow4(false);
+  };
+  const handleVolumeOpen = () => {
+    setShow1((prevState) => !prevState);
+    setShow0(false);
+    setShow(false);
+    setShow3(false);
+    setShow4(false);
+  };
+  const handlePoolingOpen = () => {
+    setShow3((prevState) => !prevState);
+    setShow0(false);
+    setShow1(false);
+    setShow(false);
+    setShow4(false);
+  };
+  const handleRequisitionOpen = () => {
+    setShow4((prevState) => !prevState);
+    setShow0(false);
+    setShow1(false);
+    setShow3(false);
+    setShow(false);
+  };
+  const handleDashboard = ()=>{
+    setShow4(false);
+    setShow0(false);
+    setShow1(false);
+    setShow3(false);
+    setShow(false);
+  }
   const DonorList = [
     {
       link: "/donorRecord/addDonorRecord",
@@ -69,10 +114,10 @@ export default function SideBar({ isOpen }) {
     { link: "/office/employee", name: "Employee" },
   ];
   return (
-    <div className="w-60 bg-gray-100 min-h-screen  fixed  ">
-      <div className="h-[90vh] overflow-auto mb-4">
-        <Link href={"/"}>
-          <div className="bg-gray-100 h-20  w-full flex items-center justify-center gap-8">
+    <div className="fixed min-h-screen w-60  bg-gray-100  ">
+      <div className="mb-4 h-[90vh] overflow-auto">
+        <Link href={"/"} onClick={handleDashboard}>
+          <div className={`flex h-20  w-full items-center justify-center gap-8 bg-gray-100 ${pathname.split('/')[1] === ''?'bg-[#034A88] font-bold text-white':''}`}>
             <FaTachometerAlt className="text-2xl" />
             <h1 className="text-xl font-normal ">Dashboard</h1>
           </div>
@@ -80,24 +125,25 @@ export default function SideBar({ isOpen }) {
         <Divider />
         <div>
           <div
-            className="bg-gray-100 h-20 w-full   flex items-center justify-around"
-            onClick={() => setShow0((prevState) => !prevState)}
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'office'?'bg-[#034A88] font-bold text-white':''} `}
+            onClick={handleOfficeOpen}
           >
-            <div className="flex justify-between  w-full items-center">
-              <HiMiniBuildingOffice className="text-xl ml-3" />
-              <h1 className="text-xl">Office</h1>
+            <div className="flex w-full  items-center justify-between">
+              <HiMiniBuildingOffice className="ml-3 text-xl" />
+              <h1 className={`text-xl `}>Office</h1>
               <IoIosArrowUp
                 className={` font-bold ${show0 ? "" : "rotate-180"} mr-3`}
               />
             </div>
           </div>
-
           <div className={`${show0 ? "block" : "hidden"}`}>
             {officeSetupList?.map((item, index) => {
               return (
                 <Link href={item.link} key={index} className="">
-                  <div className="bg-gray-200 h-16 flex gap-2 items-center ">
-                    <IoMdStarOutline className="text-2xl ml-8" />
+                  <div
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                  >
+                    <IoMdStarOutline className="ml-8 text-2xl" />
                     <h1>{item.name}</h1>
                   </div>
                   <Divider />
@@ -106,11 +152,12 @@ export default function SideBar({ isOpen }) {
             })}
           </div>
         </div>
+
         <Divider />
         <div>
           <div
-            className="bg-gray-100 h-20 w-full   flex items-center justify-around"
-            onClick={() => setShow((prevState) => !prevState)}
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'donorRecord'?'bg-[#034A88] font-bold text-white':''} `}
+            onClick={handleDonorOpen}
           >
             <FaUserAlt className="text-xl" />
             <h1 className="text-xl">Donor Record</h1>
@@ -123,8 +170,10 @@ export default function SideBar({ isOpen }) {
             {DonorList?.map((item, index) => {
               return (
                 <Link href={item.link} key={index} className="">
-                  <div className="bg-gray-200 h-16  flex items-center gap-2 ">
-                    <IoMdStarOutline className="text-2xl ml-8" />
+                  <div
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                  >
+                    <IoMdStarOutline className="ml-8 text-2xl" />
                     <h1 className="text-md">{item.name}</h1>
                   </div>
                   <Divider />
@@ -136,8 +185,8 @@ export default function SideBar({ isOpen }) {
         <Divider />
         <div>
           <div
-            className="bg-gray-100 h-20 w-full   flex items-center justify-around"
-            onClick={() => setShow1((prevState) => !prevState)}
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'volumeOfMilk'?'bg-[#034A88] font-bold text-white':''} `}
+            onClick={handleVolumeOpen}
           >
             <FaPrescriptionBottle className="text-xl" />
             <h1 className="text-xl">Volume of Milk</h1>
@@ -150,8 +199,10 @@ export default function SideBar({ isOpen }) {
             {volumeOfMilk?.map((item, index) => {
               return (
                 <Link href={item.link} key={index} className="">
-                  <div className="bg-gray-200 h-16 flex gap-2 items-center  ">
-                    <IoMdStarOutline className="text-2xl ml-8" />
+                  <div
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                  >
+                    <IoMdStarOutline className="ml-8 text-2xl" />
                     <h1>{item.name}</h1>
                   </div>
                   <Divider />
@@ -163,8 +214,8 @@ export default function SideBar({ isOpen }) {
         <Divider />
         <div>
           <div
-            className="bg-gray-100 h-20 w-full   flex items-center justify-around"
-            onClick={() => setShow3((prevState) => !prevState)}
+            className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'pasteurization'?'bg-[#034A88] font-bold text-white':''} `}
+            onClick={handlePoolingOpen}
           >
             <SiProcessingfoundation className="text-xl" />
 
@@ -178,8 +229,10 @@ export default function SideBar({ isOpen }) {
             {pasteuriationList?.map((item, index) => {
               return (
                 <Link href={item.link} key={index} className="">
-                  <div className="bg-gray-200 h-16 flex items-center gap-2 ">
-                    <IoMdStarOutline className="text-2xl ml-6" />
+                  <div
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                  >
+                    <IoMdStarOutline className="ml-6 text-2xl" />
                     <h1>{item.name}</h1>
                   </div>
                   <Divider />
@@ -191,8 +244,8 @@ export default function SideBar({ isOpen }) {
         <Divider />
         <div>
           <div
-            className="bg-gray-100 h-20 w-full   flex items-center justify-around"
-            onClick={() => setShow4((prevState) => !prevState)}
+           className={`flex h-20 w-full   items-center justify-around bg-gray-100 ${pathname.split('/')[1] === 'milkRequisation'?'bg-[#034A88] font-bold text-white':''} `}
+            onClick={handleRequisitionOpen}
           >
             <GiBabyBottle className="text-2xl" />
             <h1 className="text-xl">Milk Requistion </h1>
@@ -205,8 +258,10 @@ export default function SideBar({ isOpen }) {
             {milkRequistionList?.map((item, index) => {
               return (
                 <Link href={item.link} key={index} className="">
-                  <div className="bg-gray-200 h-16 flex items-center gap-2 ">
-                    <IoMdStarOutline className="text-2xl ml-6" />
+                  <div
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                  >
+                    <IoMdStarOutline className="ml-6 text-2xl" />
                     <h1>{item.name}</h1>
                   </div>
                   <Divider />
