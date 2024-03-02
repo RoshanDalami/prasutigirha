@@ -1,5 +1,27 @@
 import mongoose, { Schema } from "mongoose";
 
+const collectedMilk = new Schema(
+  {
+    time: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    temp: {
+      type: Number,
+      required: true,
+    },
+    storedBy: {
+      type: String,
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
 const volumeOfMilkSchema = new Schema(
   {
     userId: {
@@ -26,26 +48,15 @@ const volumeOfMilkSchema = new Schema(
       type: String,
       required: true,
     },
-    time: {
-      type: String,
-      required: true,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-    },
-    storedBy: {
-      type: String,
-      required: true,
-    },
-    temp: {
-      type: Number,
-      required: true,
-    },
     remaining: {
       type: Number,
       required: true,
     },
+    totalMilkCollected:{
+      type:Number,
+      required:true
+    },
+    collectedMilk:[collectedMilk]
   },
   { timestamps: true }
 );

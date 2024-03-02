@@ -20,7 +20,7 @@ export default function SideBar() {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
   const pathname = usePathname();
-  console.log(pathname?.split('/'),'response')
+
   const handleOfficeOpen = () => {
     setShow0((prevState) => !prevState);
     setShow(false);

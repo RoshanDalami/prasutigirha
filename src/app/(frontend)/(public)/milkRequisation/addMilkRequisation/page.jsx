@@ -28,10 +28,14 @@ export default function AddMilkReq({ clickedIdData }) {
     setValue,
     control,
     watch,
-  } = useForm();
+  } = useForm({
+    defaultValues:{
+      requisitedMilk:[{batchNumber:'',uniqueBottleNumber:'',bottleName:'',quantity:''}]
+    }
+  });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "test",
+    name: "requisitedMilk",
   });
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
@@ -86,7 +90,7 @@ export default function AddMilkReq({ clickedIdData }) {
   };
   function handleAppend(e) {
     e.preventDefault();
-    append({});
+    append({batchNumber:'',uniqueBottleNumber:'',bottleName:'',quantity:''});
   }
 
   return (
@@ -102,7 +106,8 @@ export default function AddMilkReq({ clickedIdData }) {
               <div className="font-bold text-lg flex justify-end">
                 <button
                   className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                  onClick={handleAppend}
+                  onClick={(e)=>{e.preventDefault();
+                    append({batchNumber:'',uniqueBottleNumber:'',bottleName:'',quantity:''});}}
                 >
                   Add More +
                 </button>
@@ -143,81 +148,12 @@ export default function AddMilkReq({ clickedIdData }) {
                   options={{ calenderLocale: "ne", valueLocale: "en" }}
                   className="inputStyle"
                 />
-              </div>
-              <div className="grid">
-                <label htmlFor="">
-                  Batch Number <span className="text-red-600">*</span>
-                </label>
-                <input
-                  type="Number"
-                  className="inputStyle"
-                  placeholder="Enter Batch Number"
-                  {...register("batchNumber", {
-                    required: "Batch number is required",
-                  })}
-                />
-                {errors?.batchNumber && (
-                  <p className="errorMessages">{errors.batchNumber.message}</p>
-                )}
-              </div>
-              <div className="grid">
-                <label htmlFor="">
-                  Unique Bottle Number
-                  <span className="text-red-600">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="inputStyle"
-                  placeholder="Enter Unique Bottle Number"
-                  {...register("uniqueBottleNumber", {
-                    required: "Bottle number is required",
-                  })}
-                />
-                {errors?.uniqueBottleNumber && (
-                  <p className="errorMessages">
-                    {errors.uniqueBottleNumber.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="flex flex-col">
-                <label htmlFor="">
-                  Bottle Name<span className="text-red-600">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="inputStyle"
-                  placeholder="Enter Bottle Name"
-                  {...register("bottleName", {
-                    required: "Bottle name is required",
-                  })}
-                />
-                {errors?.bottleName && (
-                  <p className="errorMessages">{errors.bottleName.message}</p>
-                )}
-              </div>
-
-              <div className="flex flex-col">
-                <label htmlFor="">
-                  ML<span className="text-red-600">*</span>
-                </label>
-                <input
-                  type="number"
-                  className="inputStyle"
-                  placeholder="Enter ML"
-                  {...register("quantity", {
-                    required: "Quantity is required",
-                  })}
-                />
-                {errors?.quantity && (
-                  <p className="errorMessages">{errors.quantity.message}</p>
-                )}
-              </div>
+              </div> 
             </div>
-            {fields.map((items, index) => {
+            {fields.map((field, index) => {
               return (
                 <div
-                  key={items.id}
+                  key={field.id}
                   className="grid md:grid-cols-2 grid-cols-1 text-lg gap-4 pt-4"
                 >
                   <div className="grid">
@@ -228,7 +164,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       type="Number"
                       className="inputStyle"
                       placeholder="Enter Batch Number"
-                      {...register(`test.${index}.batchNumber`, {
+                      {...register(`requisitedMilk.${index}.batchNumber`, {
                         required: "Batch number is required",
                       })}
                     />
@@ -247,7 +183,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       type="text"
                       className="inputStyle"
                       placeholder="Enter Unique Bottle Number"
-                      {...register(`test.${index}.uniqueBottleNumber`, {
+                      {...register(`requisitedMilk.${index}.uniqueBottleNumber`, {
                         required: "Bottle number is required",
                       })}
                     />
@@ -266,7 +202,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       type="text"
                       className="inputStyle"
                       placeholder="Enter Bottle Name"
-                      {...register(`test.${index}.bottleName`, {
+                      {...register(`requisitedMilk.${index}.bottleName`, {
                         required: "Bottle name is required",
                       })}
                     />
@@ -285,7 +221,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       type="number"
                       className="inputStyle"
                       placeholder="Enter ML"
-                      {...register(`test.${index}.quantity`, {
+                      {...register(`requisitedMilk.${index}.quantity`, {
                         required: "Quantity is required",
                       })}
                     />
@@ -294,6 +230,8 @@ export default function AddMilkReq({ clickedIdData }) {
                     )}
                   </div>
                   <div></div>
+                  {
+                    fields.length > 1 && 
                   <div className="font-bold text-lg flex justify-end">
                     <button
                       className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
@@ -302,6 +240,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       Remove
                     </button>
                   </div>
+                  }
                 </div>
               );
             })}

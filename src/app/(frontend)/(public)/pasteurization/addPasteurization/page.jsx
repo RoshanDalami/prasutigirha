@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 const aa = new BikramSambat(new Date()).toBS();
 
 export default function AddPasteurization({ clickedIdData }) {
-  console.log(clickedIdData, "response");
+  
   const userInfo =
     typeof localStorage !== "undefined"
       ? JSON.parse(localStorage.getItem("userInfo"))
@@ -114,7 +114,7 @@ export default function AddPasteurization({ clickedIdData }) {
   const [donorList, setDonorList] = useState([]);
 
   useEffect(() => {
-    if (watchFields?.gestationalAge !== 0) {
+    if (watchFields?.gestationalAge) {
       async function fetchData() {
         const { status, data } =
           watchFields?.gestationalAge != 4
@@ -224,10 +224,7 @@ export default function AddPasteurization({ clickedIdData }) {
               )}
 
               {fields.map((field, index) => {
-                const watchInput = watch(
-                  `donorDetailsForPooling.${index}.volumeOfMilkPooled`
-                );
-
+                
                 return (
                   <div
                     key={field.id}

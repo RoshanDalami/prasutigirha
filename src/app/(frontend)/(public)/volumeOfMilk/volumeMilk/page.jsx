@@ -120,8 +120,8 @@ export default function ListVolume() {
                   <td className="py-3">Gestational Age</td>
                   {/* <td className="py-3">Contact</td> */}
                   <td className="py-3">Date</td>
-                  <td className="py-3">Time</td>
-                  <td className="py-3">ML</td>
+                  {/* <td className="py-3">Time</td> */}
+                  <td className="py-3">Total Volume</td>
                   <td className="py-3">Action</td>
                 </tr>
 
@@ -147,8 +147,8 @@ export default function ListVolume() {
                       })}
                       {/* <td className="py-3">{item.donorId.contactNo}</td> */}
                       <td className="py-3">{item.date}</td>
-                      <td className="py-3">{item.time}</td>
-                      <td className="py-3">{item.quantity} ml</td>
+                      {/* <td className="py-3">{item.time}</td> */}
+                      <td className="py-3">{item.totalMilkCollected} ml</td>
                       <td className="py-3">
                         <div className="flex justify-evenly text-xl">
                           <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">

@@ -22,10 +22,14 @@ export default function AddVolume({ clickedData }) {
     setValue,
     control,
     formState: { isSubmitting, errors },
-  } = useForm();
+  } = useForm({
+    defaultValues:{
+      collectedMilk:[{time:"",quantity:0,temp:"",storedBy:''}]
+    }
+  });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "test",
+    name: "collectedMilk",
   });
   const router = useRouter();
   const watchFields = watch();
@@ -93,6 +97,7 @@ export default function AddVolume({ clickedData }) {
       date,
       engDate,
     };
+   
     try {
       const response = await axios.post(`${urls.createVolumeOfMilk}`, data);
       if (response.status === 200) {
@@ -105,7 +110,7 @@ export default function AddVolume({ clickedData }) {
   //Nepali Date
   function handleAppend(e) {
     e.preventDefault();
-    append({});
+    append({time:"",quantity:0,temp:"",storedBy:''});
   }
   return (
     <>
@@ -118,7 +123,8 @@ export default function AddVolume({ clickedData }) {
             <div className="font-bold text-lg flex justify-end">
               <button
                 className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                onClick={handleAppend}
+                onClick={(e)=>{e.preventDefault();
+                  append({time:"",quantity:0,temp:"",storedBy:''});}}
               >
                 Add More +
               </button>
@@ -137,7 +143,7 @@ export default function AddVolume({ clickedData }) {
                     --Select Donor--
                   </option>
                   {donorList?.map((item, index) => {
-                    const combinedValue = `${item.gestationalAge}-${item._id}`;
+                    const combinedValue = `${item.gestationalAge}-${item._id}-${item.donorName}`;
                     return (
                       <option
                         key={index}
@@ -188,73 +194,12 @@ export default function AddVolume({ clickedData }) {
                   className="inputStyle"
                 />
               </div>
-              <div className="flex flex-col">
-                <label className="text-lg">
-                  Time
-                  <span className="text-lg text-red-600">*</span>
-                </label>
-                <input
-                  className="inputStyle"
-                  type="time"
-                  placeholder="."
-                  {...register("time", { required: "Time is required" })}
-                />
-                {errors?.time && (
-                  <p className="errorMessages">{errors?.time?.message}</p>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <label className="text-lg">
-                  ML
-                  <span className="text-lg text-red-600">*</span>
-                </label>
-                <input
-                  className="inputStyle"
-                  type="number"
-                  placeholder="."
-                  {...register("quantity", { required: "Volume required" })}
-                />
-                {errors?.quantity && (
-                  <p className="errorMessages">{errors?.quantity?.message}</p>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <label className="text-lg">
-                  Temperature
-                  <span className="text-lg text-red-600">*</span>
-                </label>
-                <input
-                  className="inputStyle"
-                  type="Number"
-                  placeholder=""
-                  {...register("temp", { required: "Temperature is required" })}
-                />
-                {errors?.temp && (
-                  <p className="errorMessages">{errors?.temp?.message}</p>
-                )}
-              </div>
-              <div className="flex flex-col">
-                <label className="text-lg">
-                  Store By
-                  <span className="text-lg text-red-600">*</span>
-                </label>
-                <input
-                  className="inputStyle"
-                  type="text"
-                  placeholder="."
-                  {...register("storedBy", {
-                    required: "This field is required",
-                  })}
-                />
-                {errors?.storedBy && (
-                  <p className="errorMessages">{errors?.storedBy?.message}</p>
-                )}
-              </div>
+              
             </div>
-            {fields.map((items, index) => {
+            {fields.map((field, index) => {
               return (
                 <div
-                  key={items.id}
+                  key={field.id}
                   className="grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-2"
                 >
                   <div className="flex flex-col">
@@ -266,7 +211,7 @@ export default function AddVolume({ clickedData }) {
                       className="inputStyle"
                       type="time"
                       placeholder="."
-                      {...register(`test.${index}.time`, {
+                      {...register(`collectedMilk.${index}.time`, {
                         required: "Time is required",
                       })}
                     />
@@ -283,7 +228,7 @@ export default function AddVolume({ clickedData }) {
                       className="inputStyle"
                       type="number"
                       placeholder="."
-                      {...register(`test.${index}.quantity`, {
+                      {...register(`collectedMilk.${index}.quantity`, {
                         required: "Volume required",
                       })}
                     />
@@ -302,7 +247,7 @@ export default function AddVolume({ clickedData }) {
                       className="inputStyle"
                       type="Number"
                       placeholder=""
-                      {...register(`test.${index}.temp`, {
+                      {...register(`collectedMilk.${index}.temp`, {
                         required: "Temperature is required",
                       })}
                     />
@@ -311,25 +256,27 @@ export default function AddVolume({ clickedData }) {
                     )}
                   </div>
                   <div className="flex flex-col">
-                    <label className="text-lg">
-                      Store By
-                      <span className="text-lg text-red-600">*</span>
-                    </label>
-                    <input
-                      className="inputStyle"
-                      type="text"
-                      placeholder="."
-                      {...register(`test.${index}.storedBy`, {
-                        required: "This field is required",
-                      })}
-                    />
-                    {errors?.storedBy && (
-                      <p className="errorMessages">
-                        {errors?.storedBy?.message}
-                      </p>
-                    )}
-                  </div>
-                  <div></div>
+                <label className="text-lg">
+                  Store By
+                  <span className="text-lg text-red-600">*</span>
+                </label>
+                <input
+                  className="inputStyle"
+                  type="text"
+                  placeholder="."
+                  {...register(`collectedMilk.${index}.storedBy`, {
+                    required: "This field is required",
+                  })}
+                />
+                {errors?.storedBy && (
+                  <p className="errorMessages">{errors?.storedBy?.message}</p>
+                )}
+              </div>
+                <div>
+                    
+                </div>
+                {
+                  fields.length > 1 && 
                   <div className="font-bold text-lg flex justify-end">
                     <button
                       className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
@@ -338,6 +285,7 @@ export default function AddVolume({ clickedData }) {
                       Remove
                     </button>
                   </div>
+                }
                 </div>
               );
             })}
