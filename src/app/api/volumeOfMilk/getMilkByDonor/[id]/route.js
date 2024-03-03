@@ -12,8 +12,17 @@ export async function GET(req, { params }) {
 
     const modeOfDelivery = await Delivery.find({});
     const modeName = modeOfDelivery.filter((item)=> item.deliveryId === individual?.modeOfDelivery )?.[0]?.deliveryName
-    console.log(modeName)
-    // console.log(individual)
+    if(response.length <= 0){
+      donorDetails={
+        donorRegNo:individual?.donorRegNo,
+        donorName:individual?.donorName,
+        donorAge:individual?.donorAge,
+        address:individual?.address,
+        contactNo:individual?.contactNo,
+        modeOfDelivery:modeName,
+        donotedMilkList:[]
+      }
+    }
     response.forEach((items) => {
        const array =  items.collectedMilk.map((item) => {
         return {...item._doc,date:items.date }

@@ -50,6 +50,7 @@ export default function ListVolume() {
       } 
     }
   }
+
   return (
     <>
       <div>
@@ -101,54 +102,29 @@ export default function ListVolume() {
                   </td> */}
                   <td className="py-3 ">S.N</td>
                   <td className="py-3 ">
-                    Baby <br /> Name
+                    Baby  Name
                   </td>
-                  <td className="py-3 ">
-                    Date of <br /> Birth
-                  </td>
-                  <td className="py-3 ">
-                    Gestation <br /> Age
-                  </td>
-                  <td className="py-3 ">
-                    Birth <br /> Weight
-                  </td>
-                  <td className="py-3 ">
-                    Baby <br /> Status
-                  </td>
-                  <td className="py-3 ">
-                    Bottle <br /> Name
-                  </td>
-                  <td className="py-3 ">
-                    Date of <br /> Bottle
-                  </td>
-
-                  <td className="py-3 ">ML</td>
+                  <td className="py-3">Feeding Date</td>
+                  <td className="py-3">Total Milk Feeded</td>
+                  <td className="py-3">No. of Bottle</td>
                   <td className="py-3 ">Action</td>
                 </tr>
-                {/* {requsitionList?.map((row, index) => {
+                {requsitionList?.map((row, index) => {
                   return (
                     <tr
                       className=" border border-x-gray text-center"
                       key={index}
                     >
                       <td className="py-3">{index + 1}</td>
-                      <td className="py-3">{row?.babyEntry?.babyName}</td>
-                      <td className="py-3">{row?.babyEntry?.dateOfBaby}</td>
-                      {gestationalAgeList?.map((item, index) => {
-                        if (item.gestationalId === row.babyEntry?.gestationalAge) {
-                          return (
-                            <td className="py-3" key={index}>
-                              {item.gestationalName}
-                            </td>
-                          );
-                        }
-                      })}
-                      <td className="py-3">{row?.babyEntry?.babyWeight} grams</td>
-                      <td className="py-3">{row?.babyStatus}</td>
-                      <td className="py-3">{row?.feedingDetails?.bottleName}</td>
-                      <td className="py-3">{row?.feedingDetails?.feedingDate}</td>
-                      <td className="py-3">{row.feedingDetails.quantity}{" "} ml</td>
-
+                      <td className="py-3">{row?.babyName}</td>
+                      <td className="py-3">{row?.feedingDate}</td>
+                      
+                      <td className="py-3">{
+                        row.requisitedMilk.map((item)=>{
+                          return item.quantity
+                        }).reduce((acc,amount)=> acc+amount,0)
+                      }</td>
+                      <td className="py-3">{row.requisitedMilk.length}</td>
                       <td className="py-3 ">
                         <div className="flex justify-evenly items-center text-xl">
                           <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
@@ -166,7 +142,7 @@ export default function ListVolume() {
                       </td>
                     </tr>
                   );
-                })} */}
+                })}
               </table>
             </div>
           </TableBorder>

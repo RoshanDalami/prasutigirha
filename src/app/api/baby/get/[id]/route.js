@@ -8,11 +8,20 @@ export async function GET(req,{params}){
     let babyList = {}
     const feedList = []
     try {
-        const response = await MilkRequsition.find({babyId:id});
         const individual = await BabyDetail.findOne({_id:id});
+        const response = await MilkRequsition.find({babyId:id});
         const gestational = await Gestational.find({});
-
         const gestationalName = gestational.filter((item)=>item.gestationalId === individual?.gestationalAge)?.[0]?.gestationalName
+        if(response.length <= 0){
+            babyList = {
+                babyName:individual?.babyName,
+                dateOfBaby:individual?.dateOfBaby,
+                engDateOfBaby:individual?.engDateOfBaby,
+                gestationalAge:gestationalName,
+                babyWeight:individual?.babyWeight,
+                milkComsumedDetail:[]
+            }
+        }
         response.forEach((items)=>{
             const array = items.requisitedMilk.map((item,index)=>{
                 return {...item._doc,feedingDate:items.feedingDate}
