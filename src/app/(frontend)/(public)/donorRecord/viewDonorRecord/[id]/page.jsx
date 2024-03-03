@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import TableBorder from "src/components/TableDesign";
 import { urls } from "src/services/apiHelpers";
 export default function Details() {
-  const [donorDetails, setDonorDetails] = useState([]);
+  const [donorDetails, setDonorDetails] = useState({});
   const { id } = useParams();
   useEffect(() => {
     async function fetchData() {
@@ -21,35 +21,25 @@ export default function Details() {
   console.log(donorDetails, "donordetails");
   return (
     <div className=" px-10 pt-10 ">
-      <div className="flex  justify-around">
-        <div className="font-bold text-lg leading-9">
-          <p className="font-bold text-lg">
-            Donor Name : <span></span>
-          </p>
-          <p className="font-bold text-lg"> 
-            Donor Age : <span></span>
-          </p>
-          <p>
-            Address : <span></span>
-          </p>
-          <p>
-            Mode of Delivery : <span></span>
-          </p>
-        </div>
-        <div className="font-bold text-lg leading-9">
-          <p>
-            Baby Name : <span></span>
-          </p>
-          <p>
-            Date of Birth : <span></span>
-          </p>
-          <p>
-            Gestational Age : <span></span>
-          </p>
-          <p>
-            Baby Weight : <span></span>
-          </p>
-        </div>
+      <div className="grid grid-cols-4  text-lg leading-9">
+        <p className="  text-lg">
+          Donor Name :{" "}
+          <span className="font-bold">{donorDetails?.donorName}</span>
+        </p>
+        <p className=" text-lg">
+          Reg No : <span className="font-bold">{donorDetails?.donorRegNo}</span>
+        </p>
+        <p className=" text-lg">
+          Donor Age :{" "}
+          <span className="font-bold">{donorDetails?.donorAge}</span>
+        </p>
+        <p>
+          Address : <span className="font-bold">{donorDetails?.address}</span>
+        </p>
+        <p>
+          Mode of Delivery :{" "}
+          <span className="font-bold">{donorDetails?.modeOfDelivery}</span>
+        </p>
       </div>
       <TableBorder title={"Donor Details"}>
         <div>
@@ -65,7 +55,7 @@ export default function Details() {
               </tr>
             </thead>
             <tbody>
-              {donorDetails?.map((items, index) => {
+              {donorDetails?.donotedMilkList?.map((items, index) => {
                 return (
                   <tr key={index} className="border border-x-gray text-center">
                     <td className="py-3">{index + 1}</td>
