@@ -4,13 +4,21 @@ import { connect } from "src/dbConfig/dbConfig";
 connect();
 export async function POST(req, res) {
   const body = await req.json();
+  
+  const quantityArray = body.collectedMilk.map((item,index)=>{
+    return(
+      parseInt(item.quantity)
+    )
+  })
+  const remaining = quantityArray.reduce((acc,value)=>acc+value,0)
+  
   try {
     const isNewDocument = !body._id;
     const newMilkVolume = isNewDocument
-      ? new MilkVolume({ ...body, remaining: body.quantity })
+      ? new MilkVolume({ ...body,remaining:remaining,totalMilkCollected:remaining })
       : await MilkVolume.findByIdAndUpdate(
           body._id,
-          { ...body, remaining: body.quantity },
+          { ...body,remaining:remaining,totalMilkCollected:remaining},
           { new: true }
         );
     const savedMilkVolume = await newMilkVolume.save();

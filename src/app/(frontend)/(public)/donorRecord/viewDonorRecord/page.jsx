@@ -15,6 +15,7 @@ export default function ViewDonor() {
     ssr: false,
   });
   const router = useRouter();
+
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -32,6 +33,12 @@ export default function ViewDonor() {
     },
     [router]
   );
+  const handleDetail = useCallback(
+    (id) => {
+      router.push(`/donorRecord/viewDonorRecord/${id}`);
+    },
+    [router]
+  );
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(`${urls.getDonor}/${id}`);
@@ -46,6 +53,7 @@ export default function ViewDonor() {
       console.error("Error deleteing:", error);
     }
   };
+
   return (
     <>
       <div>
@@ -118,19 +126,25 @@ export default function ViewDonor() {
                       <td className="py-3">{item.contactNo}</td>
                       <td className="py-3">
                         <div className="flex justify-evenly text-xl">
-                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600" >
-
-                          <PencilSquareIcon
-                            className="h-6 w-6 text-white"
-                            onClick={() => handleEdit(item._id)}
-                          />
+                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
+                            <PencilSquareIcon
+                              className="h-6 w-6 text-white"
+                              onClick={() => handleEdit(item._id)}
+                            />
                           </div>
                           <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
-
-                          <TrashIcon
-                            className="h-6 w-6 text-white"
-                            onClick={() => handleDelete(item._id)}
-                          />
+                            <TrashIcon
+                              className="h-6 w-6 text-white"
+                              onClick={() => handleDelete(item._id)}
+                            />
+                          </div>
+                          <div>
+                            <h1
+                              className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                              onClick={() => handleDetail(item._id)}
+                            >
+                              Details
+                            </h1>
                           </div>
                         </div>
                       </td>

@@ -20,7 +20,7 @@ export default function SideBar() {
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
   const pathname = usePathname();
-  console.log(pathname?.split('/'),'response')
+
   const handleOfficeOpen = () => {
     setShow0((prevState) => !prevState);
     setShow(false);
@@ -56,13 +56,13 @@ export default function SideBar() {
     setShow3(false);
     setShow(false);
   };
-  const handleDashboard = ()=>{
+  const handleDashboard = () => {
     setShow4(false);
     setShow0(false);
     setShow1(false);
     setShow3(false);
     setShow(false);
-  }
+  };
   const DonorList = [
     {
       link: "/donorRecord/addDonorRecord",
@@ -100,6 +100,10 @@ export default function SideBar() {
       name: "Add Baby Details",
     },
     {
+      link: "/milkRequisation/babyDetails",
+      name: "Baby Detail",
+    },
+    {
       link: "/milkRequisation/addMilkRequisation",
       name: "Add Milk Requisition",
     },
@@ -107,6 +111,7 @@ export default function SideBar() {
       link: "/milkRequisation/listOfMilkRequisation",
       name: "List of Milk Requisition",
     },
+    
   ];
   const officeSetupList = [
     { link: "/office/officeSetup", name: "Office" },
@@ -117,7 +122,13 @@ export default function SideBar() {
     <div className="fixed min-h-screen w-60  bg-gray-100  ">
       <div className="mb-4 h-[90vh] overflow-auto">
         <Link href={"/"} onClick={handleDashboard}>
-          <div className={`flex h-20  w-full items-center justify-center gap-8  ${pathname.split('/')[1] === ''?'bg-blue-600 font-bold text-white':'bg-gray-100'}`}>
+          <div
+            className={`flex h-20  w-full items-center justify-center gap-8  ${
+              pathname.split("/")[1] === ""
+                ? "bg-blue-600 font-bold text-white"
+                : "bg-gray-100"
+            }`}
+          >
             <FaTachometerAlt className="text-2xl" />
             <h1 className="text-xl font-normal ">Dashboard</h1>
           </div>
@@ -125,7 +136,11 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'office'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
+            className={`flex h-20 w-full   items-center justify-around  ${
+              pathname.split("/")[1] === "office"
+                ? "bg-blue-600 font-bold text-white"
+                : "bg-gray-100"
+            } `}
             onClick={handleOfficeOpen}
           >
             <div className="flex w-full  items-center justify-between">
@@ -141,7 +156,11 @@ export default function SideBar() {
               return (
                 <Link href={item.link} key={index} className="">
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                      pathname === item.link
+                        ? "bg-red-600 font-bold text-white"
+                        : ""
+                    } `}
                   >
                     <IoMdStarOutline className="ml-8 text-2xl" />
                     <h1>{item.name}</h1>
@@ -156,7 +175,11 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'donorRecord'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
+            className={`flex h-20 w-full   items-center justify-around  ${
+              pathname.split("/")[1] === "donorRecord"
+                ? "bg-blue-600 font-bold text-white"
+                : "bg-gray-100"
+            } `}
             onClick={handleDonorOpen}
           >
             <FaUserAlt className="text-xl" />
@@ -171,7 +194,11 @@ export default function SideBar() {
               return (
                 <Link href={item.link} key={index} className="">
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                      pathname === item.link
+                        ? "bg-red-600 font-bold text-white"
+                        : ""
+                    } `}
                   >
                     <IoMdStarOutline className="ml-8 text-2xl" />
                     <h1 className="text-md">{item.name}</h1>
@@ -185,7 +212,11 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'volumeOfMilk'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
+            className={`flex h-20 w-full   items-center justify-around  ${
+              pathname.split("/")[1] === "volumeOfMilk"
+                ? "bg-blue-600 font-bold text-white"
+                : "bg-gray-100"
+            } `}
             onClick={handleVolumeOpen}
           >
             <FaPrescriptionBottle className="text-xl" />
@@ -200,7 +231,11 @@ export default function SideBar() {
               return (
                 <Link href={item.link} key={index} className="">
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                      pathname === item.link
+                        ? "bg-red-600 font-bold text-white"
+                        : ""
+                    } `}
                   >
                     <IoMdStarOutline className="ml-8 text-2xl" />
                     <h1>{item.name}</h1>
@@ -214,7 +249,11 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-            className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'pasteurization'?'bg-blue-600  font-bold text-white':'bg-gray-100'} `}
+            className={`flex h-20 w-full   items-center justify-around  ${
+              pathname.split("/")[1] === "pasteurization"
+                ? "bg-blue-600  font-bold text-white"
+                : "bg-gray-100"
+            } `}
             onClick={handlePoolingOpen}
           >
             <SiProcessingfoundation className="text-xl" />
@@ -230,7 +269,11 @@ export default function SideBar() {
               return (
                 <Link href={item.link} key={index} className="">
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                      pathname === item.link
+                        ? "bg-red-600 font-bold text-white"
+                        : ""
+                    } `}
                   >
                     <IoMdStarOutline className="ml-6 text-2xl" />
                     <h1>{item.name}</h1>
@@ -244,7 +287,11 @@ export default function SideBar() {
         <Divider />
         <div>
           <div
-           className={`flex h-20 w-full   items-center justify-around  ${pathname.split('/')[1] === 'milkRequisation'?'bg-blue-600 font-bold text-white':'bg-gray-100'} `}
+            className={`flex h-20 w-full   items-center justify-around  ${
+              pathname.split("/")[1] === "milkRequisation"
+                ? "bg-blue-600 font-bold text-white"
+                : "bg-gray-100"
+            } `}
             onClick={handleRequisitionOpen}
           >
             <GiBabyBottle className="text-2xl" />
@@ -259,7 +306,11 @@ export default function SideBar() {
               return (
                 <Link href={item.link} key={index} className="">
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${pathname === item.link ? "bg-red-600 font-bold text-white" : ""} `}
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                      pathname === item.link
+                        ? "bg-red-600 font-bold text-white"
+                        : ""
+                    } `}
                   >
                     <IoMdStarOutline className="ml-6 text-2xl" />
                     <h1>{item.name}</h1>

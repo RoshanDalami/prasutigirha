@@ -1,5 +1,24 @@
 import mongoose, { Schema } from "mongoose";
 
+const requisitedMilk = new Schema({
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  batchNumber: {
+    type: String,
+    required: [true, "Batch number is required"],
+  },
+  uniqueBottleNumber: {
+    type: String,
+    required: [true, "Unique Bottle Number is required"],
+  },
+  bottleName: {
+    type: String,
+    required: true,
+  },
+},{timestamps:true})
+
 const milkRequsitionSchema = new Schema(
   {
     userId: {
@@ -14,18 +33,7 @@ const milkRequsitionSchema = new Schema(
         type:String,
         required:true
     },
-    batchNumber: {
-      type: String,
-      required: [true, "Batch number is required"],
-    },
-    uniqueBottleNumber: {
-      type: String,
-      required: [true, "Unique Bottle Number is required"],
-    },
-    bottleName: {
-      type: String,
-      required: true,
-    },
+    
     feedingDate: {
       type: String,
       required: true,
@@ -34,10 +42,7 @@ const milkRequsitionSchema = new Schema(
       type: String,
       required: true,
     },
-    quantity: {
-      type: Number,
-      required: true,
-    },
+    requisitedMilk:[requisitedMilk]
   },
   { timestamps: true }
 );
