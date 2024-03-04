@@ -29,9 +29,16 @@ export default function AddMilkReq({ clickedIdData }) {
     control,
     watch,
   } = useForm({
-    defaultValues:{
-      requisitedMilk:[{batchNumber:'',uniqueBottleNumber:'',bottleName:'',quantity:''}]
-    }
+    defaultValues: {
+      requisitedMilk: [
+        {
+          batchNumber: "",
+          uniqueBottleNumber: "",
+          bottleName: "",
+          quantity: "",
+        },
+      ],
+    },
   });
   const { fields, append, remove } = useFieldArray({
     control,
@@ -90,7 +97,12 @@ export default function AddMilkReq({ clickedIdData }) {
   };
   function handleAppend(e) {
     e.preventDefault();
-    append({batchNumber:'',uniqueBottleNumber:'',bottleName:'',quantity:''});
+    append({
+      batchNumber: "",
+      uniqueBottleNumber: "",
+      bottleName: "",
+      quantity: "",
+    });
   }
 
   return (
@@ -106,8 +118,15 @@ export default function AddMilkReq({ clickedIdData }) {
               <div className="font-bold text-lg flex justify-end">
                 <button
                   className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                  onClick={(e)=>{e.preventDefault();
-                    append({batchNumber:'',uniqueBottleNumber:'',bottleName:'',quantity:''});}}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    append({
+                      batchNumber: "",
+                      uniqueBottleNumber: "",
+                      bottleName: "",
+                      quantity: "",
+                    });
+                  }}
                 >
                   Add More +
                 </button>
@@ -145,10 +164,10 @@ export default function AddMilkReq({ clickedIdData }) {
                   inputClassName="form-control  focus:outline-none"
                   value={feedingDate}
                   onChange={(e) => setFeedingDate(e)}
-                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  options={{ calenderLocale: "en", valueLocale: "en" }}
                   className="inputStyle"
                 />
-              </div> 
+              </div>
             </div>
             {fields.map((field, index) => {
               return (
@@ -183,9 +202,12 @@ export default function AddMilkReq({ clickedIdData }) {
                       type="text"
                       className="inputStyle"
                       placeholder="Enter Unique Bottle Number"
-                      {...register(`requisitedMilk.${index}.uniqueBottleNumber`, {
-                        required: "Bottle number is required",
-                      })}
+                      {...register(
+                        `requisitedMilk.${index}.uniqueBottleNumber`,
+                        {
+                          required: "Bottle number is required",
+                        }
+                      )}
                     />
                     {errors?.uniqueBottleNumber && (
                       <p className="errorMessages">
@@ -230,17 +252,16 @@ export default function AddMilkReq({ clickedIdData }) {
                     )}
                   </div>
                   <div></div>
-                  {
-                    fields.length > 1 && 
-                  <div className="font-bold text-lg flex justify-end">
-                    <button
-                      className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                      onClick={() => remove(index)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                  }
+                  {fields.length > 1 && (
+                    <div className="font-bold text-lg flex justify-end">
+                      <button
+                        className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
+                        onClick={() => remove(index)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}

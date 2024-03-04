@@ -38,7 +38,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const serologyStatus = useRecoilValue(serologyAtom);
   const { userData, setUserData } = useContext(StepperContext);
   const router = useRouter();
-  const {id} = useParams();
+  const { id } = useParams();
 
   //Nepali date
   const [birthDate, setBirthDate] = useState(aa);
@@ -113,21 +113,12 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     // resolver: addressValidation,
   });
   useEffect(() => {
-    if ( clickedIdData ) {
-        setBirthDate(clickedIdData?.babyStatus?.dateOfBirth)
-      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth );
-      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding );
-      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer );
+    if (clickedIdData) {
+      setBirthDate(clickedIdData?.babyStatus?.dateOfBirth);
+      setValue("engDateBirth", clickedIdData?.babyStatus?.engDateBirth);
+      setValue("babyFeeding", clickedIdData?.babyStatus?.babyFeeding);
+      setValue("babyTransfer", clickedIdData?.babyStatus?.babyTransfer);
       setValue("babyStatus", clickedIdData?.babyStatus?.babyStatus);
-      setValue("hiv", clickedIdData?.serologyRecords?.hiv );
-      setValue("hbsag", clickedIdData?.serologyRecords?.hbsag );
-      setValue("vdrl", clickedIdData?.serologyRecords?.vdrl );
-      // setValue("dateOfTest", clickedIdData?.serologyRecords?.dateOfTest );
-    setTestDate(clickedIdData?.serologyRecords?.dateOfTest)
-      setValue(
-        "engDateTest",
-        clickedIdData?.serologyRecords?.engDateTest 
-      );
     } else if (userData) {
       setDefaultValuesWithUserData({
         dateOfBirth: userData.dateOfBirth || "",
@@ -136,22 +127,12 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         babyFeeding: userData.babyFeeding || "",
         babyTransfer: userData.babyTransfer || "",
         babyStatus: userData.babyStatus || "",
-        hiv: userData.hiv || "",
-        hbsag: userData.hbsag || "",
-        vdrl: userData.vdrl || "",
-        dateOfTest: userData.dateOfTest || "",
-        engDateTest: userData.engDateTest || "",
       });
       setValue("dateOfBirth", userData.dateOfBirth || "");
       setValue("engDateBirth", userData.engDateBirth || "");
       setValue("babyFeeding", userData.babyFeeding || "");
       setValue("babyTransfer", userData.babyTransfer || "");
       setValue("babyStatus", userData.babyStatus || "");
-      setValue("hiv", userData.hiv || "");
-      setValue("hbsag", userData.hbsag || "");
-      setValue("vdrl", userData.vdrl || "");
-      setValue("dateOfTest", userData.dateOfTest || "");
-      setValue("engDateTest", userData.engDateTest || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
     }
@@ -168,13 +149,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
         },
-        serologyRecords: {
-          hiv: JSON.parse(data.hiv),
-          hbsag: JSON.parse(data.hbsag),
-          vdrl: JSON.parse(data.vdrl),
-          dateOfTest: testDate,
-          engDateTest: engDate,
-        },
       });
       localStorage.setItem(
         "userData",
@@ -186,13 +160,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             babyStatus: data.babyStatus,
             babyTransfer: data.babyTransfer,
             babyFeeding: data.babyFeeding,
-          },
-          serologyRecords: {
-            hiv: JSON.parse(data.hiv),
-            hbsag: JSON.parse(data.hbsag),
-            vdrl: JSON.parse(data.vdrl),
-            dateOfTest: testDate,
-            engDateTest: engDate,
           },
         })
       );
@@ -208,13 +175,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
         },
-        serologyRecords: {
-          hiv: JSON.parse(data.hiv),
-          hbsag: JSON.parse(data.hbsag),
-          vdrl: JSON.parse(data.vdrl),
-          dateOfTest: testDate,
-          engDateTest: engDate,
-        },
       });
       localStorage.setItem(
         "userData",
@@ -226,12 +186,6 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
             babyTransfer: data.babyTransfer,
             babyFeeding: data.babyFeeding,
           },
-          serologyRecords: {
-            hiv: JSON.parse(data.hiv),
-            hbsag: JSON.parse(data.hbsag),
-            vdrl: JSON.parse(data.vdrl),
-            dateOfTest: data.dateOfTest,
-          },
         })
       );
       data = {
@@ -242,43 +196,36 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
         },
-        serologyRecords: {
-          hiv: JSON.parse(data.hiv),
-          hbsag: JSON.parse(data.hbsag),
-          vdrl: JSON.parse(data.vdrl),
-          dateOfTest: data.dateOfTest,
-        },
       };
       try {
         const response = await axios.post(`${urls.createDanaDarta}`, data);
-        console.log(response,'response')
+        console.log(response, "response");
         if (response.status === 200) {
           router.push("/donorRecord/viewDonorRecord");
-          setSerologyPositive('false')
+          setSerologyPositive("false");
         }
       } catch (error) {
-
         console.log(error, "response");
       }
     }
   };
 
   const watchAllFields = watch();
-  useEffect(() => {
-    if (watchAllFields?.hiv) {
-      setSerologyPositive(watchAllFields?.hiv);
-    }
-  }, [setSerologyPositive, watchAllFields?.hiv]);
-  useEffect(() => {
-    if (watchAllFields?.hbsag) {
-      setSerologyPositive1(watchAllFields?.hbsag);
-    }
-  }, [setSerologyPositive1, watchAllFields?.hbsag]);
-  useEffect(() => {
-    if (watchAllFields?.vdrl) {
-      setSerologyPositive2(watchAllFields?.vdrl);
-    }
-  }, [setSerologyPositive2, watchAllFields?.vdrl]);
+  // useEffect(() => {
+  //   if (watchAllFields?.hiv) {
+  //     setSerologyPositive(watchAllFields?.hiv);
+  //   }
+  // }, [setSerologyPositive, watchAllFields?.hiv]);
+  // useEffect(() => {
+  //   if (watchAllFields?.hbsag) {
+  //     setSerologyPositive1(watchAllFields?.hbsag);
+  //   }
+  // }, [setSerologyPositive1, watchAllFields?.hbsag]);
+  // useEffect(() => {
+  //   if (watchAllFields?.vdrl) {
+  //     setSerologyPositive2(watchAllFields?.vdrl);
+  //   }
+  // }, [setSerologyPositive2, watchAllFields?.vdrl]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -294,7 +241,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               inputClassName="form-control  focus:outline-none"
               value={birthDate}
               onChange={(e) => setBirthDate(e)}
-              options={{ calenderLocale: "ne", valueLocale: "en" }}
+              options={{ calenderLocale: "en", valueLocale: "en" }}
               className="inputStyle"
               // {...register("dateOfBirth", { required: true })}
             />
@@ -358,108 +305,13 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
                 valueAsNumber: true,
               })}
             >
-              <option selected disabled value={''} >--Select Breast Feeding Status--</option>
+              <option selected disabled value={""}>
+                --Select Breast Feeding Status--
+              </option>
               {breastFeedingOptions}
             </select>
             {errors.babyFeeding && (
               <p className="errorMessages">{errors.babyFeeding.message}</p>
-            )}
-          </div>
-        </div>
-        <p className="font-bold text-xl py-5 ">Serology Screening Records:</p>
-        <div className="grid grid-cols-2 gap-4 text-lg">
-          <div className="grid">
-            <label>
-              {" "}
-              HIV Test
-              <span className="text-red-600">*</span>
-            </label>
-            <select
-              className="inputStyle"
-              {...register("hiv", {
-                required: "Yes/No Required",
-              })}
-            >
-              {" "}
-              <option selected disabled value={""}>
-                --select HIV Status--
-              </option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select>
-            {errors.hiv && (
-              <p className="errorMessages">{errors.hiv.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label>
-              {" "}
-              HBSAG Test
-              <span className="text-red-600">*</span>
-            </label>
-            <select
-              className="inputStyle"
-              {...register("hbsag", {
-                required: "Yes/No Required",
-              })}
-            >
-              {" "}
-              <option selected disabled value={""}>
-                --select HBSAG Status--
-              </option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select>
-            {errors.hbsag && (
-              <p className="errorMessages">{errors.hbsag.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label>
-              {" "}
-              VDRL Test
-              <span className="text-red-600">*</span>
-            </label>
-            <select
-              className="inputStyle"
-              {...register("vdrl", {
-                required: "Yes/No Required",
-              })}
-            >
-              {" "}
-              <option selected disabled value={""}>
-                --select VDRL Status--
-              </option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
-            </select>
-            {errors.vdrl && (
-              <p className="errorMessages">{errors.vdrl.message}</p>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <label>
-              {" "}
-              Date of Test
-              <span className="text-red-600">*</span>
-            </label>
-            {/* <input
-              type="date"
-              className="inputStyle"
-              {...register("dateOfTest", {
-                required: "Yes/No Required",
-              })}
-            /> */}
-            <NepaliDatePicker
-              inputClassName="form-control  focus:outline-none"
-              value={testDate}
-              onChange={(e) => setTestDate(e)}
-              options={{ calenderLocale: "ne", valueLocale: "en" }}
-              className="inputStyle"
-              // {...register("dateOfBirth", { required: true })}
-            />
-            {errors.dateOfTest && (
-              <p className="errorMessages">{errors.dateOfTest.message}</p>
             )}
           </div>
         </div>
