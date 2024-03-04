@@ -58,7 +58,7 @@ export default function AddVolume({ clickedData }) {
         "donorId",
         `${clickedData?.gestationalAge}-${clickedData?.donorId}-${clickedData?.donorName}`
       );
-      // setValue('collectedMilk',clickedData?.collectedMilk);
+      setValue('collectedMilk',clickedData?.collectedMilk);
       setValue("gestationalAge", clickedData?.gestationalAge);
       // clickedData?.collectedMilk?.forEach((item,index)=>{
       //   setValue(`collectedMilk.${index}.quantity`, item?.quantity);
