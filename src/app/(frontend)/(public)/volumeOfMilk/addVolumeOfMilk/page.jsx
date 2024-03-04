@@ -70,8 +70,6 @@ export default function AddVolume({ clickedData }) {
       setDate(clickedData?.date);
     }
   }, [clickedData, fields, replace, setValue]);
-  
-
   useEffect(() => {
     gestational.forEach((item) => {
       if (
