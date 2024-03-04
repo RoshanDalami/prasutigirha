@@ -66,7 +66,7 @@ export default function AddVolume({ clickedData }) {
       //   setValue(`collectedMilk.${index}.temp`, item?.temp);
       //   setValue(`collectedMilk.${index}.time`, item?.time);
       // })
-      replace('collectedMilk',clickedData?.collectedMilk)
+      // replace('collectedMilk',clickedData?.collectedMilk)
       setDate(clickedData?.date);
     }
   }, [clickedData, fields, replace, setValue]);
