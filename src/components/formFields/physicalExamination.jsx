@@ -296,7 +296,7 @@ const PhysicalExamination = ({
           </FormControl>
         </div>
 
-        <div
+        {/* <div
           className="flex justify-center items-center border border-gray-400 w-[250px] h-[150px]"
           onClick={handleButtonClick}
         >
@@ -307,7 +307,7 @@ const PhysicalExamination = ({
             style={{ display: "none" }}
             {...register("signature")}
           />
-        </div>
+        </div> */}
         <div className="flex flex-col mt-5">
           <input
             className="inputStyle"
