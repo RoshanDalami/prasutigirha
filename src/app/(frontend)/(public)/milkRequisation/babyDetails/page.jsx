@@ -69,7 +69,7 @@ export default function BabyDetail() {
                         </div> */}
                         <div>
                           <h1
-                            className="cursor-pointer"
+                            className="cursor-pointer bg-indigo-600 font-semibold rounded-md text-white px-2 py-1.5"
                             onClick={() => handleDetail(items._id)}
                           >
                             Details

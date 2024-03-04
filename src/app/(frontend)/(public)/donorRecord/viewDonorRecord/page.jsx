@@ -140,7 +140,7 @@ export default function ViewDonor() {
                           </div>
                           <div>
                             <h1
-                              className="cursor-pointer"
+                              className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
                               onClick={() => handleDetail(item._id)}
                             >
                               Details
