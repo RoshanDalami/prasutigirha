@@ -58,14 +58,14 @@ export default function AddVolume({ clickedData }) {
         "donorId",
         `${clickedData?.gestationalAge}-${clickedData?.donorId}-${clickedData?.donorName}`
       );
-      setValue('collectedMilk',clickedData?.collectedMilk);
+      // setValue('collectedMilk',clickedData?.collectedMilk);
       setValue("gestationalAge", clickedData?.gestationalAge);
-      // clickedData?.collectedMilk?.forEach((item,index)=>{
-      //   setValue(`collectedMilk.${index}.quantity`, item?.quantity);
-      //   setValue(`collectedMilk.${index}.storedBy`, item?.storedBy);
-      //   setValue(`collectedMilk.${index}.temp`, item?.temp);
-      //   setValue(`collectedMilk.${index}.time`, item?.time);
-      // })
+      clickedData?.collectedMilk?.forEach((item,index)=>{
+        setValue(`collectedMilk.${index}.quantity`, item?.quantity);
+        setValue(`collectedMilk.${index}.storedBy`, item?.storedBy);
+        setValue(`collectedMilk.${index}.temp`, item?.temp);
+        setValue(`collectedMilk.${index}.time`, item?.time);
+      })
       // replace('collectedMilk',clickedData?.collectedMilk)
       setDate(clickedData?.date);
     }
