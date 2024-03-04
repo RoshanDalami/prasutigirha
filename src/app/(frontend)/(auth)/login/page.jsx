@@ -57,7 +57,7 @@ const Login = () => {
           <Image
             height={200}
             width={350}
-            src={"/assets/images/amritkosh.jpg"}
+            src={"https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkosh.jpg?alt=media&token=323bc8f3-fdb8-4a32-a68e-89934ba69f09"}
             alt="amrit-kosh"
             className="rounded-lg hidden md:block w-full"
           />

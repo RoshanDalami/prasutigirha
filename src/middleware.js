@@ -13,6 +13,7 @@ export function middleware(req) {
   if (!token && !isPublicPath) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
+
   if (decodedToken?.exp < currentTime && path != "/login") {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }

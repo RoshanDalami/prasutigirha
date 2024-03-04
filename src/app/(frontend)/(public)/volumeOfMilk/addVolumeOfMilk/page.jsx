@@ -27,7 +27,7 @@ export default function AddVolume({ clickedData }) {
       collectedMilk: [{ time: "", quantity: 0, temp: "", storedBy: "" }],
     },
   });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove , replace } = useFieldArray({
     control,
     name: "collectedMilk",
   });
@@ -47,24 +47,29 @@ export default function AddVolume({ clickedData }) {
     }
     fetchData();
   }, []);
-
+  // if(clickedData){
+  //   fields.length = clickedData?.collectedMilk?.length
+  // }
   useEffect(() => {
+    
     if (clickedData) {
       setValue("_id", clickedData?._id);
       setValue(
         "donorId",
-        `${clickedData?.gestationalAge}-${clickedData?.donorId}`
+        `${clickedData?.gestationalAge}-${clickedData?.donorId}-${clickedData?.donorName}`
       );
+      setValue('collectedMilk',clickedData?.collectedMilk);
       setValue("gestationalAge", clickedData?.gestationalAge);
-      setValue("quantity", clickedData?.quantity);
-
-      setValue("storedBy", clickedData?.storedBy);
-      setValue("temp", clickedData?.temp);
-      setValue("time", clickedData?.time);
+      // clickedData?.collectedMilk?.forEach((item,index)=>{
+      //   setValue(`collectedMilk.${index}.quantity`, item?.quantity);
+      //   setValue(`collectedMilk.${index}.storedBy`, item?.storedBy);
+      //   setValue(`collectedMilk.${index}.temp`, item?.temp);
+      //   setValue(`collectedMilk.${index}.time`, item?.time);
+      // })
+      replace('collectedMilk',clickedData?.collectedMilk)
       setDate(clickedData?.date);
     }
-  }, [clickedData, setValue]);
-
+  }, [clickedData, fields, replace, setValue]);
   useEffect(() => {
     gestational.forEach((item) => {
       if (
@@ -112,6 +117,8 @@ export default function AddVolume({ clickedData }) {
     e.preventDefault();
     append({ time: "", quantity: 0, temp: "", storedBy: "" });
   }
+
+  
   return (
     <>
       <form
