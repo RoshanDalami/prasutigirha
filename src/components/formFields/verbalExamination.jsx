@@ -51,28 +51,40 @@ const VerbalExamination = ({
 
   useEffect(() => {
     if (clickedIdData) {
-      setValue("acuteInfection", clickedIdData?.verbalExamination?.acuteInfection );
-      setValue("chronicInfection", clickedIdData?.verbalExamination?.chronicInfection );
+      setValue(
+        "acuteInfection",
+        clickedIdData?.verbalExamination?.acuteInfection
+      );
+      setValue(
+        "chronicInfection",
+        clickedIdData?.verbalExamination?.chronicInfection
+      );
       setValue(
         "cancerTreatmentWithinThreeYears",
-        clickedIdData?.verbalExamination?.cancerTreatmentWithinThreeYears 
+        clickedIdData?.verbalExamination?.cancerTreatmentWithinThreeYears
       );
-      setValue("autoImmuneDisease", clickedIdData?.verbalExamination?.autoImmuneDisease );
+      setValue(
+        "autoImmuneDisease",
+        clickedIdData?.verbalExamination?.autoImmuneDisease
+      );
       setValue(
         "coughMoreThanTwoWeeks",
-        clickedIdData?.verbalExamination?.coughMoreThanTwoWeeks 
+        clickedIdData?.verbalExamination?.coughMoreThanTwoWeeks
       );
-      setValue("chickenpox", clickedIdData?.verbalExamination?.chickenpox );
-      setValue("stdLastOneYear", clickedIdData?.verbalExamination?.stdLastOneYear );
+      setValue("chickenpox", clickedIdData?.verbalExamination?.chickenpox);
+      setValue(
+        "stdLastOneYear",
+        clickedIdData?.verbalExamination?.stdLastOneYear
+      );
       setValue(
         "medCancerAntisicotikRadioactiveThyroid",
-        clickedIdData?.verbalExamination?.medCancerAntisicotikRadioactiveThyroid 
+        clickedIdData?.verbalExamination?.medCancerAntisicotikRadioactiveThyroid
       );
       setValue(
         "transplantAndBloodTaken",
-        clickedIdData?.verbalExamination?.transplantAndBloodTaken 
+        clickedIdData?.verbalExamination?.transplantAndBloodTaken
       );
-      setValue("BadLifeStyle", clickedIdData?.verbalExamination?.BadLifeStyle );
+      setValue("BadLifeStyle", clickedIdData?.verbalExamination?.BadLifeStyle);
     } else if (userData) {
       setDefaultValuesWithUserData({
         acuteInfection: userData.acuteInfection || "",
@@ -451,8 +463,47 @@ const VerbalExamination = ({
                 />
                 <label>Drugs</label>
               </div>
+              <div className="flex gap-1">
+                <input
+                  id="drugs"
+                  type="radio"
+                  value="No"
+                  {...register("BadLifeStyle", {
+                    required: "This field required",
+                  })}
+                />
+                <label>None</label>
+              </div>
             </div>
           </div>
+          {/* <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">
+              Life Style ( Smoking/Drinking/Drugs):
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue=""
+              name="radio-buttons-group"
+            >
+              <FormControlLabel
+                value={true}
+                control={<Radio />}
+                label="Yes"
+                {...register("transplantAndBloodTaken", {
+                  required: "This field required",
+                })}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio />}
+                label="No"
+                {...register("transplantAndBloodTaken", {
+                  required: "This field required",
+                })}
+              />
+            </RadioGroup>
+          </FormControl> */}
         </div>
       </FormBorder>
       <div className="mt-5">

@@ -23,9 +23,9 @@ export default function AddVolume({ clickedData }) {
     control,
     formState: { isSubmitting, errors },
   } = useForm({
-    defaultValues:{
-      collectedMilk: clickedData?.collectedMilk || [{time:"",quantity:0,temp:"",storedBy:''}] 
-    }
+    defaultValues: {
+      collectedMilk: [{ time: "", quantity: 0, temp: "", storedBy: "" }],
+    },
   });
   const { fields, append, remove , replace } = useFieldArray({
     control,
@@ -102,7 +102,7 @@ export default function AddVolume({ clickedData }) {
       date,
       engDate,
     };
-   
+
     try {
       const response = await axios.post(`${urls.createVolumeOfMilk}`, data);
       if (response.status === 200) {
@@ -115,7 +115,7 @@ export default function AddVolume({ clickedData }) {
   //Nepali Date
   function handleAppend(e) {
     e.preventDefault();
-    append({time:"",quantity:0,temp:"",storedBy:''});
+    append({ time: "", quantity: 0, temp: "", storedBy: "" });
   }
 
   
@@ -130,8 +130,10 @@ export default function AddVolume({ clickedData }) {
             <div className="font-bold text-lg flex justify-end">
               <button
                 className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                onClick={(e)=>{e.preventDefault();
-                  append({time:"",quantity:0,temp:"",storedBy:''});}}
+                onClick={(e) => {
+                  e.preventDefault();
+                  append({ time: "", quantity: 0, temp: "", storedBy: "" });
+                }}
               >
                 Add More +
               </button>
@@ -197,11 +199,10 @@ export default function AddVolume({ clickedData }) {
                   inputClassName="form-control  focus:outline-none"
                   value={date}
                   onChange={(e) => setDate(e)}
-                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  options={{ calenderLocale: "en", valueLocale: "en" }}
                   className="inputStyle"
                 />
               </div>
-              
             </div>
             {fields.map((field, index) => {
               return (
@@ -237,11 +238,15 @@ export default function AddVolume({ clickedData }) {
                       placeholder="."
                       {...register(`collectedMilk.${index}.quantity`, {
                         required: "Volume required",
+                        min: {
+                          value: 0,
+                          message: "Volume should not be negative",
+                        },
                       })}
                     />
-                    {errors?.quantity && (
+                    {errors?.collectedMilk?.[index]?.quantity && (
                       <p className="errorMessages">
-                        {errors?.quantity?.message}
+                        {errors?.collectedMilk?.[index]?.quantity?.message}
                       </p>
                     )}
                   </div>
@@ -259,40 +264,41 @@ export default function AddVolume({ clickedData }) {
                       })}
                     />
                     {errors?.temp && (
-                      <p className="errorMessages">{errors?.temp?.message}</p>
+                      <p className="errorMessages">
+                        {errors?.collectedMilk?.[index]?.temp?.message}
+                      </p>
                     )}
                   </div>
                   <div className="flex flex-col">
-                <label className="text-lg">
-                  Store By
-                  <span className="text-lg text-red-600">*</span>
-                </label>
-                <input
-                  className="inputStyle"
-                  type="text"
-                  placeholder="."
-                  {...register(`collectedMilk.${index}.storedBy`, {
-                    required: "This field is required",
-                  })}
-                />
-                {errors?.storedBy && (
-                  <p className="errorMessages">{errors?.storedBy?.message}</p>
-                )}
-              </div>
-                <div>
-                    
-                </div>
-                {
-                  fields.length > 1 && 
-                  <div className="font-bold text-lg flex justify-end">
-                    <button
-                      className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                      onClick={() => remove(index)}
-                    >
-                      Remove
-                    </button>
+                    <label className="text-lg">
+                      Store By
+                      <span className="text-lg text-red-600">*</span>
+                    </label>
+                    <input
+                      className="inputStyle"
+                      type="text"
+                      placeholder="."
+                      {...register(`collectedMilk.${index}.storedBy`, {
+                        required: "This field is required",
+                      })}
+                    />
+                    {errors?.storedBy && (
+                      <p className="errorMessages">
+                        {errors?.storedBy?.message}
+                      </p>
+                    )}
                   </div>
-                }
+                  <div></div>
+                  {fields.length > 1 && (
+                    <div className="font-bold text-lg flex justify-end">
+                      <button
+                        className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
+                        onClick={() => remove(index)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}

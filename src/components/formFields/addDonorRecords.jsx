@@ -28,6 +28,11 @@ const defaultValues = {
   modeOfDelivery: "",
   parity: "",
 };
+const currentTime = new Date().toLocaleTimeString([], {
+  hour: "2-digit",
+  minute: "2-digit",
+});
+console.log(currentTime, "currenttime");
 const educationList = [
   { name: "School Level", id: 1 },
   { name: "High School", id: 2 },
@@ -148,8 +153,8 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setValue("_id", clickedIdData?._id);
       setValue("hosRegNo", clickedIdData?.hosRegNo);
       setValue("donorRegNo", clickedIdData?.donorRegNo);
-      setDate(clickedIdData?.date)
-    
+      setDate(clickedIdData?.date);
+
       setValue("engDate", clickedIdData?.engDate);
       setValue("time", clickedIdData?.time);
       setValue("donorName", clickedIdData?.donorName);
@@ -232,7 +237,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={"Add Donor Records"}>
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           {isExternal ? (
             <div className="font-bold  text-xl  " onClick={handleExternal}>
               <Button>Internal</Button>
@@ -242,10 +247,11 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <Button>External</Button>
             </div>
           )}
-        </div>
+        </div> */}
         <div className="md:grid-cols-2 grid text-lg gap-4">
           {/* <div className="grid"> */}
-          <div className={`flex flex-col ${isExternal ? "hidden" : "block"}`}>
+          {/* <div className={`flex flex-col ${isExternal ? "hidden" : "block"}`}> */}
+          <div className="flex flex-col">
             <label>
               {" "}
               Hospital Registration Number
@@ -279,7 +285,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               value={date}
               onChange={(e) => setDate(e)}
               // onChange={() => handleDateChange()}
-              options={{ calenderLocale: "ne", valueLocale: "en" }}
+              options={{ calenderLocale: "en", valueLocale: "en" }}
               className="inputStyle"
             />
             {/* {error && <p className="errorMessages">{error}</p>} */}
@@ -291,7 +297,8 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             </label>
             <input
               type="time"
-              placeholder=""
+              placeholder={""}
+              // value={currentTime}
               className="inputStyle"
               {...register("time", { required: "Time is Required" })}
             />
@@ -398,7 +405,12 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               placeholder="Enter Contact Number"
               className="inputStyle"
               {...register("contactNo", {
-                required: "Contact Number Required",
+                required: "Contact number is required",
+                pattern: {
+                  value: /^9\d{9}$/,
+                  message:
+                    "Contact number should begin with 9 and have exactly 10 digits",
+                },
               })}
             />
             {errors.contactNo && (
@@ -415,7 +427,10 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               type="number"
               placeholder="Enter Present Age of Child"
               className="inputStyle"
-              {...register("ageOfChild", { required: "Age Required" })}
+              {...register("ageOfChild", {
+                required: "Age Required",
+                min: { value: 0, message: "Age should not be negative" },
+              })}
             />
             {errors.ageOfChild && (
               <p className="errorMessages">{errors.ageOfChild.message}</p>
