@@ -101,7 +101,7 @@ export default function SideBar() {
     },
     {
       link: "/milkRequisation/babyDetails",
-      name: "Baby Detail",
+      name: "Baby List",
     },
     {
       link: "/milkRequisation/addMilkRequisation",
@@ -111,12 +111,6 @@ export default function SideBar() {
       link: "/milkRequisation/listOfMilkRequisation",
       name: "List of Milk Requisition",
     },
-
-    {
-      link: "/milkRequisation/babyDetails",
-      name: "List of Baby Detail",
-    },
-
   ];
   const officeSetupList = [
     { link: "/office/officeSetup", name: "Office" },
