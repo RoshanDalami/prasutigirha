@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import AddDonorRecord from "src/components/formFields/addDonorRecords";
 import PhysicalExamination from "src/components/formFields/physicalExamination";
+import SerelogyRecord from "src/components/formFields/serelogyRecord";
 import StatusOfBaby from "src/components/formFields/statusOfBaby";
 import VerbalExamination from "src/components/formFields/verbalExamination";
 import { UseContextProvider } from "src/components/stepper/StepperContext";
@@ -26,6 +27,7 @@ export default function CreateAddDonor({ clickedIdData }) {
       ? [
           "Add Donor Records",
           "Baby Status",
+          "Serelogy Record",
           "Verbal Examination Record",
           "Physical Examination Record ",
         ]
@@ -53,7 +55,7 @@ export default function CreateAddDonor({ clickedIdData }) {
         );
       case 3:
         return (
-          <VerbalExamination
+          <SerelogyRecord
             handleClick={handleClick}
             currentStep={currentStep}
             clickedIdData={clickedIdData}
@@ -61,6 +63,15 @@ export default function CreateAddDonor({ clickedIdData }) {
           />
         );
       case 4:
+        return (
+          <VerbalExamination
+            handleClick={handleClick}
+            currentStep={currentStep}
+            clickedIdData={clickedIdData}
+            steps={steps}
+          />
+        );
+      case 5:
         return (
           <PhysicalExamination
             handleClick={handleClick}

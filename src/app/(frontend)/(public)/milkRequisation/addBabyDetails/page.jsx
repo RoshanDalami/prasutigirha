@@ -98,16 +98,13 @@ export default function AddBabyDetails({ clickedIdData }) {
     );
   });
 
-  
-
   const onSubmit = async (data) => {
     data = {
-        ...data,
+      ...data,
       _id: data?._id,
-      dateOfBaby:birthDate,
-      engDateOfBaby:engBirthDate,
+      dateOfBaby: birthDate,
+      engDateOfBaby: engBirthDate,
       userId: userInfo._id,
-      
     };
 
     try {
@@ -156,7 +153,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                   inputClassName="form-control  focus:outline-none"
                   value={birthDate}
                   onChange={(e) => setBirthDate(e)}
-                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  options={{ calenderLocale: "en", valueLocale: "en" }}
                   className="inputStyle"
                 />
               </div>
@@ -207,6 +204,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                   placeholder="Enter Birth Weight"
                   {...register("babyWeight", {
                     required: "Birth weight required",
+                    min: { value: 0, message: "Weight cannot be negative" },
                   })}
                 />
                 {errors?.babyWeight && (

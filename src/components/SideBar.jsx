@@ -66,7 +66,7 @@ export default function SideBar() {
   const DonorList = [
     {
       link: "/donorRecord/addDonorRecord",
-      name: "Add Donor Record",
+      name: "Donor Record",
     },
     {
       link: "/donorRecord/viewDonorRecord",
@@ -76,7 +76,7 @@ export default function SideBar() {
   const volumeOfMilk = [
     {
       link: "/volumeOfMilk/addVolumeOfMilk",
-      name: "Add Volume of Milk",
+      name: "Volume of Milk",
     },
 
     {
@@ -87,7 +87,7 @@ export default function SideBar() {
   const pasteuriationList = [
     {
       link: "/pasteurization/addPasteurization",
-      name: "Add Pasteurization Process",
+      name: "Pasteurization Process",
     },
     {
       link: "/pasteurization/pasteurizationList",
@@ -97,11 +97,11 @@ export default function SideBar() {
   const milkRequistionList = [
     {
       link: "/milkRequisation/addBabyDetails",
-      name: "Add Baby Details",
+      name: "Baby Details",
     },
     {
       link: "/milkRequisation/addMilkRequisation",
-      name: "Add Milk Requisition",
+      name: "Milk Requisition",
     },
     {
       link: "/milkRequisation/listOfMilkRequisation",
@@ -109,7 +109,7 @@ export default function SideBar() {
     },
     {
       link: "/milkRequisation/babyDetails",
-      name: "Baby Detail",
+      name: "List of Baby Detail",
     },
   ];
   const officeSetupList = [

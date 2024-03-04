@@ -12,7 +12,6 @@ import toast from "react-hot-toast";
 const aa = new BikramSambat(new Date()).toBS();
 
 export default function AddPasteurization({ clickedIdData }) {
-  
   const userInfo =
     typeof localStorage !== "undefined"
       ? JSON.parse(localStorage.getItem("userInfo"))
@@ -80,7 +79,6 @@ export default function AddPasteurization({ clickedIdData }) {
       donorId: item.donorId.split("/")[0],
       collectedDate: item.donorId.split("/")[1],
       donorName: item.donorId.split("/")[2],
-
     }));
     data = {
       ...data,
@@ -198,7 +196,7 @@ export default function AddPasteurization({ clickedIdData }) {
                   inputClassName="form-control  focus:outline-none"
                   value={date}
                   onChange={(e) => setDate(e)}
-                  options={{ calenderLocale: "ne", valueLocale: "en" }}
+                  options={{ calenderLocale: "en", valueLocale: "en" }}
                   className="inputStyle"
                 />
               </div>
@@ -224,7 +222,6 @@ export default function AddPasteurization({ clickedIdData }) {
               )}
 
               {fields.map((field, index) => {
-                
                 return (
                   <div
                     key={field.id}
