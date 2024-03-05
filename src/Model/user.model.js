@@ -16,10 +16,6 @@ const userSchema = new Schema({
     password:{
         type:String,
         required:[true,'Password is required field']
-    },
-    confirmPassword:{
-        type:String,
-        required:[true,'ConfirmPassword is required']
     }
 },{timestamps:true})
 

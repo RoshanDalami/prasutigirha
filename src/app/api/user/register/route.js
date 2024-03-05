@@ -8,6 +8,7 @@ export async function POST(req, res) {
   try {
     const { username, email, contactNo, password, confirmPassword } =
       await req.json();
+      
         console.log(username, email, contactNo, password, confirmPassword)
     if (password !== confirmPassword) {
       return NextResponse.json(
