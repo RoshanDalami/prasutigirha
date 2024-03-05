@@ -171,9 +171,7 @@ export default function Department() {
                   type="text"
                   placeholder="Department Name"
                   className="inputStyle"
-                  {...register("departmentName", {
-                    required: "Department name required",
-                  })}
+                  {...register("departmentName")}
                 />
                 {errors?.departmentName && (
                   <p className="errorMessages">
@@ -187,7 +185,7 @@ export default function Department() {
                 </label>
                 <select
                   className="inputStyle"
-                  {...register("officeId", { required: "Office  is required" })}
+                  {...register("officeId")}
                 >
                   <option value={""} selected disabled>
                     --Select Office--

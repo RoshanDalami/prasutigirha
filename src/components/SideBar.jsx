@@ -113,9 +113,12 @@ export default function SideBar() {
     },
   ];
   const officeSetupList = [
-    { link: "/office/officeSetup", name: "Office" },
-    { link: "/office/department", name: "Department" },
-    { link: "/office/employee", name: "Employee" },
+    { link: "/office/officeSetup", name: "Office Setup" },
+    { link: "/office/officeList", name: "Office List" },
+    { link: "/office/department", name: "Department Setup" },
+    { link: "/office/departmentList", name: "Department List" },
+    { link: "/office/employee", name: "Employee Setup " },
+    { link: "/office/employeeList", name: "Employee List " },
   ];
   return (
     <div className="fixed min-h-screen w-60  bg-gray-100  ">
