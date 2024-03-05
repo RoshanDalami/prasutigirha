@@ -5,6 +5,7 @@ connect();
 
 export async function GET(req,res){
     const districtId = req.nextUrl.searchParams.get('districtId')
+    // districtId:districtId
     try {
         const palikaList = await Palika.find({districtId:districtId})
         return NextResponse.json(palikaList,{status:200})

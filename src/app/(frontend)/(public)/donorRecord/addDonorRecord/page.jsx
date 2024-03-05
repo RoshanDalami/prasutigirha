@@ -31,7 +31,7 @@ export default function CreateAddDonor({ clickedIdData }) {
           "Verbal Examination Record",
           "Physical Examination Record ",
         ]
-      : ["Add Donor Records", "Baby Status"];
+      : ["Add Donor Records", "Baby Status","Serelogy Record"];
 
   const displayStep = (step) => {
     switch (step) {

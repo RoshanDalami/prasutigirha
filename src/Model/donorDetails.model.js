@@ -33,6 +33,12 @@ const serologyScreeningSchema = new mongoose.Schema({
   engDateTest: {
     type: String,
   },
+  dateOfHivTest:{
+    type:String,
+  },
+  dateofHbsagTest:{
+    type:String
+  }
 
   // helperName: {
   //   type: String,

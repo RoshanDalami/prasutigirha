@@ -206,7 +206,7 @@ export default function Department() {
               </div>
             </div>
             <div className="text-lg font-bold my-5">
-              <Button>{isSubmitting ? "Submitting..." : "Submit"}</Button>
+              <Button isSubmitting={isSubmitting} >{isSubmitting ? "Submitting..." : "Submit"}</Button>
             </div>
           </FormBorder>
         </form>

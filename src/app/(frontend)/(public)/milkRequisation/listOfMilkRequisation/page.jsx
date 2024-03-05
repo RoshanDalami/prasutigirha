@@ -127,13 +127,13 @@ export default function ListVolume() {
                       <td className="py-3">{row.requisitedMilk.length}</td>
                       <td className="py-3 ">
                         <div className="flex justify-evenly items-center text-xl">
-                          <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
+                          {/* <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
 
                           <PencilSquareIcon
                             className="h-6 w-6 text-white "
                             onClick={() => handleEdit(row._id)}
                           />
-                          </div>
+                          </div> */}
                           <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
 
                           <TrashIcon className="h-6 w-6 text-white" onClick={()=>handleDelete(row._id)}  />
