@@ -137,9 +137,10 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             hiv: JSON.parse(data.hiv),
             hbsag: JSON.parse(data.hbsag),
             vdrl: JSON.parse(data.vdrl),
-            dateOfTest: data.dateOfTest,
-            dateOfHivTest: data.hivTestDate,
-            dateofHbsagTest: data.hbsagTestDate,
+            dateOfTest: testDate,
+          engDateTest: engTestDate,
+          dateOfHivTest: hivTestDate,
+          dateofHbsagTest: hbsagTestDate,
           },
         })
       );
@@ -149,14 +150,15 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
           hiv: JSON.parse(data.hiv),
           hbsag: JSON.parse(data.hbsag),
           vdrl: JSON.parse(data.vdrl),
-          dateOfTest: data.dateOfTest,
-          dateOfHivTest: data.hivTestDate,
-          dateofHbsagTest: data.hbsagTestDate,
+          dateOfTest: testDate,
+          engDateTest: engTestDate,
+          dateOfHivTest: hivTestDate,
+          dateofHbsagTest: hbsagTestDate,
         },
       };
       try {
         const response = await axios.post(`${urls.createDanaDarta}`, data);
-        console.log(response, "response");
+        // console.log(response, "response");
         if (response.status === 200) {
           router.push("/donorRecord/viewDonorRecord");
           setSerologyPositive("false");

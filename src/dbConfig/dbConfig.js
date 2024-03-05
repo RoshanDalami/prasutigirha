@@ -8,7 +8,6 @@ export async function connect(){
         connection.on('connected',()=>{
             console.log('Connected to database successfully')
         })
-
         connection.on('error',(err)=>{
             console.log('Could not connect to database ' + err);
             process.exit();

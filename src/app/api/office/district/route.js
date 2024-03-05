@@ -7,6 +7,7 @@ connect();
 
 export async function GET(req,res){
    const stateId = req.nextUrl.searchParams.get('stateId') 
+//    stateId:stateId
     try {
         const districtList = await District.find({stateId:stateId})
         return NextResponse.json(districtList,{status:200})

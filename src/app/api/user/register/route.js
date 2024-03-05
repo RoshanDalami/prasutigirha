@@ -15,6 +15,7 @@ export async function POST(req, res) {
         { status: 400 }
       );
     }
+    
 
     const existingUser = await User.findOne({ email: email });
     if (existingUser) {
