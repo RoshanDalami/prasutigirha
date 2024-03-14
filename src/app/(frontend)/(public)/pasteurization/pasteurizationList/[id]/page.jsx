@@ -55,6 +55,7 @@ export default function BottleDetails() {
       poolingCondition: pooling.poolingCondition,
       expireDate: pooling.expireDate,
       totalVolume: pooling.collectedVolume,
+      poolingDate:pooling.date
     };
     try {
       const response = await axios.post(`${urls.createBottle}`, data);
@@ -168,6 +169,9 @@ export default function BottleDetails() {
                       </p>
                       <p>
                         Volume: <span>{item?.volume}ml</span>
+                      </p>
+                      <p>
+                        Pasteurization Date: <span>{item?.poolingDate}</span>
                       </p>
                       <p>
                         Expire Date: <span>{item?.expireDate}</span>

@@ -22,6 +22,10 @@ const bottleList = new Schema({
     type:Number,
     required:true
   },
+  poolingDate:{
+    type:String,
+    required:true
+  }
 });
 
 const bottleSchema = new Schema(
@@ -42,6 +46,11 @@ const bottleSchema = new Schema(
       type: Number,
       required: true,
     },
+    poolingDate:{
+      type:String,
+      required:true
+    },
+
     bottleList: [bottleList],
   },
   { timestamps: true }
