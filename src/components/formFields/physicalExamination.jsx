@@ -311,7 +311,7 @@ const PhysicalExamination = ({
         <div className="flex flex-col mt-5">
           <input
             className="inputStyle"
-            placeholder="Breast Feeding Helper Employee Name"
+            placeholder="BF Counsellor"
             {...register("doctorName", {
               required: "Name Required",
             })}

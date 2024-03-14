@@ -417,6 +417,14 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <p className="errorMessages">{errors.contactNo.message}</p>
             )}
           </div>
+          <div className="flex flex-col">
+            <label htmlFor="">Landline Number</label>
+            <input
+              className="inputStyle"
+              placeholder="Enter Landline Number"
+              {...register("landlineNum")}
+            />
+          </div>
           <div className="flex-col flex">
             <label>
               {" "}
