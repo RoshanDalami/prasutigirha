@@ -147,11 +147,9 @@ export default function BottleDetails() {
                     className="flex items-center justify-center font-bold "
                   >
                     <div>
-                      <p className="">
-                        PoolingId: <span>{item?.poolingId}</span>
-                      </p>
+                      <p>Pasteurization Date: </p>
                       {item?.poolingCondition === 4 ? (
-                        <p>Pooling Condition: {"Colostrum"}</p>
+                        <p>PDHM: {"Colostrum"}</p>
                       ) : (
                         gestational?.map((age, index) => {
                           if (age?.gestationalId === item?.poolingCondition) {
@@ -164,7 +162,7 @@ export default function BottleDetails() {
                         })
                       )}
                       <p>
-                        Bottle Name: <span>{item?.name}</span>
+                        Batch Id: <span>{item?.name}</span>
                       </p>
                       <p>
                         Volume: <span>{item?.volume}ml</span>

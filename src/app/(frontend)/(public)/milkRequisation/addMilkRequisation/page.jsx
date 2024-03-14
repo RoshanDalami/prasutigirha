@@ -74,7 +74,17 @@ export default function AddMilkReq({ clickedIdData }) {
     }
     fetchData();
   }, []);
-
+  //poolingList batchname
+  const [poolingList, setPoolingList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getPooling}`);
+      if (status === 200) {
+        setPoolingList(data);
+      }
+    }
+    fetchData();
+  }, []);
   const watchFields = watch();
   const onSubmit = async (data) => {
     data = {
@@ -179,21 +189,26 @@ export default function AddMilkReq({ clickedIdData }) {
                     <label htmlFor="">
                       Batch Number <span className="text-red-600">*</span>
                     </label>
-                    <input
+                    <select
                       type="Number"
                       className="inputStyle"
                       placeholder="Enter Batch Number"
                       {...register(`requisitedMilk.${index}.batchNumber`, {
                         required: "Batch number is required",
                       })}
-                    />
+                    >
+                      <option>--Select Batch Number--</option>
+                      {poolingList?.map((items, index) => {
+                        return <option key={index}>{items?.batchName}</option>;
+                      })}
+                    </select>
                     {errors?.batchNumber && (
                       <p className="errorMessages">
                         {errors.batchNumber.message}
                       </p>
                     )}
                   </div>
-                  <div className="grid">
+                  {/* <div className="grid">
                     <label htmlFor="">
                       Unique Bottle Number
                       <span className="text-red-600">*</span>
@@ -214,7 +229,7 @@ export default function AddMilkReq({ clickedIdData }) {
                         {errors.uniqueBottleNumber.message}
                       </p>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="flex flex-col">
                     <label htmlFor="">

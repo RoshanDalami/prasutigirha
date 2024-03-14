@@ -47,7 +47,27 @@ export default function AddBabyDetails({ clickedIdData }) {
       </option>
     );
   });
-
+  const [parityList, setParityList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await axios.get(`${urls.getParity}`);
+      if (status === 200) {
+        setParityList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  //mode of delivery
+  const [modeOfDeliveryList, setModeOfDeliveryList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getDelivery}`);
+      if (status === 200) {
+        setModeOfDeliveryList(data);
+      }
+    }
+    fetchData();
+  }, []);
   const diagnosis = [
     { name: "Preterm delivery", id: 1 },
     { name: "Premature delivery", id: 2 },
@@ -179,11 +199,69 @@ export default function AddBabyDetails({ clickedIdData }) {
                 )}
               </div>
               <div className="flex flex-col">
+                <label>
+                  Gender <span className="text-red-600">*</span>
+                </label>
+                <select
+                  className="inputStyle"
+                  {...register("gender", { required: "Gender Required" })}
+                >
+                  <option selected disabled value={""}>
+                    --Select Gender--
+                  </option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+                {errors.gender && (
+                  <p className="errorMessages">{errors.gender.message}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="">
+                  Parity <span className="text-red-600">*</span>
+                </label>
+                <select
+                  className="inputStyle"
+                  {...register("parity", { required: "Parity is Required" })}
+                >
+                  <option className="" selected disabled value={""}>
+                    --Select Parity--
+                  </option>
+                  {parityList?.map((items, index) => {
+                    return <option key={index}>{items?.parityName}</option>;
+                  })}
+                </select>
+                {errors.parity && (
+                  <p className="errorMessages">{errors.parity.message}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <label>
+                  Mode of Delivery <span className="text-red-600">*</span>
+                </label>
+                <select
+                  className="inputStyle"
+                  {...register("mod", {
+                    required: "Mode of Delivery Required",
+                  })}
+                >
+                  <option selected disabled value={""}>
+                    --Select Mode of Delivery--
+                  </option>
+                  {modeOfDeliveryList?.map((items, index) => {
+                    return <option key={index}>{items?.deliveryName}</option>;
+                  })}
+                </select>
+                {errors.mod && (
+                  <p className="errorMessages">{errors.mod.message}</p>
+                )}
+              </div>
+              <div className="flex flex-col">
                 <label htmlFor="">
                   IP Number<span className="text-red-600">*</span>
                 </label>
                 <input
-                  type="Number"
+                  type="text"
                   className="inputStyle"
                   placeholder="Enter IP Number"
                   {...register("ipNumber", {
