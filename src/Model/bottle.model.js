@@ -9,6 +9,9 @@ const bottleList = new Schema({
     type: Number,
     required: true,
   },
+  remainingVoluem:{
+    type:Number
+  },
   expireDate: {
     type: String,
     required: true,

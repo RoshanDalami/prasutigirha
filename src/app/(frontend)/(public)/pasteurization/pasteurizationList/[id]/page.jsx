@@ -148,7 +148,7 @@ export default function BottleDetails() {
                     className="flex items-center justify-center font-bold "
                   >
                     <div>
-                      <p>Pasteurization Date: </p>
+                      
                       {item?.poolingCondition === 4 ? (
                         <p>PDHM: {"Colostrum"}</p>
                       ) : (
@@ -156,7 +156,7 @@ export default function BottleDetails() {
                           if (age?.gestationalId === item?.poolingCondition) {
                             return (
                               <p key={index}>
-                                Pooling Condition: {age?.gestationalName}
+                                PDHM: {age?.gestationalName}
                               </p>
                             );
                           }

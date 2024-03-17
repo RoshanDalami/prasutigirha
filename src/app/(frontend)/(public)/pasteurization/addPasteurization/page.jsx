@@ -303,7 +303,7 @@ export default function AddPasteurization({ clickedIdData }) {
             <div className="my-3">
               <button
                 className={`text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg disabled:bg-gray-300  disabled:cursor-not-allowed `}
-                disabled={milkVolume > 2500 ? true : false || fields.length < 2}
+                disabled={milkVolume > 2500 ? true : false }
                 type="submit"
               >
                 {isSubmitting ? "Submitting..." : "Submit"}

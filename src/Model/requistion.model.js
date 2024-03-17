@@ -9,10 +9,6 @@ const requisitedMilk = new Schema({
     type: String,
     required: [true, "Batch number is required"],
   },
-  uniqueBottleNumber: {
-    type: String,
-    required: [true, "Unique Bottle Number is required"],
-  },
   bottleName: {
     type: String,
     required: true,

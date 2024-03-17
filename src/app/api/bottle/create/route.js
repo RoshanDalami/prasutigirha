@@ -34,6 +34,7 @@ export async function POST(req) {
         poolingCondition: poolingCondition,
         name: bottleName,
         volume: bottleSize,
+        remainingVoluem:bottleSize,
         expireDate: expireDate,
         poolingDate:poolingDate
       };
@@ -55,6 +56,7 @@ export async function POST(req) {
         poolingCondition: poolingCondition,
         name: lastBottleName,
         volume: remainingMilk,
+        remainingVoluem:remainingMilk,
         expireDate: expireDate,
         poolingDate:poolingDate
       };

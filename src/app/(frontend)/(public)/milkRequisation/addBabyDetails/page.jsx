@@ -26,8 +26,9 @@ export default function AddBabyDetails({ clickedIdData }) {
     handleSubmit,
     formState: { isSubmitting, errors },
     setValue,
+    watch
   } = useForm();
-
+  const watchFields = watch()
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
   useEffect(() => {
@@ -109,6 +110,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     { id: 1, name: "NICU" },
     { id: 2, name: "SNCU" },
     { id: 3, name: "KMC" },
+    { id: 4, name: "Other" },
   ];
   const babyStatusOptions = babyStatus?.map((item, index) => {
     return (
@@ -121,6 +123,7 @@ export default function AddBabyDetails({ clickedIdData }) {
   const onSubmit = async (data) => {
     data = {
       ...data,
+      babyStatus: watchFields?.babyStatus === 'Other' ? data?.babyStatusOther :data?.babyStatus ,
       _id: data?._id,
       dateOfBaby: birthDate,
       engDateOfBaby: engBirthDate,
@@ -130,7 +133,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     try {
       const { status } = await axios.post(`${urls.createBaby}`, data);
       if (status === 200) {
-        router.push("/");
+        router.push("/milkRequisation/babyDetails");
       }
     } catch (error) {
       console.log(error, "response");
@@ -331,6 +334,15 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Baby Status <span className="text-red-600">*</span>
                 </label>
+                  {
+                    watchFields.babyStatus === 'Other' ? <input
+                    type="text"
+                    className="inputStyle"
+                    placeholder="Baby Status"
+                    {...register("babyStatusOther", {
+                      required: "Baby status is required",
+                    })}
+                  /> : 
                 <select
                   className="inputStyle"
                   {...register("babyStatus", {
@@ -342,6 +354,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                   </option>
                   {babyStatusOptions}
                 </select>
+                  }
                 {errors?.babyStatus && (
                   <p className="errorMessages">{errors.babyStatus.message}</p>
                 )}

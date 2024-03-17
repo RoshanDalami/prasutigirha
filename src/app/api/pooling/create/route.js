@@ -63,7 +63,7 @@ export async function POST(req) {
         { $set: { remaining: newRemaining } }
       );
     }
-    if(body._id){
+    if(body._id){u
       const response = await Pasteurization.findByIdAndUpdate(body._id,{...body,
         batchName: batchName,
         expireDate: expireDate},{new:true});
