@@ -72,7 +72,7 @@ export default function AddMilkReq({ clickedIdData }) {
       });
     }
     fetchBottleList();
-  }, [watchArray])
+  }, [watchArray.map(item=>item.batchNumber)])
 
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
