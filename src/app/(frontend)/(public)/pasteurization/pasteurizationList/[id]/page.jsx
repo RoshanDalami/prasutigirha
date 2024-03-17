@@ -55,6 +55,7 @@ export default function BottleDetails() {
       poolingCondition: pooling.poolingCondition,
       expireDate: pooling.expireDate,
       totalVolume: pooling.collectedVolume,
+      poolingDate:pooling.date
     };
     try {
       const response = await axios.post(`${urls.createBottle}`, data);
@@ -147,27 +148,28 @@ export default function BottleDetails() {
                     className="flex items-center justify-center font-bold "
                   >
                     <div>
-                      <p className="">
-                        PoolingId: <span>{item?.poolingId}</span>
-                      </p>
+                      
                       {item?.poolingCondition === 4 ? (
-                        <p>Pooling Condition: {"Colostrum"}</p>
+                        <p>PDHM: {"Colostrum"}</p>
                       ) : (
                         gestational?.map((age, index) => {
                           if (age?.gestationalId === item?.poolingCondition) {
                             return (
                               <p key={index}>
-                                Pooling Condition: {age?.gestationalName}
+                                PDHM: {age?.gestationalName}
                               </p>
                             );
                           }
                         })
                       )}
                       <p>
-                        Bottle Name: <span>{item?.name}</span>
+                        Batch Id: <span>{item?.name}</span>
                       </p>
                       <p>
                         Volume: <span>{item?.volume}ml</span>
+                      </p>
+                      <p>
+                        Pasteurization Date: <span>{item?.poolingDate}</span>
                       </p>
                       <p>
                         Expire Date: <span>{item?.expireDate}</span>

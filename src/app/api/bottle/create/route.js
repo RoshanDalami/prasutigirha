@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(req) {
   try {
-    const { poolingId, poolingCondition, expireDate, totalVolume } =
+    const { poolingId, poolingCondition, expireDate, totalVolume,poolingDate } =
       await req.json();
 
     const totalMilk = totalVolume;
@@ -34,7 +34,9 @@ export async function POST(req) {
         poolingCondition: poolingCondition,
         name: bottleName,
         volume: bottleSize,
+        remainingVoluem:bottleSize,
         expireDate: expireDate,
+        poolingDate:poolingDate
       };
       bottles.push(bottle);
 
@@ -54,7 +56,9 @@ export async function POST(req) {
         poolingCondition: poolingCondition,
         name: lastBottleName,
         volume: remainingMilk,
+        remainingVoluem:remainingMilk,
         expireDate: expireDate,
+        poolingDate:poolingDate
       };
       bottles.push(lastBottle);
     }
@@ -65,6 +69,7 @@ export async function POST(req) {
       poolingCondition,
       expireDate,
       totalVolume,
+      poolingDate:poolingDate,
       bottleList : bottles
     });
     const savedBottle = await newBottle.save()

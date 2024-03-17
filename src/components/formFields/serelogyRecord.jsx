@@ -138,9 +138,9 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             hbsag: JSON.parse(data.hbsag),
             vdrl: JSON.parse(data.vdrl),
             dateOfTest: testDate,
-          engDateTest: engTestDate,
-          dateOfHivTest: hivTestDate,
-          dateofHbsagTest: hbsagTestDate,
+            engDateTest: engTestDate,
+            dateOfHivTest: hivTestDate,
+            dateofHbsagTest: hbsagTestDate,
           },
         })
       );
@@ -207,8 +207,8 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <option selected disabled value={""}>
                 --select HIV Status--
               </option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
+              <option value={true}>Reactive</option>
+              <option value={false}>Non-Reactive</option>
             </select>
             {errors.hiv && (
               <p className="errorMessages">{errors.hiv.message}</p>
@@ -249,8 +249,8 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <option selected disabled value={""}>
                 --select HBSAG Status--
               </option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
+              <option value={true}>Reactive</option>
+              <option value={false}>Non-Reactive</option>
             </select>
             {errors.hbsag && (
               <p className="errorMessages">{errors.hbsag.message}</p>
@@ -291,8 +291,8 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <option selected disabled value={""}>
                 --select VDRL Status--
               </option>
-              <option value={true}>Yes</option>
-              <option value={false}>No</option>
+              <option value={true}>Reactive</option>
+              <option value={false}>Non-Reactive</option>
             </select>
             {errors.vdrl && (
               <p className="errorMessages">{errors.vdrl.message}</p>

@@ -3,9 +3,9 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { urls } from "src/services/apiHelpers";
-import axios from 'axios'
+import axios from "axios";
 
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
@@ -14,41 +14,41 @@ export default function ListVolume() {
   const router = useRouter();
   const handleEdit = (id) => {
     router.push(`/pasteurization/addPasteurization/${id}`);
-  }
+  };
   const handleBottleDetails = (id) => {
     router.push(`/pasteurization/pasteurizationList/${id}`);
-  }
+  };
 
-  const [poolingList,setPoolingList] = useState([]);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await axios.get(`${urls.getPooling}`);
-      if(status === 200){
-        setPoolingList(data)
+  const [poolingList, setPoolingList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getPooling}`);
+      if (status === 200) {
+        setPoolingList(data);
       }
     }
-    fetchData()
-  },[])
-  const handleDelete =async(id)=>{
-    const response = await axios.delete(`${urls.getPooling}/${id}`)
-    if(response.status === 200){
-      const {data,status} = await axios.get(`${urls.getPooling}`);
-      if(status === 200){
-        setPoolingList(data)
+    fetchData();
+  }, []);
+  const handleDelete = async (id) => {
+    const response = await axios.delete(`${urls.getPooling}/${id}`);
+    if (response.status === 200) {
+      const { data, status } = await axios.get(`${urls.getPooling}`);
+      if (status === 200) {
+        setPoolingList(data);
       }
     }
-  }
-  const [gestationalAge,setGestationalAge] = useState([]);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await axios.get(`${urls.getGestational}`);
-      if(status === 200){
-        setGestationalAge(data)
+  };
+  const [gestationalAge, setGestationalAge] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (status === 200) {
+        setGestationalAge(data);
       }
     }
-    fetchData()
-  },[])
- 
+    fetchData();
+  }, []);
+
   return (
     <>
       <div>
@@ -107,51 +107,61 @@ export default function ListVolume() {
                   <td className="py-3 px-2">Expiry Date</td>
                   <td className="py-3 px-2">Action</td>
                 </tr>
-                {
-                  poolingList?.map((row,index)=>{
-                    return(
-
-                <tr className=" border border-x-gray text-center" key={index} >
-                  
-                  <td className="py-3">{index + 1}</td>
-                  <td className="py-3">{row?.donorDetailsForPooling?.length}</td>
-                  <td className="py-3">{row?.date}</td>
-                  {
-                    row.poolingCondition == 4 ? 
-                    <td className="py-3">{'Colostrum'}</td> : gestationalAge?.map((item,index)=>{
-                      if(item.gestationalId == row.poolingCondition){
-                        return(
-                          <td className="py-3" key={index}>{item.gestationalName}</td>
-                        )
-                      }
-                    })
-                  }
-                  <td className="py-3">{row.collectedVolume}{" "}ml</td>
-                  <td className="py-3">{row.batchName}</td>
-                  <td className="py-3">{row.expireDate}</td>
-                  <td className="py-3 ">
-                    <div className="flex justify-evenly gap-3  text-xl">
-                      {/* <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
+                {poolingList?.map((row, index) => {
+                  return (
+                    <tr
+                      className=" border border-x-gray text-center"
+                      key={index}
+                    >
+                      <td className="py-3">{index + 1}</td>
+                      <td className="py-3">
+                        {row?.donorDetailsForPooling?.length}
+                      </td>
+                      <td className="py-3">{row?.date}</td>
+                      {row.poolingCondition == 4 ? (
+                        <td className="py-3">{"Colostrum"}</td>
+                      ) : (
+                        gestationalAge?.map((item, index) => {
+                          if (item.gestationalId == row.poolingCondition) {
+                            return (
+                              <td className="py-3" key={index}>
+                                {item.gestationalName}
+                              </td>
+                            );
+                          }
+                        })
+                      )}
+                      <td className="py-3">{row.collectedVolume} ml</td>
+                      <td className="py-3">
+                        {row.batchName}({row?.date})
+                      </td>
+                      <td className="py-3">{row.expireDate}</td>
+                      <td className="py-3 ">
+                        <div className="flex justify-evenly gap-3  text-xl">
+                          {/* <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
                         
                       <PencilSquareIcon
                         className="h-6 w-6 text-white "
                         onClick={() => handleEdit(row._id)}
                       />
                       </div> */}
-                      <div className="cursor-pointer bg-red-600 rounded-md shadow-md px-2 py-1">
-
-                      <TrashIcon className="h-6 w-6 text-white"  onClick={()=>handleDelete(row._id)} />
-                      </div>
-                      <button className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2" onClick={()=>handleBottleDetails(row._id)}  >
-                              Bottles
+                          <div className="cursor-pointer bg-red-600 rounded-md shadow-md px-2 py-1">
+                            <TrashIcon
+                              className="h-6 w-6 text-white"
+                              onClick={() => handleDelete(row._id)}
+                            />
+                          </div>
+                          <button
+                            className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
+                            onClick={() => handleBottleDetails(row._id)}
+                          >
+                            Bottles
                           </button>
-                        
-                    </div>
-                  </td>
-                </tr>
-                    )
-                  })
-                }
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
           </TableBorder>

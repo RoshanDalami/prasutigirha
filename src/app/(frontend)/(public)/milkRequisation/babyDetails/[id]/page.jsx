@@ -48,7 +48,7 @@ export default function BabyDetailsById() {
                   <td className="py-3">Batch No.</td>
                   <td className="py-3">Quantity</td>
                   <td className="py-3">Bottle Name</td>
-                  <td className="py-3">Bottle No</td>
+                  {/* <td className="py-3">Bottle No</td> */}
                   <td className="py-3">Feeding Date</td>
                 </tr>
               </thead>
@@ -63,7 +63,7 @@ export default function BabyDetailsById() {
                       <td className="py-3">{items?.batchNumber}</td>
                       <td className="py-3">{items?.quantity}</td>
                       <td className="py-3">{items?.bottleName}</td>
-                      <td className="py-3">{items?.uniqueBottleNumber}</td>
+                      {/* <td className="py-3">{items?.uniqueBottleNumber}</td> */}
                       <td className="py-3">{items?.feedingDate}</td>
                     </tr>
                   );

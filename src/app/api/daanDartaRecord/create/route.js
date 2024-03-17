@@ -18,7 +18,7 @@ export async function POST(req, res) {
     if (latestDaanDarta) {
       const lastDonorRegNo = latestDaanDarta.donorRegNo;
       const numericPart = parseInt(lastDonorRegNo, 10);
-      newDonorRegNo = (numericPart + 1).toString().padStart(3, "0");
+      newDonorRegNo = 'PMWH-' + (numericPart + 1).toString().padStart(3, "0");
     }
 
     let newDaanDarta = new DaanDarta({

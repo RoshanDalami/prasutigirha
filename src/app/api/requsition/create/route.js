@@ -15,7 +15,6 @@ export async function POST(req) {
         { ...body },
         { new: true }
       );
-
       return NextResponse.json(response, { status: 200 });
     }
     const babyDetail = await BabyDetail.findOne({_id:body?.babyId})

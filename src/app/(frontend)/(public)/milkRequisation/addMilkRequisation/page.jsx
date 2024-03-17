@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
@@ -11,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
 const aa = new BikramSambat(new Date()).toBS();
+
 export default function AddMilkReq({ clickedIdData }) {
   const router = useRouter();
   const { id } = useParams();
@@ -33,9 +35,8 @@ export default function AddMilkReq({ clickedIdData }) {
       requisitedMilk: [
         {
           batchNumber: "",
-          uniqueBottleNumber: "",
           bottleName: "",
-          quantity: "",
+          quantity: 0,
         },
       ],
     },
@@ -44,6 +45,34 @@ export default function AddMilkReq({ clickedIdData }) {
     control,
     name: "requisitedMilk",
   });
+  const watchFields = watch();
+  const watchArray = watch("requisitedMilk");
+
+  // const watchArray = watchFields?.requisitedMilk
+
+  const [bottleList, setBottleList] = useState([]);
+
+  useEffect(() => {
+    async function fetchBottleList() {
+      watchArray?.forEach(async (item, index) => {
+        if (item?.batchNumber != "") {
+          const response = await axios.get(
+            `${urls.getBottle}/${item.batchNumber.split("/")?.[0]}`
+          );
+          if (response.status === 200) {
+            // console.log(response?.data,'response')
+            setBottleList((prevData) => [
+              ...prevData.slice(0, index),
+              response?.data?.bottleList,
+              ...prevData.slice(index + 1),
+            ]);
+          }
+        }
+      });
+    }
+    fetchBottleList();
+  }, [watchArray]);
+
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
   useEffect(() => {
@@ -74,18 +103,30 @@ export default function AddMilkReq({ clickedIdData }) {
     }
     fetchData();
   }, []);
+  //poolingList batchname
+  const [poolingList, setPoolingList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getPooling}`);
+      if (status === 200) {
+        setPoolingList(data);
+      }
+    }
+    fetchData();
+  }, []);
 
-  const watchFields = watch();
+
   const onSubmit = async (data) => {
     data = {
       ...data,
-      babyId: watchFields.babyId.split("/")[0],
-      babyName: watchFields.babyId.split("/")[1],
+      babyId: watchFields?.babyId.split("/")[0],
+      babyName: watchFields?.babyId.split("/")[1],
       _id: data?._id,
       userId: userInfo._id,
       feedingDate: feedingDate,
       engFeedingDate: engFeedingDate,
     };
+    console.log(data, "response");
     try {
       const { status } = await axios.post(`${urls.createMilkRequistion}`, data);
       if (status === 200) {
@@ -95,15 +136,14 @@ export default function AddMilkReq({ clickedIdData }) {
       console.log(error, "response");
     }
   };
-  function handleAppend(e) {
-    e.preventDefault();
-    append({
-      batchNumber: "",
-      uniqueBottleNumber: "",
-      bottleName: "",
-      quantity: "",
-    });
-  }
+
+  const validVolume =
+    watchArray
+      ?.map((item) => {
+        return item.quantity;
+      })
+      ?.reduce((acc, amount) => acc + amount, 0) / watchArray?.length;
+
 
   return (
     <>
@@ -122,9 +162,8 @@ export default function AddMilkReq({ clickedIdData }) {
                     e.preventDefault();
                     append({
                       batchNumber: "",
-                      uniqueBottleNumber: "",
                       bottleName: "",
-                      quantity: "",
+                      quantity: 0,
                     });
                   }}
                 >
@@ -179,21 +218,36 @@ export default function AddMilkReq({ clickedIdData }) {
                     <label htmlFor="">
                       Batch Number <span className="text-red-600">*</span>
                     </label>
-                    <input
+                    {/* <Select options={newPoolingList} placeholder={'-- Select Batch Number --'} value={{...register(`requisitedMilk.${index}.batchNumber`, {
+                        required: "Batch number is required",
+                      })}}  /> */}
+                    <select
                       type="Number"
                       className="inputStyle"
                       placeholder="Enter Batch Number"
                       {...register(`requisitedMilk.${index}.batchNumber`, {
                         required: "Batch number is required",
                       })}
-                    />
+                    >
+                      <option value={""} selected disabled>
+                        --Select Batch Number--
+                      </option>
+                      {poolingList?.map((items, index) => {
+                        const combinedValue = `${items._id}/${items.batchName}`;
+                        return (
+                          <option key={index} value={combinedValue}>
+                            {items?.batchName}({items?.date})
+                          </option>
+                        );
+                      })}
+                    </select>
                     {errors?.batchNumber && (
                       <p className="errorMessages">
                         {errors.batchNumber.message}
                       </p>
                     )}
                   </div>
-                  <div className="grid">
+                  {/* <div className="grid">
                     <label htmlFor="">
                       Unique Bottle Number
                       <span className="text-red-600">*</span>
@@ -214,20 +268,43 @@ export default function AddMilkReq({ clickedIdData }) {
                         {errors.uniqueBottleNumber.message}
                       </p>
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="flex flex-col">
                     <label htmlFor="">
                       Bottle Name<span className="text-red-600">*</span>
                     </label>
-                    <input
+                    <select
+                      className="inputStyle"
+                      {...register(`requisitedMilk.${index}.bottleName`, {
+                        required: "Bottle name is required",
+                      })}
+                    >
+                      <option value="" selected disabled>
+                        -- select bottle --
+                      </option>
+                      {bottleList?.map((item, index0) => (
+                        <React.Fragment key={index}>
+                          {index0 === index &&
+                            item.map((subItem, subIndex) => {
+                              const bottleCombValue = `${subItem._id}/${subItem.name}`;
+                              return (
+                                <option key={subIndex} value={bottleCombValue}>
+                                  {subItem.name}
+                                </option>
+                              );
+                            })}
+                        </React.Fragment>
+                      ))}
+                    </select>
+                    {/* <input
                       type="text"
                       className="inputStyle"
                       placeholder="Enter Bottle Name"
                       {...register(`requisitedMilk.${index}.bottleName`, {
                         required: "Bottle name is required",
                       })}
-                    />
+                    /> */}
                     {errors?.bottleName && (
                       <p className="errorMessages">
                         {errors.bottleName.message}
@@ -244,6 +321,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       className="inputStyle"
                       placeholder="Enter ML"
                       {...register(`requisitedMilk.${index}.quantity`, {
+                        valueAsNumber: true,
                         required: "Quantity is required",
                       })}
                     />
@@ -267,7 +345,14 @@ export default function AddMilkReq({ clickedIdData }) {
             })}
 
             <div className="my-5 font-bold text-xl">
-              <Button>{isSubmitting ? "Submiting ..." : "Submit"}</Button>
+            <button
+                className={`text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg disabled:bg-gray-300  disabled:cursor-not-allowed `}
+                disabled={validVolume > 150  ? true : false  }
+                type="submit"
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </button>
+              {/* <Button isSubmitting={isSubmitting} volume={validVolume > 150 ? false : true}  >{isSubmitting ? "Submiting ..." : "Submit"}</Button> */}
             </div>
           </FormBorder>
         </form>
