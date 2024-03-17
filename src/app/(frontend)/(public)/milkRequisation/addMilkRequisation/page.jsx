@@ -51,7 +51,8 @@ export default function AddMilkReq({ clickedIdData }) {
   // const watchArray = watchFields?.requisitedMilk
 
   const [bottleList, setBottleList] = useState([]);
-
+  
+  
   useEffect(() => {
     async function fetchBottleList() {
       watchArray?.forEach(async (item, index) => {
@@ -71,7 +72,7 @@ export default function AddMilkReq({ clickedIdData }) {
       });
     }
     fetchBottleList();
-  }, [watchArray]);
+  }, [watchArray?.entries()?.next()?.value])
 
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
@@ -209,6 +210,7 @@ export default function AddMilkReq({ clickedIdData }) {
               </div>
             </div>
             {fields.map((field, index) => {
+              const ml = watch(`requisitedMilk.${index}.quantity`)
               return (
                 <div
                   key={field.id}
@@ -228,6 +230,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       {...register(`requisitedMilk.${index}.batchNumber`, {
                         required: "Batch number is required",
                       })}
+
                     >
                       <option value={""} selected disabled>
                         --Select Batch Number--
@@ -287,12 +290,15 @@ export default function AddMilkReq({ clickedIdData }) {
                         <React.Fragment key={index}>
                           {index0 === index &&
                             item.map((subItem, subIndex) => {
-                              const bottleCombValue = `${subItem._id}/${subItem.name}`;
-                              return (
-                                <option key={subIndex} value={bottleCombValue}>
-                                  {subItem.name}
-                                </option>
-                              );
+                              if(subItem.remainingVoluem > 0){
+
+                                const bottleCombValue = `${subItem._id}/${subItem.name}`;
+                                return (
+                                  <option key={subIndex} value={bottleCombValue}>
+                                    {subItem.name}({'Remaining Volume'}({subItem.remainingVoluem}{'ml'}))
+                                  </option>
+                                );
+                              }
                             })}
                         </React.Fragment>
                       ))}
@@ -318,12 +324,13 @@ export default function AddMilkReq({ clickedIdData }) {
                     </label>
                     <input
                       type="number"
-                      className="inputStyle"
+                      className={`${ml>150 ? 'border-2 border-red-600 inputStyleError':'inputStyle'}`}
                       placeholder="Enter ML"
                       {...register(`requisitedMilk.${index}.quantity`, {
                         valueAsNumber: true,
                         required: "Quantity is required",
                       })}
+
                     />
                     {errors?.quantity && (
                       <p className="errorMessages">{errors.quantity.message}</p>
