@@ -2,10 +2,12 @@ import { MilkRequsition } from "src/Model/requistion.model";
 import { NextResponse } from "next/server";
 import { connect } from "src/dbConfig/dbConfig";
 import { BabyDetail } from "src/Model/baby.model";
+import { Bottle } from "src/Model/bottle.model";
 connect();
 
 export async function POST(req) {
   const body = await req.json();
+  // console.log(body,'response')
 
   try {
     const { _id } = body;
@@ -17,6 +19,15 @@ export async function POST(req) {
       );
       return NextResponse.json(response, { status: 200 });
     }
+    body?.requisitedMilk?.forEach(async(items)=>{
+      const poolingId = items.batchNumber.split('/')?.[0]
+      const response = await Bottle.findOne({poolingId:poolingId}).then((doc)=>{
+        const item = doc.bottleList.id(items.bottleName.split('/')?.[0])
+        item.remainingVoluem = item.volume - items.quantity;
+        doc.save()
+      })
+      
+    })
     const babyDetail = await BabyDetail.findOne({_id:body?.babyId})
     const consumnedMilk = body?.requisitedMilk?.map((item)=>{return parseInt(item?.quantity)}).reduce((acc,amount)=>acc + amount ,0) + babyDetail?.milkConsumed
     const newMilkRequsition = new MilkRequsition(body);
@@ -24,7 +35,9 @@ export async function POST(req) {
      await BabyDetail.findOneAndUpdate({_id:body?.babyId},{
       $set:{milkConsumed:consumnedMilk}
     });
-    return NextResponse.json(response, { status: 200 });
+    
+    
+    return NextResponse.json(body, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { message: "Internal Server Error" },
