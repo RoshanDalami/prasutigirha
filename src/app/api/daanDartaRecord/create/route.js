@@ -13,10 +13,10 @@ export async function POST(req, res) {
       { sort: { donorRegNo: -1 } }
     );
 
-    let newDonorRegNo = "001";
+    let newDonorRegNo = "PMWH-001";
 
     if (latestDaanDarta) {
-      const lastDonorRegNo = latestDaanDarta.donorRegNo;
+      const lastDonorRegNo = latestDaanDarta.donorRegNo?.split("-")[1];
       const numericPart = parseInt(lastDonorRegNo, 10);
       newDonorRegNo = 'PMWH-' + (numericPart + 1).toString().padStart(3, "0");
     }
