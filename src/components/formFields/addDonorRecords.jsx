@@ -57,7 +57,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getEthnicity}`);
       if (status === 200) {
-        setEthnicity(data);
+        setEthnicity(data?.data);
       }
     }
     fetchData();
@@ -76,7 +76,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     const fetchData = async () => {
       const { data, status } = await axios.get(`${urls.getGestational}`);
       if (status === 200) {
-        setGestationalAgeList(data);
+        setGestationalAgeList(data?.data);
       }
     };
     fetchData();
@@ -95,7 +95,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getDelivery}`);
       if (status === 200) {
-        setModeOfDeliveryList(data);
+        setModeOfDeliveryList(data?.data);
       }
     }
     fetchData();
@@ -115,7 +115,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getParity}`);
       if (status === 200) {
-        setParityList(data);
+        setParityList(data?.data);
       }
     }
     fetchData();

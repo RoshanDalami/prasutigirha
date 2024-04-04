@@ -27,7 +27,7 @@ export default function AddVolume({ clickedData }) {
       collectedMilk: [{ time: "", quantity: 0, temp: "", storedBy: "" }],
     },
   });
-  const { fields, append, remove , replace } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "collectedMilk",
   });
@@ -42,7 +42,7 @@ export default function AddVolume({ clickedData }) {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getGestational}`);
       if (status === 200) {
-        setGestational(data);
+        setGestational(data?.data);
       }
     }
     fetchData();
@@ -51,7 +51,6 @@ export default function AddVolume({ clickedData }) {
   //   fields.length = clickedData?.collectedMilk?.length
   // }
   useEffect(() => {
-    
     if (clickedData) {
       setValue("_id", clickedData?._id);
       setValue(
@@ -60,12 +59,12 @@ export default function AddVolume({ clickedData }) {
       );
       // setValue('collectedMilk',clickedData?.collectedMilk);
       setValue("gestationalAge", clickedData?.gestationalAge);
-      clickedData?.collectedMilk?.forEach((item,index)=>{
+      clickedData?.collectedMilk?.forEach((item, index) => {
         setValue(`collectedMilk.${index}.quantity`, item?.quantity);
         setValue(`collectedMilk.${index}.storedBy`, item?.storedBy);
         setValue(`collectedMilk.${index}.temp`, item?.temp);
         setValue(`collectedMilk.${index}.time`, item?.time);
-      })
+      });
       // replace('collectedMilk',clickedData?.collectedMilk)
       setDate(clickedData?.date);
     }
@@ -86,7 +85,7 @@ export default function AddVolume({ clickedData }) {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getDonor}`);
       if (status === 200) {
-        setDonorList(data);
+        setDonorList(data?.data);
       }
     }
     fetchData();
@@ -118,7 +117,6 @@ export default function AddVolume({ clickedData }) {
     append({ time: "", quantity: 0, temp: "", storedBy: "" });
   }
 
-  
   return (
     <>
       <form

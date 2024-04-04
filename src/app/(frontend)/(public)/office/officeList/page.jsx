@@ -1,4 +1,3 @@
-
 "use client";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useCallback } from "react";
@@ -22,7 +21,7 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getOffice}`);
       if (status === 200) {
-        setOfficeList(data);
+        setOfficeList(data.data);
       }
     }
     fetchData();
@@ -58,7 +57,6 @@ export default function ViewDonor() {
   return (
     <>
       <div>
-        
         <div className="mx-10">
           <TableBorder
             title={"Office List"}

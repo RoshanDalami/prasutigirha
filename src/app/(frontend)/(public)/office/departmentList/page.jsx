@@ -1,4 +1,3 @@
-
 "use client";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useCallback } from "react";
@@ -22,18 +21,18 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getDepartment}`);
       if (status === 200) {
-        setDepartmentList(data);
+        setDepartmentList(data?.data);
       }
     }
     fetchData();
   }, []);
-
+  console.log(departmentList, "department");
   const [officeList, setOfficeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getOffice}`);
       if (status === 200) {
-        setOfficeList(data);
+        setOfficeList(data?.data);
       }
     }
     fetchData();
@@ -68,14 +67,13 @@ export default function ViewDonor() {
   return (
     <>
       <div>
-        
         <div className="mx-10">
           <TableBorder
             title={"Department List"}
             title2={
               <div className="flex flex-col   ">
                 <div className=" flex justify-end">
-                  <Link href={"/office/officeSetup"}>
+                  <Link href={"/office/department"}>
                     <Button>+Add </Button>
                   </Link>
                 </div>
@@ -105,9 +103,7 @@ export default function ViewDonor() {
                   </td> */}
                       <td className="py-3">{index + 1}</td>
                       <td className="py-3">{item.departmentName}</td>
-                      <td className="py-3">{
-                        officeList?.[0]?.office_name
-                      }</td>
+                      <td className="py-3">{officeList?.[0]?.office_name}</td>
                       {/* <td className="py-3">{item.office_email}</td>
                       <td className="py-3">{item.office_phone}</td> */}
                       {/* <td className="py-3">

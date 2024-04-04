@@ -11,12 +11,13 @@ export default function Office() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
   const watchFields = watch();
   const router = useRouter();
   //state
   const [state, setState] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       const { status, data } = await axios.get(`${urls.getStates}`);
@@ -26,7 +27,8 @@ export default function Office() {
     };
     fetchData();
   }, []);
-  const stateOptions = state?.map((item, index) => {
+
+  const stateOptions = state?.data?.map((item, index) => {
     return (
       <option key={index} value={item.stateId}>
         {item.stateName}
@@ -49,7 +51,7 @@ export default function Office() {
       fetchData();
     }
   }, [watchFields?.stateId]);
-  const districtOptions = district?.map((item, index) => {
+  const districtOptions = district?.data?.map((item, index) => {
     return (
       <option key={index} value={item.districtId}>
         {item.districtName}
@@ -71,7 +73,7 @@ export default function Office() {
       fetchData();
     }
   }, [watchFields?.districtId]);
-  const paliakOptions = palika?.map((item, index) => {
+  const paliakOptions = palika?.data?.map((item, index) => {
     return (
       <option key={index} value={item.palikaId}>
         {item.palikaName}
@@ -235,7 +237,7 @@ export default function Office() {
             </div>
           </div>
           <div className="my-5 font-bold text-lg">
-            <Button>Submit</Button>
+            <Button isSubmitting={isSubmitting}>Submit</Button>
           </div>
         </FormBorder>
       </form>
