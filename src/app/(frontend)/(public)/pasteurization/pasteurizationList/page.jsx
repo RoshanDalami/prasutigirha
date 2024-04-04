@@ -20,11 +20,12 @@ export default function ListVolume() {
   };
 
   const [poolingList, setPoolingList] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getPooling}`);
       if (status === 200) {
-        setPoolingList(data);
+        setPoolingList(data?.data);
       }
     }
     fetchData();

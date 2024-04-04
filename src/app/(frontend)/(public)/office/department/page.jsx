@@ -25,7 +25,7 @@ export default function Department() {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getOffice}`);
       if (status === 200) {
-        setOfficeList(data);
+        setOfficeList(data?.data);
       }
     }
     fetchData();
@@ -69,7 +69,7 @@ export default function Department() {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getDepartment}`);
       if (status === 200) {
-        setDepartmentList(data);
+        setDepartmentList(data?.data);
       }
     }
     fetchData();
@@ -136,7 +136,7 @@ export default function Department() {
                         </div>
                       </div>
                       <div className="flex justify-end">
-                        <Button>
+                        <Button isSubmitting={isSubmitting}>
                           {isSubmitting ? "Submitting..." : "Add"}
                         </Button>
                       </div>
@@ -183,10 +183,7 @@ export default function Department() {
                 <label htmlFor="">
                   Select Office <span className="text-red-600">*</span>
                 </label>
-                <select
-                  className="inputStyle"
-                  {...register("officeId")}
-                >
+                <select className="inputStyle" {...register("officeId")}>
                   <option value={""} selected disabled>
                     --Select Office--
                   </option>
@@ -204,7 +201,9 @@ export default function Department() {
               </div>
             </div>
             <div className="text-lg font-bold my-5">
-              <Button isSubmitting={isSubmitting} >{isSubmitting ? "Submitting..." : "Submit"}</Button>
+              <Button isSubmitting={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
             </div>
           </FormBorder>
         </form>

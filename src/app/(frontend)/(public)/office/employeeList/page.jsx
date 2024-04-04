@@ -21,7 +21,7 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getEmployee}`);
       if (status === 200) {
-        setEmployeeList(data);
+        setEmployeeList(data?.data);
       }
     }
     fetchData();
@@ -44,7 +44,7 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getDepartment}`);
       if (status === 200) {
-        setDepartmentList(data);
+        setDepartmentList(data.data);
       }
     }
     fetchData();
@@ -54,7 +54,7 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getPost}`);
       if (status === 200) {
-        setPostList(data);
+        setPostList(data?.data);
       }
     }
     fetchData();
@@ -96,7 +96,7 @@ export default function ViewDonor() {
             title2={
               <div className="flex flex-col   ">
                 <div className=" flex justify-end">
-                  <Link href={"/office/officeSetup"}>
+                  <Link href={"/office/employee"}>
                     <Button>+Add </Button>
                   </Link>
                 </div>
@@ -140,7 +140,6 @@ export default function ViewDonor() {
                           );
                         }
                       })}
-
 
                       <td className="py-3">{officeList?.[0]?.office_name}</td>
 

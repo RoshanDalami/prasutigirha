@@ -121,7 +121,7 @@ export default function AddPasteurization({ clickedIdData }) {
               )
             : await axios.get(`${urls.getColostrum}`);
         if (status === 200) {
-          setDonorList(data);
+          setDonorList(data?.data);
         }
       }
       fetchData();
@@ -147,7 +147,7 @@ export default function AddPasteurization({ clickedIdData }) {
     const fetchData = async () => {
       const { data, status } = await axios.get(`${urls.getGestational}`);
       if (status === 200) {
-        setGestationalAgeList(data);
+        setGestationalAgeList(data?.data);
       }
     };
     fetchData();
@@ -303,7 +303,7 @@ export default function AddPasteurization({ clickedIdData }) {
             <div className="my-3">
               <button
                 className={`text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg disabled:bg-gray-300  disabled:cursor-not-allowed `}
-                disabled={milkVolume > 2500 ? true : false }
+                disabled={milkVolume > 2500 ? true : false}
                 type="submit"
               >
                 {isSubmitting ? "Submitting..." : "Submit"}

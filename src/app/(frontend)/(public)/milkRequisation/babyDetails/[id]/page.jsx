@@ -10,9 +10,9 @@ export default function BabyDetailsById() {
   const { id } = useParams();
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getBaby}/${id}`);
+      const { status, data } = await axios.get(`${urls.getBabyById}/${id}`);
       if (status === 200) {
-        setBabyDetails(data);
+        setBabyDetails(data?.data);
       }
     }
     fetchData();
