@@ -63,7 +63,7 @@ export async function POST(req) {
         { $set: { remaining: newRemaining } }
       );
     }
-    if(body._id){u
+    if(body._id){
       const response = await Pasteurization.findByIdAndUpdate(body._id,{...body,
         batchName: batchName,
         expireDate: expireDate},{new:true});
@@ -73,10 +73,10 @@ export async function POST(req) {
     
     
 
-    return NextResponse.json(savedData, { status: 200 });
+    return new NextResponse.json(savedData, { status: 200 });
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
+    return new NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );
