@@ -113,6 +113,7 @@ export default function SideBar() {
     },
   ];
   const officeSetupList = [
+    { link: "/office/fiscalYear", name: "Fiscal Year " },
     { link: "/office/officeSetup", name: "Office Setup" },
     { link: "/office/officeList", name: "Office List" },
     { link: "/office/department", name: "Department Setup" },
