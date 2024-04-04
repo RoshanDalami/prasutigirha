@@ -5,16 +5,16 @@ export async function GET(req, { params }) {
   const id = params.id;
   try {
     if (!id) {
-      return NextResponse.json({ message: "Id is undefined" }, { status: 400 });
+      return new NextResponse.json({ message: "Id is undefined" }, { status: 400 });
     }
     const response = await MilkRequsition.findOne({ _id: id });
-    return NextResponse.json(
+    return new NextResponse.json(
       response,
       { message: "List Created Successfully" },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
+    return new NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );
@@ -28,13 +28,13 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ message: "Id is undefined" }, { status: 400 });
     }
     const response = await MilkRequsition.deleteOne({ _id: id });
-    return NextResponse.json(
+    return new NextResponse.json(
       response,
       { message: "List Created Successfully" },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
+    return new NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );

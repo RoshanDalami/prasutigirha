@@ -20,9 +20,9 @@ export async function GET(req, { params }) {
       date: item.date,
     }));
 
-    return NextResponse.json(extractedData, { status: 200 });
+    return new NextResponse.json(extractedData, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
+    return new NextResponse.json(
       { message: "Internal Server Error vyo" },
       { status: 500 }
     );

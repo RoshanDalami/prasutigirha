@@ -49,7 +49,7 @@ export async function POST(req, res) {
 
     if (newDaanDarta.isSerologyPositive === true) {
       await newDaanDarta.save();
-      return NextResponse.json(
+      return new NextResponse.json(
         { message: "Serology Positive she can't donate milk" },
         { status: 200 }
       );
@@ -79,7 +79,7 @@ export async function POST(req, res) {
 
     if (newDaanDarta.verbalStatus === true) {
       await newDaanDarta.save();
-      return NextResponse.json(
+      return new NextResponse.json(
         { message: "She can't milk right now" },
         { status: 200 }
       );
@@ -102,7 +102,7 @@ export async function POST(req, res) {
 
     if (newDaanDarta.physicalStatus === true) {
       await newDaanDarta.save();
-      return NextResponse.json(
+      return new NextResponse.json(
         { message: "she can't donate milk right now !" },
         { status: 200 }
       );
@@ -110,14 +110,14 @@ export async function POST(req, res) {
 
     // ===============================================================================================	  if (newDaanDarta.serologyRecords.hiv === true) {
     const savedDaanDarta = await newDaanDarta.save();
-    return NextResponse.json(
+    return new NextResponse.json(
       savedDaanDarta,
       { message: "daanDarta created successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
+    return new NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );
