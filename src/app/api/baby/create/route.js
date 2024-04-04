@@ -7,7 +7,7 @@ export async function POST(req) {
 
     
     if (!body) {
-      return new NextResponse.json({ message: "Bad Request" }, { status: 404 });
+      return  NextResponse.json({ message: "Bad Request" }, { status: 404 });
     }
 
     const newBaby = new BabyDetail({
@@ -16,10 +16,10 @@ export async function POST(req) {
       milkConsumedToday:0
     });
     const savedBaby = await newBaby.save();
-    return new NextResponse.json(savedBaby, { status: 200 });
+    return  NextResponse.json(savedBaby, { status: 200 });
   } catch (error) {
 
-    return new NextResponse.json(
+    return  NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );

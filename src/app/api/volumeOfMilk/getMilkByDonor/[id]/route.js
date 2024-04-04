@@ -38,10 +38,10 @@ export async function GET(req, { params }) {
           donotedMilkList:voluemofMilk
         }
     });
-    return new NextResponse.json(donorDetails, { status: 200 });
+    return  NextResponse.json(donorDetails, { status: 200 });
   } catch (error) {
     console.log(error);
-    return new NextResponse.json(
+    return  NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );

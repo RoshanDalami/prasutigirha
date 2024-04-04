@@ -3,8 +3,8 @@ import {NextResponse} from 'next/server';
 export async function GET(){
     try {
         const response = await MilkRequsition.find({},{__v:0,createdAt:0,updatedAt:0})
-        return new NextResponse.json(response,{status:200})
+        return  NextResponse.json(response,{status:200})
     } catch (error) {
-        return new NextResponse.json({message:"Internal Server Error"},{status:500})
+        return  NextResponse.json({message:"Internal Server Error"},{status:500})
     }
 }

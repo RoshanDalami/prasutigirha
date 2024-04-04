@@ -22,10 +22,10 @@ export async function POST(req, res) {
           { new: true }
         );
     const savedMilkVolume = await newMilkVolume.save();
-    return new NextResponse.json(savedMilkVolume, { status: 200 });
+    return  NextResponse.json(savedMilkVolume, { status: 200 });
   } catch (error) {
     console.log(error);
-    return new NextResponse.json(
+    return  NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );

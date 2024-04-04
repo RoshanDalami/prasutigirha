@@ -9,9 +9,9 @@ export async function GET() {
     //   "contactNo hosRegNo"
     // );
 
-    return new NextResponse.json(response, { status: 200 });
+    return  NextResponse.json(response, { status: 200 });
   } catch (error) {
-    return new NextResponse.json(
+    return  NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );
