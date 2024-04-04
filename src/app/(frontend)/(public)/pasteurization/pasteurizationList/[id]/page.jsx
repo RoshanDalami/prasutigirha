@@ -12,9 +12,9 @@ export default function BottleDetails() {
   const [poolingDone, setPoolingDone] = useState(false);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getPooling}/${id}`);
-      if (status === 200) {
-        setPooling(data);
+      const {  data } = await axios.get(`${urls.getPoolingById}/${id}`);
+      if (data?.status === 200) {
+        setPooling(data?.data);
         setPoolingDone(true);
       }
     }
@@ -27,8 +27,8 @@ export default function BottleDetails() {
     if (poolingDone) {
       async function fetchData() {
         const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
-        if (status === 200) {
-          setBottles(data);
+        if (data?.status === 200) {
+          setBottles(data?.data);
           setBottle(true);
         }
       }
@@ -42,8 +42,8 @@ export default function BottleDetails() {
     if (bottle) {
       async function fetchData() {
         const { data, status } = await axios.get(`${urls.getGestational}`);
-        if (status === 200) {
-          setGestational(data);
+        if (data?.status === 200) {
+          setGestational(data?.data);
         }
       }
       fetchData();
@@ -60,10 +60,10 @@ export default function BottleDetails() {
     };
     try {
       const response = await axios.post(`${urls.createBottle}`, data);
-      if (response.status === 200) {
+      if (response?.data?.status === 200) {
         const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
-        if (status === 200) {
-          setBottles(data);
+        if (data?.status === 200) {
+          setBottles(data?.data);
         }
       }
     } catch (error) {}

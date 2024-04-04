@@ -92,7 +92,7 @@ export default function AddPasteurization({ clickedIdData }) {
 
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
-      if (response.status === 200) {
+      if (response?.data?.status === 200) {
         toast.success("Polling Created Successfully");
         router.push("/pasteurization/pasteurizationList");
       } else {

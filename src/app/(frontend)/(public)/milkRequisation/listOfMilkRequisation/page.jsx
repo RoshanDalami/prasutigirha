@@ -18,8 +18,8 @@ export default function ListVolume() {
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getRequistion}`);
-      if (status === 200) {
-        setRequsitionList(data);
+      if (data?.status === 200) {
+        setRequsitionList(data?.data);
         toast.success("List generated successfully");
       } else {
         toast.error("List generation failed");
@@ -31,8 +31,8 @@ export default function ListVolume() {
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getGestational}`);
-      if (status === 200) {
-        setGestationalAgeList(data);
+      if (data?.status === 200) {
+        setGestationalAgeList(data?.data);
       }
     }
     fetchData();
@@ -42,10 +42,10 @@ export default function ListVolume() {
   }, [router]);
   const handleDelete = async(id) =>{
     const response = await axios.delete(`${urls.getRequistion}/${id}`);
-    if(response.status === 200){
+    if(response.data?.status === 200){
       const { data, status } = await axios.get(`${urls.getRequistion}`);
-      if (status === 200) {
-        setRequsitionList(data);
+      if (data?.status === 200) {
+        setRequsitionList(data?.data);
         
       } 
     }

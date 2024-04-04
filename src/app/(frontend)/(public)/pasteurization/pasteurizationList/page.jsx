@@ -23,8 +23,9 @@ export default function ListVolume() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getPooling}`);
-      if (status === 200) {
+      const { data } = await axios.get(`${urls.getPooling}`);
+      console.log(data,'response')
+      if (data?.status === 200) {
         setPoolingList(data?.data);
       }
     }
@@ -34,8 +35,8 @@ export default function ListVolume() {
     const response = await axios.delete(`${urls.getPooling}/${id}`);
     if (response.status === 200) {
       const { data, status } = await axios.get(`${urls.getPooling}`);
-      if (status === 200) {
-        setPoolingList(data);
+      if (data?.status === 200) {
+        setPoolingList(data?.data);
       }
     }
   };
@@ -44,7 +45,7 @@ export default function ListVolume() {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getGestational}`);
       if (status === 200) {
-        setGestationalAge(data);
+        setGestationalAge(data?.data);
       }
     }
     fetchData();

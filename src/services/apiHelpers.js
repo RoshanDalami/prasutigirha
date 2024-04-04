@@ -27,12 +27,17 @@ export const urls = {
   createVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/registerMilkVolume`,
   createPooling: `${baseUrl}/api/v1/pasteurization/createPasteurization`,
   getPooling: `${baseUrl}/api/v1/pasteurization/getPasteurization`,
+  getPoolingById: `${baseUrl}/api/v1/pasteurization/getPasteurizationById` ,
   getColostrum: `${baseUrl}/api/v1/pasteurization/getColostrum`,
   getCondition: `${baseUrl}/api/v1/pasteurization/getCondition`,
   getConditionById: `${baseUrl}/api/v1/pasteurization/getConditionById`,
   getBaby: `${baseUrl}/api/v1/baby/getBabyDetail`,
   getBabyById: `${baseUrl}/api/v1/baby/getBabyDetailId`,
   createBaby: `${baseUrl}/api/v1/baby/createBabyDetail`,
+  getBottle: `${baseUrl}/api/v1/bottle/getBottles`,
+  createBottle: `${baseUrl}/api/v1/bottle/generateBottles`,
+  createMilkRequistion:`${baseUrl}/api/v1/milkRequsition/registerMilkRequsition`,
+  getRequistion:`${baseUrl}/api/v1/milkRequsition/getMilkRequsition`
 };
 
 // export const urls = {
