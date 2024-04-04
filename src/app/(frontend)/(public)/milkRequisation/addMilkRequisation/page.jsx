@@ -60,27 +60,30 @@ export default function AddMilkReq({ clickedIdData }) {
           const response = await axios.get(
             `${urls.getBottle}/${item.batchNumber.split("/")?.[0]}`
           );
-          if (response.status === 200) {
+          if (response?.data.status === 200) {
             // console.log(response?.data,'response')
             setBottleList((prevData) => [
               ...prevData.slice(0, index),
-              response?.data?.bottleList,
+              response?.data?.data?.bottleList,
               ...prevData.slice(index + 1),
             ]);
+          }else{
+            setBabyList([])
           }
         }
       });
     }
     fetchBottleList();
-  }, [watchArray.map(item=>item.batchNumber)])
+  }, [watchArray?.map(item=>item.batchNumber)])
+  
 
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getGestational}`);
-      if (status === 200) {
-        setGestationalAge(data);
+      if (data?.status === 200) {
+        setGestationalAge(data?.data);
       }
     }
     fetchData();
@@ -98,8 +101,8 @@ export default function AddMilkReq({ clickedIdData }) {
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getBaby}`);
-      if (status === 200) {
-        setBabyList(data);
+      if (data?.status === 200) {
+        setBabyList(data?.data);
       }
     }
     fetchData();
@@ -109,8 +112,8 @@ export default function AddMilkReq({ clickedIdData }) {
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getPooling}`);
-      if (status === 200) {
-        setPoolingList(data);
+      if (data?.status === 200) {
+        setPoolingList(data?.data);
       }
     }
     fetchData();
@@ -127,10 +130,11 @@ export default function AddMilkReq({ clickedIdData }) {
       feedingDate: feedingDate,
       engFeedingDate: engFeedingDate,
     };
-    console.log(data, "response");
+
     try {
-      const { status } = await axios.post(`${urls.createMilkRequistion}`, data);
-      if (status === 200) {
+      const response = await axios.post(`${urls.createMilkRequistion}`, data);
+      console.log(response,'response')
+      if (response?.data?.status === 200) {
         router.push("/milkRequisation/listOfMilkRequisation");
       }
     } catch (error) {
@@ -286,16 +290,17 @@ export default function AddMilkReq({ clickedIdData }) {
                       <option value="" selected disabled>
                         -- select bottle --
                       </option>
-                      {bottleList?.map((item, index0) => (
+
+                      {  bottleList?.map((item, index0) => (
                         <React.Fragment key={index}>
                           {index0 === index &&
-                            item.map((subItem, subIndex) => {
-                              if(subItem.remainingVoluem > 0){
+                            item?.map((subItem, subIndex) => {
+                              if(subItem?.remainingVoluem > 0){
 
-                                const bottleCombValue = `${subItem._id}/${subItem.name}`;
+                                const bottleCombValue = `${subItem?._id}/${subItem?.name}`;
                                 return (
                                   <option key={subIndex} value={bottleCombValue}>
-                                    {subItem.name}({'Remaining Volume'}({subItem.remainingVoluem}{'ml'}))
+                                    {subItem?.name}({'Remaining Volume'}({subItem?.remainingVoluem}{'ml'}))
                                   </option>
                                 );
                               }

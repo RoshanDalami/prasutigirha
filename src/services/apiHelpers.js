@@ -1,7 +1,9 @@
-const baseUrl = "http://localhost:8000";
+const baseUrl = "https://prasuti-backend.onrender.com";
+// const baseUrl = "http://localhost:8000";
 export const urls = {
   login: `/api/user/login`,
   register: `/api/user/register`,
+  logout: `/api/user/logout`,
   createOffice: `${baseUrl}/api/v1/office/registerOffice`,
   getOffice: `${baseUrl}/api/v1/office/getOffice`,
   getStates: `${baseUrl}/api/v1/office/getState`,
@@ -27,12 +29,18 @@ export const urls = {
   createVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/registerMilkVolume`,
   createPooling: `${baseUrl}/api/v1/pasteurization/createPasteurization`,
   getPooling: `${baseUrl}/api/v1/pasteurization/getPasteurization`,
+  getPoolingById: `${baseUrl}/api/v1/pasteurization/getPasteurizationById` ,
   getColostrum: `${baseUrl}/api/v1/pasteurization/getColostrum`,
   getCondition: `${baseUrl}/api/v1/pasteurization/getCondition`,
   getConditionById: `${baseUrl}/api/v1/pasteurization/getConditionById`,
   getBaby: `${baseUrl}/api/v1/baby/getBabyDetail`,
   getBabyById: `${baseUrl}/api/v1/baby/getBabyDetailId`,
   createBaby: `${baseUrl}/api/v1/baby/createBabyDetail`,
+  getBottle: `${baseUrl}/api/v1/bottle/getBottles`,
+  createBottle: `${baseUrl}/api/v1/bottle/generateBottles`,
+  createMilkRequistion:`${baseUrl}/api/v1/milkRequsition/registerMilkRequsition`,
+  getRequistion:`${baseUrl}/api/v1/milkRequsition/getMilkRequsition`,
+  getGestationalPooling:`${baseUrl}/api/v1/pasteurization/getConditionById`
 };
 
 // export const urls = {

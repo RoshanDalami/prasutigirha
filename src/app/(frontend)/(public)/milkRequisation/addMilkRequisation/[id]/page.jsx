@@ -10,8 +10,8 @@ export default function AddMilkReqId() {
   useEffect(()=>{
     async function fetchData(){
       const {data,status} = await axios.get(`${urls.getRequistion}/${id}`);
-      if(status === 200){
-        setApiData(data)
+      if(data?.status === 200){
+        setApiData(data?.data)
       }
     }
     fetchData()
