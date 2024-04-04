@@ -1,7 +1,9 @@
-const baseUrl = "http://localhost:8000";
+const baseUrl = "https://prasuti-backend.onrender.com";
+// const baseUrl = "http://localhost:8000";
 export const urls = {
   login: `/api/user/login`,
   register: `/api/user/register`,
+  logout: `/api/user/logout`,
   createOffice: `${baseUrl}/api/v1/office/registerOffice`,
   getOffice: `${baseUrl}/api/v1/office/getOffice`,
   getStates: `${baseUrl}/api/v1/office/getState`,
@@ -37,7 +39,8 @@ export const urls = {
   getBottle: `${baseUrl}/api/v1/bottle/getBottles`,
   createBottle: `${baseUrl}/api/v1/bottle/generateBottles`,
   createMilkRequistion:`${baseUrl}/api/v1/milkRequsition/registerMilkRequsition`,
-  getRequistion:`${baseUrl}/api/v1/milkRequsition/getMilkRequsition`
+  getRequistion:`${baseUrl}/api/v1/milkRequsition/getMilkRequsition`,
+  getGestationalPooling:`${baseUrl}/api/v1/pasteurization/getConditionById`
 };
 
 // export const urls = {
