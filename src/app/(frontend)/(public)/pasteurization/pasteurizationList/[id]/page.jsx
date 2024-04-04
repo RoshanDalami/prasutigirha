@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import QRCode from "react-qr-code";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useReactToPrint } from "react-to-print";
 export default function BottleDetails() {
   const { id } = useParams();
   const [pooling, setPooling] = useState({});
@@ -55,7 +56,7 @@ export default function BottleDetails() {
       poolingCondition: pooling.poolingCondition,
       expireDate: pooling.expireDate,
       totalVolume: pooling.collectedVolume,
-      poolingDate:pooling.date
+      poolingDate: pooling.date,
     };
     try {
       const response = await axios.post(`${urls.createBottle}`, data);
@@ -73,6 +74,10 @@ export default function BottleDetails() {
   //     (donor) => item.donorId === donor.donorId
   //   );
   // });
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <div>
@@ -140,59 +145,68 @@ export default function BottleDetails() {
             <div className="text-xl font-semibold bg-indigo-700 rounded-md w-fit px-4 py-1 text-white absolute -top-4">
               Bottle Details
             </div>
-            <div className=" grid grid-cols-2 ">
+            <div className=" grid grid-cols-1" ref={componentRef}>
               {bottles?.bottleList?.map((item, index) => {
                 return (
-                  <div
-                    key={index}
-                    className="flex items-center justify-center font-bold "
-                  >
-                    <div>
-                      
-                      {item?.poolingCondition === 4 ? (
-                        <p>PDHM: {"Colostrum"}</p>
-                      ) : (
-                        gestational?.map((age, index) => {
-                          if (age?.gestationalId === item?.poolingCondition) {
-                            return (
-                              <p key={index}>
-                                PDHM: {age?.gestationalName}
-                              </p>
-                            );
-                          }
-                        })
-                      )}
-                      <p>
-                        Batch Id: <span>{item?.name}</span>
-                      </p>
-                      <p>
-                        Volume: <span>{item?.volume}ml</span>
-                      </p>
-                      <p>
-                        Pasteurization Date: <span>{item?.poolingDate}</span>
-                      </p>
-                      <p>
-                        Expire Date: <span>{item?.expireDate}</span>
-                      </p>
-                    </div>
-                    <div className="mx-10 my-10 h-20 w-20 ">
-                      <QRCode
-                        size={256}
-                        style={{
-                          height: "auto",
-                          maxWidth: "100%",
-                          width: "100%",
-                        }}
-                        value={JSON.stringify(item)}
-                        viewBox={`0 0 256 256`}
-                      />
-                      {/* <div className="w-10 ">
+                  <>
+                    <div key={index} className="font-bold ">
+                      <div className="flex justify-center">
+                        <div>
+                          {item?.poolingCondition === 4 ? (
+                            <p>PDHM: {"Colostrum"}</p>
+                          ) : (
+                            gestational?.map((age, index) => {
+                              if (
+                                age?.gestationalId === item?.poolingCondition
+                              ) {
+                                return (
+                                  <p key={index}>
+                                    PDHM: {age?.gestationalName}
+                                  </p>
+                                );
+                              }
+                            })
+                          )}
+                          <p>
+                            Batch Id: <span>{item?.name}</span>
+                          </p>
+                          <p>
+                            Volume: <span>{item?.volume}ml</span>
+                          </p>
+                          <p>
+                            Pasteurization Date:{" "}
+                            <span>{item?.poolingDate}</span>
+                          </p>
+                          <p>
+                            Expire Date: <span>{item?.expireDate}</span>
+                          </p>
+                        </div>
+
+                        <div className="mx-10 my-10 h-20 w-20 ">
+                          <QRCode
+                            size={256}
+                            style={{
+                              height: "auto",
+                              maxWidth: "100%",
+                              width: "100%",
+                            }}
+                            value={JSON.stringify(item)}
+                            viewBox={`0 0 256 256`}
+                          />
+                          {/* <div className="w-10 ">
                <Barcode value={JSON.stringify(item)}   />
                 </div> */}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 );
               })}
+            </div>
+            <div className="flex justify-center items-center mt-8">
+              <button className="" onClick={handlePrint}>
+                Print
+              </button>
             </div>
           </div>
         </>
