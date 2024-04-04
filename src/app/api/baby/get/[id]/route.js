@@ -36,9 +36,9 @@ export async function GET(req,{params}){
                 milkComsumedDetail:feedList
             }
         })
-        return NextResponse.json(babyList,{status:200})
+        return  NextResponse.json(babyList,{status:200})
     } catch (error) {
             console.log(error);
-            return NextResponse.json({message:"Internal Server Error"},{status:500});
+            return  NextResponse.json({message:"Internal Server Error"},{status:500});
     }
 }

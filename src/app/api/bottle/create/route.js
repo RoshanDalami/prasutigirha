@@ -73,10 +73,10 @@ export async function POST(req) {
       bottleList : bottles
     });
     const savedBottle = await newBottle.save()
-    return NextResponse.json(savedBottle, { status: 200 });
+    return  NextResponse.json(savedBottle, { status: 200 });
   } catch (error) {
     console.log(error)
-    return NextResponse.json(
+    return  NextResponse.json(
       { message: "Internal Server Error" },
       { status: 500 }
     );
