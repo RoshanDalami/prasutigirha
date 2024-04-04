@@ -18,7 +18,7 @@ export default function ListVolume() {
       const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
       if (status === 200) {
         setVolumeList(data);
-        setFilteredVolumeList(data);
+        setFilteredVolumeList(data?.data);
       }
     }
     fetchData();
@@ -28,7 +28,7 @@ export default function ListVolume() {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getGestational}`);
       if (status === 200) {
-        setGestationalAge(data);
+        setGestationalAge(data?.data);
       }
     }
     fetchData();
@@ -163,9 +163,6 @@ export default function ListVolume() {
                               onClick={() => handleDelete(item._id)}
                             />
                           </div>
-                          
-
-
                         </div>
                       </td>
                     </tr>

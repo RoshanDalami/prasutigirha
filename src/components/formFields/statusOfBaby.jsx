@@ -52,7 +52,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getBabyStatus}`);
       if (status === 200) {
-        setBabyStatusList(data);
+        setBabyStatusList(data.data);
       }
     }
     fetchData();
@@ -70,7 +70,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getBabyTransfer}`);
       if (status === 200) {
-        setBabyTranferList(data);
+        setBabyTranferList(data?.data);
       }
     }
     fetchData();
@@ -88,7 +88,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getBreastFeeding}`);
       if (status === 200) {
-        setBreastFeedingList(data);
+        setBreastFeedingList(data?.data);
       }
     }
     fetchData();

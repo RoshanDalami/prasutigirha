@@ -13,7 +13,7 @@ export default function BabyDetail() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getBaby}`);
       if (status === 200) {
-        setBabyDetails(data);
+        setBabyDetails(data?.data);
       }
     }
     fetchData();

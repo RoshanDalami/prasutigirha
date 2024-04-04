@@ -13,7 +13,7 @@ export default function Details() {
         `${urls.getMilkByDonorId}/${id}`
       );
       if (status === 200) {
-        setDonorDetails(data);
+        setDonorDetails(data?.data);
       }
     }
     fetchData();

@@ -26,16 +26,16 @@ export default function AddBabyDetails({ clickedIdData }) {
     handleSubmit,
     formState: { isSubmitting, errors },
     setValue,
-    watch
+    watch,
   } = useForm();
-  const watchFields = watch()
+  const watchFields = watch();
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getGestational}`);
       if (status === 200) {
-        setGestationalAge(data);
+        setGestationalAge(data?.data);
       }
     }
     fetchData();
@@ -53,7 +53,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getParity}`);
       if (status === 200) {
-        setParityList(data);
+        setParityList(data?.data);
       }
     }
     fetchData();
@@ -64,7 +64,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getDelivery}`);
       if (status === 200) {
-        setModeOfDeliveryList(data);
+        setModeOfDeliveryList(data?.data);
       }
     }
     fetchData();
@@ -123,7 +123,10 @@ export default function AddBabyDetails({ clickedIdData }) {
   const onSubmit = async (data) => {
     data = {
       ...data,
-      babyStatus: watchFields?.babyStatus === 'Other' ? data?.babyStatusOther :data?.babyStatus ,
+      babyStatus:
+        watchFields?.babyStatus === "Other"
+          ? data?.babyStatusOther
+          : data?.babyStatus,
       _id: data?._id,
       dateOfBaby: birthDate,
       engDateOfBaby: engBirthDate,
@@ -334,27 +337,28 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Baby Status <span className="text-red-600">*</span>
                 </label>
-                  {
-                    watchFields.babyStatus === 'Other' ? <input
+                {watchFields.babyStatus === "Other" ? (
+                  <input
                     type="text"
                     className="inputStyle"
                     placeholder="Baby Status"
                     {...register("babyStatusOther", {
                       required: "Baby status is required",
                     })}
-                  /> : 
-                <select
-                  className="inputStyle"
-                  {...register("babyStatus", {
-                    required: "Baby status is required",
-                  })}
-                >
-                  <option selected disabled value={""}>
-                    --Select Baby Status--
-                  </option>
-                  {babyStatusOptions}
-                </select>
-                  }
+                  />
+                ) : (
+                  <select
+                    className="inputStyle"
+                    {...register("babyStatus", {
+                      required: "Baby status is required",
+                    })}
+                  >
+                    <option selected disabled value={""}>
+                      --Select Baby Status--
+                    </option>
+                    {babyStatusOptions}
+                  </select>
+                )}
                 {errors?.babyStatus && (
                   <p className="errorMessages">{errors.babyStatus.message}</p>
                 )}

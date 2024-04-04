@@ -21,7 +21,7 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getDonor}`);
       if (status === 200) {
-        setDonorList(data);
+        setDonorList(data?.data);
       }
     }
     fetchData();

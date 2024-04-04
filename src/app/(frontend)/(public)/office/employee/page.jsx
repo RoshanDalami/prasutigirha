@@ -23,7 +23,7 @@ export default function Employee() {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getDepartment}`);
       if (status === 200) {
-        setDepartmentList(data);
+        setDepartmentList(data?.data);
       }
     }
     fetchData();
@@ -40,7 +40,7 @@ export default function Employee() {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getPost}`);
       if (status === 200) {
-        setPostList(data);
+        setPostList(data?.data);
       }
     }
     fetchData();
@@ -61,7 +61,7 @@ export default function Employee() {
     try {
       const response = await axios.post(`${urls.createEmployee}`, data);
       if (response.status === 200) {
-        router.push("/");
+        router.push("/office/employeeList");
       }
     } catch (error) {
       console.log(error, "response");
