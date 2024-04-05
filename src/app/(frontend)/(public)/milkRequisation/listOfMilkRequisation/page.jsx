@@ -41,8 +41,8 @@ export default function ListVolume() {
     router.push(`/milkRequisation/addMilkRequisation/${id}`);
   }, [router]);
   const handleDelete = async(id) =>{
-    const response = await axios.delete(`${urls.getRequistion}/${id}`);
-    if(response.data?.status === 200){
+    const response = await axios.delete(`${urls.deleteRequistion}/${id}`);
+    if(response?.data?.status === 200){
       const { data, status } = await axios.get(`${urls.getRequistion}`);
       if (data?.status === 200) {
         setRequsitionList(data?.data);

@@ -17,7 +17,7 @@ export default function ListVolume() {
     async function fetchData() {
       const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
       if (status === 200) {
-        setVolumeList(data);
+        setVolumeList(data?.data);
         setFilteredVolumeList(data?.data);
       }
     }
@@ -59,7 +59,15 @@ export default function ListVolume() {
 
   async function handleDelete(id) {
     try {
-      const response = await axios.delete(`${urls.getVolumeOfMilk}/${id}`);
+      const response = await axios.delete(`${urls.deleteMilkById}/${id}`);
+      console.log(response,'response')
+      if(response?.status === 200){
+        const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
+        if (status === 200) {
+          setVolumeList(data?.data);
+          setFilteredVolumeList(data?.data);
+        }
+      }
       console.log(response, "deleted");
     } catch (error) {}
   }
