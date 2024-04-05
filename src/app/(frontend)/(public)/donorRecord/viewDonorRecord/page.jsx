@@ -132,12 +132,12 @@ export default function ViewDonor() {
                               onClick={() => handleEdit(item._id)}
                             />
                           </div> */}
-                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
+                          {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
                             <TrashIcon
                               className="h-6 w-6 text-white"
                               onClick={() => handleDelete(item._id)}
                             />
-                          </div>
+                          </div> */}
                           <div>
                             <h1
                               className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "

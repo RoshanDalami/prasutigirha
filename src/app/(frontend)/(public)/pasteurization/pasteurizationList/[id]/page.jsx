@@ -203,11 +203,14 @@ export default function BottleDetails() {
                 );
               })}
             </div>
+            {
+              !bottle && 
             <div className="flex justify-center items-center mt-8">
-              <button className="" onClick={handlePrint}>
+              <button className="bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-md font-bold text-white" onClick={handlePrint}>
                 Print
               </button>
             </div>
+            }
           </div>
         </>
       ) : (

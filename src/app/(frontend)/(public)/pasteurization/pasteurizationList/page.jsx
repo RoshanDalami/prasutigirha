@@ -32,8 +32,9 @@ export default function ListVolume() {
     fetchData();
   }, []);
   const handleDelete = async (id) => {
-    const response = await axios.delete(`${urls.getPooling}/${id}`);
-    if (response.status === 200) {
+    const response = await axios.delete(`${urls.deletePooling}/${id}`);
+    console.log(response,'response')
+    if (response?.status === 200) {
       const { data, status } = await axios.get(`${urls.getPooling}`);
       if (data?.status === 200) {
         setPoolingList(data?.data);
@@ -44,7 +45,7 @@ export default function ListVolume() {
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await axios.get(`${urls.getGestational}`);
-      if (status === 200) {
+      if (data?.status === 200) {
         setGestationalAge(data?.data);
       }
     }

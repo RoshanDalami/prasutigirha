@@ -25,11 +25,13 @@ export const urls = {
   getGestational: `${baseUrl}/api/v1/dropdown/getGestational`,
   getParity: `${baseUrl}/api/v1/dropdown/getParity`,
   getMilkByDonorId: `${baseUrl}/api/v1/milkVolume/getMilkVolumeByDonor`,
+  deleteMilkById: `${baseUrl}/api/v1/milkVolume/deleteMilkById`,
   getVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/getMilkVolume`,
   createVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/registerMilkVolume`,
   createPooling: `${baseUrl}/api/v1/pasteurization/createPasteurization`,
   getPooling: `${baseUrl}/api/v1/pasteurization/getPasteurization`,
   getPoolingById: `${baseUrl}/api/v1/pasteurization/getPasteurizationById` ,
+  deletePooling:`${baseUrl}/api/v1/pasteurization/deletePasteurizationById`,
   getColostrum: `${baseUrl}/api/v1/pasteurization/getColostrum`,
   getCondition: `${baseUrl}/api/v1/pasteurization/getCondition`,
   getConditionById: `${baseUrl}/api/v1/pasteurization/getConditionById`,
@@ -40,7 +42,9 @@ export const urls = {
   createBottle: `${baseUrl}/api/v1/bottle/generateBottles`,
   createMilkRequistion:`${baseUrl}/api/v1/milkRequsition/registerMilkRequsition`,
   getRequistion:`${baseUrl}/api/v1/milkRequsition/getMilkRequsition`,
-  getGestationalPooling:`${baseUrl}/api/v1/pasteurization/getConditionById`
+  getGestationalPooling:`${baseUrl}/api/v1/pasteurization/getConditionById`,
+  deleteRequistion:`${baseUrl}/api/v1/milkRequsition/deleteMilkRequsition`,
+
 };
 
 // export const urls = {
