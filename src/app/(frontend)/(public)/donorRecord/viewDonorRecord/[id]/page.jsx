@@ -18,7 +18,6 @@ export default function Details() {
     }
     fetchData();
   }, [id]);
-  console.log(donorDetails, "donordetails");
   return (
     <div className=" px-10 pt-10 ">
       <div className="grid grid-cols-4  text-lg leading-9">
@@ -34,7 +33,7 @@ export default function Details() {
           <span className="font-bold">{donorDetails?.donorAge}</span>
         </p>
         <p>
-          Address : <span className="font-bold">{donorDetails?.address}</span>
+          Address : <span className="font-bold">{donorDetails?.address?.stateId}</span>
         </p>
         <p>
           Mode of Delivery :{" "}

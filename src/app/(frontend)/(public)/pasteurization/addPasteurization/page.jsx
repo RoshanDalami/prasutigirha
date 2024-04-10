@@ -1,7 +1,9 @@
 "use client";
+import React from "react";
 import FormBorder from "@/components/reusableForm";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
@@ -9,6 +11,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import toast from "react-hot-toast";
+import CircularProgress from "@mui/material/CircularProgress";
 const aa = new BikramSambat(new Date()).toBS();
 
 export default function AddPasteurization({ clickedIdData }) {
@@ -30,7 +33,9 @@ export default function AddPasteurization({ clickedIdData }) {
     control,
   } = useForm({
     defaultValues: {
-      donorDetailsForPooling: [{ donorId: "", volumeOfMilkPooled: 0 }],
+      donorDetailsForPooling: [
+        { donorId: "", milkvolumeId: "", volumeOfMilkPooled: 0 },
+      ],
     },
   });
   const watchFields = watch();
@@ -89,6 +94,7 @@ export default function AddPasteurization({ clickedIdData }) {
       collectedVolume: milkVolume,
       donorDetailsForPooling: newArray,
     };
+    console.log(data,'response')
 
     try {
       const response = await axios.post(`${urls.createPooling}`, data);
@@ -110,6 +116,34 @@ export default function AddPasteurization({ clickedIdData }) {
   //  },[watchFields?.donorDetailsForPooling])
 
   const [donorList, setDonorList] = useState([]);
+  const [milkList, setMilkList] = useState([]);
+  const [random,setRandom] = useState(0)
+
+  useEffect(()=>{
+
+    async function fetchMilkVolume() {
+      watchArray?.forEach(async (item, index) => {
+        if(item?.donorId?.split('/')[0]!=''){
+          const response = await axios.get(
+            `${urls.getMilkByDonorId}/${item?.donorId?.split('/')[0]}`
+          );
+          if (response?.data.status === 200) {
+            // console.log(response?.data,'response')
+            setMilkList((prevData) => [
+              ...prevData.slice(0, index),
+              response?.data?.data?.donotedMilkList,
+              ...prevData.slice(index + 1),
+            ]);
+            setRandom(Math.random())
+          } else {
+            setMilkList([]);
+          }
+        }
+      });
+    }
+    fetchMilkVolume()
+  },[watchArray?.map((item)=>item.donorId)])
+
 
   useEffect(() => {
     if (watchFields?.gestationalAge) {
@@ -210,6 +244,7 @@ export default function AddPasteurization({ clickedIdData }) {
                       e.preventDefault();
                       append({
                         donorId: "",
+                        milkvolumeId: "",
                         volumeOfMilkPooled: 0,
                       });
                     }}
@@ -238,21 +273,73 @@ export default function AddPasteurization({ clickedIdData }) {
                           `donorDetailsForPooling.${index}.donorId`,
                           { required: "Donor Name required" }
                         )}
+                        // onChange={()=>fetchMilkVolume()}
+                        
                       >
-                        <option selected disabled value={""}>
+                        <option selected disabled value={''} >
                           --Select Donor--
                         </option>
-                        {donorList?.map((item, index) => {
-                          const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
-                          // console.log(item,'response')
-
-                          return (
-                            <option key={index} value={combinedValue}>
-                              {item.donorName} (Remaining Volume:
-                              {item.remaining}ml)
-                            </option>
-                          );
-                        })}
+                        {donorList ? (
+                          <>
+                            {donorList?.map((item, index) => {
+                              const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
+                              return (
+                                <option key={index} value={combinedValue} >
+                                  {item.donorName} (Remaining Volume:
+                                  {item.remaining}ml)
+                                </option>
+                              );
+                            })}
+                          </>
+                        ) : (
+                          <div className=" flex items-center  justify-center">
+                            <CircularProgress size={100} />
+                          </div>
+                        )}
+                      </select>
+                      {errors?.donorId && <p>{errors.donorId.messsage}</p>}
+                    </div>
+                    <div className="flex flex-col w-2/4">
+                      <label htmlFor="">
+                        Milk List<span className="text-red-600">*</span>
+                      </label>
+                      <select
+                        className={`inputStyle`}
+                        required
+                        {...register(
+                          `donorDetailsForPooling.${index}.milkvolumeId`,
+                          { required: "Donor Name required" }
+                        )}
+                      >
+                        <option selected disabled value={""}>
+                          --Select Milk--
+                        </option>
+                        {milkList ? (
+                          <>
+                            {milkList?.map((item, index0) => (
+                              <React.Fragment key={index}>
+                                {index0 === index &&
+                                  item?.map((subItem, subIndex) => {
+                                    const bottleCombValue = `${subItem?._id}`;
+                                    return (
+                                      <option
+                                        key={subIndex}
+                                        value={bottleCombValue}
+                                      >
+                                        {subItem?.date}
+                                      </option>
+                                    );
+                                  })}
+                              </React.Fragment>
+                            ))}
+                          </>
+                        ) : (
+                          <>
+                            <div className=" flex items-center  justify-center">
+                              <CircularProgress size={100} />
+                            </div>
+                          </>
+                        )}
                       </select>
                       {errors?.donorId && <p>{errors.donorId.messsage}</p>}
                     </div>
@@ -292,10 +379,12 @@ export default function AddPasteurization({ clickedIdData }) {
                           className="bg-red-600 rounded-md shadow-md px-6 py-2 font-bold text-white"
                           onClick={(e) => removeHandler(e, index)}
                         >
-                          Remove
+                          {/* Remove
+                           */}
+                          <FaTrashAlt />
                         </button>
                       </div>
-                    )}
+                     )} 
                   </div>
                 );
               })}
