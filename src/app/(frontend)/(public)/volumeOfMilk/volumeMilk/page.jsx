@@ -71,6 +71,12 @@ export default function ListVolume() {
       console.log(response, "deleted");
     } catch (error) {}
   }
+  const handleDetail = useCallback(
+    (id) => {
+      router.push(`/donorRecord/viewDonorRecord/${id}`);
+    },
+    [router]
+  );
   return (
     <>
       <div>
@@ -170,6 +176,14 @@ export default function ListVolume() {
                               className="h-6 w-6 text-white"
                               onClick={() => handleDelete(item._id)}
                             />
+                          </div>
+                          <div>
+                            <h1
+                              className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                              onClick={() => handleDetail(item.donorId)}
+                            >
+                              Details
+                            </h1>
                           </div>
                         </div>
                       </td>

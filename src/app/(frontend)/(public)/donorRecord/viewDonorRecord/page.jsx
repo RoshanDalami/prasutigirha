@@ -108,7 +108,7 @@ export default function ViewDonor() {
                   <td className="py-3">Age</td>
                   <td className="py-3">Address</td>
                   <td className="py-3">Contact</td>
-                  <td className="py-3">Action</td>
+                  {/* <td className="py-3">Action</td> */}
                 </tr>
                 {donorList?.map((item, index) => {
                   return (
@@ -122,22 +122,22 @@ export default function ViewDonor() {
                       <td className="py-3">{item.donorRegNo}</td>
                       <td className="py-3">{item.donorName}</td>
                       <td className="py-3">{item.donorAge}</td>
-                      <td className="py-3">{item.address}</td>
+                      <td className="py-3">{item?.address?.stateId}</td>
                       <td className="py-3">{item.contactNo}</td>
-                      <td className="py-3">
+                      {/* <td className="py-3">
                         <div className="flex justify-evenly text-xl">
-                          {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
+                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
                             <PencilSquareIcon
                               className="h-6 w-6 text-white"
                               onClick={() => handleEdit(item._id)}
                             />
-                          </div> */}
-                          {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
+                          </div>
+                          <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
                             <TrashIcon
                               className="h-6 w-6 text-white"
                               onClick={() => handleDelete(item._id)}
                             />
-                          </div> */}
+                          </div>
                           <div>
                             <h1
                               className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
@@ -147,7 +147,7 @@ export default function ViewDonor() {
                             </h1>
                           </div>
                         </div>
-                      </td>
+                      </td> */}
                     </tr>
                   );
                 })}

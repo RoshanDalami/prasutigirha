@@ -134,6 +134,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     setValue,
+    watch
   } = useForm({
     // defaultValues: defaultValuesWithUserData,
   });
@@ -148,6 +149,8 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   //     setError("");
   //   }
   // };
+  const watchFields = watch()
+
   useEffect(() => {
     if (clickedIdData) {
       setValue("_id", clickedIdData?._id);
@@ -212,7 +215,12 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, clickedIdData, setValue]);
   console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
-    setUserData({ ...userData, ...data, date: date, engDate });
+    setUserData({ ...userData, ...data, date: date, engDate , address:{
+      stateId:watchFields?.address?.stateId?.split('/')[1],
+      districtId:watchFields?.address?.districtId?.split('/')[1],
+      palikaId:watchFields?.address?.palikaId?.split('/')[1],
+      ward:watchFields?.address?.ward
+    } });
     localStorage.setItem(
       "userData",
       JSON.stringify({ ...userData, ...data, date: date, engDate })
@@ -233,6 +241,75 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     donorAge: { required: "Donor Age is required", pattern: /^\d+$/ }, // Example pattern for numeric input
     // Add validation rules for other fields as needed
   };
+
+   //state
+   const [state, setState] = useState([]);
+
+   useEffect(() => {
+     const fetchData = async () => {
+       const { status, data } = await axios.get(`${urls.getStates}`);
+       if (status === 200) {
+         setState(data);
+       }
+     };
+     fetchData();
+   }, []);
+ 
+   const stateOptions = state?.data?.map((item, index) => {
+    const combValue = `${item.stateId}/${item.stateName}`
+     return (
+       <option key={index} value={combValue}>
+         {item.stateName}
+       </option>
+     );
+   });
+ 
+   //district
+   const [district, setDistrict] = useState([]);
+   useEffect(() => {
+     if (watchFields?.address?.stateId) {
+       const fetchData = async () => {
+         const { data, status } = await axios.get(
+           `${urls.getDistrict}?stateId=${watchFields?.address?.stateId?.split('/')[0]}`
+         );
+         if (status === 200) {
+           setDistrict(data);
+         }
+       };
+       fetchData();
+     }
+   }, [watchFields?.address?.stateId]);
+   const districtOptions = district?.data?.map((item, index) => {
+    const comboValue = `${item.districtId}/${item.districtName}`
+     return (
+       <option key={index} value={comboValue}>
+         {item.districtName}
+       </option>
+     );
+   });
+   //palika
+   const [palika, setPalika] = useState([]);
+   useEffect(() => {
+     if (watchFields?.address?.districtId) {
+       const fetchData = async () => {
+         const { status, data } = await axios.get(
+           `${urls.getPalika}?districtId=${watchFields?.address?.districtId?.split('/')[0]}`
+         );
+         if (status === 200) {
+           setPalika(data);
+         }
+       };
+       fetchData();
+     }
+   }, [watchFields?.address?.districtId]);
+   const paliakOptions = palika?.data?.map((item, index) => {
+    const combValue = `${item.palikaId}/${item.palikaName}`
+     return (
+       <option key={index} value={combValue}>
+         {item.palikaName}
+       </option>
+     );
+   });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -347,7 +424,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               className="inputStyle"
               {...register("education", { required: "Education Required" })}
             >
-              <option selected disabled>
+              <option selected disabled value={""}>
                 --Select Education--
               </option>
               {educationList?.map((item, index) => {
@@ -380,16 +457,70 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <p className="errorMessages">{errors.ethnicity.message}</p>
             )}
           </div>
+          <div className="flex flex-col">
+            <label>
+              {" "}
+              State<span className="text-red-600">*</span>
+            </label>
+            <select
+              className="inputStyle"
+              {...register("address.stateId", { required: "Ethnicity Required" })}
+            >
+              <option selected disabled value={""}>
+                --Select State--
+              </option>
+              {stateOptions}
+            </select>
+            {errors.ethnicity && (
+              <p className="errorMessages">{errors.ethnicity.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <label>
+              {" "}
+              District<span className="text-red-600">*</span>
+            </label>
+            <select
+              className="inputStyle"
+              {...register("address.districtId", { required: "Ethnicity Required" })}
+            >
+              <option selected disabled value={""}>
+                --Select District--
+              </option>
+              {districtOptions}
+            </select>
+            {errors.ethnicity && (
+              <p className="errorMessages">{errors.ethnicity.message}</p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <label>
+              {" "}
+              Palika<span className="text-red-600">*</span>
+            </label>
+            <select
+              className="inputStyle"
+              {...register("address.palikaId", { required: "Ethnicity Required" })}
+            >
+              <option selected disabled value={""}>
+                --Select Palika--
+              </option>
+              {paliakOptions}
+            </select>
+            {errors.ethnicity && (
+              <p className="errorMessages">{errors.ethnicity.message}</p>
+            )}
+          </div>
           <div className="flex-col flex">
             <label>
               {" "}
-              Address<span className="text-red-600">*</span>
+              Ward<span className="text-red-600">*</span>
             </label>
             <input
               type="text"
               placeholder="Enter Address"
               className="inputStyle"
-              {...register("address", { required: "Address Required" })}
+              {...register("address.ward", { required: "Address Required" })}
             />
             {errors.address && (
               <p className="errorMessages">{errors.address.message}</p>
