@@ -1,7 +1,11 @@
+
 // const baseUrl = "https://prasuti-backend.onrender.com";
 import { store } from "src/redux/store";
 import axios from "axios";
-const baseUrl = "http://localhost:8000";
+// const baseUrl = "http://localhost:8000";
+const baseUrl = "https://prasuti-backend.onrender.com";
+// const baseUrl = "http://localhost:8000";
+
 export const urls = {
   mainUrl: `${baseUrl}/api/v1`,
   login: `/api/user/login`,
