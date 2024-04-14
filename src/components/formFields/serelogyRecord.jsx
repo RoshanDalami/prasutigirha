@@ -7,6 +7,7 @@ import FormBorder from "../reusableForm";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
+import { createDonor } from "src/services/apiService/donorRecord/donor";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -157,7 +158,7 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
         },
       };
       try {
-        const response = await axios.post(`${urls.createDanaDarta}`, data);
+        const response = await createDonor(data);
         // console.log(response, "response");
         if (response.status === 200) {
           router.push("/donorRecord/viewDonorRecord");

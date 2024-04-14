@@ -1,11 +1,14 @@
 // const baseUrl = "https://prasuti-backend.onrender.com";
+import { store } from "src/redux/store";
+import axios from "axios";
 const baseUrl = "http://localhost:8000";
 export const urls = {
+  mainUrl: `${baseUrl}/api/v1`,
   login: `/api/user/login`,
   register: `/api/user/register`,
   logout: `/api/user/logout`,
-  createOffice: `${baseUrl}/api/v1/office/registerOffice`,
-  getOffice: `${baseUrl}/api/v1/office/getOffice`,
+  // createOffice: `${baseUrl}/api/v1/office/registerOffice`,
+  // getOffice: `${baseUrl}/api/v1/office/getOffice`,
   getStates: `${baseUrl}/api/v1/office/getState`,
   getDistrict: `${baseUrl}/api/v1/office/getdistrict`,
   getPalika: `${baseUrl}/api/v1/office/getPalika`,
@@ -24,14 +27,16 @@ export const urls = {
   getBreastFeeding: `${baseUrl}/api/v1/dropdown/getBreastFeeding`,
   getGestational: `${baseUrl}/api/v1/dropdown/getGestational`,
   getParity: `${baseUrl}/api/v1/dropdown/getParity`,
+  //milkvolume
   getMilkByDonorId: `${baseUrl}/api/v1/milkVolume/getMilkVolumeByDonor`,
   deleteMilkById: `${baseUrl}/api/v1/milkVolume/deleteMilkById`,
   getVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/getMilkVolume`,
   createVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/registerMilkVolume`,
+  //pooling
   createPooling: `${baseUrl}/api/v1/pasteurization/createPasteurization`,
   getPooling: `${baseUrl}/api/v1/pasteurization/getPasteurization`,
-  getPoolingById: `${baseUrl}/api/v1/pasteurization/getPasteurizationById` ,
-  deletePooling:`${baseUrl}/api/v1/pasteurization/deletePasteurizationById`,
+  getPoolingById: `${baseUrl}/api/v1/pasteurization/getPasteurizationById`,
+  deletePooling: `${baseUrl}/api/v1/pasteurization/deletePasteurizationById`,
   getColostrum: `${baseUrl}/api/v1/pasteurization/getColostrum`,
   getCondition: `${baseUrl}/api/v1/pasteurization/getCondition`,
   getConditionById: `${baseUrl}/api/v1/pasteurization/getConditionById`,
@@ -40,52 +45,23 @@ export const urls = {
   createBaby: `${baseUrl}/api/v1/baby/createBabyDetail`,
   getBottle: `${baseUrl}/api/v1/bottle/getBottles`,
   createBottle: `${baseUrl}/api/v1/bottle/generateBottles`,
-  createMilkRequistion:`${baseUrl}/api/v1/milkRequsition/registerMilkRequsition`,
-  getRequistion:`${baseUrl}/api/v1/milkRequsition/getMilkRequsition`,
-  getGestationalPooling:`${baseUrl}/api/v1/pasteurization/getConditionById`,
-  deleteRequistion:`${baseUrl}/api/v1/milkRequsition/deleteMilkRequsition`,
-
+  createMilkRequistion: `${baseUrl}/api/v1/milkRequsition/registerMilkRequsition`,
+  getRequistion: `${baseUrl}/api/v1/milkRequsition/getMilkRequsition`,
+  getGestationalPooling: `${baseUrl}/api/v1/pasteurization/getConditionById`,
+  deleteRequistion: `${baseUrl}/api/v1/milkRequsition/deleteMilkRequsition`,
+  createFiscal: `${baseUrl}/api/v1/fiscal/createFiscal`,
+  getFiscal: `${baseUrl}/api/v1/fiscal/getFiscal`,
 };
 
-// export const urls = {
-//   getStates: `/api/office/state`,
-//   getDistrict: `/api/office/district`,
-//   getPalika: `/api/office/palika`,
-//   getGestational: `/api/dropdown/gestational`,
-//   getBabyStatus: `/api/dropdown/babyStatus`,
-//   getBabyTransfer: `/api/dropdown/babyTransfer`,
-//   getBreastFeeding: `/api/dropdown/breastFeeding`,
-//   getDelivery: `/api/dropdown/delivery`,
-//   getParity: `/api/dropdown/parity`,
-//   getEthnicity: `/api/dropdown/ethnicity`,
-//   login: `/api/user/login`,
-//   register: `/api/user/register`,
-//   logout: `/api/user/logout`,
-//   createOffice: `/api/office/createOffice`,
-//   getOffice: `/api/office/getOffice`,
-//   createDepartment: `/api/office/department/createDepartment`,
-//   getDepartment: `/api/office/department/getDepartment`,
-//   createPost: `/api/office/post/createPost`,
-//   getPost: `/api/office/post/getPost`,
-//   createEmployee: `/api/office/employee/createEmployee`,
-//   getEmployee: `/api/office/employee/getEmployee`,
-//   createVolumeOfMilk: `/api/volumeOfMilk/addVolumeOfMilk`,
-//   getDonor: `/api/daanDartaRecord/get`,
-//   createDanaDarta: `/api/daanDartaRecord/create`,
-//   getVolumeOfMilk: `/api/volumeOfMilk/getVolumeOfMilk`,
-//   getMilkByDonorId: `/api/volumeOfMilk/getMilkByDonor`,
-//   createPooling: `/api/pooling/create`,
-//   remainingVolumeByDonorId: `/api/volumeOfMilk/volumeByDonorId`,
-//   createMilkRequistion: `/api/requsition/create`,
-//   getDonorListByCondition: `/api/pooling/condition`,
-//   createPooling: `/api/pooling/create`,
-//   remainingVolumeByDonorId: `/api/volumeOfMilk/volumeByDonorId`,
-//   getColostrum: `/api/pooling/colostrum`,
-//   getGestationalPooling: `/api/pooling/condition`,
-//   getPooling: `/api/pooling/list`,
-//   getRequistion: `/api/requsition/list`,
-//   createBottle: `/api/bottle/create`,
-//   getBottle: `/api/bottle/get`,
-//   createBaby: `/api/baby/create`,
-//   getBaby: `/api/baby/get`,
-// };
+export const mainApi = async (method, url, data) => {
+  const tok = store.getState();
+  let response = await axios({
+    method,
+    url: `${urls.mainUrl}${url}`,
+    data,
+    headers: {
+      Authorization: `Bearer ${tok.userDetail.user?.data?.token}`,
+    },
+  });
+  return response.data;
+};

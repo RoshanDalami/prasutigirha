@@ -2,6 +2,7 @@
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { useState, useEffect } from "react";
+import { createOffice } from "src/services/apiService/officeService/office";
 import { useForm } from "react-hook-form";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
@@ -83,9 +84,9 @@ export default function Office() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(`${urls.createOffice}`, data);
+      const response = await createOffice(data);
       if (response.status === 200) {
-        router.push("/");
+        router.push("/office/officeList");
       }
     } catch (error) {
       console.log(error);

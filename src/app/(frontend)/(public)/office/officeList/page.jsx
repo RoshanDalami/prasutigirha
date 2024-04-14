@@ -7,6 +7,7 @@ import Button from "src/components/button";
 import axios from "axios";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
+import { getOffice } from "src/services/apiService/officeService/office";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 
@@ -19,9 +20,9 @@ export default function ViewDonor() {
   const [officeList, setOfficeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getOffice}`);
+      const { status, data } = await getOffice();
       if (status === 200) {
-        setOfficeList(data.data);
+        setOfficeList(data);
       }
     }
     fetchData();

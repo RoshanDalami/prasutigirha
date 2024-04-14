@@ -6,6 +6,10 @@ import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
+import {
+  getVolumeOfMilk,
+  deleteMilkById,
+} from "src/services/apiService/milkVolume/milkVolume";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 export default function ListVolume() {
@@ -15,10 +19,10 @@ export default function ListVolume() {
   const [volumeList, setVolumeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
+      const { status, data } = await getVolumeOfMilk();
       if (status === 200) {
         setVolumeList(data?.data);
-        setFilteredVolumeList(data?.data);
+        setFilteredVolumeList(data);
       }
     }
     fetchData();
@@ -59,9 +63,9 @@ export default function ListVolume() {
 
   async function handleDelete(id) {
     try {
-      const response = await axios.delete(`${urls.deleteMilkById}/${id}`);
-      console.log(response,'response')
-      if(response?.status === 200){
+      const response = await deleteMilkById(id);
+      console.log(response, "response");
+      if (response?.status === 200) {
         const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
         if (status === 200) {
           setVolumeList(data?.data);

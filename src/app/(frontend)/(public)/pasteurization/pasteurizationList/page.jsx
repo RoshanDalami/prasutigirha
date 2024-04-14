@@ -6,6 +6,10 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
+import {
+  deletePooling,
+  getPooling,
+} from "src/services/apiService/pasteurization/pasteurization";
 
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
@@ -23,21 +27,21 @@ export default function ListVolume() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data } = await axios.get(`${urls.getPooling}`);
-      console.log(data,'response')
+      const { data } = await getPooling();
+      console.log(data, "response");
       if (data?.status === 200) {
-        setPoolingList(data?.data);
+        setPoolingList(data);
       }
     }
     fetchData();
   }, []);
   const handleDelete = async (id) => {
-    const response = await axios.delete(`${urls.deletePooling}/${id}`);
-    console.log(response,'response')
+    const response = await deletePooling(id);
+    console.log(response, "response");
     if (response?.status === 200) {
       const { data, status } = await axios.get(`${urls.getPooling}`);
       if (data?.status === 200) {
-        setPoolingList(data?.data);
+        setPoolingList(data);
       }
     }
   };
