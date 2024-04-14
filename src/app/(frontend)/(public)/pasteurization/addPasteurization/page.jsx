@@ -12,6 +12,11 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import toast from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
+import {
+  createPooling,
+  getColostrum,
+  getGestationalPooling,
+} from "src/services/apiService/pasteurization/pasteurization";
 const aa = new BikramSambat(new Date()).toBS();
 
 export default function AddPasteurization({ clickedIdData }) {
@@ -94,10 +99,10 @@ export default function AddPasteurization({ clickedIdData }) {
       collectedVolume: milkVolume,
       donorDetailsForPooling: newArray,
     };
-    console.log(data,'response')
+    console.log(data, "response");
 
     try {
-      const response = await axios.post(`${urls.createPooling}`, data);
+      const response = await createPooling(data);
       if (response?.data?.status === 200) {
         toast.success("Polling Created Successfully");
         router.push("/pasteurization/pasteurizationList");
@@ -117,15 +122,14 @@ export default function AddPasteurization({ clickedIdData }) {
 
   const [donorList, setDonorList] = useState([]);
   const [milkList, setMilkList] = useState([]);
-  const [random,setRandom] = useState(0)
+  const [random, setRandom] = useState(0);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     async function fetchMilkVolume() {
       watchArray?.forEach(async (item, index) => {
-        if(item?.donorId?.split('/')[0]!=''){
+        if (item?.donorId?.split("/")[0] != "") {
           const response = await axios.get(
-            `${urls.getMilkByDonorId}/${item?.donorId?.split('/')[0]}`
+            `${urls.getMilkByDonorId}/${item?.donorId?.split("/")[0]}`
           );
           if (response?.data.status === 200) {
             // console.log(response?.data,'response')
@@ -134,28 +138,30 @@ export default function AddPasteurization({ clickedIdData }) {
               response?.data?.data?.donotedMilkList,
               ...prevData.slice(index + 1),
             ]);
-            setRandom(Math.random())
+            setRandom(Math.random());
           } else {
             setMilkList([]);
           }
         }
       });
     }
-    fetchMilkVolume()
-  },[watchArray?.map((item)=>item.donorId)])
-
+    fetchMilkVolume();
+  }, [watchArray?.map((item) => item.donorId)]);
 
   useEffect(() => {
     if (watchFields?.gestationalAge) {
       async function fetchData() {
         const { status, data } =
+          // watchFields?.gestationalAge != 4
+          //   ? await axios.get(
+          //       `${urls.getGestationalPooling}/${watchFields?.gestationalAge}`
+          //     )
+          //   : await getColostrum();
           watchFields?.gestationalAge != 4
-            ? await axios.get(
-                `${urls.getGestationalPooling}/${watchFields?.gestationalAge}`
-              )
-            : await axios.get(`${urls.getColostrum}`);
+            ? await getGestationalPooling(watchFields?.gestationalAge)
+            : await getColostrum();
         if (status === 200) {
-          setDonorList(data?.data);
+          setDonorList(data);
         }
       }
       fetchData();
@@ -274,9 +280,8 @@ export default function AddPasteurization({ clickedIdData }) {
                           { required: "Donor Name required" }
                         )}
                         // onChange={()=>fetchMilkVolume()}
-                        
                       >
-                        <option selected disabled value={''} >
+                        <option selected disabled value={""}>
                           --Select Donor--
                         </option>
                         {donorList ? (
@@ -284,7 +289,7 @@ export default function AddPasteurization({ clickedIdData }) {
                             {donorList?.map((item, index) => {
                               const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
                               return (
-                                <option key={index} value={combinedValue} >
+                                <option key={index} value={combinedValue}>
                                   {item.donorName} (Remaining Volume:
                                   {item.remaining}ml)
                                 </option>
@@ -384,7 +389,7 @@ export default function AddPasteurization({ clickedIdData }) {
                           <FaTrashAlt />
                         </button>
                       </div>
-                     )} 
+                    )}
                   </div>
                 );
               })}

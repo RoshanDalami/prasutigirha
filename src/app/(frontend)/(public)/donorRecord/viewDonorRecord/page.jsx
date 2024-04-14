@@ -5,6 +5,7 @@ import { urls } from "src/services/apiHelpers";
 import Link from "next/link";
 import Button from "src/components/button";
 import axios from "axios";
+import { getDonor } from "src/services/apiService/donorRecord/donor";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -19,9 +20,9 @@ export default function ViewDonor() {
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getDonor}`);
+      const { status, data } = await getDonor();
       if (status === 200) {
-        setDonorList(data?.data);
+        setDonorList(data);
       }
     }
     fetchData();

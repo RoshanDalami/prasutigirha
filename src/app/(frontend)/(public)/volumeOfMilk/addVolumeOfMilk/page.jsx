@@ -6,6 +6,7 @@ import axios from "axios";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { createVolumeOfMilk } from "src/services/apiService/milkVolume/milkVolume";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
@@ -103,7 +104,7 @@ export default function AddVolume({ clickedData }) {
     };
 
     try {
-      const response = await axios.post(`${urls.createVolumeOfMilk}`, data);
+      const response = await createVolumeOfMilk(data);
       if (response.status === 200) {
         router.push("/volumeOfMilk/volumeMilk");
         toast.success("Volume Created Successfully");

@@ -9,6 +9,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { createDonor } from "src/services/apiService/donorRecord/donor";
 import { useRouter } from "next/navigation";
 
 import StepperControl from "../stepper/StepperControl";
@@ -139,7 +140,7 @@ const PhysicalExamination = ({
     };
 
     try {
-      const response = await axios.post(`${urls.createDanaDarta}`, data);
+      const response = await createDonor(data);
       if (response.status === 200) {
         router.push("/donorRecord/viewDonorRecord");
       }

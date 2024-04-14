@@ -6,7 +6,6 @@ import bcryptjs from "bcryptjs";
 connect();
 
 export async function POST(req, res) {
-
   let userDetail;
   try {
     const { email, password } = await req.json();
@@ -32,18 +31,18 @@ export async function POST(req, res) {
     }
     const token = jwt.sign(
       { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET
     );
-
+    const userDetails = { ...userDetail, token };
     const response = NextResponse.json(
-      userDetail,
+      userDetails,
       { message: "User Logged In Successfully" },
       { status: 200 }
     );
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 ,
+      maxAge: 60 * 60 * 24,
       path: "/",
     });
     return response;

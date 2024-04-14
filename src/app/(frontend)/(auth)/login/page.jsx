@@ -30,7 +30,7 @@ const Login = () => {
       if (response.status === 200) {
         if (typeof localStorage !== 'undefined') {
           // Save user information in local storage
-          localStorage.setItem('userInfo', JSON.stringify(response.data));
+          localStorage.setItem('user', JSON.stringify(response.data));
         } else {
           console.error("localStorage is not available in this environment");
         }

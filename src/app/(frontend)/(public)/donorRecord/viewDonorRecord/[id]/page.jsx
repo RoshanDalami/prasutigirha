@@ -4,16 +4,16 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TableBorder from "src/components/TableDesign";
 import { urls } from "src/services/apiHelpers";
+import { getMilkByDonorId } from "src/services/apiService/milkVolume/milkVolume";
 export default function Details() {
   const [donorDetails, setDonorDetails] = useState({});
   const { id } = useParams();
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(
-        `${urls.getMilkByDonorId}/${id}`
-      );
+      const { status, data } = await getMilkByDonorId(id);
+
       if (status === 200) {
-        setDonorDetails(data?.data);
+        setDonorDetails(data);
       }
     }
     fetchData();
@@ -33,7 +33,8 @@ export default function Details() {
           <span className="font-bold">{donorDetails?.donorAge}</span>
         </p>
         <p>
-          Address : <span className="font-bold">{donorDetails?.address?.stateId}</span>
+          Address :{" "}
+          <span className="font-bold">{donorDetails?.address?.stateId}</span>
         </p>
         <p>
           Mode of Delivery :{" "}
