@@ -47,15 +47,24 @@ export const getCondition = async () => {
 };
 export const getConditionById = async (id) => {
   let response = await mainApi(
-    apiUrls.pasteurization.getCondition.method,
-    apiUrls.pasteurization.getCondition.url + `/${id}`
+    apiUrls.pasteurization.getConditionById.method,
+    apiUrls.pasteurization.getConditionById.url + `/${id}`
   );
   return response;
 };
 export const getGestationalPooling = async (id) => {
   let response = await mainApi(
-    apiUrls.pasteurization.getCondition.method,
-    apiUrls.pasteurization.getCondition.url + `/${id}`
+    apiUrls.pasteurization.getGestationalPooling.method,
+    apiUrls.pasteurization.getGestationalPooling.url + `/${id}`
   );
   return response;
 };
+
+export const getDonorByGestationalAge = async (id)=>{
+  let response = await mainApi(
+    apiUrls.pasteurization.getDonorListById.method,
+    apiUrls.pasteurization.getDonorListById.url+`/${id}`,
+    
+  )
+  return response
+}

@@ -33,12 +33,13 @@ export async function POST(req, res) {
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET
     );
-    const userDetails = { ...userDetail, token };
+    const userDetails = { userDetail, token };
     const response = NextResponse.json(
       userDetails,
       { message: "User Logged In Successfully" },
       { status: 200 }
     );
+
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

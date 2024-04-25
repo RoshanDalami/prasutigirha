@@ -1,6 +1,10 @@
 "use client";
 import React from "react";
 import DashboardCard from "src/components/card";
+import { useRecoilValue } from "recoil";
+import { userAtomState } from "src/recoil/user/userAtom";
+import { store } from "src/redux/store";
+import Cookies from "js-cookie";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -111,6 +115,8 @@ export default function Dashboard() {
       imageName: "/assets/images/feeding-bottle.png",
     },
   ];
+  const token = useRecoilValue(userAtomState)
+  console.log(store.getState(),'response')
   
   return (
     <div className="my-10 mx-10">

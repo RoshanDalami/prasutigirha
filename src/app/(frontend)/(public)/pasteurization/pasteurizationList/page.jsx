@@ -27,9 +27,9 @@ export default function ListVolume() {
 
   useEffect(() => {
     async function fetchData() {
-      const { data } = await getPooling();
-      console.log(data, "response");
-      if (data?.status === 200) {
+      const { data , status } = await getPooling();
+      
+      if (status === 200) {
         setPoolingList(data);
       }
     }

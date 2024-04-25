@@ -15,9 +15,6 @@ export const userSlice = createSlice({
     logout: (state) => {
       (state.user = null), localStorage.removeItem("user");
     },
-    approvalStatus: (state, action) => {
-      state.approvalStatus = action.payload;
-    },
   },
 });
 export const { logout } = userSlice.actions;

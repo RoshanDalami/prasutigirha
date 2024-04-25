@@ -19,6 +19,7 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  persistStore
 } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
 
@@ -44,3 +45,4 @@ export const store = configureStore({
       },
     }),
 });
+export const persistor = persistStore(store)

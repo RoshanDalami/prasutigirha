@@ -10,8 +10,10 @@ import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import toast from 'react-hot-toast'
+import toast from "react-hot-toast";
+
 const Login = () => {
+
   const {
     register,
     handleSubmit,
@@ -20,29 +22,30 @@ const Login = () => {
   const [showPw, setShowPw] = useState(false);
   const router = useRouter();
   const onSubmit = async (data) => {
-    data={
+    data = {
       ...data,
-      email:data?.email?.trim()
-    }
-// tets
+      email: data?.email?.trim(),
+    };
+    // tets
     try {
       const response = await axios.post(`${urls.login}`, data);
       if (response.status === 200) {
-        if (typeof localStorage !== 'undefined') {
+
+        if (typeof localStorage !== "undefined") {
           // Save user information in local storage
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem("user", JSON.stringify(response.data));
         } else {
           console.error("localStorage is not available in this environment");
         }
-        router.push("/");
-        toast.success('Login successfull')
-        window.location.reload();
-      }else{
-        toast.error('Invalid Credentials')
-      }
 
+        router.push("/");
+        toast.success("Login successfull");
+        window.location.reload();
+      } else {
+        toast.error("Invalid Credentials");
+      }
     } catch (error) {
-      toast.error('Invalid Credentials')
+      toast.error("Invalid Credentials");
       console.log(error);
     }
   };
@@ -57,7 +60,9 @@ const Login = () => {
           <Image
             height={200}
             width={350}
-            src={"https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkosh.jpg?alt=media&token=323bc8f3-fdb8-4a32-a68e-89934ba69f09"}
+            src={
+              "https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkosh.jpg?alt=media&token=323bc8f3-fdb8-4a32-a68e-89934ba69f09"
+            }
             alt="amrit-kosh"
             className="rounded-lg hidden md:block w-full"
           />

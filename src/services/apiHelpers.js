@@ -1,9 +1,12 @@
-
 // const baseUrl = "https://prasuti-backend.onrender.com";
 import { store } from "src/redux/store";
 import axios from "axios";
-// const baseUrl = "http://localhost:8000";
-const baseUrl = "https://prasuti-backend.onrender.com";
+const userInfo = typeof (localStorage != "undefined")
+  ? JSON.parse(localStorage.getItem("user"))
+  : "";
+
+const baseUrl = "http://localhost:8000";
+// const baseUrl = "https://prasuti-backend.onrender.com"; 
 // const baseUrl = "http://localhost:8000";
 
 export const urls = {
@@ -58,13 +61,12 @@ export const urls = {
 };
 
 export const mainApi = async (method, url, data) => {
-  const tok = store.getState();
   let response = await axios({
     method,
     url: `${urls.mainUrl}${url}`,
     data,
     headers: {
-      Authorization: `Bearer ${tok.userDetail.user?.data?.token}`,
+      Authorization: `Bearer ${userInfo?.token}`,
     },
   });
   return response.data;

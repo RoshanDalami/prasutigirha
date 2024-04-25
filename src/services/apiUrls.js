@@ -106,6 +106,10 @@ const apiUrls = {
       method: "GET",
       url: "/pasteurization/getConditionById",
     },
+    getDonorListById:{
+      method:"GET",
+      url:"/pasteurization/getDonorByGestationalAge"
+    }
   },
   baby: {
     getBabyDetail: {
@@ -141,9 +145,13 @@ const apiUrls = {
       url: "/milkRequsition/getMilkRequsition",
     },
     deleteRequistion: {
-      method: "GET",
+      method: "DELETE",
       url: "/milkRequsition/deleteMilkRequsition",
     },
   },
 };
 export default apiUrls;
+
+
+
+
