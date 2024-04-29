@@ -5,8 +5,8 @@ const userInfo = typeof (localStorage != "undefined")
   ? JSON.parse(localStorage.getItem("user"))
   : "";
 
-const baseUrl = "http://localhost:8000";
-// const baseUrl = "https://prasuti-backend.onrender.com"; 
+// const baseUrl = "http://localhost:8000";
+const baseUrl = "https://prasuti-backend.onrender.com";
 // const baseUrl = "http://localhost:8000";
 
 export const urls = {

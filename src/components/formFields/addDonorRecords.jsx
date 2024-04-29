@@ -13,6 +13,11 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
+import {
+  getDistrict,
+  getPalika,
+  getState
+} from 'src/services/apiService/officeService/office'
 const defaultValues = {
   hosRegNo: "",
   donorRegNo: "",
@@ -254,7 +259,8 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { status, data } = await axios.get(`${urls.getStates}`);
+      const { status, data } = await getState();
+      console.log(data,status,'response')
       if (status === 200) {
         setState(data);
       }
@@ -262,7 +268,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     fetchData();
   }, []);
 
-  const stateOptions = state?.data?.map((item, index) => {
+  const stateOptions = state?.map((item, index) => {
     const combValue = `${item.stateId}/${item.stateName}`;
     return (
       <option key={index} value={combValue}>
@@ -276,11 +282,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   useEffect(() => {
     if (watchFields?.address?.stateId) {
       const fetchData = async () => {
-        const { data, status } = await axios.get(
-          `${urls.getDistrict}?stateId=${
-            watchFields?.address?.stateId?.split("/")[0]
-          }`
-        );
+        const { data, status } = await getDistrict(watchFields?.address?.stateId?.split("/")[0])
         if (status === 200) {
           setDistrict(data);
         }
@@ -288,7 +290,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       fetchData();
     }
   }, [watchFields?.address?.stateId]);
-  const districtOptions = district?.data?.map((item, index) => {
+  const districtOptions = district?.map((item, index) => {
     const comboValue = `${item.districtId}/${item.districtName}`;
     return (
       <option key={index} value={comboValue}>
@@ -301,11 +303,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   useEffect(() => {
     if (watchFields?.address?.districtId) {
       const fetchData = async () => {
-        const { status, data } = await axios.get(
-          `${urls.getPalika}?districtId=${
-            watchFields?.address?.districtId?.split("/")[0]
-          }`
-        );
+        const { status, data } = await getPalika(watchFields?.address?.districtId?.split("/")[0])
         if (status === 200) {
           setPalika(data);
         }
@@ -313,7 +311,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       fetchData();
     }
   }, [watchFields?.address?.districtId]);
-  const paliakOptions = palika?.data?.map((item, index) => {
+  const paliakOptions = palika?.map((item, index) => {
     const combValue = `${item.palikaId}/${item.palikaName}`;
     return (
       <option key={index} value={combValue}>

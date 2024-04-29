@@ -64,20 +64,20 @@ export default function SideBar() {
     setShow(false);
   };
   const DonorList = [
-    {
-      link: "/donorRecord/addDonorRecord",
-      name: "Donor Record",
-    },
+    // {
+    //   link: "/donorRecord/addDonorRecord",
+    //   name: "Donor Record",
+    // },
     {
       link: "/donorRecord/viewDonorRecord",
       name: "View Donor Record",
     },
   ];
   const volumeOfMilk = [
-    {
-      link: "/volumeOfMilk/addVolumeOfMilk",
-      name: "Volume of Milk",
-    },
+    // {
+    //   link: "/volumeOfMilk/addVolumeOfMilk",
+    //   name: "Volume of Milk",
+    // },
 
     {
       link: "/volumeOfMilk/volumeMilk",
@@ -85,40 +85,45 @@ export default function SideBar() {
     },
   ];
   const pasteuriationList = [
-    {
-      link: "/pasteurization/addPasteurization",
-      name: "Pasteurization Process",
-    },
+    // {
+    //   link: "/pasteurization/addPasteurization",
+    //   name: "Pasteurization Process",
+    // },
     {
       link: "/pasteurization/pasteurizationList",
-      name: "List of Pasteurization Process",
+      name: "Pasteurization",
+    },
+    {
+      link: "/pasteurization/culture/createCulture",
+      name: "Culture",
     },
   ];
   const milkRequistionList = [
-    {
-      link: "/milkRequisation/addBabyDetails",
-      name: "Baby Details",
-    },
+    // {
+    //   link: "/milkRequisation/addBabyDetails",
+    //   name: "Baby Details",
+    // },
     {
       link: "/milkRequisation/babyDetails",
       name: "Baby List",
     },
-    {
-      link: "/milkRequisation/addMilkRequisation",
-      name: "Milk Requisition",
-    },
+    // {
+    //   link: "/milkRequisation/addMilkRequisation",
+    //   name: "Milk Requisition",
+    // },
     {
       link: "/milkRequisation/listOfMilkRequisation",
-      name: "List of Milk Requisition",
+      name: "Milk Requisition",
     },
   ];
   const officeSetupList = [
     { link: "/office/fiscalYear", name: "Fiscal Year " },
-    { link: "/office/officeSetup", name: "Office Setup" },
+    // { link: "/office/officeSetup", name: "Office Setup" },
     { link: "/office/officeList", name: "Office List" },
-    { link: "/office/department", name: "Department Setup" },
+    // { link: "/office/department", name: "Department Setup" },
     { link: "/office/departmentList", name: "Department List" },
-    { link: "/office/employee", name: "Employee Setup " },
+    { link: "/office/postList", name: "Post" },
+    // { link: "/office/employee", name: "Employee Setup " },
     { link: "/office/employeeList", name: "Employee List " },
   ];
   return (

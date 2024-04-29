@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import BikramSambat from "bikram-sambat-js";
-
+import { createFiscalYear } from 'src/services/apiService/officeService/office'
 export default function Fiscal() {
   const {
     register,
@@ -23,24 +23,24 @@ export default function Fiscal() {
   const aa = new BikramSambat(new Date()).toBS();
   const [startDate, setStartDate] = useState(aa);
   const [endDate, setEndDate] = useState(aa);
-  //   const onSubmit = async (data) => {
-  //     data = {
-  //       ...data,
-  //       userId: userInfo?._id,
-  //     };
-  //     console.log(data, "response");
-  //     try {
-  //       const response = await axios.post(`${urls.createEmployee}`, data);
-  //       if (response.status === 200) {
-  //         router.push("/");
-  //       }
-  //     } catch (error) {
-  //       console.log(error, "response");
-  //     }
-  //   };
+    const onSubmit = async (data) => {
+      data = {
+        ...data,
+        startDate:startDate,
+        endDate:endDate
+      }
+     try {
+        const {status} = await createFiscalYear(data)
+        if(status === 200){
+          router.push('/office/fiscalYear')
+        }
+     } catch (error) {
+      console.log(error)
+     }
+    };
   return (
     <>
-      <form className="mx-10">
+      <form className="mx-10" onSubmit={handleSubmit((data)=>onSubmit(data))}  >
         <FormBorder title={"Fiscal Year"}>
           <div className="md:grid-cols-3 grid grid-cols-1 gap-4 text-lg">
             <div className="flex flex-col">
@@ -51,8 +51,8 @@ export default function Fiscal() {
                 type="text"
                 placeholder="Fiscal Year"
                 className="inputStyle"
-                {...register("employeeName", {
-                  required: "Employee name required",
+                {...register("fiscalYear", {
+                  required: "fiscalYear name required",
                 })}
               />
               {errors?.employeeName && (
@@ -67,8 +67,8 @@ export default function Fiscal() {
                 type="number"
                 placeholder="Start Year"
                 className="inputStyle"
-                {...register("employeeName", {
-                  required: "Employee name required",
+                {...register("startYear", {
+                  required: "startYear name required",
                 })}
               />
               {errors?.employeeName && (
@@ -83,8 +83,8 @@ export default function Fiscal() {
                 type="number"
                 placeholder="End Year"
                 className="inputStyle"
-                {...register("employeeName", {
-                  required: "Employee name required",
+                {...register("endYear", {
+                  required: "endYear name required",
                 })}
               />
               {errors?.employeeName && (
@@ -123,12 +123,12 @@ export default function Fiscal() {
               <label htmlFor="" className="">
                 Status?
               </label>
-              <input type="checkbox" className="h-6 w-6 pt-2" />
+              <input type="checkbox" className="h-6 w-6 pt-2" {...register("status")} />
             </div>
           </div>
 
           <div className="text-lg font-bold my-5">
-            <Button>{isSubmitting ? "Submitting..." : "Submit"}</Button>
+            <Button isSubmitting={isSubmitting} >{isSubmitting ? "Submitting..." : "Submit"}</Button>
           </div>
         </FormBorder>
       </form>

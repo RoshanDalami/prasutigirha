@@ -2,7 +2,7 @@
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { useState, useEffect } from "react";
-import { createOffice } from "src/services/apiService/officeService/office";
+import { createOffice , getState,getDistrict,getPalika } from "src/services/apiService/officeService/office";
 import { useForm } from "react-hook-form";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
@@ -21,7 +21,7 @@ export default function Office() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { status, data } = await axios.get(`${urls.getStates}`);
+      const { status, data } = await getState();
       if (status === 200) {
         setState(data);
       }
@@ -29,7 +29,7 @@ export default function Office() {
     fetchData();
   }, []);
 
-  const stateOptions = state?.data?.map((item, index) => {
+  const stateOptions = state?.map((item, index) => {
     return (
       <option key={index} value={item.stateId}>
         {item.stateName}
@@ -42,9 +42,7 @@ export default function Office() {
   useEffect(() => {
     if (watchFields?.stateId) {
       const fetchData = async () => {
-        const { data, status } = await axios.get(
-          `${urls.getDistrict}?stateId=${watchFields?.stateId}`
-        );
+        const { data, status } = await getDistrict(watchFields?.stateId)
         if (status === 200) {
           setDistrict(data);
         }
@@ -52,7 +50,7 @@ export default function Office() {
       fetchData();
     }
   }, [watchFields?.stateId]);
-  const districtOptions = district?.data?.map((item, index) => {
+  const districtOptions = district?.map((item, index) => {
     return (
       <option key={index} value={item.districtId}>
         {item.districtName}
@@ -64,9 +62,7 @@ export default function Office() {
   useEffect(() => {
     if (watchFields?.districtId) {
       const fetchData = async () => {
-        const { status, data } = await axios.get(
-          `${urls.getPalika}?districtId=${watchFields?.districtId}`
-        );
+        const { status, data } = await getPalika(watchFields?.districtId)
         if (status === 200) {
           setPalika(data);
         }
@@ -74,7 +70,7 @@ export default function Office() {
       fetchData();
     }
   }, [watchFields?.districtId]);
-  const paliakOptions = palika?.data?.map((item, index) => {
+  const paliakOptions = palika?.map((item, index) => {
     return (
       <option key={index} value={item.palikaId}>
         {item.palikaName}

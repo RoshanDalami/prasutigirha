@@ -10,6 +10,9 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
+import {
+  createBaby,
+} from 'src/services/apiService/baby/babyServices'
 const aa = new BikramSambat(new Date()).toBS();
 export default function AddBabyDetails({ clickedIdData }) {
   const router = useRouter();
@@ -18,7 +21,7 @@ export default function AddBabyDetails({ clickedIdData }) {
 
   const userInfo =
     typeof localStorage !== "undefined"
-      ? JSON.parse(localStorage.getItem("userInfo"))
+      ? JSON.parse(localStorage.getItem("user"))
       : "";
   const engBirthDate = new BikramSambat(birthDate, "BS").toAD();
   const {
@@ -130,11 +133,11 @@ export default function AddBabyDetails({ clickedIdData }) {
       _id: data?._id,
       dateOfBaby: birthDate,
       engDateOfBaby: engBirthDate,
-      userId: userInfo._id,
+      userId: userInfo?.userDetail._id,
     };
 
     try {
-      const { status } = await axios.post(`${urls.createBaby}`, data);
+      const { status } = await createBaby(data);
       if (status === 200) {
         router.push("/milkRequisation/babyDetails");
       }
@@ -365,7 +368,7 @@ export default function AddBabyDetails({ clickedIdData }) {
               </div>
             </div>
             <div className="my-5 font-bold text-xl">
-              <Button>{isSubmitting ? "Submiting ..." : "Submit"}</Button>
+              <Button isSubmitting={isSubmitting}>{isSubmitting ? "Submiting ..." : "Submit"}</Button>
             </div>
           </FormBorder>
         </form>

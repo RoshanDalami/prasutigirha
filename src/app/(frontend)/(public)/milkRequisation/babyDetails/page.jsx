@@ -5,15 +5,19 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import TableBorder from "src/components/TableDesign";
 import { urls } from "src/services/apiHelpers";
-
+import {
+  getBabyDetail,
+  getBabyById
+} from "src/services/apiService/baby/babyServices"
+import Link from "next/link";
 export default function BabyDetail() {
   const [babyDetails, setBabyDetails] = useState([]);
   const router = useRouter();
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getBaby}`);
+      const { status, data } = await getBabyDetail();
       if (status === 200) {
-        setBabyDetails(data?.data);
+        setBabyDetails(data);
       }
     }
     fetchData();
@@ -27,7 +31,17 @@ export default function BabyDetail() {
   );
   return (
     <div className="pt-10 px-10">
-      <TableBorder title={"Baby Details"}>
+      <TableBorder title={"Baby Details"} title2={
+              <div className="flex flex-col   ">
+                <div className=" flex justify-end">
+                  <Link href={"/milkRequisation/addBabyDetails"}>
+                    <button className="text-white bg-red-600 hover:bg-[#004a89] px-4 py-3 rounded-lg font-bold ">
+                      + Add
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            }  >
         <div>
           <table className="w-full">
             <thead>

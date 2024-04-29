@@ -12,21 +12,40 @@ import {
 } from "src/services/apiService/milkVolume/milkVolume";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { searchMilkVolume } from "src/services/apiService/search/searchService";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+const aa = new BikramSambat(new Date()).toBS();
+import { useForm } from "react-hook-form";
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
+  const { register, handleSubmit , reset } = useForm();
+  const [date, setDate] = useState("");
+  const engDate = new BikramSambat(date, "BS").toAD();
   const [volumeList, setVolumeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await getVolumeOfMilk();
+      
       if (status === 200) {
-        setVolumeList(data?.data);
+        setVolumeList(data);
         setFilteredVolumeList(data);
       }
     }
     fetchData();
   }, []);
+  const resetFilter = async()=>{
+    const { status, data } = await getVolumeOfMilk();
+    console.log(status,data,'response')
+    if (status === 200) {
+      
+      setFilteredVolumeList(data);
+    }
+    reset()
+  }
   const [gestationalAgeList, setGestationalAge] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -66,10 +85,10 @@ export default function ListVolume() {
       const response = await deleteMilkById(id);
       console.log(response, "response");
       if (response?.status === 200) {
-        const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
+        const { status, data } = await getVolumeOfMilk();
         if (status === 200) {
-          setVolumeList(data?.data);
-          setFilteredVolumeList(data?.data);
+          setVolumeList(data);
+          setFilteredVolumeList(data);
         }
       }
       console.log(response, "deleted");
@@ -81,33 +100,69 @@ export default function ListVolume() {
     },
     [router]
   );
+  const gestationalOptions = gestationalAgeList?.map((item, index) => {
+    return (
+      <option key={index} value={item.gestationalId}>
+        {item.gestationalName}
+      </option>
+    );
+  });
+  const onSubmit = async (data) => {
+    try {
+      const response = await searchMilkVolume(data.gestationalAge,date)
+      console.log(response,'response')
+      if(response?.status === 200){
+        setFilteredVolumeList(response?.data);
+      }
+    } catch (error) {}
+  };
   return (
     <>
       <div>
-        <form className="my-5 mx-10 ">
+        <form
+          className="my-5 mx-10 "
+          onSubmit={handleSubmit((data) => onSubmit(data))}
+        >
           <p htmlFor="" className="text-red-600 text-2xl font-bold my-5 ">
             Volume of Milk
           </p>
           <div className="grid grid-cols-4 gap-4">
-            <input
-              type="text"
-              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-              placeholder="Search by Phone No/ Hospital Reg No..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-
-            <input
-              type="date"
-              placeholder="Search by ID..."
-              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-            />
             <div>
+              <select {...register("gestationalAge")} className="inputStyle">
+                <option value={""}>--select gestational age--</option>
+                {gestationalOptions}
+              </select>
+            </div>
+
+            <div className=" ">
+              {/* <input
+             type="date"
+             placeholder=""
+             className="inputStyle"
+             {...register("date", { required: "Date is Required" })}
+           /> */}
+              <NepaliDatePicker
+                inputClassName="form-control  focus:outline-none"
+                value={date}
+                onChange={(e) => setDate(e)}
+                // onChange={() => handleDateChange()}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+              {/* {error && <p className="errorMessages">{error}</p>} */}
+            </div>
+            <div className="flex gap-3">
               <button
-                onClick={handleSearch}
                 className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
+                type="submit"
               >
                 SEARCH
+              </button>
+              <button
+                className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
+                onClick={()=>resetFilter()}
+              >
+                RESET
               </button>
             </div>
           </div>

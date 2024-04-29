@@ -30,3 +30,11 @@ export const createVolumeOfMilk = async (data) => {
   );
   return response;
 };
+
+export const getMilkListByDonor = async (id)=>{
+  let response = await mainApi(
+    apiUrls?.milkVolume?.getMilkListByDonor?.method,
+    apiUrls?.milkVolume?.getMilkListByDonor?.url+`/${id}`,
+  )
+  return response
+}

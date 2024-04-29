@@ -9,7 +9,13 @@ import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import {
+  getEmployee,
+  getOffice,
+  getDepartment,
+  getPost,
 
+} from 'src/services/apiService/officeService/office'
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
@@ -19,9 +25,9 @@ export default function ViewDonor() {
   const [employeeList, setEmployeeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getEmployee}`);
+      const { status, data } = await getEmployee();
       if (status === 200) {
-        setEmployeeList(data?.data);
+        setEmployeeList(data);
       }
     }
     fetchData();
@@ -31,7 +37,7 @@ export default function ViewDonor() {
   const [officeList, setOfficeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getOffice}`);
+      const { status, data } = await getOffice();
       if (status === 200) {
         setOfficeList(data);
       }
@@ -42,9 +48,9 @@ export default function ViewDonor() {
   const [departmentList, setDepartmentList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getDepartment}`);
+      const { status, data } = await getDepartment();
       if (status === 200) {
-        setDepartmentList(data.data);
+        setDepartmentList(data);
       }
     }
     fetchData();
@@ -52,9 +58,9 @@ export default function ViewDonor() {
   const [postList, setPostList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getPost}`);
+      const { status, data } = await getPost();
       if (status === 200) {
-        setPostList(data?.data);
+        setPostList(data);
       }
     }
     fetchData();

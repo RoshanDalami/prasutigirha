@@ -1,10 +1,10 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function getBottle(){
+export async function getBottle(id){
     let response = await mainApi(
         apiUrls.bottle?.getBottle?.method,
-        apiUrls?.bottle?.getBottle?.url
+        apiUrls?.bottle?.getBottle?.url+`/${id}`
     )
     return response
 }

@@ -44,6 +44,14 @@ const apiUrls = {
       method: "POST",
       url: "/office/registerEmployee",
     },
+    createFiscalYear:{
+      method:"POST",
+      url:"/fiscal/createFiscal"
+    },
+    getFiscalYear:{
+      method:"GET",
+      url:"/fiscal/getFiscal"
+    }
   },
   donor: {
     getDonor: {
@@ -72,6 +80,10 @@ const apiUrls = {
       method: "POST",
       url: "/milkVolume/registerMilkVolume",
     },
+    getMilkListByDonor:{
+      method:"GET",
+      url:"/milkVolume/volumeByDonorId"
+    }
   },
   pasteurization: {
     createPooling: {
@@ -88,7 +100,7 @@ const apiUrls = {
     },
     deletePooling: {
       method: "DELETE",
-      url: "/pasteurizations/deletePooling",
+      url: "/pasteurization/deletePasteurizationById",
     },
     getColostrum: {
       method: "GET",
@@ -109,6 +121,10 @@ const apiUrls = {
     getDonorListById:{
       method:"GET",
       url:"/pasteurization/getDonorByGestationalAge"
+    },
+    updateCulture:{
+      method:"POST",
+      url:"/pasteurization/updateCulture"
     }
   },
   baby: {
@@ -149,6 +165,31 @@ const apiUrls = {
       url: "/milkRequsition/deleteMilkRequsition",
     },
   },
+  search:{
+    searchDonor:{
+      method:"GET",
+      url:"/search/searchDonor"
+    },
+    searchMilkVolume:{
+      method:"GET",
+      url:"/search/searchMilkVolume"
+    },
+    searchPasteurization:{
+      method:"GET",
+      url:"/search/searchPasteurization"
+    },
+    searchRequsition:{
+      method:"GET",
+      url:"/search/searchRequsition"
+    }
+  },
+  culture:{
+    createCulture:{
+      method:"POST",
+      url:"/culture/createCulture"
+    }
+  }
+  
 };
 export default apiUrls;
 

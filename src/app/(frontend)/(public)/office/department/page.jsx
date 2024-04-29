@@ -7,6 +7,12 @@ import { useForm } from "react-hook-form";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import {
+  getOffice,
+  createDepartment,
+  getDepartment,
+  createPost
+} from 'src/services/apiService/officeService/office'
 export default function Department() {
   const router = useRouter();
   const [openModel, setOpenModel] = useState(false);
@@ -23,9 +29,9 @@ export default function Department() {
   const [officeList, setOfficeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getOffice}`);
+      const { data, status } = await getOffice()
       if (status === 200) {
-        setOfficeList(data?.data);
+        setOfficeList(data);
       }
     }
     fetchData();
@@ -39,10 +45,10 @@ export default function Department() {
     };
 
     try {
-      const response = await axios.post(`${urls.createDepartment}`, data);
+      const response = await createDepartment(data)
       console.log(response, "response");
       if (response.status === 200) {
-        router.push("/");
+        router.push("/office/departmentList");
       }
     } catch (error) {
       console.log(error);
@@ -55,10 +61,10 @@ export default function Department() {
       userId: userInfo?._id,
     };
     try {
-      const response = await axios.post(`${urls.createPost}`, data);
+      const response = await createPost(data)
       console.log(response, "response");
       if (response.status === 200) {
-        router.push("/");
+        router.push("/office/departmentList");
       }
     } catch (error) {
       console.log(error);
@@ -67,9 +73,9 @@ export default function Department() {
   const [departmentList, setDepartmentList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getDepartment}`);
+      const { data, status } = await getDepartment();
       if (status === 200) {
-        setDepartmentList(data?.data);
+        setDepartmentList(data);
       }
     }
     fetchData();

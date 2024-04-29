@@ -11,6 +11,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import { useParams } from "next/navigation";
+import {getDonor} from 'src/services/apiService/donorRecord/donor'
 const aa = new BikramSambat(new Date()).toBS();
 export default function AddVolume({ clickedData }) {
   const [date, setDate] = useState(aa);
@@ -84,9 +85,9 @@ export default function AddVolume({ clickedData }) {
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getDonor}`);
+      const { status, data } = await getDonor();
       if (status === 200) {
-        setDonorList(data?.data);
+        setDonorList(data);
       }
     }
     fetchData();
@@ -303,8 +304,9 @@ export default function AddVolume({ clickedData }) {
             })}
 
             <button
-              className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65]"
+              className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65] disabled:cursor-not-allowed disabled:bg-gray-200"
               type="submit"
+              disabled={isSubmitting}
             >
               {isSubmitting ? "Submitting ..." : "Submit"}
             </button>
