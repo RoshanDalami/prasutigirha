@@ -1,10 +1,12 @@
+'use client'
 // const baseUrl = "https://prasuti-backend.onrender.com";
 import { store } from "src/redux/store";
 import axios from "axios";
-const userInfo = typeof (localStorage != "undefined")
-  ? JSON.parse(localStorage.getItem("user"))
-  : "";
-
+import Cookies from "js-cookie";
+// const userInfo = typeof (localStorage != 'undefined')
+//   ? JSON.parse(localStorage.getItem("user"))
+//   : "";
+  const token = Cookies.get('token')
 // const baseUrl = "http://localhost:8000";
 const baseUrl = "https://prasuti-backend.onrender.com";
 // const baseUrl = "http://localhost:8000";
@@ -66,7 +68,7 @@ export const mainApi = async (method, url, data) => {
     url: `${urls.mainUrl}${url}`,
     data,
     headers: {
-      Authorization: `Bearer ${userInfo?.token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   return response.data;
