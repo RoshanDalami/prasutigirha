@@ -9,7 +9,7 @@ export default function Navbar() {
 
   const userInfo =
     typeof localStorage !== "undefined"
-      ? JSON.parse(localStorage.getItem("userInfo"))
+      ? JSON.parse(localStorage.getItem("user"))
       : { username: "Softech" };
   const router = useRouter();
   const [loading,setLoading] = useState(false)
@@ -19,6 +19,7 @@ export default function Navbar() {
       setLoading(true)
       const { data } = await axios.get(`${urls.logout}`);
       if (data.success === true) {
+        localStorage.removeItem('user')
         router.push("/login");
         setLoading(false)
       }
@@ -53,7 +54,7 @@ export default function Navbar() {
       <div className="flex items-center gap-5 relative  ">
         <p className="text-lg">
           Welcome!!{" "}
-          <span className="text-red-600 font-bold ">{userInfo?.username}</span>{" "}
+          <span className="text-red-600 font-bold ">{userInfo?.userDetail?.username}</span>{" "}
         </p>
         <div className="">
           <div className=" cursor-pointer " onClick={handleClick}>

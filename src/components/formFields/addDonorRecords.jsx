@@ -6,12 +6,18 @@ import StepperControl from "../stepper/StepperControl";
 import { useRouter } from "next/navigation";
 import FormBorder from "../reusableForm";
 import Button from "../button";
+import { createDonor } from "src/services/apiService/donorRecord/donor";
 import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
+import {
+  getDistrict,
+  getPalika,
+  getState
+} from 'src/services/apiService/officeService/office'
 const defaultValues = {
   hosRegNo: "",
   donorRegNo: "",
@@ -134,7 +140,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
     setValue,
-    watch
+    watch,
   } = useForm({
     // defaultValues: defaultValuesWithUserData,
   });
@@ -149,7 +155,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   //     setError("");
   //   }
   // };
-  const watchFields = watch()
+  const watchFields = watch();
 
   useEffect(() => {
     if (clickedIdData) {
@@ -215,12 +221,18 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, clickedIdData, setValue]);
   console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
-    setUserData({ ...userData, ...data, date: date, engDate , address:{
-      stateId:watchFields?.address?.stateId?.split('/')[1],
-      districtId:watchFields?.address?.districtId?.split('/')[1],
-      palikaId:watchFields?.address?.palikaId?.split('/')[1],
-      ward:watchFields?.address?.ward
-    } });
+    setUserData({
+      ...userData,
+      ...data,
+      date: date,
+      engDate,
+      address: {
+        stateId: watchFields?.address?.stateId?.split("/")[1],
+        districtId: watchFields?.address?.districtId?.split("/")[1],
+        palikaId: watchFields?.address?.palikaId?.split("/")[1],
+        ward: watchFields?.address?.ward,
+      },
+    });
     localStorage.setItem(
       "userData",
       JSON.stringify({ ...userData, ...data, date: date, engDate })
@@ -242,74 +254,71 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     // Add validation rules for other fields as needed
   };
 
-   //state
-   const [state, setState] = useState([]);
+  //state
+  const [state, setState] = useState([]);
 
-   useEffect(() => {
-     const fetchData = async () => {
-       const { status, data } = await axios.get(`${urls.getStates}`);
-       if (status === 200) {
-         setState(data);
-       }
-     };
-     fetchData();
-   }, []);
- 
-   const stateOptions = state?.data?.map((item, index) => {
-    const combValue = `${item.stateId}/${item.stateName}`
-     return (
-       <option key={index} value={combValue}>
-         {item.stateName}
-       </option>
-     );
-   });
- 
-   //district
-   const [district, setDistrict] = useState([]);
-   useEffect(() => {
-     if (watchFields?.address?.stateId) {
-       const fetchData = async () => {
-         const { data, status } = await axios.get(
-           `${urls.getDistrict}?stateId=${watchFields?.address?.stateId?.split('/')[0]}`
-         );
-         if (status === 200) {
-           setDistrict(data);
-         }
-       };
-       fetchData();
-     }
-   }, [watchFields?.address?.stateId]);
-   const districtOptions = district?.data?.map((item, index) => {
-    const comboValue = `${item.districtId}/${item.districtName}`
-     return (
-       <option key={index} value={comboValue}>
-         {item.districtName}
-       </option>
-     );
-   });
-   //palika
-   const [palika, setPalika] = useState([]);
-   useEffect(() => {
-     if (watchFields?.address?.districtId) {
-       const fetchData = async () => {
-         const { status, data } = await axios.get(
-           `${urls.getPalika}?districtId=${watchFields?.address?.districtId?.split('/')[0]}`
-         );
-         if (status === 200) {
-           setPalika(data);
-         }
-       };
-       fetchData();
-     }
-   }, [watchFields?.address?.districtId]);
-   const paliakOptions = palika?.data?.map((item, index) => {
-    const combValue = `${item.palikaId}/${item.palikaName}`
-     return (
-       <option key={index} value={combValue}>
-         {item.palikaName}
-       </option>
-     );
-   });
+  useEffect(() => {
+    const fetchData = async () => {
+      const { status, data } = await getState();
+      console.log(data,status,'response')
+      if (status === 200) {
+        setState(data);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const stateOptions = state?.map((item, index) => {
+    const combValue = `${item.stateId}/${item.stateName}`;
+    return (
+      <option key={index} value={combValue}>
+        {item.stateName}
+      </option>
+    );
+  });
+
+  //district
+  const [district, setDistrict] = useState([]);
+  useEffect(() => {
+    if (watchFields?.address?.stateId) {
+      const fetchData = async () => {
+        const { data, status } = await getDistrict(watchFields?.address?.stateId?.split("/")[0])
+        if (status === 200) {
+          setDistrict(data);
+        }
+      };
+      fetchData();
+    }
+  }, [watchFields?.address?.stateId]);
+  const districtOptions = district?.map((item, index) => {
+    const comboValue = `${item.districtId}/${item.districtName}`;
+    return (
+      <option key={index} value={comboValue}>
+        {item.districtName}
+      </option>
+    );
+  });
+  //palika
+  const [palika, setPalika] = useState([]);
+  useEffect(() => {
+    if (watchFields?.address?.districtId) {
+      const fetchData = async () => {
+        const { status, data } = await getPalika(watchFields?.address?.districtId?.split("/")[0])
+        if (status === 200) {
+          setPalika(data);
+        }
+      };
+      fetchData();
+    }
+  }, [watchFields?.address?.districtId]);
+  const paliakOptions = palika?.map((item, index) => {
+    const combValue = `${item.palikaId}/${item.palikaName}`;
+    return (
+      <option key={index} value={combValue}>
+        {item.palikaName}
+      </option>
+    );
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -464,7 +473,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             </label>
             <select
               className="inputStyle"
-              {...register("address.stateId", { required: "Ethnicity Required" })}
+              {...register("address.stateId", {
+                required: "Ethnicity Required",
+              })}
             >
               <option selected disabled value={""}>
                 --Select State--
@@ -482,7 +493,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             </label>
             <select
               className="inputStyle"
-              {...register("address.districtId", { required: "Ethnicity Required" })}
+              {...register("address.districtId", {
+                required: "Ethnicity Required",
+              })}
             >
               <option selected disabled value={""}>
                 --Select District--
@@ -500,7 +513,9 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             </label>
             <select
               className="inputStyle"
-              {...register("address.palikaId", { required: "Ethnicity Required" })}
+              {...register("address.palikaId", {
+                required: "Ethnicity Required",
+              })}
             >
               <option selected disabled value={""}>
                 --Select Palika--

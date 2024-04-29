@@ -6,7 +6,11 @@ import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import {
+  getDepartment,
+  getPost,
+  createEmpolyee
+} from 'src/services/apiService/officeService/office'
 export default function Employee() {
   const {
     register,
@@ -21,9 +25,9 @@ export default function Employee() {
   const [departmentList, setDepartmentList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getDepartment}`);
+      const { data, status } = await getDepartment();
       if (status === 200) {
-        setDepartmentList(data?.data);
+        setDepartmentList(data);
       }
     }
     fetchData();
@@ -38,9 +42,9 @@ export default function Employee() {
   const [postList, setPostList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getPost}`);
+      const { data, status } = await getPost();
       if (status === 200) {
-        setPostList(data?.data);
+        setPostList(data);
       }
     }
     fetchData();
@@ -59,7 +63,7 @@ export default function Employee() {
     };
     console.log(data, "response");
     try {
-      const response = await axios.post(`${urls.createEmployee}`, data);
+      const response = await createEmpolyee(data)
       if (response.status === 200) {
         router.push("/office/employeeList");
       }
@@ -151,7 +155,7 @@ export default function Employee() {
                 Phone <span className="text-red-600">*</span>
               </label>
               <input
-                type="text"
+                type="number"
                 placeholder="Employee Phone"
                 className="inputStyle"
                 {...register("employeePhone", {

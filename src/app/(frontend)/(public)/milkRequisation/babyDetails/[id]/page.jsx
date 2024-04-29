@@ -4,15 +4,15 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import TableBorder from "src/components/TableDesign";
 import { urls } from "src/services/apiHelpers";
-
+import {getBabyById} from 'src/services/apiService/baby/babyServices'
 export default function BabyDetailsById() {
   const [babyDetails, setBabyDetails] = useState({});
   const { id } = useParams();
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getBabyById}/${id}`);
+      const { status, data } = await getBabyById(id);
       if (status === 200) {
-        setBabyDetails(data?.data);
+        setBabyDetails(data);
       }
     }
     fetchData();

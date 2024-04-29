@@ -5,27 +5,42 @@ import { urls } from "src/services/apiHelpers";
 import Link from "next/link";
 import Button from "src/components/button";
 import axios from "axios";
+import { getDonor } from "src/services/apiService/donorRecord/donor";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-
+import {searchDonor} from 'src/services/apiService/search/searchService';
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+const aa = new BikramSambat(new Date()).toBS();
+import { useForm } from "react-hook-form";
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
+  const [date, setDate] = useState('');
+  const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
-
+  const {register,handleSubmit} = useForm()
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getDonor}`);
+      const { status, data } = await getDonor();
       if (status === 200) {
-        setDonorList(data?.data);
+        setDonorList(data);
       }
     }
     fetchData();
   }, []);
+
+  const resetFilter = async() =>{
+    const { status, data } = await getDonor();
+    if (status === 200) {
+      setDonorList(data);
+    }
+  }
 
   const handleEdit = useCallback(
     (id) => {
@@ -54,10 +69,42 @@ export default function ViewDonor() {
     }
   };
 
+  const [gestationalAgeList, setGestationalAgeList] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (status === 200) {
+        setGestationalAgeList(data?.data);
+      }
+    };
+    fetchData();
+  }, []);
+  const gestationalOptions = gestationalAgeList?.map((item, index) => {
+    return (
+      <option key={index} value={item.gestationalId}>
+        {item.gestationalName}
+      </option>
+    );
+  });
+const onSubmit = async(data)=>{
+    try {
+      console.log('test','response')
+      const response = await searchDonor(data.gestationalAge,data.donorName,date)
+
+     if(response?.status === 200){
+      
+        setDonorList(response?.data);
+      
+     }
+    } catch (error) {
+      console.log(error,'response')
+    }
+}
+
   return (
     <>
       <div>
-        <form className="my-5 mx-10 ">
+        <form className="my-5 mx-10 " onSubmit={handleSubmit((data)=>onSubmit(data))}>
           <p htmlFor="" className="text-red-600 text-2xl font-bold my-5 ">
             Donar Records
           </p>
@@ -65,21 +112,41 @@ export default function ViewDonor() {
             <input
               type="text"
               className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-              placeholder="Search by ID..."
+              placeholder="Donor Name"
+              {...register('donorName')}
             />
-            <input
-              type="text"
-              placeholder="Search by  Name..."
-              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-            />
-            <input
-              type="text"
-              placeholder="Search by Phone..."
-              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
-            />
+            
             <div>
-              <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg ">
+              <select {...register('gestationalAge')} className="inputStyle" >
+                <option value={''} >--select gestational age--</option>
+                {gestationalOptions}
+              </select>
+            </div>
+           
+            <div className="">
+           
+            {/* <input
+              type="date"
+              placeholder=""
+              className="inputStyle"
+              {...register("date", { required: "Date is Required" })}
+            /> */}
+            <NepaliDatePicker
+              inputClassName="form-control  focus:outline-none"
+              value={date}
+              onChange={(e) => setDate(e)}
+              // onChange={() => handleDateChange()}
+              options={{ calenderLocale: "en", valueLocale: "en" }}
+              className="inputStyle"
+            />
+            {/* {error && <p className="errorMessages">{error}</p>} */}
+          </div>
+            <div className="flex gap-3">
+              <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg " type="submit" >
                 SEARCH
+              </button>
+              <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg " onClick={()=>resetFilter()} >
+                RESET
               </button>
             </div>
           </div>
