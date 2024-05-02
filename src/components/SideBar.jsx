@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { IoIosArrowUp } from "react-icons/io";
-import { FaTachometerAlt, FaUserAlt } from "react-icons/fa";
+import { FaTachometerAlt, FaUserAlt ,FaRegListAlt} from "react-icons/fa";
 import { Divider } from "@mui/material";
 
 import { GiBabyBottle } from "react-icons/gi";
@@ -19,6 +19,7 @@ export default function SideBar() {
   const [show1, setShow1] = useState(false);
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
+  const [show5, setShow5] = useState(false);
   const pathname = usePathname();
 
   const handleOfficeOpen = () => {
@@ -27,6 +28,7 @@ export default function SideBar() {
     setShow1(false);
     setShow3(false);
     setShow4(false);
+    setShow5(false);
   };
   const handleDonorOpen = () => {
     setShow((prevState) => !prevState);
@@ -34,6 +36,7 @@ export default function SideBar() {
     setShow1(false);
     setShow3(false);
     setShow4(false);
+    setShow5(false);
   };
   const handleVolumeOpen = () => {
     setShow1((prevState) => !prevState);
@@ -41,6 +44,7 @@ export default function SideBar() {
     setShow(false);
     setShow3(false);
     setShow4(false);
+    setShow5(false);
   };
   const handlePoolingOpen = () => {
     setShow3((prevState) => !prevState);
@@ -48,6 +52,7 @@ export default function SideBar() {
     setShow1(false);
     setShow(false);
     setShow4(false);
+    setShow5(false);
   };
   const handleRequisitionOpen = () => {
     setShow4((prevState) => !prevState);
@@ -55,6 +60,8 @@ export default function SideBar() {
     setShow1(false);
     setShow3(false);
     setShow(false);
+    setShow5(false);
+
   };
   const handleDashboard = () => {
     setShow4(false);
@@ -62,7 +69,16 @@ export default function SideBar() {
     setShow1(false);
     setShow3(false);
     setShow(false);
+    setShow5(false);
   };
+  const handleReport = () =>{
+    setShow5((prevState)=>!prevState);
+    setShow4(false);
+    setShow0(false);
+    setShow1(false);
+    setShow3(false);
+    setShow(false);
+  }
   const DonorList = [
     // {
     //   link: "/donorRecord/addDonorRecord",
@@ -126,8 +142,15 @@ export default function SideBar() {
     // { link: "/office/employee", name: "Employee Setup " },
     { link: "/office/employeeList", name: "Employee List " },
   ];
+  const report = [
+    {link:"/report/donor",name:'Donor'},
+    {link:"/report/milkVolume",name:'Milk Volume'},
+    {link:"/report/pasteuriation",name:'Pasteuriation'},
+    {link:"/pasteurization/culture",name:'Culture'},
+    {link:"/report/milkRequistion",name:'Requistion'},
+  ]
   return (
-    <div className="fixed min-h-screen w-60  bg-gray-100  ">
+    <div className="fixed min-h-screen w-60  bg-gray-100   ">
       <div className="mb-4 h-[90vh] overflow-auto">
         <Link href={"/"} onClick={handleDashboard}>
           <div
@@ -328,8 +351,47 @@ export default function SideBar() {
               );
             })}
           </div>
+          
         </div>
         <Divider />
+        <div>
+          <div
+            className={`flex h-20 w-full   items-center justify-around  ${
+              pathname.split("/")[1] === "report"
+                ? "bg-blue-600 font-bold text-white"
+                : "bg-gray-100"
+            } `}
+            onClick={handleReport}
+          >
+            <FaRegListAlt className="text-2xl" />
+            <h1 className="text-xl">Report </h1>
+            <IoIosArrowUp
+              className={` font-bold ${show5 ? "" : "rotate-180"}`}
+            />
+          </div>
+
+          <div className={`${show5 ? "block" : "hidden"} mb-20`}>
+            {report?.map((item, index) => {
+              return (
+                <Link href={item.link} key={index} className="">
+                  <div
+                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                      pathname === item.link
+                        ? "bg-red-600 font-bold text-white"
+                        : ""
+                    } `}
+                  >
+                    <IoMdStarOutline className="ml-6 text-2xl" />
+                    <h1>{item.name}</h1>
+                  </div>
+                  <Divider />
+                </Link>
+              );
+            })}
+          </div>
+          <Divider/>
+          
+        </div>
       </div>
     </div>
   );

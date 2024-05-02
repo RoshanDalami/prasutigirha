@@ -27,6 +27,7 @@ export default function CreateCulture() {
         {
           bottleId: "",
           cultureResult: null,
+          cultureRemark:''
         },
       ],
     },
@@ -82,6 +83,7 @@ export default function CreateCulture() {
       }
     } catch (error) {}
   };
+  
   return (
     <div className="mx-4">
       <FormBorder title={"Create Culture"}>
@@ -105,7 +107,7 @@ export default function CreateCulture() {
                 {apiData?.map((item, index) => {
                   return (
                     <option key={index} value={item._id}>
-                      {item.batchName}
+                      {item.batchName}{" "}{`(${item.date})`}
                     </option>
                   );
                 })}
@@ -130,13 +132,16 @@ export default function CreateCulture() {
               className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white font-bold"
               onClick={(e) => {
                 e.preventDefault();
-                append({ bottleId: "", cultureResult: null });
+                append({ bottleId: "", cultureResult: null , cultureRemark:'' });
               }}
             >
               Add
             </button>
           </div>
           {fields.map((field, index) => {
+            const watchResult = watch(
+              `cultureBottleList.${index}.cultureResult`
+            );
             return (
               <div key={field.id} className="flex items-center gap-3 w-full">
                 <div className="flex flex-col w-2/4">
@@ -157,19 +162,21 @@ export default function CreateCulture() {
                 </div>
                 <div className="flex flex-col w-2/4">
                   <label>Culture Result</label>
-
-                  <select
-                    name=""
-                    id=""
-                    className="inputStyle text-sm"
-                    {...register(`cultureBottleList.${index}.cultureResult`)}
-                  >
-                    <option value="" className="text-md" selected disabled>
-                      --Update Culture--
-                    </option>
-                    <option value={true}>Positive</option>
-                    <option value={false}>Negative</option>
-                  </select>
+                  
+                    <select
+                      name=""
+                      id=""
+                      className="inputStyle text-sm"
+                      {...register(`cultureBottleList.${index}.cultureResult`)}
+                    >
+                      <option value="" className="text-md" selected disabled>
+                        --Update Culture--
+                      </option>
+                      <option value={true}>Positive</option>
+                      <option value={false}>Negative</option>
+                      <option value={"Other"}>Other</option>
+                    </select>
+                
                 </div>
                 {fields?.length > 1 ? (
                   <div className="flex items-center justify-center mt-6 ">

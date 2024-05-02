@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DashboardCard from "src/components/card";
 import { useRecoilValue } from "recoil";
 import { userAtomState } from "src/recoil/user/userAtom";
@@ -66,12 +66,12 @@ export const bardata = {
   labels,
   datasets: [
     {
-      label: "Donor",
+      label: "Milk Collected",
       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
       backgroundColor: "#004a89",
     },
     {
-      label: "Baby",
+      label: "Milk Requsition",
       data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
       backgroundColor: "red",
     },
@@ -88,35 +88,133 @@ export const linedata = {
     },
   ],
 };
+import {
+  getMilkCollected,
+  getMilkRequsitited,
+  getNumberOfDonor,
+  getTotalBaby,
+  getMonthWiseMilkCollection,getMonthWiseMilkRequsition
+} from 'src/services/apiService/dashboard/dashboardService'
 export default function Dashboard() {
+  const [baby,setBaby] = useState(0);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status} = await getTotalBaby();
+      if(status === 200){
+        setBaby(data)
+      }
+    }
+    fetchData()
+  },[])
+
+  const [milkCollected,setMilkCollected] = useState(0);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status}= await getMilkCollected();
+      if(status === 200){
+        setMilkCollected(data)
+      }
+    }
+    fetchData()
+  },[])
+
+  const [milkRequsition,setMilkRequsition] = useState(0);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status}= await getMilkRequsitited();
+      if(status === 200){
+        setMilkRequsition(data)
+      }
+    }
+    fetchData()
+  },[])
+
+  const [donor,setDonor] = useState(0);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status}= await getNumberOfDonor();
+      if(status === 200){
+        setDonor(data)
+      }
+    }
+    fetchData()
+  },[])
+
+
   const dashboarddata = [
     {
       id: 1,
       title: "Donor Records",
-      recordAmount: "6k",
+      recordAmount: donor,
       imageName: "/assets/images/mother.png",
     },
     {
       id: 2,
       title: "Recipient Records",
-      recordAmount: "1k",
+      recordAmount: baby,
       imageName: "/assets/images/newborn.png",
     },
     {
       id: 3,
-      title: "Registration Records",
-      recordAmount: "10k",
+      title: "Milk Requsition",
+      recordAmount: milkRequsition,
       imageName: "/assets/images/record.png",
     },
     {
       id: 4,
       title: "Milk Collection",
-      recordAmount: "500",
+      recordAmount: milkCollected,
       imageName: "/assets/images/feeding-bottle.png",
     },
   ];
   const token = useRecoilValue(userAtomState)
   console.log(store.getState(),'response')
+  const [milkCollectionMonthWise,setMilkCollectionMonthWise] = useState([])
+  useEffect(()=>{
+    async function fetchData(){
+      const {status , data} = await getMonthWiseMilkCollection();
+      if(status === 200){
+        setMilkCollectionMonthWise(data)
+      }
+    }
+    fetchData()
+  },[])
+  const [milkRequsitionMonthWise,setMilkRequsitionMonthWise] = useState([])
+  useEffect(()=>{
+    async function fetchData(){
+      const {status , data} = await getMonthWiseMilkRequsition();
+      if(status === 200){
+        setMilkRequsitionMonthWise(data)
+      }
+    }
+    fetchData()
+  },[])
+   const bardata = {
+    labels,
+    datasets: [
+      {
+        label: "Milk Collected",
+        data: milkCollectionMonthWise,
+        backgroundColor: "#004a89",
+      },
+      {
+        label: "Milk Requsition",
+        data: milkRequsitionMonthWise,
+        backgroundColor: "red",
+      },
+    ],
+  };
+   const linedata = {
+    labels,
+    datasets: [
+      {
+        label: "Registration",
+        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+        borderColor: "#004a89",
+        backgroundColor: "#004a89",
+      },
+    ],
+  };
   
   return (
     <div className="my-10 mx-10">

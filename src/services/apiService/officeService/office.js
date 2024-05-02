@@ -107,3 +107,20 @@ export const getFiscalYear = async ()=>{
   )
   return response
 }
+
+export const updateFiscalYearStatus = async (id)=>{
+  let response = await mainApi(
+    apiUrls.office.updateFiscalYearStatus.method,
+    apiUrls.office.updateFiscalYearStatus.url+`/${id?id:''}`,
+    
+  )
+  return response
+}
+
+export const getFiscalYearById = async (id)=>{
+  let response = await mainApi(
+    apiUrls?.office.getFiscalYearById.method,
+    apiUrls?.office.getFiscalYearById.url+`/${id?id:''}`,
+  )
+  return response
+}

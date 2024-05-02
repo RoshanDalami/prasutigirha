@@ -16,3 +16,11 @@ export const createDonor = async (data) => {
   );
   return response;
 };
+
+export const getInActiveDonor = async ()=>{
+  let response = await mainApi(
+    apiUrls?.donor?.getInActiveDonor?.method,
+    apiUrls?.donor?.getInActiveDonor?.url,
+  )
+  return response;
+}

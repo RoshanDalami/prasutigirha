@@ -1,3 +1,4 @@
+
 const apiUrls = {
   office: {
     createOffice: {
@@ -51,6 +52,14 @@ const apiUrls = {
     getFiscalYear:{
       method:"GET",
       url:"/fiscal/getFiscal"
+    },
+    updateFiscalYearStatus:{
+      method:"GET",
+      url:"/fiscal/updateStatus"
+    },
+    getFiscalYearById:{
+      method:"GET",
+      url:"/fiscal/getFiscal"
     }
   },
   donor: {
@@ -62,6 +71,10 @@ const apiUrls = {
       method: "POST",
       url: "/donor/registerDonor",
     },
+    getInActiveDonor:{
+      method:"GET",
+      url:"/donor/getInActiveDonor"
+    }
   },
   milkVolume: {
     getMilkVolumeByDonor: {
@@ -188,7 +201,34 @@ const apiUrls = {
       method:"POST",
       url:"/culture/createCulture"
     }
+  },
+  dashboard:{
+    getNumberOfDonor:{
+      method:"GET",
+      url:"/dashboard/getNumberOfDonor"
+    },
+    getNumberOfMilkCollected:{
+      method:"GET",
+      url:"/dashboard/getNumberOfMilkCollected"
+    },
+    getMilkRequsitited:{
+      method:"GET",
+      url:"/dashboard/getTotalMilkRequsition"
+    },
+    getNumberOfBaby:{
+      method:"GET",
+      url:"/dashboard/getNumberOfBaby"
+    },
+    getMonthWiseMilkCollection:{
+      method:"GET",
+      url:"/dashboard/getMilkCollectedMonthWise"
+    },
+    getMonthWiseMilkRequsition:{
+      method:"GET",
+      url:"/dashboard/getMilkRequsitionMonthWise"
+    }
   }
+  
   
 };
 export default apiUrls;

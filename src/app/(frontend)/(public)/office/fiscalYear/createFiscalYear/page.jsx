@@ -9,20 +9,30 @@ import { useRouter } from "next/navigation";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import BikramSambat from "bikram-sambat-js";
 import { createFiscalYear } from 'src/services/apiService/officeService/office'
-export default function Fiscal() {
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting, errors },
-  } = useForm();
-  //   const userInfo =
-  //     typeof localStorage !== "undefined"
-  //       ? JSON.parse(localStorage.getItem("userInfo"))
-  //       : "";
+export default function Fiscal({clickedIdData}) {
   const router = useRouter();
   const aa = new BikramSambat(new Date()).toBS();
   const [startDate, setStartDate] = useState(aa);
   const [endDate, setEndDate] = useState(aa);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { isSubmitting, errors },
+  } = useForm();
+  useEffect(()=>{
+    if(clickedIdData){
+      setValue('_id',clickedIdData?._id)
+      setValue('fiscalYear',clickedIdData?.fiscalYear);
+      setValue('startYear',clickedIdData?.startYear);
+      setValue('endYear',clickedIdData?.endYear);
+      setValue('status',clickedIdData?.status);
+      setStartDate(clickedIdData?.startDate)
+      setEndDate(clickedIdData?.endDate)
+
+    }
+  },[clickedIdData, setValue])
+ 
     const onSubmit = async (data) => {
       data = {
         ...data,
@@ -123,7 +133,7 @@ export default function Fiscal() {
               <label htmlFor="" className="">
                 Status?
               </label>
-              <input type="checkbox" className="h-6 w-6 pt-2" {...register("status")} />
+              <input type="checkbox" className="h-6 w-6 pt-2" {...register("status")}/>
             </div>
           </div>
 

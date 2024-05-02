@@ -35,7 +35,7 @@ export default function AddMilkReq({ clickedIdData }) {
     setValue,
     control,
     watch,
-    getValues
+    getValues,
   } = useForm({
     defaultValues: {
       requisitedMilk: [
@@ -59,27 +59,27 @@ export default function AddMilkReq({ clickedIdData }) {
 
   const [bottleList, setBottleList] = useState([]);
 
-  useEffect(() => {
-    async function fetchBottleList() {
-      watchArray?.forEach(async (item, index) => {
-        if (item?.batchNumber != "") {
-          const response = await getBottle(item.batchNumber.split("/")?.[0]);
-          if (response?.status === 200) {
-            // console.log(response?.data,'response')
-            setBottleList((prevData) => [
-              ...prevData.slice(0, index),
-              response?.data?.bottleList,
-              ...prevData.slice(index + 1),
-            ]);
-          } else {
-            setBabyList([]);
-          }
-        }
-      });
-    }
+  // useEffect(() => {
+  //   async function fetchBottleList() {
+  //     watchArray?.forEach(async (item, index) => {
+  //       if (item?.batchNumber != "") {
+  //         const response = await getBottle(item.batchNumber.split("/")?.[0]);
+  //         if (response?.status === 200) {
+  //           // console.log(response?.data,'response')
+  //           setBottleList((prevData) => [
+  //             ...prevData.slice(0, index),
+  //             response?.data?.bottleList,
+  //             ...prevData.slice(index + 1),
+  //           ]);
+  //         } else {
+  //           setBabyList([]);
+  //         }
+  //       }
+  //     });
+  //   }
 
-    fetchBottleList();
-  }, [watchArray]);
+  //   fetchBottleList();
+  // }, [watchArray]);
   // watchArray?.map(item=>item.batchNumber)
 
   //gestationalAge
@@ -154,6 +154,31 @@ export default function AddMilkReq({ clickedIdData }) {
       })
       ?.reduce((acc, amount) => acc + amount, 0) / watchArray?.length;
 
+  const [watchBottle, setWatchBottle] = useState([]);
+  const [isValid, setIsValid] = useState(false);
+  let remvol;
+  let quantity;
+  const [someArray,setSomeArray] = useState(false)
+  useEffect(()=>{
+    watchArray?.forEach((item,index)=>{
+      let nextIndex = watchArray[index+1];
+      if(item.bottleName?.split('/')[0]=== nextIndex?.bottleName?.split('/')[0]){
+
+        let afterCalculation = item.remainingVol - item.quantity;
+        if (watchArray[index + 1]) {
+          let nextItem = watchArray[index + 1];
+          
+          
+          // Compare the current item's calculation with the next item's calculation
+          if (afterCalculation > nextItem.quantity) {
+            setSomeArray(true);
+          }
+        }
+      }
+    })  
+  
+  },[watchArray?.map((item)=>item?.bottleName)])
+
   return (
     <>
       <div className="mx-10">
@@ -219,8 +244,9 @@ export default function AddMilkReq({ clickedIdData }) {
               </div>
             </div>
             {fields.map((field, index) => {
-              const remvol = getValues(`requisitedMilk.${index}.remainingVol`)
-              const quantity = getValues(`requisitedMilk.${index}.quantity`)
+              remvol = getValues(`requisitedMilk.${index}.remainingVol`);
+              quantity = getValues(`requisitedMilk.${index}.quantity`);
+
               return (
                 <div
                   key={field.id}
@@ -311,9 +337,17 @@ export default function AddMilkReq({ clickedIdData }) {
                       })}
                       onChange={(e) => {
                         const selectedValue = e.target.value;
+                        setWatchBottle((prevData) => [
+                          ...prevData.slice(0, index),
+                          selectedValue?.split("/")[0],
+                          ...prevData.slice(index + 1),
+                        ]);
                         setValue(
                           `requisitedMilk.${index}.remainingVol`,
                           selectedValue?.split("/")[2]
+                        );
+                        setIsValid(
+                          watchBottle.includes(selectedValue?.split("/")[0])
                         );
                       }}
                     >
@@ -371,7 +405,9 @@ export default function AddMilkReq({ clickedIdData }) {
                     </label>
                     <input
                       type="number"
-                      className={`inputStyle ${remvol < quantity ? 'bg-red-600/50':''}`}
+                      className={`inputStyle ${
+                        remvol < quantity ? "bg-red-600/50" : ""
+                      }`}
                       placeholder="Enter ML"
                       {...register(`requisitedMilk.${index}.quantity`, {
                         valueAsNumber: true,
@@ -401,7 +437,15 @@ export default function AddMilkReq({ clickedIdData }) {
             <div className="my-5 font-bold text-xl">
               <button
                 className={`text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg disabled:bg-gray-300  disabled:cursor-not-allowed `}
-                disabled={validVolume > 150 ? true : false || isSubmitting}
+                disabled={
+                  validVolume > 150
+                    ? true
+                    : false || isSubmitting || feedingDate > aa
+                    ? true
+                    : false || remvol < quantity
+                    ? true
+                    : false || someArray
+                }
                 type="submit"
               >
                 {isSubmitting ? "Submitting..." : "Submit"}

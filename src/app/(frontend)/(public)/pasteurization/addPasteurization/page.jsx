@@ -21,6 +21,7 @@ import {
 import { getMilkListByDonor } from "src/services/apiService/milkVolume/milkVolume";
 const aa = new BikramSambat(new Date()).toBS();
 
+
 export default function AddPasteurization({ clickedIdData }) {
   const userInfo =
     typeof localStorage !== "undefined"
@@ -189,7 +190,10 @@ export default function AddPasteurization({ clickedIdData }) {
       </option>
     );
   });
-  console.log(newArray,'response')
+ const [tryArray,setTryArray] = useState([])
+  const [isValid,setIsValid] = useState(false)
+  let remVol 
+  let poolVol 
   return (
     <>
       <div className="mx-10">
@@ -251,8 +255,8 @@ export default function AddPasteurization({ clickedIdData }) {
               </div>
 
               {fields.map((field, index) => {
-                const remVol = getValues(`donorDetailsForPooling.${index}.remainingVol`)
-                const poolVol = getValues(`donorDetailsForPooling.${index}.volumeOfMilkPooled`)
+                 remVol = getValues(`donorDetailsForPooling.${index}.remainingVol`)
+                 poolVol = getValues(`donorDetailsForPooling.${index}.volumeOfMilkPooled`)
                 
                 return (
                   <div
@@ -276,7 +280,6 @@ export default function AddPasteurization({ clickedIdData }) {
                             const response = await getMilkListByDonor(
                               currentId.split("/")[0]
                             );
-                            console.log(response?.data,'response')
                             if (response?.status === 200) {
                               setMilkList((prevData) => [
                                 ...prevData.slice(0, index),
@@ -318,7 +321,7 @@ export default function AddPasteurization({ clickedIdData }) {
                         Milk List<span className="text-red-600">*</span>
                       </label>
                       <select
-                        className={`inputStyle`}
+                        className={`inputStyle `}
                         required
                         {...register(
                           `donorDetailsForPooling.${index}.milkvolumeId`,
@@ -326,10 +329,17 @@ export default function AddPasteurization({ clickedIdData }) {
                         )}
                         onChange={(e) => {
                           const selectedValue = e.target.value;
+                          setTryArray((prevData) => [
+                            ...prevData.slice(0, index),
+                            selectedValue.split("/")[0],
+                            ...prevData.slice(index + 1),
+                          ])
                           setValue(
                             `donorDetailsForPooling.${index}.remainingVol`,
                             selectedValue.split("/")[1]
-                          );
+                          )
+                          setIsValid(tryArray.includes(selectedValue.split("/")[0]))
+                           
                         }}
                       >
                         <option selected disabled value={""}>
@@ -436,7 +446,7 @@ export default function AddPasteurization({ clickedIdData }) {
             <div className="my-3">
               <button
                 className={`text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg disabled:bg-gray-300  disabled:cursor-not-allowed `}
-                disabled={milkVolume > 2500 ? true : false || isSubmitting}
+                disabled={milkVolume > 2500 ? true : false || isSubmitting || isValid || (date > aa) ? true :false || remVol < poolVol ? true : false}
                 type="submit"
               >
                 {isSubmitting ? "Submitting..." : "Submit"}
