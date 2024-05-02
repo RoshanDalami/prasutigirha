@@ -444,7 +444,7 @@ export default function AddMilkReq({ clickedIdData }) {
                     ? true
                     : false || remvol < quantity
                     ? true
-                    : false || someArray
+                    : false || isValid
                 }
                 type="submit"
               >
