@@ -333,8 +333,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <Button>External</Button>
             </div>
           )}
-        </div> */}
-        <div className="md:grid-cols-2 grid text-lg gap-4">
+        </div> */}<div className="md:grid-cols-2 grid text-lg gap-4">
           {/* <div className="grid"> */}
           {/* <div className={`flex flex-col ${isExternal ? "hidden" : "block"}`}> */}
           <div className="flex flex-col">
@@ -506,41 +505,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <p className="errorMessages">{errors.ethnicity.message}</p>
             )}
           </div>
-          <div className="flex flex-col">
-            <label>
-              {" "}
-              Palika<span className="text-red-600">*</span>
-            </label>
-            <select
-              className="inputStyle"
-              {...register("address.palikaId", {
-                required: "Ethnicity Required",
-              })}
-            >
-              <option selected disabled value={""}>
-                --Select Palika--
-              </option>
-              {paliakOptions}
-            </select>
-            {errors.ethnicity && (
-              <p className="errorMessages">{errors.ethnicity.message}</p>
-            )}
-          </div>
-          <div className="flex-col flex">
-            <label>
-              {" "}
-              Ward<span className="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter Address"
-              className="inputStyle"
-              {...register("address.ward", { required: "Address Required" })}
-            />
-            {errors.address && (
-              <p className="errorMessages">{errors.address.message}</p>
-            )}
-          </div>
+        
           <div className="flex-col flex">
             <label>
               {" "}

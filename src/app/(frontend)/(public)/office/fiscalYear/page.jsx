@@ -3,33 +3,42 @@ import dynamic from "next/dynamic";
 import { useState, useEffect, useCallback } from "react";
 import { urls } from "src/services/apiHelpers";
 import Link from "next/link";
+
 import Button from "src/components/button";
 import axios from "axios";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { getFiscalYear } from 'src/services/apiService/officeService/office'
+import {
+  getFiscalYear,
+  updateFiscalYearStatus,
+} from "src/services/apiService/officeService/office";
+import Switch from "@mui/material/Switch";
+import { FaEdit } from "react-icons/fa";
+const label = { inputProps: { "aria-label": "Switch demo" } };
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
   const router = useRouter();
-  const [apiData,setApiData] = useState([]);
-  useEffect(()=>{
-    async function getApiData (){
+  const [apiData, setApiData] = useState([]);
+  useEffect(() => {
+    async function getApiData() {
       try {
-        const {data,status} = await getFiscalYear();
-        if(status === 200){
-          setApiData(data)
+        const { data, status } = await getFiscalYear();
+        if (status === 200) {
+          setApiData(data);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-    getApiData()
-  },[])
-
+    getApiData();
+  }, []);
+const handleEdit = (id)=>{
+  router.push(`/office/fiscalYear/createFiscalYear/${id}`)
+}
   return (
     <>
       <div>
@@ -55,21 +64,57 @@ export default function ViewDonor() {
                   <th className="py-3">S No.</th>
                   <th className="py-3">Fiscal Year</th>
                   <th className="py-3">Status</th>
+                  <th className="py-3">Update Status</th>
+                  <th className="py-3">Action</th>
 
                   {/* <td className="py-3">Email</td>
                   <td className="py-3">Contact</td> */}
                 </tr>
-                {
-                  apiData?.map((item,index)=>{
-                    return(
-                      <tr key={index}>
-                        <th className="border border-black px-2 py-3">{index + 1}</th>
-                        <th className="border border-black px-2 py-3">{item.fiscalYear}</th>
-                        <th className={`border border-black px-2 py-3 ${item.status ? 'text-green-600':"text-red-600"} `}>{item.status ? "Active":"Deactive"}</th>
-                      </tr>
-                    )
-                  })
-                }
+                {apiData?.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <th className="border border-black px-2 py-3">
+                        {index + 1}
+                      </th>
+                      <th className="border border-black px-2 py-3">
+                        {item.fiscalYear}
+                      </th>
+                      <th
+                        className={`border border-black px-2 py-3 ${
+                          item.status ? "text-green-600" : "text-red-600"
+                        } `}
+                      >
+                        {item.status ? "Active" : "Deactive"}
+                      </th>
+                      <th className={`border border-black px-2 py-3  `}>
+                        <Switch
+                          {...label}
+                          onChange={async () => {
+                            const response = await updateFiscalYearStatus(
+                              item._id
+                            );
+                            if (response?.status === 200) {
+                              const { data, status } = await getFiscalYear();
+                              if (status === 200) {
+                                setApiData(data);
+                              }
+                            }
+                          }}
+                          value={true}
+                          checked={item.status}
+                        />
+                      </th>
+                      <th className="border border-black px-2 py-3 ">
+                        <div className="flex">
+
+                        <div className="bg-green-600 p-2 rounded-md shadow-md text-white cursor-pointer " onClick={()=>handleEdit(item._id)} >
+                          <FaEdit size={20}/>
+                        </div>
+                        </div>
+                      </th>
+                    </tr>
+                  );
+                })}
               </table>
             </div>
           </TableBorder>

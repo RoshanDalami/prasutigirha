@@ -15,6 +15,7 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
 import { useForm } from "react-hook-form";
+import { CSVLink, CSVDownload } from "react-csv";
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
@@ -78,7 +79,7 @@ export default function ListVolume() {
   return (
     <>
       <div>
-        <form
+      <form
           className="my-5 mx-10 "
           onSubmit={handleSubmit((data) => onSubmit(data))}
         >
@@ -108,16 +109,19 @@ export default function ListVolume() {
         </form>
         <div className="mx-10">
           <TableBorder
-            title={"List of Milk Requisition Form"}
+            title={"Milk Requisition Report"}
             title2={
-              <div className="flex flex-col   ">
-                <div className=" flex justify-end">
-                  <Link href={"/milkRequisation/addMilkRequisation"}>
-                    <Button>+Add </Button>
-                  </Link>
+              <div className="flex flex-col  ">
+                <div className=" flex justify-end gap-3">
+                  <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
+                    <CSVLink data={requsitionList} filename="Milk_requistion.csv">
+                      Export to Excel
+                    </CSVLink>
+                  </button>
                 </div>
               </div>
             }
+            
           >
             <div className=" my-5">
               <table className="w-full">
@@ -130,7 +134,6 @@ export default function ListVolume() {
                   <td className="py-3">Feeding Date</td>
                   <td className="py-3">Total Milk Feeded</td>
                   <td className="py-3">No. of Bottle</td>
-                  <td className="py-3 ">Action</td>
                 </tr>
                 {requsitionList?.map((row, index) => {
                   return (
@@ -150,23 +153,7 @@ export default function ListVolume() {
                           .reduce((acc, amount) => acc + amount, 0)}
                       </td>
                       <td className="py-3">{row.requisitedMilk.length}</td>
-                      <td className="py-3 ">
-                        <div className="flex justify-evenly items-center text-xl">
-                          {/* <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
-
-                          <PencilSquareIcon
-                            className="h-6 w-6 text-white "
-                            onClick={() => handleEdit(row._id)}
-                          />
-                          </div> */}
-                          <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
-                            <TrashIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleDelete(row._id)}
-                            />
-                          </div>
-                        </div>
-                      </td>
+                      
                     </tr>
                   );
                 })}

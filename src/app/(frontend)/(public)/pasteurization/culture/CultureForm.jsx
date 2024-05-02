@@ -2,7 +2,8 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { getPooling } from "src/services/apiService/pasteurization/pasteurization";
-import FormBorder from "src/components/reusableForm";
+import TableBorder from "src/components/TableDesign";
+import { CSVLink, CSVDownload } from "react-csv"; 
 export default function CultureForm() {
   const [poolingList, setPoolingList] = useState([]);
   useEffect(() => {
@@ -14,9 +15,25 @@ export default function CultureForm() {
     }
     getPoolingList();
   }, []);
+  const dataForExcel = poolingList?.map((item)=>{
+    return {
+      ...item,
+      donorDetailsForPooling: [...item.donorDetailsForPooling]
+    }
+  })
+  console.log(dataForExcel,'data')
   return (
     <div className="px-6">
-      <FormBorder title={'Culture'} >
+      <TableBorder title={'Culture Report'}   title2={
+                <div className="flex flex-col   ">
+                  <div className=" flex justify-end">
+                    <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
+
+                    <CSVLink data={dataForExcel} filename="culture.csv" >Export to Excel</CSVLink>
+                    </button>
+                  </div>
+                </div>
+              }  >
         <div className="flex flex-col items-center">
           <h1 className="text-xl font-bold">
             Paropakar Maternity and Women&apos;s Hospital
@@ -39,6 +56,7 @@ export default function CultureForm() {
               <th className="border border-black">Culture Report</th>
             </tr>
             {poolingList?.map((item, index) => {
+            
                 if(item.culture != null){
                     return (
                       <tr key={index} className={`${item.culture ? 'bg-rose-600/50':'bg-lime-600/50'}`} >
@@ -64,7 +82,7 @@ export default function CultureForm() {
             })}
           </table>
         </div>
-      </FormBorder>
+      </TableBorder>
     </div>
   );
 }

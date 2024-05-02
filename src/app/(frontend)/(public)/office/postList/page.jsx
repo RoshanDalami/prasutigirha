@@ -63,18 +63,10 @@ export default function Post() {
                 <td className="border border-black px-3 py-2  text-lg">
                   {item.postName}
                 </td>
-                {department?.map((row, index0) => {
-                  if (row.departmentId === item.departmentId) {
-                    return (
-                      <td
-                        className="border border-black px-3 py-2  text-lg"
-                        key={index0}
-                      >
-                        {row.departmentName}
-                      </td>
-                    );
-                  }
-                })}
+
+                <td className="border border-black px-3 py-2  text-lg">
+                  {item.departmentName}
+                </td>
               </tr>
             );
           })}

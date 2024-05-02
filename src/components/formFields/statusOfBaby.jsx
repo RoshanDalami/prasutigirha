@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
@@ -10,7 +10,27 @@ import BikramSambat from "bikram-sambat-js";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
 import { useParams } from "next/navigation";
+
 const aa = new BikramSambat(new Date()).toBS();
+
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 const defaultValues = {
   dateOfBirth: "",
   engDateBirth: "",
@@ -29,9 +49,19 @@ import {
   serologyAtom2,
 } from "src/recoil/serology/serologyAtom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
 const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
+
+  const [personName, setPersonName] = React.useState([]);
   const setSerologyPositive = useSetRecoilState(serologyAtom);
   const setSerologyPositive1 = useSetRecoilState(serologyAtom1);
   const setSerologyPositive2 = useSetRecoilState(serologyAtom2);
@@ -39,6 +69,16 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const { userData, setUserData } = useContext(StepperContext);
   const router = useRouter();
   const { id } = useParams();
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
 
   //Nepali date
   const [birthDate, setBirthDate] = useState(aa);
@@ -100,6 +140,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       </option>
     );
   });
+  const [selectedOptions, setSelectedOptions] = useState([]);
 
   const {
     control,
@@ -139,13 +180,14 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   }, [userData, setValue, clickedIdData]);
 
   const onSubmit = async (data) => {
+    console.log(data.selectedOptions);
     if (serologyStatus == "false") {
       setUserData({
         ...userData,
         babyStatus: {
           dateOfBirth: birthDate,
           engDateBirth: engDate,
-          babyStatus: data.babyStatus,
+          babyStatus: personName,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
         },
@@ -157,7 +199,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           babyStatus: {
             dateOfBirth: birthDate,
             engDateBirth: engDate,
-            babyStatus: data.babyStatus,
+            babyStatus: personName,
             babyTransfer: data.babyTransfer,
             babyFeeding: data.babyFeeding,
           },
@@ -171,7 +213,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         babyStatus: {
           dateOfBirth: birthDate,
           engDateBirth: engDate,
-          babyStatus: data.babyStatus,
+          babyStatus: personName,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
         },
@@ -182,7 +224,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
           ...userData,
           babyStatus: {
             dateOfBirth: data.dateOfBirth,
-            babyStatus: data.babyStatus,
+            babyStatus: personName,
             babyTransfer: data.babyTransfer,
             babyFeeding: data.babyFeeding,
           },
@@ -192,7 +234,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         ...userData,
         babyStatus: {
           dateOfBirth: data.dateOfBirth,
-          babyStatus: data.babyStatus,
+          babyStatus: personName,
           babyTransfer: data.babyTransfer,
           babyFeeding: data.babyFeeding,
         },
@@ -211,7 +253,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   };
 
   const watchAllFields = watch();
-  // useEffect(() => {
+
   //   if (watchAllFields?.hiv) {
   //     setSerologyPositive(watchAllFields?.hiv);
   //   }
@@ -226,7 +268,14 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   //     setSerologyPositive2(watchAllFields?.vdrl);
   //   }
   // }, [setSerologyPositive2, watchAllFields?.vdrl]);
-
+  const selectOptions = babyStatusList?.map((item) => {
+    return {
+      value: item?.babyStatusId,
+      label: item?.babyStatusName,
+    };
+  });
+  
+ 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormBorder title={" Status of Baby"}>
@@ -255,7 +304,26 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               Baby Status
               <span className="text-red-600">*</span>
             </label>
-            <select
+            <Select
+              labelId="demo-multiple-checkbox-label"
+              id="demo-multiple-checkbox"
+              multiple
+              value={personName}
+              onChange={handleChange}
+              input={<OutlinedInput label="Tag" />}
+              renderValue={(selected) => selected.join(", ")}
+              MenuProps={MenuProps}
+              placeholder="-- Select Baby Status --"
+            >
+              {babyStatusList.map((name) => (
+                <MenuItem key={name?._id} value={name?.babyStatusName}>
+                  <Checkbox checked={personName.indexOf(name?.babyStatusName) > -1} />
+                  <ListItemText primary={name?.babyStatusName} />
+                </MenuItem>
+              ))}
+            </Select>
+
+            {/* <select
               className="inputStyle"
               {...register("babyStatus", {
                 required: "Baby Status Required",
@@ -266,7 +334,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
                 --Select Your Baby Status--
               </option>
               {babyStatusOptions}
-            </select>
+            </select> */}
             {errors.babyStatus && (
               <p className="errorMessages">{errors.babyStatus.message}</p>
             )}
