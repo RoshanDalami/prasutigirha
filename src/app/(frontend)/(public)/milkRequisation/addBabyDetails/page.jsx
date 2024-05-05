@@ -83,7 +83,8 @@ export default function AddBabyDetails({ clickedIdData }) {
     { name: "IUGR", id: 8 },
     { name: "Congenital anomalies", id: 9 },
     { name: "Hypoglycemia", id: 10 },
-    { name: "Other", id: 11 },
+    { name: "LBW", id: 11 },
+    { name: "Other", id: 12 },
   ];
   const diagnosisOptions = diagnosis?.map((item, index) => {
     return (
