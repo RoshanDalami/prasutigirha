@@ -78,6 +78,19 @@ export default function BottleDetails() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+  const donorDetail = pooling?.donorDetailsForPooling
+
+  for(let i = 0 ; i<donorDetail?.length;i++){
+    if(donorDetail[i]?.donorName == donorDetail[i+1]?.donorName){
+       let milkVolume =   donorDetail[i]?.volumeOfMilkPooled + donorDetail[i+1]?.volumeOfMilkPooled;
+       donorDetail[i].volumeOfMilkPooled = milkVolume;
+       donorDetail.splice(i + 1, 1)
+    }else{
+      console.log(false)
+    }
+  }
+
+
 
   return (
     <div>
@@ -116,11 +129,14 @@ export default function BottleDetails() {
                   Donor List
                 </div>
                 <div className="mt-4">
-                  {pooling?.donorDetailsForPooling.map((item, index) => {
+                  {donorDetail.map((item, index) => {
                     return (
                       <div key={index} className="flex items-center gap-4">
                         <p> {index + 1}. </p>
-                        <p> {item.donorName} </p>
+                        <p> {
+                          
+                        item.donorName
+                        } </p>
                         <p>{item.volumeOfMilkPooled} ml</p>
                       </div>
                     );

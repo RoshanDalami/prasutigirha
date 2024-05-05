@@ -27,7 +27,7 @@ export default function CreateCulture() {
         {
           bottleId: "",
           cultureResult: null,
-          cultureRemark:''
+          cultureRemark: "",
         },
       ],
     },
@@ -83,7 +83,7 @@ export default function CreateCulture() {
       }
     } catch (error) {}
   };
-  
+
   return (
     <div className="mx-4">
       <FormBorder title={"Create Culture"}>
@@ -93,26 +93,7 @@ export default function CreateCulture() {
           onSubmit={handleSubmit((data) => onSubmit(data))}
         >
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col">
-              <label htmlFor="">Batch</label>
-              <select
-                name=""
-                id=""
-                className="inputStyle"
-                {...register("batchId")}
-              >
-                <option value="" disabled selected>
-                  --Select Batch--
-                </option>
-                {apiData?.map((item, index) => {
-                  return (
-                    <option key={index} value={item._id}>
-                      {item.batchName}{" "}{`(${item.date})`}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+          
             <div className="flex flex-col">
               <label htmlFor="">
                 Culture Date<span className="text-red-600">*</span>
@@ -132,7 +113,11 @@ export default function CreateCulture() {
               className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white font-bold"
               onClick={(e) => {
                 e.preventDefault();
-                append({ bottleId: "", cultureResult: null , cultureRemark:'' });
+                append({
+                  bottleId: "",
+                  cultureResult: null,
+                  cultureRemark: "",
+                });
               }}
             >
               Add
@@ -145,38 +130,41 @@ export default function CreateCulture() {
             return (
               <div key={field.id} className="flex items-center gap-3 w-full">
                 <div className="flex flex-col w-2/4">
-                  <label htmlFor="">Bottle List</label>
+                  <label htmlFor="">Batch</label>
                   <select
                     name=""
                     id=""
                     className="inputStyle"
-                    {...register(`cultureBottleList.${index}.bottleId`)}
+                    {...register(`cultureBottleList.${index}.batchId`)}
                   >
-                    <option className="" value={""} disabled selected>
-                      --select bottle--
+                    <option value="" disabled selected>
+                      --Select Batch--
                     </option>
-                    {bottleList?.map((item, index) => {
-                      return <option key={index}>{item?.name}</option>;
+                    {apiData?.map((item, index) => {
+                      return (
+                        <option key={index} value={item._id}>
+                          {item.batchName} {`(${item.date})`}
+                        </option>
+                      );
                     })}
                   </select>
                 </div>
                 <div className="flex flex-col w-2/4">
                   <label>Culture Result</label>
-                  
-                    <select
-                      name=""
-                      id=""
-                      className="inputStyle text-sm"
-                      {...register(`cultureBottleList.${index}.cultureResult`)}
-                    >
-                      <option value="" className="text-md" selected disabled>
-                        --Update Culture--
-                      </option>
-                      <option value={true}>Positive</option>
-                      <option value={false}>Negative</option>
-                      <option value={"Other"}>Other</option>
-                    </select>
-                
+
+                  <select
+                    name=""
+                    id=""
+                    className="inputStyle text-sm"
+                    {...register(`cultureBottleList.${index}.cultureResult`)}
+                  >
+                    <option value="" className="text-md" selected disabled>
+                      --Update Culture--
+                    </option>
+                    <option value={true}>Positive</option>
+                    <option value={false}>Negative</option>
+                    {/* <option value={"Other"}>Other</option> */}
+                  </select>
                 </div>
                 {fields?.length > 1 ? (
                   <div className="flex items-center justify-center mt-6 ">
