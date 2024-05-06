@@ -189,13 +189,10 @@ export default function Department() {
                 <label htmlFor="">
                   Select Office <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("officeId")}>
-                  <option value={""} selected disabled>
-                    --Select Office--
-                  </option>
+                <select className="inputStyle" {...register("officeId")} >
                   {officeList?.map((item, index) => {
                     return (
-                      <option key={index} value={item.officeId}>
+                      <option key={index} value={item.officeId} selected >
                         {item.office_name}
                       </option>
                     );

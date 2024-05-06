@@ -16,6 +16,7 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
 import { useForm } from "react-hook-form";
+import TablePagination from '@mui/material/TablePagination';
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
@@ -23,6 +24,8 @@ export default function ViewDonor() {
   const [date, setDate] = useState('');
   const engDate = new BikramSambat(date, "BS").toAD();
   const router = useRouter();
+  const [page,setPage] = useState(0)
+  const [rowPerPage,setRowPerPage] = useState(8)
   const {register,handleSubmit} = useForm()
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
@@ -34,6 +37,13 @@ export default function ViewDonor() {
     }
     fetchData();
   }, []);
+  const handlePageChange = (e,newpage)=>{
+    setPage(newpage)
+  }
+  function handlePerPage(e){
+    setRowPerPage(+e.target.value)
+    setPage(0)
+  }
 
   const resetFilter = async() =>{
     const { status, data } = await getDonor();
@@ -177,7 +187,7 @@ const onSubmit = async(data)=>{
                   <td className="py-3">Contact</td>
                   {/* <td className="py-3">Action</td> */}
                 </tr>
-                {donorList?.map((item, index) => {
+                {donorList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((item, index) => {
                   return (
                     <tr
                       className=" border border-x-gray text-center"
@@ -218,7 +228,17 @@ const onSubmit = async(data)=>{
                     </tr>
                   );
                 })}
+
               </table>
+              <TablePagination
+               rowsPerPageOptions={[7]}
+               rowsPerPage={rowPerPage}
+               page={page}
+               count={donorList.length}
+               component={'div'}
+               onPageChange={handlePageChange}
+               onRowsPerPageChange={handlePerPage}
+              ></TablePagination>
             </div>
           </TableBorder>
         </div>

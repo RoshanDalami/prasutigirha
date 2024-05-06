@@ -159,25 +159,13 @@ export default function AddMilkReq({ clickedIdData }) {
   let remvol;
   let quantity;
   const [someArray,setSomeArray] = useState(false)
-  useEffect(()=>{
-    watchArray?.forEach((item,index)=>{
-      let nextIndex = watchArray[index+1];
-      if(item.bottleName?.split('/')[0]=== nextIndex?.bottleName?.split('/')[0]){
+  const removeHandler = (index)=>{
+    remove(index);
+    watchBottle?.splice(index,1)
+    
+  }
+ 
 
-        let afterCalculation = item.remainingVol - item.quantity;
-        if (watchArray[index + 1]) {
-          let nextItem = watchArray[index + 1];
-          
-          
-          // Compare the current item's calculation with the next item's calculation
-          if (afterCalculation > nextItem.quantity) {
-            setSomeArray(true);
-          }
-        }
-      }
-    })  
-  
-  },[watchArray?.map((item)=>item?.bottleName)])
 
   return (
     <>
@@ -287,7 +275,8 @@ export default function AddMilkReq({ clickedIdData }) {
                         --Select Batch Number--
                       </option>
                       {poolingList?.map((items, index) => {
-                        const combinedValue = `${items._id}/${items.batchName}`;
+                        const combinedValue = `${items._id}/${items.batchName}/${items.date}`;
+                        console.log(items,'response')
                         if (items.culture === false) {
                           return (
                             <option key={index} value={combinedValue}>
@@ -361,6 +350,7 @@ export default function AddMilkReq({ clickedIdData }) {
                             item?.map((subItem, subIndex) => {
                               if (subItem?.remainingVoluem > 0) {
                                 const bottleCombValue = `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`;
+                                console.log(subItem,'response')
                                 return (
                                   <option
                                     key={subIndex}
@@ -423,7 +413,7 @@ export default function AddMilkReq({ clickedIdData }) {
                     <div className="font-bold text-lg flex items-center justify-center">
                       <button
                         className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                        onClick={() => remove(index)}
+                        onClick={() => removeHandler(index)}
                       >
                         {/* Remove */}
                         <FaTrashAlt />

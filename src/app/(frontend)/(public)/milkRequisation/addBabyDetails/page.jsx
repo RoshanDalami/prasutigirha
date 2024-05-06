@@ -1,24 +1,61 @@
 "use client";
+
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
-import {
-  createBaby,
-} from 'src/services/apiService/baby/babyServices'
+import { createBaby } from "src/services/apiService/baby/babyServices";
 const aa = new BikramSambat(new Date()).toBS();
+
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 export default function AddBabyDetails({ clickedIdData }) {
   const router = useRouter();
   const { id } = useParams();
   const [birthDate, setBirthDate] = useState(aa);
-
+  const [personName, setPersonName] = React.useState([]);
+  const [indicationName, setIndicationName] = React.useState([]);
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+  const handleIndicationChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setIndicationName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
   const userInfo =
     typeof localStorage !== "undefined"
       ? JSON.parse(localStorage.getItem("user"))
@@ -94,7 +131,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     );
   });
   const indications = [
-    { id: 1, name: "Select Indication" },
+    // { id: 1, name: "Select Indication" },
     { id: 2, name: "Preterm" },
     { id: 3, name: "Low Birth weight" },
     { id: 4, name: "IUGR" },
@@ -132,6 +169,8 @@ export default function AddBabyDetails({ clickedIdData }) {
           ? data?.babyStatusOther
           : data?.babyStatus,
       _id: data?._id,
+      diagnosis:personName,
+      indications:indicationName,
       dateOfBaby: birthDate,
       engDateOfBaby: engBirthDate,
       userId: userInfo?.userDetail._id,
@@ -267,9 +306,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                 )}
               </div>
               <div className="flex flex-col">
-                <label htmlFor="">
-                  IP Number<span className="text-red-600">*</span>
-                </label>
+                <label htmlFor="">IP Number</label>
                 <input
                   type="text"
                   className="inputStyle"
@@ -303,17 +340,26 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Diagnosis of recipient <span className="text-red-600">*</span>
                 </label>
-                <select
-                  className="inputStyle"
-                  {...register("diagnosis", {
-                    required: "Diagnosis is required",
-                  })}
+
+                <Select
+                  labelId="demo-multiple-checkbox-label"
+                  id="demo-multiple-checkbox"
+                  multiple
+                  value={personName}
+                  onChange={handleChange}
+                  input={<OutlinedInput label="Tag" />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                  placeholder="-- Select Baby Status --"
                 >
-                  <option selected disabled value={""}>
-                    --Select Diagnosis--
-                  </option>
-                  {diagnosisOptions}
-                </select>
+                  {diagnosis.map((name) => (
+                    <MenuItem key={name?.id} value={name?.name}>
+                      <Checkbox checked={personName.indexOf(name?.name) > -1} />
+                      <ListItemText primary={name?.name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+
                 {errors?.diagnosis && (
                   <p className="errorMessages">{errors.diagnosis.message}</p>
                 )}
@@ -322,17 +368,26 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Indications <span className="text-red-600">*</span>
                 </label>
-                <select
-                  className="inputStyle"
-                  {...register("indications", {
-                    required: "Inidcations is required",
-                  })}
+                <Select
+                  labelId="demo-multiple-checkbox-label"
+                  id="demo-multiple-checkbox"
+                  multiple
+                  value={indicationName}
+                  onChange={handleIndicationChange}
+                  input={<OutlinedInput label="Tag" />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                  placeholder="-- Select Baby Status --"
                 >
-                  <option selected disabled value={""}>
-                    --Select Indications--
-                  </option>
-                  {indicationOption}
-                </select>
+                  {indications.map((name) => (
+                    <MenuItem key={name?.id} value={name?.name}>
+                      <Checkbox
+                        checked={indicationName.indexOf(name?.name) > -1}
+                      />
+                      <ListItemText primary={name?.name} />
+                    </MenuItem>
+                  ))}
+                </Select>
                 {errors?.indications && (
                   <p className="errorMessages">{errors.indications.message}</p>
                 )}
@@ -369,7 +424,9 @@ export default function AddBabyDetails({ clickedIdData }) {
               </div>
             </div>
             <div className="my-5 font-bold text-xl">
-              <Button isSubmitting={isSubmitting}>{isSubmitting ? "Submiting ..." : "Submit"}</Button>
+              <Button isSubmitting={isSubmitting}>
+                {isSubmitting ? "Submiting ..." : "Submit"}
+              </Button>
             </div>
           </FormBorder>
         </form>

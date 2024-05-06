@@ -79,6 +79,20 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
       typeof value === "string" ? value.split(",") : value
     );
   };
+  const diagnosis = [
+    { name: "Preterm delivery", id: 1 },
+    { name: "Premature delivery", id: 2 },
+    { name: "Perinatal Asphyxia", id: 3 },
+    { name: "Respiratory Distress syndrome", id: 4 },
+    { name: "Sepsis", id: 5 },
+    { name: "Neonatal Jaundice", id: 6 },
+    { name: "Seizure disorders", id: 7 },
+    { name: "IUGR", id: 8 },
+    { name: "Congenital anomalies", id: 9 },
+    { name: "Hypoglycemia", id: 10 },
+    { name: "LBW", id: 11 },
+    { name: "Other", id: 12 },
+  ];
 
   //Nepali date
   const [birthDate, setBirthDate] = useState(aa);
@@ -315,10 +329,10 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               MenuProps={MenuProps}
               placeholder="-- Select Baby Status --"
             >
-              {babyStatusList.map((name) => (
-                <MenuItem key={name?._id} value={name?.babyStatusName}>
-                  <Checkbox checked={personName.indexOf(name?.babyStatusName) > -1} />
-                  <ListItemText primary={name?.babyStatusName} />
+              {diagnosis.map((name) => (
+                <MenuItem key={name?.id} value={name?.name}>
+                  <Checkbox checked={personName.indexOf(name?.name) > -1} />
+                  <ListItemText primary={name?.name} />
                 </MenuItem>
               ))}
             </Select>

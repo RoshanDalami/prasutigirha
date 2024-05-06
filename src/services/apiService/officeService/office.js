@@ -67,6 +67,14 @@ export const createEmpolyee = async (data)=>{
   return response
 }
 
+export const employeeStatus = async (id)=>{
+  let response = await mainApi(
+    apiUrls.office.activeDeactiveEmployee.method,
+    apiUrls.office.activeDeactiveEmployee.url+`/${id}`,
+  )
+  return response
+}
+
 export const getState =  async () =>{
   let response = await mainApi(
     apiUrls.office.getStates.method,
