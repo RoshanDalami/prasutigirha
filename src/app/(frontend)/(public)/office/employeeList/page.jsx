@@ -14,8 +14,11 @@ import {
   getOffice,
   getDepartment,
   getPost,
+  employeeStatus
 
 } from 'src/services/apiService/officeService/office'
+import Switch from "@mui/material/Switch";
+const label = { inputProps: { "aria-label": "Switch demo" } };
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
@@ -122,6 +125,7 @@ export default function ViewDonor() {
                   <td className="py-3">Post Name</td>
                   <td className="py-3">Contact</td>
                   <td className="py-3">Email</td>
+                  <td className="py-3">Status</td>
                   {/* <td className="py-3">Email</td>
                   <td className="py-3">Contact</td> */}
                 </tr>
@@ -159,7 +163,25 @@ export default function ViewDonor() {
                         }
                       })}
                       <td className="py-3">{item.employeePhone}</td>
-                      <td className="py-3">{item.employeeEmail}</td>
+                      <td className="py-3 text-sm px-2">{item.employeeEmail}</td>
+                      <td className="py-3">
+                      <Switch
+                          {...label}
+                          onChange={async () => {
+                            const response = await employeeStatus(
+                              item._id
+                            );
+                            if (response?.status === 200) {
+                              const { data, status } = await getEmployee();
+                              if (status === 200) {
+                                setEmployeeList(data);
+                              }
+                            }
+                          }}
+                         
+                          checked={item.isActive}
+                        />
+                      </td>
 
                       {/* <td className="py-3">{item.office_email}</td>
                       <td className="py-3">{item.office_phone}</td> */}

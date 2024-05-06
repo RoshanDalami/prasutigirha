@@ -60,9 +60,9 @@ export default function BabyDetailsById() {
                       className="border border-x-gray text-center"
                     >
                       <td className="py-3">{index + 1}</td>
-                      <td className="py-3">{items?.batchNumber}</td>
+                      <td className="py-3">{items?.batchNumber?.split('/')[1]}{" "}{`(${items?.batchNumber?.split('/')[2]})`}</td>
                       <td className="py-3">{items?.quantity}</td>
-                      <td className="py-3">{items?.bottleName}</td>
+                      <td className="py-3">{items?.bottleName?.split('/')[1]}</td>
                       {/* <td className="py-3">{items?.uniqueBottleNumber}</td> */}
                       <td className="py-3">{items?.feedingDate}</td>
                     </tr>

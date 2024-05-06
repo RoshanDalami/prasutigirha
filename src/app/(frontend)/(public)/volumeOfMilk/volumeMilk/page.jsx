@@ -6,6 +6,7 @@ import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
+import TablePagination from '@mui/material/TablePagination';
 import {
   getVolumeOfMilk,
   deleteMilkById,
@@ -116,6 +117,16 @@ export default function ListVolume() {
       }
     } catch (error) {}
   };
+  const [page,setPage] = useState(0)
+  const [rowPerPage,setRowPerPage] = useState(8)
+  const handlePageChange = (e,newpage)=>{
+    setPage(newpage)
+  }
+  function handlePerPage(e){
+    setRowPerPage(+e.target.value)
+    setPage(0)
+  }
+
   return (
     <>
       <div>
@@ -198,7 +209,7 @@ export default function ListVolume() {
                   <td className="py-3">Action</td>
                 </tr>
 
-                {filteredVolumeList?.map((item, index) => {
+                {filteredVolumeList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((item, index) => {
                   return (
                     <tr
                       className=" border border-x-gray text-center"
@@ -250,6 +261,15 @@ export default function ListVolume() {
                   );
                 })}
               </table>
+              <TablePagination
+               rowsPerPageOptions={[7]}
+               rowsPerPage={rowPerPage}
+               page={page}
+               count={filteredVolumeList?.length}
+               component={'div'}
+               onPageChange={handlePageChange}
+               onRowsPerPageChange={handlePerPage}
+              ></TablePagination>
             </div>
           </TableBorder>
         </div>

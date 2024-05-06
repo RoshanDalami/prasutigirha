@@ -45,6 +45,10 @@ const apiUrls = {
       method: "POST",
       url: "/office/registerEmployee",
     },
+    activeDeactiveEmployee:{
+      method:"GET",
+      url:"/office/employeeStatus"
+    },
     createFiscalYear:{
       method:"POST",
       url:"/fiscal/createFiscal"

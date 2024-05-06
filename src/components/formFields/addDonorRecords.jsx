@@ -38,14 +38,16 @@ const currentTime = new Date().toLocaleTimeString([], {
   hour: "2-digit",
   minute: "2-digit",
 });
-console.log(currentTime, "currenttime");
+
 const educationList = [
   { name: "School Level", id: 1 },
   { name: "High School", id: 2 },
   { name: "Bachelor Degree", id: 3 },
   { name: "Master Degree", id: 4 },
   { name: "Doctorate", id: 5 },
-  { name: "Other", id: 6 },
+  { name: "Literate", id: 6 },
+  { name: "Illiterate", id: 7 },
+  { name: "Other", id: 8 },
 ];
 
 const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {

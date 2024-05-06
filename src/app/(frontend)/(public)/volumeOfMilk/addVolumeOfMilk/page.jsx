@@ -26,13 +26,14 @@ export default function AddVolume({ clickedData }) {
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      collectedMilk: [{ time: "", quantity: 0, temp: "", storedBy: "" }],
+      collectedMilk: [{ time: "", quantity: 0, temp: "-20", storedBy: "" }],
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "collectedMilk",
   });
+  
   const router = useRouter();
   const watchFields = watch();
   const [gestational, setGestational] = useState([]);
@@ -118,6 +119,9 @@ export default function AddVolume({ clickedData }) {
     e.preventDefault();
     append({ time: "", quantity: 0, temp: "", storedBy: "" });
   }
+  const removeHandler = (index)=>{
+    remove(index)
+  }
 
   return (
     <>
@@ -132,7 +136,7 @@ export default function AddVolume({ clickedData }) {
                 className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
                 onClick={(e) => {
                   e.preventDefault();
-                  append({ time: "", quantity: 0, temp: "", storedBy: "" });
+                  append({ time: "", quantity: 0, temp: "-20", storedBy: "" });
                 }}
               >
                 Add More +
@@ -262,6 +266,7 @@ export default function AddVolume({ clickedData }) {
                       {...register(`collectedMilk.${index}.temp`, {
                         required: "Temperature is required",
                       })}
+                      readOnly
                     />
                     {errors?.temp && (
                       <p className="errorMessages">

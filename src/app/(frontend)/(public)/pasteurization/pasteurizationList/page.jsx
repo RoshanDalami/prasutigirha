@@ -19,7 +19,8 @@ import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
 import {
   searchPasteurization
-} from 'src/services/apiService/search/searchService'
+} from 'src/services/apiService/search/searchService';
+import TablePagination from '@mui/material/TablePagination';
 export default function ListVolume() {
   // const TableBorder = dynamic(() => import("@/components/TableDesign"), {
   //   ssr: true,
@@ -115,6 +116,15 @@ export default function ListVolume() {
       console.log(error)
     }
   }
+  const [page,setPage] = useState(0)
+  const [rowPerPage,setRowPerPage] = useState(8)
+  const handlePageChange = (e,newpage)=>{
+    setPage(newpage)
+  }
+  function handlePerPage(e){
+    setRowPerPage(+e.target.value)
+    setPage(0)
+  }
   return (
     <>
       <div>
@@ -183,7 +193,7 @@ export default function ListVolume() {
                   <td className="py-3 px-2">Expiry Date</td>
                   <td className="py-3 px-2">Action</td>
                 </tr>
-                {poolingList?.map((row, index) => {
+                {poolingList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((row, index) => {
                   return (
                     <tr
                     className={`${row.culture ? 'bg-rose-400/50':(row.culture === false)?'bg-lime-600/50':""} border border-x-gray text-center`}
@@ -245,6 +255,15 @@ export default function ListVolume() {
                   );
                 })}
               </table>
+              <TablePagination
+               rowsPerPageOptions={[7]}
+               rowsPerPage={rowPerPage}
+               page={page}
+               count={poolingList?.length}
+               component={'div'}
+               onPageChange={handlePageChange}
+               onRowsPerPageChange={handlePerPage}
+              ></TablePagination>
             </div>
           </TableBorder>
         </div>

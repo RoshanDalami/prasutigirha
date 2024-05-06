@@ -141,11 +141,13 @@ export default function CreateCulture() {
                       --Select Batch--
                     </option>
                     {apiData?.map((item, index) => {
-                      return (
-                        <option key={index} value={item._id}>
-                          {item.batchName} {`(${item.date})`}
-                        </option>
-                      );
+                      if(item.culture === null){
+                        return (
+                          <option key={index} value={item._id}>
+                            {item.batchName} {`(${item.date})`}
+                          </option>
+                        );
+                      }
                     })}
                   </select>
                 </div>

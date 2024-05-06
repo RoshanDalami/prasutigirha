@@ -194,6 +194,15 @@ export default function AddPasteurization({ clickedIdData }) {
   const [isValid,setIsValid] = useState(false)
   let remVol 
   let poolVol 
+  useEffect(()=>{
+   for(let i = 0 ; i< tryArray.length ; i++ ){
+      if(tryArray[i] === tryArray[i+1]){
+        setIsValid(false)
+      }else{
+        setIsValid(true)
+      }
+   }
+  },[tryArray])
   return (
     <>
       <div className="mx-10">
@@ -299,13 +308,15 @@ export default function AddPasteurization({ clickedIdData }) {
                           <>
                             {donorList?.map((item, index) => {
                               const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
-                              return (
-                                <option key={index} value={combinedValue}>
-                                  {item.donorName}
-                                  {/* (Remaining Volume:
-                                  {item.remaining}ml) */}
-                                </option>
-                              );
+                              if(item.remaining != 0){
+                                return (
+                                  <option key={index} value={combinedValue}>
+                                    {item.donorName}
+                                    {/* (Remaining Volume:
+                                    {item.remaining}ml) */}
+                                  </option>
+                                );
+                              }
                             })}
                           </>
                         ) : (
