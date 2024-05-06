@@ -131,7 +131,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     );
   });
   const indications = [
-    { id: 1, name: "Select Indication" },
+    // { id: 1, name: "Select Indication" },
     { id: 2, name: "Preterm" },
     { id: 3, name: "Low Birth weight" },
     { id: 4, name: "IUGR" },
