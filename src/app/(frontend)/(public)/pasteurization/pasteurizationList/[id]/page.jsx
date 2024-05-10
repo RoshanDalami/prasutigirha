@@ -12,7 +12,7 @@ export default function BottleDetails() {
   const [poolingDone, setPoolingDone] = useState(false);
   useEffect(() => {
     async function fetchData() {
-      const {  data } = await axios.get(`${urls.getPoolingById}/${id}`);
+      const { data } = await axios.get(`${urls.getPoolingById}/${id}`);
       if (data?.status === 200) {
         setPooling(data?.data);
         setPoolingDone(true);
@@ -78,19 +78,19 @@ export default function BottleDetails() {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
-  const donorDetail = pooling?.donorDetailsForPooling
+  const donorDetail = pooling?.donorDetailsForPooling;
 
-  for(let i = 0 ; i<donorDetail?.length;i++){
-    if(donorDetail[i]?.donorName == donorDetail[i+1]?.donorName){
-       let milkVolume =   donorDetail[i]?.volumeOfMilkPooled + donorDetail[i+1]?.volumeOfMilkPooled;
-       donorDetail[i].volumeOfMilkPooled = milkVolume;
-       donorDetail.splice(i + 1, 1)
-    }else{
-      console.log(false)
+  for (let i = 0; i < donorDetail?.length; i++) {
+    if (donorDetail[i]?.donorName == donorDetail[i + 1]?.donorName) {
+      let milkVolume =
+        donorDetail[i]?.volumeOfMilkPooled +
+        donorDetail[i + 1]?.volumeOfMilkPooled;
+      donorDetail[i].volumeOfMilkPooled = milkVolume;
+      donorDetail.splice(i + 1, 1);
+    } else {
+      console.log(false);
     }
   }
-
-
 
   return (
     <div>
@@ -133,10 +133,7 @@ export default function BottleDetails() {
                     return (
                       <div key={index} className="flex items-center gap-4">
                         <p> {index + 1}. </p>
-                        <p> {
-                          
-                        item.donorName
-                        } </p>
+                        <p> {item.donorName} </p>
                         <p>{item.volumeOfMilkPooled} ml</p>
                       </div>
                     );
@@ -165,7 +162,7 @@ export default function BottleDetails() {
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="text-lg h-[400px] w-[600px] ">
+                    <div key={index} className="text-lg h-[1200px] w-[800px] ">
                       <div className="flex justify-center">
                         <div>
                           {item?.poolingCondition === 4 ? (
@@ -219,14 +216,16 @@ export default function BottleDetails() {
                 );
               })}
             </div>
-            {
-              bottle && 
-            <div className="flex justify-center items-center mt-8">
-              <button className="bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-md font-bold text-white" onClick={handlePrint}>
-                Print
-              </button>
-            </div>
-            }
+            {bottle && (
+              <div className="flex justify-center items-center mt-8">
+                <button
+                  className="bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-md font-bold text-white"
+                  onClick={handlePrint}
+                >
+                  Print
+                </button>
+              </div>
+            )}
           </div>
         </>
       ) : (
