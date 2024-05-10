@@ -194,15 +194,15 @@ export default function AddPasteurization({ clickedIdData }) {
   const [isValid,setIsValid] = useState(false)
   let remVol 
   let poolVol 
-  useEffect(()=>{
-   for(let i = 0 ; i< tryArray.length ; i++ ){
-      if(tryArray[i] === tryArray[i+1]){
-        setIsValid(false)
-      }else{
-        setIsValid(true)
-      }
-   }
-  },[tryArray])
+  // useEffect(()=>{
+  //  for(let i = 0 ; i< tryArray.length ; i++ ){
+  //     if(tryArray[i] === tryArray[i+1]){
+  //       setIsValid(false)
+  //     }else{
+  //       setIsValid(true)
+  //     }
+  //  }
+  // },[tryArray])
   return (
     <>
       <div className="mx-10">
