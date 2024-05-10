@@ -165,7 +165,7 @@ export default function BottleDetails() {
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="font-bold ">
+                    <div key={index} className="text-sm h-[377px] w-[500px] ">
                       <div className="flex justify-center">
                         <div>
                           {item?.poolingCondition === 4 ? (
