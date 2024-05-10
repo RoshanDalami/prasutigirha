@@ -165,7 +165,7 @@ export default function BottleDetails() {
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="text-sm h-[377px] w-[500px] ">
+                    <div key={index} className="text-sm h-[377px] w-[566px] ">
                       <div className="flex justify-center">
                         <div>
                           {item?.poolingCondition === 4 ? (
@@ -198,7 +198,7 @@ export default function BottleDetails() {
                           </p>
                         </div>
 
-                        <div className="mx-10 my-10 h-20 w-20 ">
+                        <div className="h-20 w-20 ">
                           <QRCode
                             size={256}
                             style={{
