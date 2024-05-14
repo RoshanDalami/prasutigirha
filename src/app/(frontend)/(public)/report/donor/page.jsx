@@ -92,7 +92,7 @@ export default function ViewDonor() {
       </option>
     );
   });
-  
+
   const onSubmit = async (data) => {
     try {
       console.log("test", "response");
@@ -109,26 +109,41 @@ export default function ViewDonor() {
       console.log(error, "response");
     }
   };
-  const excelData = donorList?.map((item,index)=>{
-    return{
-      sn:index + 1,
-    hosRegNo:item.hosRegNo,
-    DonorRegNo:item.donorRegNo,
-    Donor_Name:item.donorName,
-    Reg_Date:item.date,
-    Donor_Age:item.donorAge,
-    Donor_Education:item.education,
-   Donor_Ethnicity: item.ethnicity,
-    Donor_State:item.address.stateId,
-    Donor_District:item.address.districtId,
+  const excelData = donorList?.map((item, index) => {
+    return {
+      sn: index + 1,
+      hosRegNo: item.hosRegNo,
+      DonorRegNo: item.donorRegNo,
+      Donor_Name: item.donorName,
+      Reg_Date: item.date,
+      Donor_Age: item.donorAge,
+      Donor_Education: item.education,
+      Donor_Ethnicity: item.ethnicity,
+      Donor_State: item.address.stateId,
+      Donor_District: item.address.districtId,
       Gestational_Age: item.gestationalName,
-      Mode_of_Delivery:item.deliveryName,
-      Parity:item.parityName,
-    Donor_Contact:item.contactNo,
-    Donor_Status:item.isDonorActive,
-    }
-  })
-  console.log(donorList,'response')
+      Mode_of_Delivery: item.deliveryName,
+      Parity: item.parityName,
+      Donor_Contact: item.contactNo,
+      Donor_Status: item.isDonorActive,
+      HIV_Test:item?.serologyRecords?.hiv,
+      HBSAG_Test:item?.serologyRecords?.hbsag,
+      VDRL_Test:item?.serologyRecords?.vdrl,
+      Acute_Infection:item?.verbalExamination?.acuteInfection,
+      Chronic_Infection:item?.verbalExamination?.chronicInfection,
+      Cancer_Treatment_In_Three_Years:item?.verbalExamination?.cancerTreatmentWithinThreeYears,
+      Auto_ImmuneDisease:item?.verbalExamination?.autoImmuneDisease,
+      Cough_more_than_two_weeks:item?.verbalExamination?.coughMoreThanTwoWeeks,
+      Chicken_Pox:item?.verbalExamination?.chickenpox,
+      STD_last_one_year:item?.verbalExamination?.stdLastOneYear,
+      Transplant_and_Blood_Taken : item?.verbalExamination?.transplantAndBloodTaken,
+      Mastitis:item?.donorPhysicalExamination?.mastitis,
+      Local_Lesions:item?.donorPhysicalExamination?.localLesions,
+      FugalInNippleAreola:item?.donorPhysicalExamination?.fugalInNippleAreola,
+      Herpes:item?.donorPhysicalExamination?.herpesZoster
+    };
+  });
+  // console.log(donorList, "response");
   return (
     <>
       <div>
@@ -144,11 +159,13 @@ export default function ViewDonor() {
                     </CSVLink>
                   </button>
                   <button
-                    className={`bg-indigo-600 rounded-md px-3 py-2 shadow-md text-white ${active?'bg-green-500':''}`}
+                    className={`bg-indigo-600 rounded-md px-3 py-2 shadow-md text-white ${
+                      active ? "bg-green-500" : ""
+                    }`}
                     onClick={async () => {
                       const response = await getDonor();
-                      setInactive(false)
-                      setActive(true)
+                      setInactive(false);
+                      setActive(true);
                       if (response?.status === 200) {
                         setDonorList(response?.data);
                       }
@@ -157,12 +174,14 @@ export default function ViewDonor() {
                     Active Donor
                   </button>
                   <button
-                    className={`bg-indigo-600 rounded-md px-3 py-2 shadow-md text-white ${inActive?'bg-green-500':''}`}
+                    className={`bg-indigo-600 rounded-md px-3 py-2 shadow-md text-white ${
+                      inActive ? "bg-green-500" : ""
+                    }`}
                     onClick={async () => {
                       const response = await getInActiveDonor();
                       if (response?.status === 200) {
                         setActive(false);
-                        setInactive(true)
+                        setInactive(true);
                         setDonorList(response?.data);
                       }
                     }}
@@ -190,7 +209,9 @@ export default function ViewDonor() {
                 {donorList?.map((item, index) => {
                   return (
                     <tr
-                      className={`border border-x-gray text-center ${item.isDonorActive ? '':'bg-red-400/80'}`}
+                      className={`border border-x-gray text-center ${
+                        item.isDonorActive ? "" : "bg-red-400/80"
+                      }`}
                       key={index}
                     >
                       {/* <td className="py-3 text-center">
@@ -203,7 +224,6 @@ export default function ViewDonor() {
                       <td className="py-3">{item.contactNo}</td>
                       <td className="py-3">
                         <div className="flex justify-evenly text-xl">
-                         
                           <div>
                             <h1
                               className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "

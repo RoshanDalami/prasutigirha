@@ -10,6 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import {
   getVolumeOfMilk,
   deleteMilkById,
+  getDonorWithTotalVolume
 } from "src/services/apiService/milkVolume/milkVolume";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -29,7 +30,7 @@ export default function ListVolume() {
   const [volumeList, setVolumeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await getVolumeOfMilk();
+      const { status, data } = await getDonorWithTotalVolume();
       
       if (status === 200) {
         setVolumeList(data);
@@ -39,7 +40,7 @@ export default function ListVolume() {
     fetchData();
   }, []);
   const resetFilter = async()=>{
-    const { status, data } = await getVolumeOfMilk();
+    const { status, data } = await getDonorWithTotalVolume();
     console.log(status,data,'response')
     if (status === 200) {
       
@@ -203,7 +204,7 @@ export default function ListVolume() {
                   <td className="py-3">Donor Name</td>
                   <td className="py-3">Gestational Age</td>
                   {/* <td className="py-3">Contact</td> */}
-                  <td className="py-3">Date</td>
+                  {/* <td className="py-3">Date</td> */}
                   {/* <td className="py-3">Time</td> */}
                   <td className="py-3">Total Volume</td>
                   <td className="py-3">Action</td>
@@ -230,7 +231,7 @@ export default function ListVolume() {
                         }
                       })}
                       {/* <td className="py-3">{item.donorId.contactNo}</td> */}
-                      <td className="py-3">{item.date}</td>
+                      {/* <td className="py-3">{item.date}</td> */}
                       {/* <td className="py-3">{item.time}</td> */}
                       <td className="py-3">{item.totalMilkCollected} ml</td>
                       <td className="py-3">

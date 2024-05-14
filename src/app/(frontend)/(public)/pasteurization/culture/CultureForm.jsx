@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { getPooling } from "src/services/apiService/pasteurization/pasteurization";
 import TableBorder from "src/components/TableDesign";
 import { CSVLink, CSVDownload } from "react-csv"; 
+import axios from "axios";
+import { urls } from "src/services/apiHelpers";
 export default function CultureForm() {
   const [poolingList, setPoolingList] = useState([]);
   useEffect(() => {
@@ -15,10 +17,28 @@ export default function CultureForm() {
     }
     getPoolingList();
   }, []);
+  const [gestationalAgeList, setGestationalAgeList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (data?.status === 200) {
+        setGestationalAgeList(data?.data);
+      }
+    }
+    fetchData();
+  }, []);
   const dataForExcel = poolingList?.map((item)=>{
     return {
-      ...item,
-      donorDetailsForPooling: [...item.donorDetailsForPooling]
+      Pooling_Condition: gestationalAgeList?.map((items)=>{
+        if(item.poolingCondition === items.gestationalId){
+            return items.gestationalName
+        }
+    }),
+    Pooling_Date: item.date,
+    Expire_Date:item.expireDate,
+    Batch_Name:item.batchName+" "+`(${item.date})`,
+    Culture:item.culture ? "Positive (Discard) " : "Negative (Despense) "
+      
     }
   })
   console.log(dataForExcel,'data')

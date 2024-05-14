@@ -24,3 +24,11 @@ export const getInActiveDonor = async ()=>{
   )
   return response;
 }
+
+export const updateDonorStatus = async (id)=>{
+  let response = await mainApi(
+    apiUrls?.donor?.updateDonorStatus?.method,
+    apiUrls?.donor?.updateDonorStatus?.url+`/${id?id:''}`,
+  )
+  return response
+}

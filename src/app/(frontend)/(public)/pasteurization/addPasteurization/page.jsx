@@ -299,11 +299,12 @@ export default function AddPasteurization({ clickedIdData }) {
                         {donorList ? (
                           <>
                             {donorList?.map((item, index) => {
+                              
                               const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
                               if(item.remaining != 0){
                                 return (
                                   <option key={index} value={combinedValue}>
-                                    {item.donorName}
+                                    {item.donorName} 
                                     {/* (Remaining Volume:
                                     {item.remaining}ml) */}
                                   </option>
@@ -367,7 +368,7 @@ export default function AddPasteurization({ clickedIdData }) {
                                           )
                                         }
                                       >
-                                        {subItem?.date}{" "}
+                                        {subItem?.date} {subItem?.isColostrum ? '(Colostrum)':''}
                                         {/* {`Remaining(${subItem?.remaining})`} */}
                                       </option>
                                     );

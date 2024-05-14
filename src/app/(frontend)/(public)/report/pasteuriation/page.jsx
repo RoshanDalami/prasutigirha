@@ -18,9 +18,7 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import { CSVLink, CSVDownload } from "react-csv";
 const aa = new BikramSambat(new Date()).toBS();
-import {
-  searchPasteurization
-} from 'src/services/apiService/search/searchService'
+import { searchPasteurization } from "src/services/apiService/search/searchService";
 export default function ListVolume() {
   // const TableBorder = dynamic(() => import("@/components/TableDesign"), {
   //   ssr: true,
@@ -31,7 +29,7 @@ export default function ListVolume() {
     formState: { isSubmitting },
   } = useForm();
   const router = useRouter();
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
   const handleEdit = (id) => {
     router.push(`/pasteurization/addPasteurization/${id}`);
@@ -106,49 +104,67 @@ export default function ListVolume() {
       </option>
     );
   });
-  const submit = async (data)=>{
+  const submit = async (data) => {
     try {
-     const response = await searchPasteurization(data.gestationalAge,date);
-     if(response?.status===200){
-      setPoolingList(response?.data)
-     }
+      const response = await searchPasteurization(data.gestationalAge, date);
+      if (response?.status === 200) {
+        setPoolingList(response?.data);
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+  const excelData = poolingList?.map((items) => {
+    return {
+      Pooling_Condition: gestationalAge?.map((item, index) => {
+        if (item.gestationalId == items.poolingCondition) {
+          return item.gestationalName;
+        }
+      }),
+      Pooling_Date: items.date,
+      Pooling_Date_English: items.engDate,
+      Expire_Date: items.expireDate,
+      Total_Milk_Pooled: items.collectedVolume,
+      BatchName: items.batchName,
+      Culture_Result: items.culture ? "Positive (Discard) " : "Negative (Despense) ",
+    };
+  });
+
   return (
     <>
       <div>
-      <form className="my-5 mx-10 " onSubmit={handleSubmit((data)=>submit(data))} >
+        <form
+          className="my-5 mx-10 "
+          onSubmit={handleSubmit((data) => submit(data))}
+        >
           <p htmlFor="" className="text-red-600 text-2xl font-bold my-5 ">
             Pasteurization
           </p>
           <div className="grid grid-cols-4 gap-4">
-          <div>
-              <select {...register('gestationalAge')} className="inputStyle" >
-                <option value={''} >--select gestational age--</option>
+            <div>
+              <select {...register("gestationalAge")} className="inputStyle">
+                <option value={""}>--select gestational age--</option>
                 {gestationalOptions}
               </select>
             </div>
             <div className="">
-           
-            {/* <input
+              {/* <input
               type="date"
               placeholder=""
               className="inputStyle"
               {...register("date", { required: "Date is Required" })}
             /> */}
-            <NepaliDatePicker
-              inputClassName="form-control  focus:outline-none"
-              value={date}
-              onChange={(e) => setDate(e)}
-              // onChange={() => handleDateChange()}
-              options={{ calenderLocale: "en", valueLocale: "en" }}
-              className="inputStyle"
-            />
-            {/* {error && <p className="errorMessages">{error}</p>} */}
-          </div>
-            
+              <NepaliDatePicker
+                inputClassName="form-control  focus:outline-none"
+                value={date}
+                onChange={(e) => setDate(e)}
+                // onChange={() => handleDateChange()}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+              {/* {error && <p className="errorMessages">{error}</p>} */}
+            </div>
+
             <div>
               <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg ">
                 SEARCH
@@ -163,7 +179,7 @@ export default function ListVolume() {
               <div className="flex flex-col  ">
                 <div className=" flex justify-end gap-3">
                   <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
-                    <CSVLink data={poolingList} filename="Pooling_Details.csv">
+                    <CSVLink data={excelData} filename="Pooling_Details.csv">
                       Export to Excel
                     </CSVLink>
                   </button>
@@ -182,15 +198,19 @@ export default function ListVolume() {
                   <td className="py-3 px-2">Batch Name</td>
                   {/* <td className="py-3 px-2">Bottle Name</td> */}
                   <td className="py-3 px-2">Expiry Date</td>
-                  
                 </tr>
                 {poolingList?.map((row, index) => {
                   return (
                     <tr
-                    className={`${row.culture ? 'bg-rose-400/50':(row.culture === false)?'bg-lime-600/50':""} border border-x-gray text-center`}
+                      className={`${
+                        row.culture
+                          ? "bg-rose-400/50"
+                          : row.culture === false
+                          ? "bg-lime-600/50"
+                          : ""
+                      } border border-x-gray text-center`}
                       key={index}
                     >
-                     
                       <td className="py-3">{index + 1}</td>
                       <td className="py-3">
                         {row?.donorDetailsForPooling?.length}
@@ -214,7 +234,6 @@ export default function ListVolume() {
                         {row.batchName}({row?.date})
                       </td>
                       <td className="py-3">{row.expireDate}</td>
-                      
                     </tr>
                   );
                 })}
