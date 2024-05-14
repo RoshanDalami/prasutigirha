@@ -38,3 +38,12 @@ export const getMilkListByDonor = async (id)=>{
   )
   return response
 }
+
+
+export const getDonorWithTotalVolume = async()=>{
+  let response = await mainApi(
+    apiUrls?.milkVolume?.getDonoWithTotalVolume?.method,
+    apiUrls?.milkVolume?.getDonoWithTotalVolume?.url,
+  )
+  return response;
+}

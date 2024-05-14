@@ -9,6 +9,7 @@ import { MdDeleteForever } from "react-icons/md";
 import {
   getVolumeOfMilk,
   deleteMilkById,
+  getDonorWithTotalVolume
 } from "src/services/apiService/milkVolume/milkVolume";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ export default function ListVolume() {
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
   const [volumeList, setVolumeList] = useState([]);
+  const [excelVolumeList,setExcelVolumeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await getVolumeOfMilk();
@@ -34,6 +36,18 @@ export default function ListVolume() {
       if (status === 200) {
         setVolumeList(data);
         setFilteredVolumeList(data);
+      }
+    }
+    fetchData();
+  }, []);
+  
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await getDonorWithTotalVolume();
+      
+      if (status === 200) {
+       
+        setExcelVolumeList(data);
       }
     }
     fetchData();
@@ -117,6 +131,8 @@ export default function ListVolume() {
       }
     } catch (error) {}
   };
+
+  
   return (
     <>
       <div>
@@ -175,7 +191,7 @@ export default function ListVolume() {
               <div className="flex flex-col  ">
                 <div className=" flex justify-end gap-3">
                   <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
-                    <CSVLink data={filteredVolumeList} filename="Milk_volume.csv">
+                    <CSVLink data={excelVolumeList} filename="Milk_volume.csv">
                       Export to Excel
                     </CSVLink>
                   </button>
@@ -223,6 +239,16 @@ export default function ListVolume() {
                       <td className="py-3">{item.date}</td>
                       {/* <td className="py-3">{item.time}</td> */}
                       <td className="py-3">{item.totalMilkCollected} ml</td>
+                      {/* <td>
+                      <div>
+                            <h1
+                              className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                              onClick={() => handleDetail(item.donorId)}
+                            >
+                              Details
+                            </h1>
+                          </div>
+                      </td> */}
                       
                     </tr>
                   );

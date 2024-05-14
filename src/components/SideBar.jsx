@@ -145,9 +145,10 @@ export default function SideBar() {
   const report = [
     {link:"/report/donor",name:'Donor'},
     {link:"/report/milkVolume",name:'Milk Volume'},
-    {link:"/report/pasteuriation",name:'Pasteuriation'},
+    {link:"/report/pasteuriation",name:'Pasteurization'},
     {link:"/pasteurization/culture",name:'Culture'},
     {link:"/report/milkRequistion",name:'Requistion'},
+    {link:"/report/baby",name:'Recipient'},
   ]
   return (
     <div className="fixed min-h-screen w-60  bg-gray-100   ">

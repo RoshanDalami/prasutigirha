@@ -161,13 +161,13 @@ export default function BottleDetails() {
             <div className="text-xl font-semibold bg-indigo-700 rounded-md w-fit px-4 py-1 text-white absolute -top-4">
               Bottle Details
             </div>
-            <div className=" grid grid-cols-1" ref={componentRef}>
+            <div className="mt-5" ref={componentRef}>
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="text-lg h-[700px] w-[600px] ">
-                      <div className="flex justify-center">
-                        <div>
+                    <div key={index} className="text-[8px]">
+                      <div className=" w-fit flex bg-indigo-600/50">
+                        <div className="mx-1">
                           {item?.poolingCondition === 4 ? (
                             <p>PDHM: {"Colostrum"}</p>
                           ) : (
@@ -198,7 +198,7 @@ export default function BottleDetails() {
                           </p>
                         </div>
 
-                        <div className=" mx-3 my-4 h-24 w-24">
+                        <div className="mx-1 my-2 h-14 w-14">
                           <QRCode
                             size={256}
                             style={{

@@ -78,6 +78,10 @@ const apiUrls = {
     getInActiveDonor:{
       method:"GET",
       url:"/donor/getInActiveDonor"
+    },
+    updateDonorStatus:{
+      method:'GET',
+      url:"/donor/updateStatus"
     }
   },
   milkVolume: {
@@ -100,6 +104,10 @@ const apiUrls = {
     getMilkListByDonor:{
       method:"GET",
       url:"/milkVolume/volumeByDonorId"
+    },
+    getDonoWithTotalVolume:{
+      method:"GET",
+      url:"/milkVolume/donorWithTotalVolume"
     }
   },
   pasteurization: {

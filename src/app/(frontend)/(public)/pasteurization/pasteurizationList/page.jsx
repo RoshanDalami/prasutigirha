@@ -39,6 +39,9 @@ export default function ListVolume() {
   const handleBottleDetails = (id) => {
     router.push(`/pasteurization/pasteurizationList/${id}`);
   };
+  const handleCulture = () => {
+    router.push(`/pasteurization/culture/createCulture`);
+  };
 
   const [poolingList, setPoolingList] = useState([]);
 
@@ -193,66 +196,80 @@ export default function ListVolume() {
                   <td className="py-3 px-2">Expiry Date</td>
                   <td className="py-3 px-2">Action</td>
                 </tr>
-                {poolingList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((row, index) => {
-                  return (
-                    <tr
-                    className={`${row.culture ? 'bg-rose-400/50':(row.culture === false)?'bg-lime-600/50':""} border border-x-gray text-center`}
-                      key={index}
-                    >
-                     
-                      <td className="py-3">{index + 1}</td>
-                      <td className="py-3">
-                        {row?.donorDetailsForPooling?.length}
-                      </td>
-                      <td className="py-3">{row?.date}</td>
-                      {row.poolingCondition == 4 ? (
-                        <td className="py-3">{"Colostrum"}</td>
-                      ) : (
-                        gestationalAge?.map((item, index) => {
-                          if (item.gestationalId == row.poolingCondition) {
-                            return (
-                              <td className="py-3" key={index}>
-                                {item.gestationalName}
-                              </td>
-                            );
-                          }
-                        })
-                      )}
-                      <td className="py-3">{row.collectedVolume} ml</td>
-                      <td className="py-3">
-                        {row.batchName}({row?.date})
-                      </td>
-                      <td className="py-3">{row.expireDate}</td>
-                      <td className="py-3 px-2">
-                        <div className="flex justify-evenly gap-3  text-xl">
-                          {/* <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
-                        
-                      <PencilSquareIcon
-                        className="h-6 w-6 text-white "
-                        onClick={() => handleEdit(row._id)}
-                      />
-                      </div> */}
-                          <div className="cursor-pointer bg-red-600 rounded-md shadow-md flex items-center justify-center px-2 py-1">
-                            <TrashIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleDelete(row._id)}
-                            />
+                {poolingList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.filter((item)=>item.culture === false || item.culture === null).map((row, index) => {
+             
+
+                    return (
+                      <tr
+                      className={`${row.culture ? 'bg-rose-400/50':(row.culture === false)?'bg-lime-600/50':""} border border-x-gray text-center`}
+                        key={index}
+                      >
+                       
+                        <td className="py-3">{index + 1}</td>
+                        <td className="py-3">
+                          {row?.donorDetailsForPooling?.length}
+                        </td>
+                        <td className="py-3">{row?.date}</td>
+                        {row.poolingCondition == 4 ? (
+                          <td className="py-3">{"Colostrum"}</td>
+                        ) : (
+                          gestationalAge?.map((item, index) => {
+                            if (item.gestationalId == row.poolingCondition) {
+                              return (
+                                <td className="py-3" key={index}>
+                                  {item.gestationalName}
+                                </td>
+                              );
+                            }
+                          })
+                        )}
+                        <td className="py-3">{row.collectedVolume} ml</td>
+                        <td className="py-3">
+                          {row.batchName}({row?.date})
+                        </td>
+                        <td className="py-3">{row.expireDate}</td>
+                        <td className="py-3 px-2">
+                          <div className="flex justify-evenly gap-3  text-xl">
+                            {/* <div className="cursor-pointer bg-lime-600 rounded-md shadow-md px-2 py-1">
+                          
+                        <PencilSquareIcon
+                          className="h-6 w-6 text-white "
+                          onClick={() => handleEdit(row._id)}
+                        />
+                        </div> */}
+                            <div className="cursor-pointer bg-red-600 rounded-md shadow-md flex items-center justify-center px-2 py-1">
+                              <TrashIcon
+                                className="h-6 w-6 text-white"
+                                onClick={() => handleDelete(row._id)}
+                              />
+                            </div>
+                            <div>
+                            { row.culture != null &&
+                              
+                             <button
+                              className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
+                              onClick={() => handleBottleDetails(row._id)}
+                            >
+                              Bottles
+                            </button> 
+                            }   
+                            </div>
+                            <div>
+                            { row.culture == null &&
+                              
+                             <button
+                              className="bg-purple-600 rounded-md text-white px-2 py-1 mr-2"
+                              onClick={() => handleCulture()}
+                            >
+                              Culture
+                            </button> 
+                            }   
+                            </div>
                           </div>
-                          { 
-                          <div>
-                            
-                           <button
-                            className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
-                            onClick={() => handleBottleDetails(row._id)}
-                          >
-                            Bottles
-                          </button> 
-                          </div>
-                          }   
-                        </div>
-                      </td>
-                    </tr>
-                  );
+                        </td>
+                      </tr>
+                    );
+                  
                 })}
               </table>
               <TablePagination
