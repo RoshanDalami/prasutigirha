@@ -166,7 +166,7 @@ export default function BottleDetails() {
                 return (
                   <>
                     <div key={index} className="text-[8px]">
-                      <div className=" w-fit flex bg-indigo-600/50">
+                      <div className=" w-fit flex ">
                         <div className="mx-1">
                           {item?.poolingCondition === 4 ? (
                             <p>PDHM: {"Colostrum"}</p>
