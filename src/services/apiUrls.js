@@ -1,5 +1,23 @@
 
 const apiUrls = {
+  user:{
+    giveAccess:{
+      method:"POST",
+      url:"/user/manageAccess"
+    },
+    getAllUser:{
+      method:"GET",
+      url:"/user/getAllUser"
+    },
+    getOneUser:{
+      method:"GET",
+      url:"/user/getOneUser"
+    },
+    getAllModule:{
+      method:"GET",
+      url:"/user/getAllModule"
+    }
+  },
   office: {
     createOffice: {
       method: "POST",

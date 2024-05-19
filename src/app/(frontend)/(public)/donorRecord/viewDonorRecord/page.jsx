@@ -22,12 +22,14 @@ import { useForm } from "react-hook-form";
 import TablePagination from "@mui/material/TablePagination";
 import Switch from "@mui/material/Switch";
 const label = { inputProps: { "aria-label": "Switch demo" } };
+import LoadingSpinner from "src/components/Loading";
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
+  const [loading,setLoading] = useState(true)
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowPerPage, setRowPerPage] = useState(8);
@@ -38,6 +40,7 @@ export default function ViewDonor() {
       const { status, data } = await getDonor();
       if (status === 200) {
         setDonorList(data);
+        setLoading(false)
       }
     }
     fetchData();
@@ -118,6 +121,90 @@ export default function ViewDonor() {
     }
   };
 
+  const local = <div className=" my-5">
+  <table className="w-full">
+    <tr className="bg-[#004a89] text-white text-lg text-center">
+      {/* <td className="py-3">
+        <input type="checkbox" name="" id="" />
+      </td> */}
+      <td className="py-3">Reg. No</td>
+      <td className="py-3">Donar Name</td>
+      <td className="py-3">Age</td>
+      <td className="py-3">Address</td>
+      <td className="py-3">Contact</td>
+      <td className="py-3">Status</td>
+    </tr>
+    {donorList
+      ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
+      ?.map((item, index) => {
+        return (
+          <tr
+            className=" border border-x-gray text-center"
+            key={index}
+          >
+            {/* <td className="py-3 text-center">
+        <input type="checkbox" name="" id="" />
+      </td> */}
+            <td className="py-3">{item.donorRegNo}</td>
+            <td className="py-3">{item.donorName}</td>
+            <td className="py-3">{item.donorAge}</td>
+            <td className="py-3">{item?.address?.stateId}</td>
+            <td className="py-3">{item.contactNo}</td>
+            <td className="py-3">
+              <div className="flex justify-evenly text-xl">
+                {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
+                <PencilSquareIcon
+                  className="h-6 w-6 text-white"
+                  onClick={() => handleEdit(item._id)}
+                />
+              </div> */}
+                {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
+                <TrashIcon
+                  className="h-6 w-6 text-white"
+                  onClick={() => handleDelete(item._id)}
+                />
+              </div> */}
+                {/* <div>
+                <h1
+                  className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                  onClick={() => handleDetail(item._id)}
+                >
+                  Details
+                </h1>
+              </div> */}
+
+                <Switch
+                  {...label}
+                  onChange={async () => {
+                    const response = await updateDonorStatus(
+                      item._id
+                    );
+                    if (response.status === 200) {
+                      const { status, data } = await getDonor();
+                      if (status === 200) {
+                        setDonorList(data);
+                      }
+                    }
+                  }}
+                  checked={item.isDonorActive}
+                />
+              </div>
+            </td>
+          </tr>
+        );
+      })}
+  </table>
+  <TablePagination
+    rowsPerPageOptions={[7]}
+    rowsPerPage={rowPerPage}
+    page={page}
+    count={donorList.length}
+    component={"div"}
+    onPageChange={handlePageChange}
+    onRowsPerPageChange={handlePerPage}
+  ></TablePagination>
+</div>
+
   return (
     <>
       <div>
@@ -189,89 +276,7 @@ export default function ViewDonor() {
               </div>
             }
           >
-            <div className=" my-5">
-              <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  {/* <td className="py-3">
-                    <input type="checkbox" name="" id="" />
-                  </td> */}
-                  <td className="py-3">Reg. No</td>
-                  <td className="py-3">Donar Name</td>
-                  <td className="py-3">Age</td>
-                  <td className="py-3">Address</td>
-                  <td className="py-3">Contact</td>
-                  <td className="py-3">Status</td>
-                </tr>
-                {donorList
-                  ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
-                  ?.map((item, index) => {
-                    return (
-                      <tr
-                        className=" border border-x-gray text-center"
-                        key={index}
-                      >
-                        {/* <td className="py-3 text-center">
-                    <input type="checkbox" name="" id="" />
-                  </td> */}
-                        <td className="py-3">{item.donorRegNo}</td>
-                        <td className="py-3">{item.donorName}</td>
-                        <td className="py-3">{item.donorAge}</td>
-                        <td className="py-3">{item?.address?.stateId}</td>
-                        <td className="py-3">{item.contactNo}</td>
-                        <td className="py-3">
-                          <div className="flex justify-evenly text-xl">
-                            {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
-                            <PencilSquareIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleEdit(item._id)}
-                            />
-                          </div> */}
-                            {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
-                            <TrashIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleDelete(item._id)}
-                            />
-                          </div> */}
-                            {/* <div>
-                            <h1
-                              className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
-                              onClick={() => handleDetail(item._id)}
-                            >
-                              Details
-                            </h1>
-                          </div> */}
-
-                            <Switch
-                              {...label}
-                              onChange={async () => {
-                                const response = await updateDonorStatus(
-                                  item._id
-                                );
-                                if (response.status === 200) {
-                                  const { status, data } = await getDonor();
-                                  if (status === 200) {
-                                    setDonorList(data);
-                                  }
-                                }
-                              }}
-                              checked={item.isDonorActive}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </table>
-              <TablePagination
-                rowsPerPageOptions={[7]}
-                rowsPerPage={rowPerPage}
-                page={page}
-                count={donorList.length}
-                component={"div"}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handlePerPage}
-              ></TablePagination>
-            </div>
+            {loading ? <LoadingSpinner/> : local}
           </TableBorder>
         </div>
       </div>

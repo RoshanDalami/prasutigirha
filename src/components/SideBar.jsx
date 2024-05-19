@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { IoIosArrowUp } from "react-icons/io";
-import { FaTachometerAlt, FaUserAlt ,FaRegListAlt} from "react-icons/fa";
+import { FaTachometerAlt, FaUserAlt, FaRegListAlt } from "react-icons/fa";
 import { Divider } from "@mui/material";
 
 import { GiBabyBottle } from "react-icons/gi";
@@ -12,6 +12,7 @@ import { HiMiniBuildingOffice } from "react-icons/hi2";
 import { FaPrescriptionBottle } from "react-icons/fa6";
 import { SiProcessingfoundation } from "react-icons/si";
 import { usePathname } from "next/navigation";
+
 export default function SideBar() {
   const [show, setShow] = useState(false);
 
@@ -21,6 +22,10 @@ export default function SideBar() {
   const [show4, setShow4] = useState(false);
   const [show5, setShow5] = useState(false);
   const pathname = usePathname();
+  const userInfo =
+    typeof localStorage !== "undefined"
+      ? JSON.parse(localStorage.getItem("user"))
+      : { username: "Softech" };
 
   const handleOfficeOpen = () => {
     setShow0((prevState) => !prevState);
@@ -61,7 +66,6 @@ export default function SideBar() {
     setShow3(false);
     setShow(false);
     setShow5(false);
-
   };
   const handleDashboard = () => {
     setShow4(false);
@@ -71,14 +75,14 @@ export default function SideBar() {
     setShow(false);
     setShow5(false);
   };
-  const handleReport = () =>{
-    setShow5((prevState)=>!prevState);
+  const handleReport = () => {
+    setShow5((prevState) => !prevState);
     setShow4(false);
     setShow0(false);
     setShow1(false);
     setShow3(false);
     setShow(false);
-  }
+  };
   const DonorList = [
     // {
     //   link: "/donorRecord/addDonorRecord",
@@ -133,6 +137,7 @@ export default function SideBar() {
     },
   ];
   const officeSetupList = [
+    { link: "/user", name: "User" },
     { link: "/office/fiscalYear", name: "Fiscal Year " },
     // { link: "/office/officeSetup", name: "Office Setup" },
     // { link: "/office/officeList", name: "Office List" },
@@ -143,13 +148,17 @@ export default function SideBar() {
     { link: "/office/employeeList", name: "Employee List " },
   ];
   const report = [
-    {link:"/report/donor",name:'Donor'},
-    {link:"/report/milkVolume",name:'Milk Volume'},
-    {link:"/report/pasteuriation",name:'Pasteurization'},
-    {link:"/pasteurization/culture",name:'Culture'},
-    {link:"/report/milkRequistion",name:'Requistion'},
-    {link:"/report/baby",name:'Recipient'},
-  ]
+    { link: "/report/donor", name: "Donor" },
+    { link: "/report/milkVolume", name: "Milk Volume" },
+    { link: "/report/pasteuriation", name: "Pasteurization" },
+    { link: "/pasteurization/culture", name: "Culture" },
+    { link: "/report/milkRequistion", name: "Requistion" },
+    { link: "/report/baby", name: "Recipient" },
+  ];
+
+  const moduleAccess = userInfo?.userDetail?.assignedModule;
+ 
+
   return (
     <div className="fixed min-h-screen w-60  bg-gray-100   ">
       <div className="mb-4 h-[90vh] overflow-auto">
@@ -166,6 +175,9 @@ export default function SideBar() {
           </div>
         </Link>
         <Divider />
+        <div>
+          {
+            userInfo?.userDetail?.role === 'superadmin' ? 
         <div>
           <div
             className={`flex h-20 w-full   items-center justify-around  ${
@@ -202,196 +214,236 @@ export default function SideBar() {
               );
             })}
           </div>
+        </div> : <></>
+          }
         </div>
 
         <Divider />
         <div>
-          <div
-            className={`flex h-20 w-full   items-center justify-around  ${
-              pathname.split("/")[1] === "donorRecord"
-                ? "bg-blue-600 font-bold text-white"
-                : "bg-gray-100"
-            } `}
-            onClick={handleDonorOpen}
-          >
-            <FaUserAlt className="text-xl" />
-            <h1 className="text-xl">Donor Record</h1>
-            <IoIosArrowUp
-              className={` font-bold ${show ? "" : "rotate-180"}`}
-            />
-          </div>
-
-          <div className={`${show ? "block" : "hidden"}`}>
-            {DonorList?.map((item, index) => {
+          {moduleAccess?.map((item, index) => {
+            if (item.title === "donor") {
               return (
-                <Link href={item.link} key={index} className="">
+                <div key={index}>
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
-                      pathname === item.link
-                        ? "bg-red-600 font-bold text-white"
-                        : ""
+                    className={`flex h-20 w-full   items-center justify-around  ${
+                      pathname.split("/")[1] === "donorRecord"
+                        ? "bg-blue-600 font-bold text-white"
+                        : "bg-gray-100"
                     } `}
+                    onClick={handleDonorOpen}
                   >
-                    <IoMdStarOutline className="ml-8 text-2xl" />
-                    <h1 className="text-md">{item.name}</h1>
+                    <FaUserAlt className="text-xl" />
+                    <h1 className="text-xl">Donor Record</h1>
+                    <IoIosArrowUp
+                      className={` font-bold ${show ? "" : "rotate-180"}`}
+                    />
                   </div>
-                  <Divider />
-                </Link>
+
+                  <div className={`${show ? "block" : "hidden"}`}>
+                    {DonorList?.map((item, index) => {
+                      return (
+                        <Link href={item.link} key={index} className="">
+                          <div
+                            className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                              pathname === item.link
+                                ? "bg-red-600 font-bold text-white"
+                                : ""
+                            } `}
+                          >
+                            <IoMdStarOutline className="ml-8 text-2xl" />
+                            <h1 className="text-md">{item.name}</h1>
+                          </div>
+                          <Divider />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               );
-            })}
-          </div>
+            }
+          })}
         </div>
         <Divider />
         <div>
-          <div
-            className={`flex h-20 w-full   items-center justify-around  ${
-              pathname.split("/")[1] === "volumeOfMilk"
-                ? "bg-blue-600 font-bold text-white"
-                : "bg-gray-100"
-            } `}
-            onClick={handleVolumeOpen}
-          >
-            <FaPrescriptionBottle className="text-xl" />
-            <h1 className="text-xl">Volume of Milk</h1>
-            <IoIosArrowUp
-              className={` font-bold ${show1 ? "" : "rotate-180"}`}
-            />
-          </div>
-
-          <div className={`${show1 ? "block" : "hidden"}`}>
-            {volumeOfMilk?.map((item, index) => {
+          {moduleAccess?.map((item, index) => {
+            if (item.title === "volume") {
               return (
-                <Link href={item.link} key={index} className="">
+                <div key={index}>
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
-                      pathname === item.link
-                        ? "bg-red-600 font-bold text-white"
-                        : ""
+                    className={`flex h-20 w-full   items-center justify-around  ${
+                      pathname.split("/")[1] === "volumeOfMilk"
+                        ? "bg-blue-600 font-bold text-white"
+                        : "bg-gray-100"
                     } `}
+                    onClick={handleVolumeOpen}
                   >
-                    <IoMdStarOutline className="ml-8 text-2xl" />
-                    <h1>{item.name}</h1>
+                    <FaPrescriptionBottle className="text-xl" />
+                    <h1 className="text-xl">Volume of Milk</h1>
+                    <IoIosArrowUp
+                      className={` font-bold ${show1 ? "" : "rotate-180"}`}
+                    />
                   </div>
-                  <Divider />
-                </Link>
+
+                  <div className={`${show1 ? "block" : "hidden"}`}>
+                    {volumeOfMilk?.map((item, index) => {
+                      return (
+                        <Link href={item.link} key={index} className="">
+                          <div
+                            className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                              pathname === item.link
+                                ? "bg-red-600 font-bold text-white"
+                                : ""
+                            } `}
+                          >
+                            <IoMdStarOutline className="ml-8 text-2xl" />
+                            <h1>{item.name}</h1>
+                          </div>
+                          <Divider />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               );
-            })}
-          </div>
+            }
+          })}
         </div>
         <Divider />
         <div>
-          <div
-            className={`flex h-20 w-full   items-center justify-around  ${
-              pathname.split("/")[1] === "pasteurization"
-                ? "bg-blue-600  font-bold text-white"
-                : "bg-gray-100"
-            } `}
-            onClick={handlePoolingOpen}
-          >
-            <SiProcessingfoundation className="text-xl" />
-
-            <h1 className="text-xl">Pasteurization</h1>
-            <IoIosArrowUp
-              className={` font-bold ${show3 ? "" : "rotate-180"}`}
-            />
-          </div>
-
-          <div className={`${show3 ? "block" : "hidden"}`}>
-            {pasteuriationList?.map((item, index) => {
+          {moduleAccess?.map((item, index) => {
+            if (item.title === "pasteurization") {
               return (
-                <Link href={item.link} key={index} className="">
+                <div key={index}>
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
-                      pathname === item.link
-                        ? "bg-red-600 font-bold text-white"
-                        : ""
+                    className={`flex h-20 w-full   items-center justify-around  ${
+                      pathname.split("/")[1] === "pasteurization"
+                        ? "bg-blue-600  font-bold text-white"
+                        : "bg-gray-100"
                     } `}
+                    onClick={handlePoolingOpen}
                   >
-                    <IoMdStarOutline className="ml-6 text-2xl" />
-                    <h1>{item.name}</h1>
+                    <SiProcessingfoundation className="text-xl" />
+
+                    <h1 className="text-xl">Pasteurization</h1>
+                    <IoIosArrowUp
+                      className={` font-bold ${show3 ? "" : "rotate-180"}`}
+                    />
                   </div>
-                  <Divider />
-                </Link>
+
+                  <div className={`${show3 ? "block" : "hidden"}`}>
+                    {pasteuriationList?.map((item, index) => {
+                      return (
+                        <Link href={item.link} key={index} className="">
+                          <div
+                            className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                              pathname === item.link
+                                ? "bg-red-600 font-bold text-white"
+                                : ""
+                            } `}
+                          >
+                            <IoMdStarOutline className="ml-6 text-2xl" />
+                            <h1>{item.name}</h1>
+                          </div>
+                          <Divider />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               );
-            })}
-          </div>
+            }
+          })}
         </div>
         <Divider />
         <div>
-          <div
-            className={`flex h-20 w-full   items-center justify-around  ${
-              pathname.split("/")[1] === "milkRequisation"
-                ? "bg-blue-600 font-bold text-white"
-                : "bg-gray-100"
-            } `}
-            onClick={handleRequisitionOpen}
-          >
-            <GiBabyBottle className="text-2xl" />
-            <h1 className="text-xl">Milk Requistion </h1>
-            <IoIosArrowUp
-              className={` font-bold ${show4 ? "" : "rotate-180"}`}
-            />
-          </div>
-
-          <div className={`${show4 ? "block" : "hidden"}`}>
-            {milkRequistionList?.map((item, index) => {
+          {moduleAccess?.map((item, index) => {
+            if (item.title === "requisition") {
               return (
-                <Link href={item.link} key={index} className="">
+                <div key={index}>
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
-                      pathname === item.link
-                        ? "bg-red-600 font-bold text-white"
-                        : ""
+                    className={`flex h-20 w-full   items-center justify-around  ${
+                      pathname.split("/")[1] === "milkRequisation"
+                        ? "bg-blue-600 font-bold text-white"
+                        : "bg-gray-100"
                     } `}
+                    onClick={handleRequisitionOpen}
                   >
-                    <IoMdStarOutline className="ml-6 text-2xl" />
-                    <h1>{item.name}</h1>
+                    <GiBabyBottle className="text-2xl" />
+                    <h1 className="text-xl">Milk Requistion </h1>
+                    <IoIosArrowUp
+                      className={` font-bold ${show4 ? "" : "rotate-180"}`}
+                    />
                   </div>
-                  <Divider />
-                </Link>
+
+                  <div className={`${show4 ? "block" : "hidden"}`}>
+                    {milkRequistionList?.map((item, index) => {
+                      return (
+                        <Link href={item.link} key={index} className="">
+                          <div
+                            className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                              pathname === item.link
+                                ? "bg-red-600 font-bold text-white"
+                                : ""
+                            } `}
+                          >
+                            <IoMdStarOutline className="ml-6 text-2xl" />
+                            <h1>{item.name}</h1>
+                          </div>
+                          <Divider />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
               );
-            })}
-          </div>
-          
+            }
+          })}
         </div>
         <Divider />
         <div>
-          <div
-            className={`flex h-20 w-full   items-center justify-around  ${
-              pathname.split("/")[1] === "report"
-                ? "bg-blue-600 font-bold text-white"
-                : "bg-gray-100"
-            } `}
-            onClick={handleReport}
-          >
-            <FaRegListAlt className="text-2xl" />
-            <h1 className="text-xl">Report </h1>
-            <IoIosArrowUp
-              className={` font-bold ${show5 ? "" : "rotate-180"}`}
-            />
-          </div>
-
-          <div className={`${show5 ? "block" : "hidden"} mb-20`}>
-            {report?.map((item, index) => {
+          {moduleAccess?.map((item, index) => {
+            if (item.title === "report") {
               return (
-                <Link href={item.link} key={index} className="">
+                <div key={index}>
                   <div
-                    className={`flex h-16 items-center gap-2 bg-gray-200 ${
-                      pathname === item.link
-                        ? "bg-red-600 font-bold text-white"
-                        : ""
+                    className={`flex h-20 w-full   items-center justify-around  ${
+                      pathname.split("/")[1] === "report"
+                        ? "bg-blue-600 font-bold text-white"
+                        : "bg-gray-100"
                     } `}
+                    onClick={handleReport}
                   >
-                    <IoMdStarOutline className="ml-6 text-2xl" />
-                    <h1>{item.name}</h1>
+                    <FaRegListAlt className="text-2xl" />
+                    <h1 className="text-xl">Report </h1>
+                    <IoIosArrowUp
+                      className={` font-bold ${show5 ? "" : "rotate-180"}`}
+                    />
+                  </div>
+
+                  <div className={`${show5 ? "block" : "hidden"} mb-20`}>
+                    {report?.map((item, index) => {
+                      return (
+                        <Link href={item.link} key={index} className="">
+                          <div
+                            className={`flex h-16 items-center gap-2 bg-gray-200 ${
+                              pathname === item.link
+                                ? "bg-red-600 font-bold text-white"
+                                : ""
+                            } `}
+                          >
+                            <IoMdStarOutline className="ml-6 text-2xl" />
+                            <h1>{item.name}</h1>
+                          </div>
+                          <Divider />
+                        </Link>
+                      );
+                    })}
                   </div>
                   <Divider />
-                </Link>
+                </div>
               );
-            })}
-          </div>
-          <Divider/>
-          
+            }
+          })}
         </div>
       </div>
     </div>
