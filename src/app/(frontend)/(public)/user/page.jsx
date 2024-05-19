@@ -14,7 +14,8 @@ import {
   getOffice,
   getDepartment,
   getPost,
-  employeeStatus
+  employeeStatus,
+  getAllUser
 
 } from 'src/services/apiService/officeService/office'
 import Switch from "@mui/material/Switch";
@@ -28,7 +29,7 @@ export default function ViewDonor() {
   const [employeeList, setEmployeeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await getEmployee();
+      const { status, data } = await getAllUser();
       if (status === 200) {
         setEmployeeList(data);
       }
@@ -101,16 +102,16 @@ export default function ViewDonor() {
       <div>
         <div className="mx-10">
           <TableBorder
-            title={"Employee List"}
-            title2={
-              <div className="flex flex-col   ">
-                <div className=" flex justify-end">
-                  <Link href={"/office/employee"}>
-                    <Button>+Add </Button>
-                  </Link>
-                </div>
-              </div>
-            }
+            title={"User List"}
+            // title2={
+            //   <div className="flex flex-col   ">
+            //     <div className=" flex justify-end">
+            //       <Link href={"/office/employee"}>
+            //         <Button>+Add </Button>
+            //       </Link>
+            //     </div>
+            //   </div>
+            // }
           >
             <div className=" my-5">
               <table className="w-full">
@@ -119,13 +120,12 @@ export default function ViewDonor() {
                     <input type="checkbox" name="" id="" />
                   </td> */}
                   <td className="py-3">S No.</td>
-                  <td className="py-3">Employee Name</td>
-                  <td className="py-3">Department Name</td>
-                  {/* <td className="py-3">Office Name</td> */}
-                  <td className="py-3">Post Name</td>
-                  <td className="py-3">Contact</td>
+                  <td className="py-3">Username</td>
                   <td className="py-3">Email</td>
-                  <td className="py-3">Status</td>
+                  <td className="py-3">Role</td>
+                  <td className="py-3">Contact</td>
+
+                  <td className="py-3">Manage Access</td>
                   
                   {/* <td className="py-3">Email</td>
                   <td className="py-3">Contact</td> */}
@@ -140,30 +140,15 @@ export default function ViewDonor() {
                     <input type="checkbox" name="" id="" />
                   </td> */}
                       <td className="py-3">{index + 1}</td>
-                      <td className="py-3">{item.employeeName}</td>
+                      <td className="py-3">{item.username}</td>
 
-                      {departmentList?.map((dep, index) => {
-                        if (dep.departmentId === item.departmentId) {
-                          return (
-                            <td className="py-3" key={index}>
-                              {dep.departmentName}
-                            </td>
-                          );
-                        }
-                      })}
 
-                      {postList?.map((dep, index) => {
-                        if (dep.postId === item.postId) {
-                          return (
-                            <td className="py-3" key={index}>
-                              {dep.postName}
-                            </td>
-                          );
-                        }
-                      })}
-                      <td className="py-3">{item.employeePhone}</td>
-                      <td className="py-3 text-sm px-2">{item.employeeEmail}</td>
-                      <td className="py-3">
+                    
+                      <td className="py-3">{item.email}</td>
+                      
+                      <td className="py-3 text-sm px-2">{item?.role}</td>
+                      <td className="py-3 text-sm px-2">{item?.contactNo}</td>
+                      {/* <td className="py-3">
                       <Switch
                           {...label}
                           onChange={async () => {
@@ -180,6 +165,11 @@ export default function ViewDonor() {
                          
                           checked={item.isActive}
                         />
+                      </td> */}
+                      <td>
+                        <button className="bg-green-600 rounded-md shadow-md px-3 py-2 text-white" onClick={()=>router.push(`/user/${item._id}`)}>
+                            Manage Access
+                        </button>
                       </td>
 
                       

@@ -12,6 +12,7 @@ import {
   createEmpolyee
 } from 'src/services/apiService/officeService/office'
 export default function Employee() {
+  const [createUser,setCreateUser] = useState(false)
   const {
     register,
     handleSubmit,
@@ -60,6 +61,7 @@ export default function Employee() {
     data = {
       ...data,
       userId: userInfo?._id,
+      createUser:createUser
     };
     console.log(data, "response");
     try {
@@ -75,6 +77,13 @@ export default function Employee() {
     <>
       <form className="mx-10" onSubmit={handleSubmit((data) => onSubmit(data))}>
         <FormBorder title={"Employee"}>
+          <div className="flex justify-end">
+
+          <button className={`px-3 py-2 text-white rounded-md shadow-md ${createUser?'bg-red-600':"bg-green-600"}`} onClick={(e)=>{e.preventDefault();
+            setCreateUser((prevState)=>!prevState)} }>
+            { createUser ? "Don't Create User" : 'Create User'}
+          </button>
+          </div>
           <div className="md:grid-cols-2 grid grid-cols-1 gap-4 text-lg">
             <div className="flex flex-col">
               <label htmlFor="">
@@ -166,6 +175,25 @@ export default function Employee() {
                 <p className="errorMessages">{errors.employeePhone.message}</p>
               )}
             </div>
+            {
+              createUser ? 
+            <div className="flex flex-col">
+              <label htmlFor="">
+                Phone <span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="User Password"
+                className="inputStyle"
+                {...register("password", {
+                  required: "Password is required",
+                })}
+              />
+              {errors?.password && (
+                <p className="errorMessages">{errors.password.message}</p>
+              )}
+            </div> : <></>
+            }
           </div>
           <div className="text-lg font-bold my-5">
             <Button>{isSubmitting ? "Submitting..." : "Submit"}</Button>

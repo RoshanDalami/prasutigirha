@@ -311,7 +311,7 @@ export default function AddVolume({ clickedData }) {
             <button
               className="bg-red-600 text-white my-4 text-lg rounded-md py-2 px-5 hover:bg-[#052c65] disabled:cursor-not-allowed disabled:bg-gray-200"
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || date > aa ? true : false}
             >
               {isSubmitting ? "Submitting ..." : "Submit"}
             </button>

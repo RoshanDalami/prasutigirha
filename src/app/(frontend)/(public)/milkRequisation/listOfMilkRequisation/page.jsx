@@ -14,6 +14,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
+import LoadingSpinner from "src/components/Loading";
 import { useForm } from "react-hook-form";
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
@@ -22,6 +23,7 @@ export default function ListVolume() {
   const { register, handleSubmit } = useForm();
   const router = useRouter();
   const [requsitionList, setRequsitionList] = useState([]);
+  const [loading,setLoading] = useState(true)
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
   useEffect(() => {
@@ -29,6 +31,7 @@ export default function ListVolume() {
       const { data, status } = await getMilkRequsition()
       if (status === 200) {
         setRequsitionList(data);
+        setLoading(false)
         toast.success("List generated successfully");
       } else {
         toast.error("List generation failed");
@@ -74,7 +77,59 @@ export default function ListVolume() {
       console.log(error,'response');
     }
   };
+const local = <div className=" my-5">
+<table className="w-full">
+  <tr className="bg-[#004a89] text-white text-lg text-center">
+    {/* <td className="py-3 px-3">
+      <input type="checkbox" name="" id="" />
+    </td> */}
+    <td className="py-3 ">S.N</td>
+    <td className="py-3 ">Baby Name</td>
+    <td className="py-3">Feeding Date</td>
+    <td className="py-3">Total Milk Feeded</td>
+    <td className="py-3">No. of Bottle</td>
+    <td className="py-3 ">Action</td>
+  </tr>
+  {requsitionList?.map((row, index) => {
+    return (
+      <tr
+        className=" border border-x-gray text-center"
+        key={index}
+      >
+        <td className="py-3">{index + 1}</td>
+        <td className="py-3">{row?.babyName}</td>
+        <td className="py-3">{row?.feedingDate}</td>
 
+        <td className="py-3">
+          {row.requisitedMilk
+            .map((item) => {
+              return item.quantity;
+            })
+            .reduce((acc, amount) => acc + amount, 0)}
+        </td>
+        <td className="py-3">{row.requisitedMilk.length}</td>
+        <td className="py-3 ">
+          <div className="flex justify-evenly items-center text-xl">
+            {/* <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
+
+            <PencilSquareIcon
+              className="h-6 w-6 text-white "
+              onClick={() => handleEdit(row._id)}
+            />
+            </div> */}
+            <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
+              <TrashIcon
+                className="h-6 w-6 text-white"
+                onClick={() => handleDelete(row._id)}
+              />
+            </div>
+          </div>
+        </td>
+      </tr>
+    );
+  })}
+</table>
+</div>
   return (
     <>
       <div>
@@ -119,59 +174,7 @@ export default function ListVolume() {
               </div>
             }
           >
-            <div className=" my-5">
-              <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  {/* <td className="py-3 px-3">
-                    <input type="checkbox" name="" id="" />
-                  </td> */}
-                  <td className="py-3 ">S.N</td>
-                  <td className="py-3 ">Baby Name</td>
-                  <td className="py-3">Feeding Date</td>
-                  <td className="py-3">Total Milk Feeded</td>
-                  <td className="py-3">No. of Bottle</td>
-                  <td className="py-3 ">Action</td>
-                </tr>
-                {requsitionList?.map((row, index) => {
-                  return (
-                    <tr
-                      className=" border border-x-gray text-center"
-                      key={index}
-                    >
-                      <td className="py-3">{index + 1}</td>
-                      <td className="py-3">{row?.babyName}</td>
-                      <td className="py-3">{row?.feedingDate}</td>
-
-                      <td className="py-3">
-                        {row.requisitedMilk
-                          .map((item) => {
-                            return item.quantity;
-                          })
-                          .reduce((acc, amount) => acc + amount, 0)}
-                      </td>
-                      <td className="py-3">{row.requisitedMilk.length}</td>
-                      <td className="py-3 ">
-                        <div className="flex justify-evenly items-center text-xl">
-                          {/* <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
-
-                          <PencilSquareIcon
-                            className="h-6 w-6 text-white "
-                            onClick={() => handleEdit(row._id)}
-                          />
-                          </div> */}
-                          <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
-                            <TrashIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleDelete(row._id)}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </table>
-            </div>
+            {loading? <LoadingSpinner/> : local }
           </TableBorder>
         </div>
       </div>
