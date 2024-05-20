@@ -7,7 +7,7 @@ export async function GET(req,res){
     const districtId = req.nextUrl.searchParams.get('districtId')
     // districtId:districtId
     try {
-        const palikaList = await Palika.find({districtId:districtId})
+        const palikaList = await Palika.find({})
         return NextResponse.json(palikaList,{status:200})
     } catch (error) {
         return NextResponse.json({message:"Internal Server Error"},{status:500})
