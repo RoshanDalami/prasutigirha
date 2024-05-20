@@ -53,6 +53,7 @@ export default function ListVolume() {
 
       if (status === 200) {
         setPoolingList(data);
+        setLoading(false)
       }
     }
     fetchData();
@@ -88,6 +89,7 @@ export default function ListVolume() {
         const { data, status } = await getPooling();
         if (status === 200) {
           setPoolingList(data);
+          setLoading(false)
         }
       }
     } catch (error) {
