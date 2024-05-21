@@ -308,6 +308,9 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
               className="inputStyle"
               // {...register("dateOfBirth", { required: true })}
             />
+            {
+              birthDate > aa ? <p className="text-red-600">Future date is not allowed !!!</p> : <></>
+            }
             {errors.dateOfBirth && (
               <p className="errorMessages">{errors.dateOfBirth.message}</p>
             )}

@@ -61,7 +61,7 @@ export const lineoptions = {
     },
   },
 };
-const labels = ["January", "February", "March", "April", "May", "June"];
+const labels = ["Baisakh", "Jestha", "Ashad", "Shrawn", "Bhadra", "Ashoj","Kartik","Mangshir","Paush","Magh","Falgun","Chaitra"];
 export const bardata = {
   labels,
   datasets: [

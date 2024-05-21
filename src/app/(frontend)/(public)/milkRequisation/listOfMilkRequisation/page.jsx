@@ -88,7 +88,7 @@ const local = <div className=" my-5">
     <td className="py-3">Feeding Date</td>
     <td className="py-3">Total Milk Feeded</td>
     <td className="py-3">No. of Bottle</td>
-    <td className="py-3 ">Action</td>
+    {/* <td className="py-3 ">Action</td> */}
   </tr>
   {requsitionList?.map((row, index) => {
     return (
@@ -117,12 +117,12 @@ const local = <div className=" my-5">
               onClick={() => handleEdit(row._id)}
             />
             </div> */}
-            <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
+            {/* <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
               <TrashIcon
                 className="h-6 w-6 text-white"
                 onClick={() => handleDelete(row._id)}
               />
-            </div>
+            </div> */}
           </div>
         </td>
       </tr>

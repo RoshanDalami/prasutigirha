@@ -45,6 +45,7 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [testDate, setTestDate] = useState(aa);
   const [hivTestDate, setHivTestDate] = useState(aa);
   const [hbsagTestDate, setHbsagTestDate] = useState(aa);
+  console.log(testDate,hivTestDate,hbsagTestDate,'response')
 
   const engTestDate = new BikramSambat(testDate, "BS").toAD();
 
