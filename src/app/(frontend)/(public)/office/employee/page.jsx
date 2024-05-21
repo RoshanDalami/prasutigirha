@@ -179,7 +179,7 @@ export default function Employee() {
               createUser ? 
             <div className="flex flex-col">
               <label htmlFor="">
-                Phone <span className="text-red-600">*</span>
+                Password <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"

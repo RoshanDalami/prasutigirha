@@ -187,12 +187,12 @@ export default function ListVolume() {
               onClick={() => handleEdit(row._id)}
             />
             </div> */}
-                <div className="cursor-pointer bg-red-600 rounded-md shadow-md flex items-center justify-center px-2 py-1">
+                {/* <div className="cursor-pointer bg-red-600 rounded-md shadow-md flex items-center justify-center px-2 py-1">
                   <TrashIcon
                     className="h-6 w-6 text-white"
                     onClick={() => handleDelete(row._id)}
                   />
-                </div>
+                </div> */}
                 <div>
                 { row.culture != null &&
                   

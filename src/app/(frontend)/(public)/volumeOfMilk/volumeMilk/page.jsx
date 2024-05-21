@@ -242,12 +242,12 @@ export default function ListVolume() {
                               onClick={() => handleEdit(item._id)}
                             />
                           </div> */}
-                          <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
+                          {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
                             <TrashIcon
                               className="h-6 w-6 text-white"
                               onClick={() => handleDelete(item._id)}
                             />
-                          </div>
+                          </div> */}
                           <div>
                             <h1
                               className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
