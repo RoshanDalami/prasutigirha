@@ -288,7 +288,7 @@ const VerbalExamination = ({
           </FormControl>
           <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">
-              Cough more than 2 weeks :
+              Cough more than 2 weeks (Active Tuberculosis) :
             </FormLabel>
             <RadioGroup
               row

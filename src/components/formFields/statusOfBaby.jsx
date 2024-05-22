@@ -80,7 +80,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     );
   };
   const diagnosis = [
-    { name: "Preterm delivery", id: 1 },
+    { name: "Normal", id: 1 },
     { name: "Premature delivery", id: 2 },
     { name: "Perinatal Asphyxia", id: 3 },
     { name: "Respiratory Distress syndrome", id: 4 },

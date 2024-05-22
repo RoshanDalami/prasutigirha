@@ -110,7 +110,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     fetchData();
   }, []);
   const diagnosis = [
-    { name: "Preterm delivery", id: 1 },
+    { name: "Normal", id: 1 },
     { name: "Premature delivery", id: 2 },
     { name: "Perinatal Asphyxia", id: 3 },
     { name: "Respiratory Distress syndrome", id: 4 },
@@ -133,8 +133,8 @@ export default function AddBabyDetails({ clickedIdData }) {
   const indications = [
     // { id: 1, name: "Select Indication" },
     { id: 2, name: "Preterm" },
-    { id: 3, name: "Low Birth weight" },
-    { id: 4, name: "IUGR" },
+    { id: 4, name: "NEC" },
+    { id: 3, name: "Low Birth weight / IUGR " },
     { id: 5, name: "Post-surgical" },
     { id: 6, name: "Lactation failure" },
     { id: 7, name: "NICU" },
@@ -269,17 +269,11 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Parity <span className="text-red-600">*</span>
                 </label>
-                <select
+                <input
                   className="inputStyle"
                   {...register("parity", { required: "Parity is Required" })}
-                >
-                  <option className="" selected disabled value={""}>
-                    --Select Parity--
-                  </option>
-                  {parityList?.map((items, index) => {
-                    return <option key={index}>{items?.parityName}</option>;
-                  })}
-                </select>
+                  placeholder="Parity"
+                />
                 {errors.parity && (
                   <p className="errorMessages">{errors.parity.message}</p>
                 )}
@@ -306,7 +300,8 @@ export default function AddBabyDetails({ clickedIdData }) {
                 )}
               </div>
               <div className="flex flex-col">
-                <label htmlFor="">IP Number</label>
+                <label htmlFor="">IP Number <span className="text-red-600">*</span>
+                </label>
                 <input
                   type="text"
                   className="inputStyle"
@@ -321,7 +316,7 @@ export default function AddBabyDetails({ clickedIdData }) {
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
-                  Birth Weight<span className="text-red-600">*</span>
+                  Birth Weight (Gram) <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="Number"
