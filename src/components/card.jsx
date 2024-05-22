@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function DashboardCard({ number, title, imageSrc }) {
+export default function DashboardCard({ number, title, imageSrc,unit }) {
   return (
     <>
       <div className="flex  ">
@@ -9,7 +9,7 @@ export default function DashboardCard({ number, title, imageSrc }) {
         >
           <div className="leading-10">
             <p className="text-gray-600">{title}</p>
-            <p className="text-[#004a89] text-xl font-extrabold">{number}</p>
+            <p className="text-[#004a89] text-xl font-extrabold">{number}{" "}{unit} </p>
           </div>
           <div>
             <Image

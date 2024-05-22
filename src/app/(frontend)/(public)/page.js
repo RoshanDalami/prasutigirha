@@ -147,24 +147,28 @@ export default function Dashboard() {
       title: "Donor Records",
       recordAmount: donor,
       imageName: "/assets/images/mother.png",
+      units:''
     },
     {
       id: 2,
       title: "Recipient Records",
       recordAmount: baby,
       imageName: "/assets/images/newborn.png",
+      units:''
     },
     {
       id: 3,
       title: "Milk Requsition",
       recordAmount: milkRequsition,
       imageName: "/assets/images/record.png",
+      units:'ml'
     },
     {
       id: 4,
       title: "Milk Collection",
       recordAmount: milkCollected,
       imageName: "/assets/images/feeding-bottle.png",
+      units:'ml'
     },
   ];
   const token = useRecoilValue(userAtomState)
@@ -229,6 +233,7 @@ export default function Dashboard() {
                 title={items.title}
                 number={items.recordAmount}
                 imageSrc={items.imageName}
+                unit={items.units}
               />
             </div>
           );

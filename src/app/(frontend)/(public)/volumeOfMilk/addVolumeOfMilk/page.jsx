@@ -26,7 +26,7 @@ export default function AddVolume({ clickedData }) {
     formState: { isSubmitting, errors },
   } = useForm({
     defaultValues: {
-      collectedMilk: [{ time: "", quantity: 0, temp: "-20", storedBy: "" }],
+      collectedMilk: [{ time: "", quantity: 0, storedBy: "" }],
     },
   });
   const { fields, append, remove, replace } = useFieldArray({
@@ -117,7 +117,7 @@ export default function AddVolume({ clickedData }) {
   //Nepali Date
   function handleAppend(e) {
     e.preventDefault();
-    append({ time: "", quantity: 0, temp: "", storedBy: "" });
+    append({ time: "", quantity: 0, storedBy: "" });
   }
   const removeHandler = (index)=>{
     remove(index)
@@ -254,7 +254,7 @@ export default function AddVolume({ clickedData }) {
                       </p>
                     )}
                   </div>
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col">
                     <label className="text-lg">
                       Temperature
                       <span className="text-lg text-red-600">*</span>
@@ -273,7 +273,7 @@ export default function AddVolume({ clickedData }) {
                         {errors?.collectedMilk?.[index]?.temp?.message}
                       </p>
                     )}
-                  </div>
+                  </div> */}
                   <div className="flex flex-col">
                     <label className="text-lg">
                       Store By
@@ -293,7 +293,8 @@ export default function AddVolume({ clickedData }) {
                       </p>
                     )}
                   </div>
-                  <div></div>
+                  <div className="">
+
                   {fields.length > 1 && (
                     <div className="font-bold text-lg flex justify-end">
                       <button
@@ -304,6 +305,7 @@ export default function AddVolume({ clickedData }) {
                       </button>
                     </div>
                   )}
+                  </div>
                 </div>
               );
             })}
