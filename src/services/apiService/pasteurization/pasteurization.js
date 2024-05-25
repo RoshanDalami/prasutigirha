@@ -77,3 +77,12 @@ export const updateCulture = async (data) =>{
   )
   return response
 }
+
+export const updateOther = async (data) =>{
+  let response = await mainApi(
+    apiUrls.pasteurization.updateOther.method,
+    apiUrls.pasteurization.updateOther.url,
+    data
+  );
+  return response
+}

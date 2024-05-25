@@ -168,7 +168,12 @@ const apiUrls = {
     updateCulture:{
       method:"POST",
       url:"/pasteurization/updateCulture"
-    }
+    },
+    updateOther:{
+      method:"POST",
+      url:"/pasteurization/updateOther"
+
+}
   },
   baby: {
     getBabyDetail: {
