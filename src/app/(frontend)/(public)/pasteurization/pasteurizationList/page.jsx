@@ -41,8 +41,11 @@ export default function ListVolume() {
   const handleBottleDetails = (id) => {
     router.push(`/pasteurization/pasteurizationList/${id}`);
   };
-  const handleCulture = () => {
-    router.push(`/pasteurization/culture/createCulture`);
+  const handleOtherTest = (id)=>{
+    router.push(`/pasteurization/pasteurizationList/other/${id}`)
+  }
+  const handleCulture = (id) => {
+    router.push(`/pasteurization/pasteurizationList/culture/${id}`);
   };
 
   const [poolingList, setPoolingList] = useState([]);
@@ -146,7 +149,7 @@ export default function ListVolume() {
       <td className="py-3 px-2">Expiry Date</td>
       <td className="py-3 px-2">Action</td>
     </tr>
-    {poolingList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.filter((item)=>item.culture === false || item.culture === null).map((row, index) => {
+    {poolingList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((row, index) => {
  
 
         return (
@@ -196,12 +199,24 @@ export default function ListVolume() {
                 <div>
                 { row.culture != null &&
                   
+                  <div className="flex gap-1">
+
                  <button
                   className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
                   onClick={() => handleBottleDetails(row._id)}
                 >
                   Bottles
                 </button> 
+                {
+                  row.other === null &&
+                 <button
+                  className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
+                  onClick={() => handleOtherTest(row._id)}
+                >
+                  Other
+                </button> 
+                }
+                  </div>
                 }   
                 </div>
                 <div>
@@ -209,7 +224,7 @@ export default function ListVolume() {
                   
                  <button
                   className="bg-purple-600 rounded-md text-white px-2 py-1 mr-2"
-                  onClick={() => handleCulture()}
+                  onClick={() => handleCulture(row._id)}
                 >
                   Culture
                 </button> 

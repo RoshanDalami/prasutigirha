@@ -97,7 +97,7 @@ export default function AddPasteurization({ clickedIdData }) {
       ...item,
       donorId: item.donorId.split("/")[0],
       milkvolumeId: item.milkvolumeId.split("/")[0],
-      collectedDate: item.donorId.split("/")[1],
+      collectedDate: item.milkvolumeId.split("/")[2],
       donorName: item.donorId.split("/")[2],
     }));
     data = {
@@ -299,7 +299,7 @@ export default function AddPasteurization({ clickedIdData }) {
                         {donorList ? (
                           <>
                             {donorList?.map((item, index) => {
-                              
+                              console.log(item,'response')
                               const combinedValue = `${item.donorId}/${item.date}/${item.donorName}`;
                               if(item.remaining != 0){
                                 return (
@@ -356,7 +356,7 @@ export default function AddPasteurization({ clickedIdData }) {
                                 {index0 === index &&
                                   item?.map((subItem, subIndex) => {
                                     console.log(subItem, "respon");
-                                    const bottleCombValue = `${subItem?._id}/${subItem?.remaining}`;
+                                    const bottleCombValue = `${subItem?._id}/${subItem?.remaining}/${subItem?.date}`;
                                     return (
                                       <option
                                         key={subIndex}
