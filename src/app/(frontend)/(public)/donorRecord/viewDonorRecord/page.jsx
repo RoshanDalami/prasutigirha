@@ -87,6 +87,13 @@ export default function ViewDonor() {
     }
   };
 
+  const handleOther = (id)=>{
+    router.push(`/donorRecord/viewDonorRecord/Other/${id}`)
+  }
+  const handleOtherView = (id)=>{
+    router.push(`/donorRecord/viewDonorRecord/Other/test/${id}`)
+  }
+
   const [gestationalAgeList, setGestationalAgeList] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -133,6 +140,8 @@ export default function ViewDonor() {
       <td className="py-3">Address</td>
       <td className="py-3">Contact</td>
       <td className="py-3">Status</td>
+      <td className="py-3">Test</td>
+      <td></td>
     </tr>
     {donorList
       ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
@@ -188,6 +197,15 @@ export default function ViewDonor() {
                   }}
                   checked={item.isDonorActive}
                 />
+              </div>
+            </td>
+            <td className="py-2">
+              <div className="flex gap-3 items-center justify-center">
+                <button className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white" onClick={()=>handleOther(item._id)}>Other</button>
+                {
+                  item?.other?.length > 0 &&
+                <button className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white" onClick={()=>handleOtherView(item._id)}>View Test</button>
+                }
               </div>
             </td>
           </tr>

@@ -32,3 +32,20 @@ export const updateDonorStatus = async (id)=>{
   )
   return response
 }
+
+export const getDonorOtherTest = async (id)=>{
+  let response = await mainApi(
+    apiUrls.donor.getDonorOtherTest.method,
+    apiUrls.donor.getDonorOtherTest.url+`/${id?id:''}`,
+  )
+  return response
+}
+
+export const discard = async (data)=>{
+  let response = await mainApi(
+    apiUrls.donor.discard.method,
+    apiUrls.donor.discard.url,
+    data
+  )
+  return response
+}

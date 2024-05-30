@@ -212,7 +212,7 @@ export default function AddMilkReq({ clickedIdData }) {
                     const combinedValue = `${item._id}/${item.babyName}`;
                     return (
                       <option key={index} value={combinedValue}>
-                        {item.babyName}
+                        {item.babyName}{" "}({item.ipNumber})
                       </option>
                     );
                   })}
