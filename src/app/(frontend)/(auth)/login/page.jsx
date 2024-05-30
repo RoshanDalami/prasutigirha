@@ -11,7 +11,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-
+import {logo} from '../../../../../public/assets/images/amritkoshlogo.jpg'
 const Login = () => {
 
   const {
@@ -61,7 +61,7 @@ const Login = () => {
             height={200}
             width={350}
             src={
-              "https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkosh.jpg?alt=media&token=323bc8f3-fdb8-4a32-a68e-89934ba69f09"
+              'https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkoshlogo.jpg?alt=media&token=f7dd3d3f-6f27-466c-9405-74bd08629c4a'
             }
             alt="amrit-kosh"
             className="rounded-lg hidden md:block w-full"
@@ -70,7 +70,7 @@ const Login = () => {
         <div className="  md:w-2/4 w-full md:mx-0 mx-8 d:my-0 my-10 md:mr-6  ">
           <div className="leading-9">
             <p className="text-2xl text-red-600 font-bold">
-              Welcome to AmritKosh !
+              Welcome to AmritKosh PMWH !
             </p>
             <p>
               <span className="text-gray-600">Need an account? </span>{" "}

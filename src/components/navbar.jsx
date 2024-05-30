@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { urls } from "src/services/apiHelpers";
 import CircularProgress from '@mui/material/CircularProgress';
+
 export default function Navbar() {
 
   const userInfo =
@@ -62,7 +63,7 @@ export default function Navbar() {
               height={100}
               width={100}
               alt="logo-img"
-              src={"/assets/images/heart.png"}
+              src={"/amrit_kosh_log.png"}
               className="rounded-full h-11 w-11 shadow-md mr-8"
             />
           </div>

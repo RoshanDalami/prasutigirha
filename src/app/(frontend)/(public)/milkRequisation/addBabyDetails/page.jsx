@@ -419,7 +419,7 @@ export default function AddBabyDetails({ clickedIdData }) {
               </div>
             </div>
             <div className="my-5 font-bold text-xl">
-              <Button isSubmitting={isSubmitting}>
+              <Button isSubmitting={isSubmitting} date={ birthDate } aa={aa} >
                 {isSubmitting ? "Submiting ..." : "Submit"}
               </Button>
             </div>

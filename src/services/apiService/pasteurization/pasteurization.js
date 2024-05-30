@@ -86,3 +86,11 @@ export const updateOther = async (data) =>{
   );
   return response
 }
+
+export const Discard = async (id)=>{
+  let response = await mainApi(
+    apiUrls.pasteurization.discard.method,
+    apiUrls.pasteurization.discard.url+`/${id?id:''}`,
+  )
+  return response
+}

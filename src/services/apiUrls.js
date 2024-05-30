@@ -1,22 +1,21 @@
-
 const apiUrls = {
-  user:{
-    giveAccess:{
-      method:"POST",
-      url:"/user/manageAccess"
+  user: {
+    giveAccess: {
+      method: "POST",
+      url: "/user/manageAccess",
     },
-    getAllUser:{
-      method:"GET",
-      url:"/user/getAllUser"
+    getAllUser: {
+      method: "GET",
+      url: "/user/getAllUser",
     },
-    getOneUser:{
-      method:"GET",
-      url:"/user/getOneUser"
+    getOneUser: {
+      method: "GET",
+      url: "/user/getOneUser",
     },
-    getAllModule:{
-      method:"GET",
-      url:"/user/getAllModule"
-    }
+    getAllModule: {
+      method: "GET",
+      url: "/user/getAllModule",
+    },
   },
   office: {
     createOffice: {
@@ -63,26 +62,26 @@ const apiUrls = {
       method: "POST",
       url: "/office/registerEmployee",
     },
-    activeDeactiveEmployee:{
-      method:"GET",
-      url:"/office/employeeStatus"
+    activeDeactiveEmployee: {
+      method: "GET",
+      url: "/office/employeeStatus",
     },
-    createFiscalYear:{
-      method:"POST",
-      url:"/fiscal/createFiscal"
+    createFiscalYear: {
+      method: "POST",
+      url: "/fiscal/createFiscal",
     },
-    getFiscalYear:{
-      method:"GET",
-      url:"/fiscal/getFiscal"
+    getFiscalYear: {
+      method: "GET",
+      url: "/fiscal/getFiscal",
     },
-    updateFiscalYearStatus:{
-      method:"GET",
-      url:"/fiscal/updateStatus"
+    updateFiscalYearStatus: {
+      method: "GET",
+      url: "/fiscal/updateStatus",
     },
-    getFiscalYearById:{
-      method:"GET",
-      url:"/fiscal/getFiscal"
-    }
+    getFiscalYearById: {
+      method: "GET",
+      url: "/fiscal/getFiscal",
+    },
   },
   donor: {
     getDonor: {
@@ -93,13 +92,21 @@ const apiUrls = {
       method: "POST",
       url: "/donor/registerDonor",
     },
-    getInActiveDonor:{
-      method:"GET",
-      url:"/donor/getInActiveDonor"
+    getInActiveDonor: {
+      method: "GET",
+      url: "/donor/getInActiveDonor",
     },
-    updateDonorStatus:{
-      method:'GET',
-      url:"/donor/updateStatus"
+    updateDonorStatus: {
+      method: "GET",
+      url: "/donor/updateStatus",
+    },
+    getDonorOtherTest:{
+      method:"GET",
+      url:"/donor/getOtherTest"
+    },
+    discard:{
+      method:"POST",
+      url:"/donor/discard"
     }
   },
   milkVolume: {
@@ -119,14 +126,14 @@ const apiUrls = {
       method: "POST",
       url: "/milkVolume/registerMilkVolume",
     },
-    getMilkListByDonor:{
-      method:"GET",
-      url:"/milkVolume/volumeByDonorId"
+    getMilkListByDonor: {
+      method: "GET",
+      url: "/milkVolume/volumeByDonorId",
     },
-    getDonoWithTotalVolume:{
-      method:"GET",
-      url:"/milkVolume/donorWithTotalVolume"
-    }
+    getDonoWithTotalVolume: {
+      method: "GET",
+      url: "/milkVolume/donorWithTotalVolume",
+    },
   },
   pasteurization: {
     createPooling: {
@@ -161,19 +168,22 @@ const apiUrls = {
       method: "GET",
       url: "/pasteurization/getConditionById",
     },
-    getDonorListById:{
+    getDonorListById: {
+      method: "GET",
+      url: "/pasteurization/getDonorByGestationalAge",
+    },
+    updateCulture: {
+      method: "POST",
+      url: "/pasteurization/updateCulture",
+    },
+    updateOther: {
+      method: "PATCH",
+      url: "/donor/updateOther",
+    },
+    discard:{
       method:"GET",
-      url:"/pasteurization/getDonorByGestationalAge"
-    },
-    updateCulture:{
-      method:"POST",
-      url:"/pasteurization/updateCulture"
-    },
-    updateOther:{
-      method:"POST",
-      url:"/pasteurization/updateOther"
-
-}
+      url:"/pasteurization/discard"
+    }
   },
   baby: {
     getBabyDetail: {
@@ -188,6 +198,10 @@ const apiUrls = {
       method: "POST",
       url: "/baby/createBabyDetail",
     },
+    updateStatus:{
+      method:"GET",
+      url:"/baby/updateBaby"
+    }
   },
   bottle: {
     getBottle: {
@@ -213,61 +227,55 @@ const apiUrls = {
       url: "/milkRequsition/deleteMilkRequsition",
     },
   },
-  search:{
-    searchDonor:{
-      method:"GET",
-      url:"/search/searchDonor"
+  search: {
+    searchDonor: {
+      method: "GET",
+      url: "/search/searchDonor",
     },
-    searchMilkVolume:{
-      method:"GET",
-      url:"/search/searchMilkVolume"
+    searchMilkVolume: {
+      method: "GET",
+      url: "/search/searchMilkVolume",
     },
-    searchPasteurization:{
-      method:"GET",
-      url:"/search/searchPasteurization"
+    searchPasteurization: {
+      method: "GET",
+      url: "/search/searchPasteurization",
     },
-    searchRequsition:{
-      method:"GET",
-      url:"/search/searchRequsition"
-    }
+    searchRequsition: {
+      method: "GET",
+      url: "/search/searchRequsition",
+    },
   },
-  culture:{
-    createCulture:{
-      method:"POST",
-      url:"/culture/createCulture"
-    }
+  culture: {
+    createCulture: {
+      method: "POST",
+      url: "/culture/createCulture",
+    },
   },
-  dashboard:{
-    getNumberOfDonor:{
-      method:"GET",
-      url:"/dashboard/getNumberOfDonor"
+  dashboard: {
+    getNumberOfDonor: {
+      method: "GET",
+      url: "/dashboard/getNumberOfDonor",
     },
-    getNumberOfMilkCollected:{
-      method:"GET",
-      url:"/dashboard/getNumberOfMilkCollected"
+    getNumberOfMilkCollected: {
+      method: "GET",
+      url: "/dashboard/getNumberOfMilkCollected",
     },
-    getMilkRequsitited:{
-      method:"GET",
-      url:"/dashboard/getTotalMilkRequsition"
+    getMilkRequsitited: {
+      method: "GET",
+      url: "/dashboard/getTotalMilkRequsition",
     },
-    getNumberOfBaby:{
-      method:"GET",
-      url:"/dashboard/getNumberOfBaby"
+    getNumberOfBaby: {
+      method: "GET",
+      url: "/dashboard/getNumberOfBaby",
     },
-    getMonthWiseMilkCollection:{
-      method:"GET",
-      url:"/dashboard/getMilkCollectedMonthWise"
+    getMonthWiseMilkCollection: {
+      method: "GET",
+      url: "/dashboard/getMilkCollectedMonthWise",
     },
-    getMonthWiseMilkRequsition:{
-      method:"GET",
-      url:"/dashboard/getMilkRequsitionMonthWise"
-    }
-  }
-  
-  
+    getMonthWiseMilkRequsition: {
+      method: "GET",
+      url: "/dashboard/getMilkRequsitionMonthWise",
+    },
+  },
 };
 export default apiUrls;
-
-
-
-

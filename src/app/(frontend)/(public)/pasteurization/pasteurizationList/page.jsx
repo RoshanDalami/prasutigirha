@@ -150,7 +150,7 @@ export default function ListVolume() {
       <td className="py-3 px-2">Action</td>
     </tr>
     {poolingList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((row, index) => {
- 
+ console.log(row.other,'response')
 
         return (
           <tr
@@ -207,15 +207,6 @@ export default function ListVolume() {
                 >
                   Bottles
                 </button> 
-                {
-                  row.other === null &&
-                 <button
-                  className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
-                  onClick={() => handleOtherTest(row._id)}
-                >
-                  Other
-                </button> 
-                }
                   </div>
                 }   
                 </div>

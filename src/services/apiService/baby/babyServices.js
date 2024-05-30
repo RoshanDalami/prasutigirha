@@ -25,3 +25,11 @@ export async function getBabyById(id){
     )
     return response
 }
+export async function updateBabyStatus(id){
+    let response = await mainApi(
+        apiUrls.baby.updateStatus.method,
+        apiUrls.baby.updateStatus.url+`/${id?id:''}`,
+
+    )
+    return response
+}

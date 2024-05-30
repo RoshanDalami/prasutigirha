@@ -30,7 +30,7 @@ import {
   serologyAtom2,
 } from "src/recoil/serology/serologyAtom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
+const  SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
   const setSerologyPositive = useSetRecoilState(serologyAtom);
@@ -306,7 +306,7 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               Date of VDRL Test
               <span className="text-red-600">*</span>
             </label>
-
+ 
             <NepaliDatePicker
               inputClassName="form-control  focus:outline-none"
               value={testDate}
