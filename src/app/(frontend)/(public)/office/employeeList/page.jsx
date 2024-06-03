@@ -14,9 +14,9 @@ import {
   getOffice,
   getDepartment,
   getPost,
-  employeeStatus
+  employeeStatus,
+} from "src/services/apiService/officeService/office";
 
-} from 'src/services/apiService/officeService/office'
 import Switch from "@mui/material/Switch";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 export default function ViewDonor() {
@@ -126,7 +126,8 @@ export default function ViewDonor() {
                   <td className="py-3">Contact</td>
                   <td className="py-3">Email</td>
                   <td className="py-3">Status</td>
-                  
+                  <td className="py-3">Action</td>
+
                   {/* <td className="py-3">Email</td>
                   <td className="py-3">Contact</td> */}
                 </tr>
@@ -162,14 +163,14 @@ export default function ViewDonor() {
                         }
                       })}
                       <td className="py-3">{item.employeePhone}</td>
-                      <td className="py-3 text-sm px-2">{item.employeeEmail}</td>
+                      <td className="py-3 text-sm px-2">
+                        {item.employeeEmail}
+                      </td>
                       <td className="py-3">
-                      <Switch
+                        <Switch
                           {...label}
                           onChange={async () => {
-                            const response = await employeeStatus(
-                              item._id
-                            );
+                            const response = await employeeStatus(item._id);
                             if (response?.status === 200) {
                               const { data, status } = await getEmployee();
                               if (status === 200) {
@@ -177,12 +178,20 @@ export default function ViewDonor() {
                               }
                             }
                           }}
-                         
                           checked={item.isActive}
                         />
                       </td>
+                      <td className="py-3">
+                        <button
+                          className="text-white px-4 py-2 rounded-md shadow-md bg-indigo-600"
+                          onClick={() =>
+                            router.push(`/office/employee/${item._id}`)
+                          }
+                        >
+                          Edit
+                        </button>
+                      </td>
 
-                      
                       {/* <td className="py-3">{item.office_phone}</td> */}
                       {/* <td className="py-3">
                         <div className="flex justify-evenly text-xl">

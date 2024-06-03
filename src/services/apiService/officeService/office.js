@@ -162,3 +162,28 @@ export const GetAllModule = async () => {
   );
   return response;
 };
+
+export const GetDepartmentById = async (id) =>{
+  let response = await mainApi(
+  apiUrls.office.getDepartmentById.method,
+  apiUrls.office.getDepartmentById.url+`/${id?id:''}`,
+  )
+  return response 
+}
+
+export const GetPostById = async (id) =>{
+  let response = await mainApi(
+    apiUrls.office.getPostById.method,
+    apiUrls.office.getPostById.url+`/${id?id:''}`,
+  )
+  return response
+}
+
+export const GetEmployeeById = async (id) =>{
+  let response = await mainApi(
+    apiUrls?.office?.getEmployeeById.method,
+    apiUrls?.office?.getEmployeeById.url+`/${id?id:''}`,
+  )
+  return response 
+}
+

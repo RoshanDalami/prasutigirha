@@ -82,6 +82,18 @@ const apiUrls = {
       method: "GET",
       url: "/fiscal/getFiscal",
     },
+    getDepartmentById:{
+      method:"GET",
+      url:"/office/departmentById"
+    },
+    getPostById:{
+      method:"GET",
+      url:"/office/postById"
+    },
+    getEmployeeById:{
+      method:"GET",
+      url:"/office/employeeById"
+    }
   },
   donor: {
     getDonor: {

@@ -9,8 +9,8 @@ import {
 } from "src/services/apiService/officeService/office";
 import FormBorder from "src/components/reusableForm";
 import { useRouter } from "next/navigation";
-export default function CreatePost() {
-    const {register,handleSubmit,formState:{isSubmitting}} = useForm()
+export default function CreatePost({clickedDataId}) {
+    const {register,handleSubmit,formState:{isSubmitting},setValue} = useForm()
   const [department, setDepartment] = useState([]);
   const router = useRouter()
   useEffect(() => {
@@ -22,6 +22,13 @@ export default function CreatePost() {
     }
     fetchData();
   }, []);
+  useEffect(()=>{
+    if(clickedDataId){
+      setValue('id',clickedDataId?._id)
+      setValue('postName',clickedDataId?.postName)
+      setValue('departmentId',clickedDataId?.departmentId)
+    }
+  },[clickedDataId, setValue])
   const departmentOptions = department?.map((item, index) => {
     return (
       <option key={index} value={item.departmentId}>

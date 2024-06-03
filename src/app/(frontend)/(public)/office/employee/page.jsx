@@ -11,12 +11,13 @@ import {
   getPost,
   createEmpolyee
 } from 'src/services/apiService/officeService/office'
-export default function Employee() {
+export default function Employee({clickedIdData}) {
   const [createUser,setCreateUser] = useState(false)
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
+    setValue
   } = useForm();
   const userInfo =
     typeof localStorage !== "undefined"
@@ -40,6 +41,17 @@ export default function Employee() {
       </option>
     );
   });
+  useEffect(()=>{
+    if(clickedIdData){
+      setValue('id',clickedIdData?._id)
+      setValue('employeeName',clickedIdData?.employeeName)
+      setValue('departmentId',clickedIdData?.departmentId)
+      setValue('postId',clickedIdData?.postId)
+      setValue('employeeEmail',clickedIdData?.employeeEmail)
+      setValue('employeePhone',clickedIdData?.employeePhone)
+    }
+  },[clickedIdData, setValue])
+
   const [postList, setPostList] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -168,7 +180,12 @@ export default function Employee() {
                 placeholder="Employee Phone"
                 className="inputStyle"
                 {...register("employeePhone", {
-                  required: "Phone number required",
+                  required: "Contact number is required",
+                  pattern: {
+                    value: /^9\d{9}$/,
+                    message:
+                      "Contact number should begin with 9 and have exactly 10 digits",
+                  },
                 })}
               />
               {errors?.employeePhone && (

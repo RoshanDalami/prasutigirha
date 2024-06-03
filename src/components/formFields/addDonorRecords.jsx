@@ -227,6 +227,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       ...userData,
       ...data,
       date: date,
+      donorRegisteredDate:aa,
       engDate,
       address: {
         stateId: watchFields?.address?.stateId?.split("/")[1],

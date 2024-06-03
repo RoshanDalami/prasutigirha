@@ -1,20 +1,20 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function searchDonor(gestationalAge, donorName, registerDate) {
+export async function searchDonor(donorName, number) {
   let response = await mainApi(
     apiUrls.search.searchDonor.method,
     apiUrls.search.searchDonor.url +
-      `?gestationalAge=${gestationalAge}&donorName=${donorName}&registerDate=${registerDate}`
+      `?donorName=${donorName}&number=${number}`
   );
   return response;
 }
 
-export async function searchMilkVolume(gestationalAge, volumeDate) {
+export async function searchMilkVolume(donorName) {
   let response = await mainApi(
     apiUrls.search.searchMilkVolume.method,
     apiUrls.search.searchMilkVolume.url +
-      `?gestationalAge=${gestationalAge}&volumeDate=${volumeDate}`
+      `?donorName=${donorName}`
   );
   return response;
 }
