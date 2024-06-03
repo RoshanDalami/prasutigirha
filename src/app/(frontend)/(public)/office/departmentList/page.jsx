@@ -91,6 +91,7 @@ export default function ViewDonor() {
                   </td> */}
                   <td className="py-3">S No.</td>
                   <td className="py-3">Department Name</td>
+                  <td className="py-3">Action</td>
                   {/* <td className="py-3">Office Name</td> */}
                   {/* <td className="py-3">Email</td>
                   <td className="py-3">Contact</td> */}
@@ -106,6 +107,9 @@ export default function ViewDonor() {
                   </td> */}
                       <td className="py-3">{index + 1}</td>
                       <td className="py-3">{item.departmentName}</td>
+                      <td className="py-3">
+                        <button className="bg-indigo-600 px-4 py-2 rounded-md shadow-md text-white" onClick={()=>{router.push(`/office/department/${item._id}`)}}>Edit</button>
+                      </td>
                       {/* <td className="py-3">{officeList?.[0]?.office_name}</td> */}
                       {/* <td className="py-3">{item.office_email}</td>
                       <td className="py-3">{item.office_phone}</td> */}

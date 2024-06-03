@@ -20,6 +20,8 @@ import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { submittingAtom } from "src/recoil/isSubmiting/submittingAtom";
 import { useSetRecoilState } from "recoil";
+import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
+const aa = new BikramSambat(new Date()).toBS();
 const defaultValues = {
   mastitis: "",
   localLesions: "",
@@ -113,6 +115,7 @@ const PhysicalExamination = ({
         fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
         herpesZoster: JSON.parse(data.herpesZoster),
         doctorName: data.doctorName,
+        donorRegisteredDate:aa
       },
     });
     localStorage.setItem(
@@ -125,6 +128,7 @@ const PhysicalExamination = ({
           fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
           herpesZoster: JSON.parse(data.herpesZoster),
           doctorName: data.doctorName,
+          donorRegisteredDate:aa
         },
       })
     );
@@ -136,6 +140,7 @@ const PhysicalExamination = ({
         fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
         herpesZoster: JSON.parse(data.herpesZoster),
         doctorName: data.doctorName,
+        donorRegisteredDate:aa
       },
     };
 

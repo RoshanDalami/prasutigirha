@@ -7,7 +7,9 @@ import {
 } from "src/services/apiService/officeService/office";
 import Link from "next/link";
 import Button from "src/components/button";
+import { useRouter } from "next/navigation";
 export default function Post() {
+  const router = useRouter()
   const [apiData, setApiData] = useState([]);
   const [department, setDepartment] = useState([]);
   useEffect(() => {
@@ -56,6 +58,7 @@ export default function Post() {
           <tr className="bg-[#004a89] text-white text-lg text-center">
             <th className="border border-black px-3 py-4">Post</th>
             <th className="border border-black px-3 py-4">Department</th>
+            <th className="border border-black px-3 py-4">Action</th>
           </tr>
           {apiData?.map((item, index) => {
             return (
@@ -66,6 +69,9 @@ export default function Post() {
 
                 <td className="border border-black px-3 py-2  text-lg">
                   {item.departmentName}
+                </td>
+                <td className="border border-black px-3 py-2  text-lg">
+                 <button className="text-white px-4 py-2 rounded-md shadow-md bg-indigo-600" onClick={()=>router.push(`/office/postList/createPost/${item._id}`)}  >Edit</button>
                 </td>
               </tr>
             );

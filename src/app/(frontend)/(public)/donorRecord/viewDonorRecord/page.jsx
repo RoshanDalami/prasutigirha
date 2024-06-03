@@ -115,9 +115,8 @@ export default function ViewDonor() {
     try {
       console.log("test", "response");
       const response = await searchDonor(
-        data.gestationalAge,
         data.donorName,
-        date
+        data.number
       );
 
       if (response?.status === 200) {
@@ -240,31 +239,12 @@ export default function ViewDonor() {
               placeholder="Donor Name"
               {...register("donorName")}
             />
-
-            <div>
-              <select {...register("gestationalAge")} className="inputStyle">
-                <option value={""}>--select gestational age--</option>
-                {gestationalOptions}
-              </select>
-            </div>
-
-            <div className="">
-              {/* <input
-              type="date"
-              placeholder=""
-              className="inputStyle"
-              {...register("date", { required: "Date is Required" })}
-            /> */}
-              <NepaliDatePicker
-                inputClassName="form-control  focus:outline-none"
-                value={date}
-                onChange={(e) => setDate(e)}
-                // onChange={() => handleDateChange()}
-                options={{ calenderLocale: "en", valueLocale: "en" }}
-                className="inputStyle"
-              />
-              {/* {error && <p className="errorMessages">{error}</p>} */}
-            </div>
+            <input
+              type="text"
+              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
+              placeholder="Contact Number"
+              {...register("number")}
+            />
             <div className="flex gap-3">
               <button
                 className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "

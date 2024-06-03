@@ -150,7 +150,6 @@ const local = <div className=" my-5">
                 options={{ calenderLocale: "en", valueLocale: "en" }}
                 className="inputStyle"
               />
-              {/* {error && <p className="errorMessages">{error}</p>} */}
             </div>
 
             <button

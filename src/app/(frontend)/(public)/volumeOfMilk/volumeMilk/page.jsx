@@ -6,11 +6,11 @@ import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { BiEdit } from "react-icons/bi";
 import { MdDeleteForever } from "react-icons/md";
-import TablePagination from '@mui/material/TablePagination';
+import TablePagination from "@mui/material/TablePagination";
 import {
   getVolumeOfMilk,
   deleteMilkById,
-  getDonorWithTotalVolume
+  getDonorWithTotalVolume,
 } from "src/services/apiService/milkVolume/milkVolume";
 import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -24,14 +24,14 @@ export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
     ssr: false,
   });
-  const { register, handleSubmit , reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
   const [volumeList, setVolumeList] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const { status, data } = await getDonorWithTotalVolume();
-      
+
       if (status === 200) {
         setVolumeList(data);
         setFilteredVolumeList(data);
@@ -39,15 +39,15 @@ export default function ListVolume() {
     }
     fetchData();
   }, []);
-  const resetFilter = async()=>{
+  const resetFilter = async () => {
     const { status, data } = await getDonorWithTotalVolume();
-    console.log(status,data,'response')
+
     if (status === 200) {
-      
+      setVolumeList(data);
       setFilteredVolumeList(data);
     }
-    reset()
-  }
+    reset();
+  };
   const [gestationalAgeList, setGestationalAge] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -111,21 +111,21 @@ export default function ListVolume() {
   });
   const onSubmit = async (data) => {
     try {
-      const response = await searchMilkVolume(data.gestationalAge,date)
-      console.log(response,'response')
-      if(response?.status === 200){
+      const response = await searchMilkVolume(data.donorName);
+      console.log(response, "response");
+      if (response?.status === 200) {
         setFilteredVolumeList(response?.data);
       }
     } catch (error) {}
   };
-  const [page,setPage] = useState(0)
-  const [rowPerPage,setRowPerPage] = useState(8)
-  const handlePageChange = (e,newpage)=>{
-    setPage(newpage)
-  }
-  function handlePerPage(e){
-    setRowPerPage(+e.target.value)
-    setPage(0)
+  const [page, setPage] = useState(0);
+  const [rowPerPage, setRowPerPage] = useState(8);
+  const handlePageChange = (e, newpage) => {
+    setPage(newpage);
+  };
+  function handlePerPage(e) {
+    setRowPerPage(+e.target.value);
+    setPage(0);
   }
 
   return (
@@ -139,30 +139,15 @@ export default function ListVolume() {
             Volume of Milk
           </p>
           <div className="grid grid-cols-4 gap-4">
-            <div>
-              <select {...register("gestationalAge")} className="inputStyle">
-                <option value={""}>--select gestational age--</option>
-                {gestationalOptions}
-              </select>
+            <div className="">
+              <input
+                type="text"
+                className="inputStyle w-full"
+                placeholder="Donor Name"
+                {...register("donorName")}
+              />
             </div>
 
-            <div className=" ">
-              {/* <input
-             type="date"
-             placeholder=""
-             className="inputStyle"
-             {...register("date", { required: "Date is Required" })}
-           /> */}
-              <NepaliDatePicker
-                inputClassName="form-control  focus:outline-none"
-                value={date}
-                onChange={(e) => setDate(e)}
-                // onChange={() => handleDateChange()}
-                options={{ calenderLocale: "en", valueLocale: "en" }}
-                className="inputStyle"
-              />
-              {/* {error && <p className="errorMessages">{error}</p>} */}
-            </div>
             <div className="flex gap-3">
               <button
                 className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
@@ -172,7 +157,7 @@ export default function ListVolume() {
               </button>
               <button
                 className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
-                onClick={()=>resetFilter()}
+                onClick={() => resetFilter()}
               >
                 RESET
               </button>
@@ -210,66 +195,68 @@ export default function ListVolume() {
                   <td className="py-3">Action</td>
                 </tr>
 
-                {filteredVolumeList?.slice((page * rowPerPage),((page * rowPerPage) + rowPerPage))?.map((item, index) => {
-                  return (
-                    <tr
-                      className=" border border-x-gray text-center"
-                      key={index}
-                    >
-                      {/* <td className="py-3 text-center">
+                {filteredVolumeList
+                  ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
+                  ?.map((item, index) => {
+                    return (
+                      <tr
+                        className=" border border-x-gray text-center"
+                        key={index}
+                      >
+                        {/* <td className="py-3 text-center">
                     <input type="checkbox" name="" id="" />
                   </td> */}
-                      <td className="py-3">{index + 1}</td>
-                      <td className="py-3">{item.donorName}</td>
-                      {gestationalAgeList?.map((age, index) => {
-                        if (age.gestationalId === item.gestationalAge) {
-                          return (
-                            <td className="py-3" key={index}>
-                              {age.gestationalName}
-                            </td>
-                          );
-                        }
-                      })}
-                      {/* <td className="py-3">{item.donorId.contactNo}</td> */}
-                      {/* <td className="py-3">{item.date}</td> */}
-                      {/* <td className="py-3">{item.time}</td> */}
-                      <td className="py-3">{item.totalMilkCollected} ml</td>
-                      <td className="py-3">
-                        <div className="flex justify-evenly text-xl">
-                          {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">
+                        <td className="py-3">{index + 1}</td>
+                        <td className="py-3">{item.donorName}</td>
+                        {gestationalAgeList?.map((age, index) => {
+                          if (age.gestationalId === item.gestationalAge) {
+                            return (
+                              <td className="py-3" key={index}>
+                                {age.gestationalName}
+                              </td>
+                            );
+                          }
+                        })}
+                        {/* <td className="py-3">{item.donorId.contactNo}</td> */}
+                        {/* <td className="py-3">{item.date}</td> */}
+                        {/* <td className="py-3">{item.time}</td> */}
+                        <td className="py-3">{item.totalMilkCollected} ml</td>
+                        <td className="py-3">
+                          <div className="flex justify-evenly text-xl">
+                            {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">
                             <PencilSquareIcon
                               className="h-6 w-6 text-white"
                               onClick={() => handleEdit(item._id)}
                             />
                           </div> */}
-                          {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
+                            {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
                             <TrashIcon
                               className="h-6 w-6 text-white"
                               onClick={() => handleDelete(item._id)}
                             />
                           </div> */}
-                          <div>
-                            <h1
-                              className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
-                              onClick={() => handleDetail(item.donorId)}
-                            >
-                              Details
-                            </h1>
+                            <div>
+                              <h1
+                                className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                                onClick={() => handleDetail(item.donorId)}
+                              >
+                                Details
+                              </h1>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </table>
               <TablePagination
-               rowsPerPageOptions={[7]}
-               rowsPerPage={rowPerPage}
-               page={page}
-               count={filteredVolumeList?.length}
-               component={'div'}
-               onPageChange={handlePageChange}
-               onRowsPerPageChange={handlePerPage}
+                rowsPerPageOptions={[7]}
+                rowsPerPage={rowPerPage}
+                page={page}
+                count={filteredVolumeList?.length}
+                component={"div"}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handlePerPage}
               ></TablePagination>
             </div>
           </TableBorder>
