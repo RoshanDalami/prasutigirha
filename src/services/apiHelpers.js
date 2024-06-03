@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 //   ? JSON.parse(localStorage.getItem("user"))
 //   : "";
   const token = Cookies.get('token')
-// const baseUrl = "http://localhost:8000";
+
 
 
 
