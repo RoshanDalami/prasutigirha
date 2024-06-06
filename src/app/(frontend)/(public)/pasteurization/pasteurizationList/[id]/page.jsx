@@ -76,6 +76,7 @@ export default function BottleDetails() {
   // });
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
+
     content: () => componentRef.current,
   });
   const donorDetail = pooling?.donorDetailsForPooling
@@ -161,12 +162,14 @@ export default function BottleDetails() {
             <div className="text-xl font-semibold bg-indigo-700 rounded-md w-fit px-4 py-1 text-white absolute -top-4">
               Bottle Details
             </div>
-            <div className="mt-5 flex flex-col gap-8" ref={componentRef}>
+            <div className="flex flex-col items-center justify-center" ref={componentRef}>
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="text-[10px]  ">
-                      <div className=" w-fit flex  h-[188.97637795 px] w-[117.165 px] gap-1 ">
+                    <div key={index} className="text-[8px] border border-black p-1" 
+                    style={{width:"189px",height:"85px"}}
+                    >
+                      <div className="flex justify-between  " >
                         <div className="">
                           {item?.poolingCondition === 4 ? (
                             <p>PDHM: {"Colostrum"}</p>
