@@ -93,7 +93,7 @@ import {
   getMilkRequsitited,
   getNumberOfDonor,
   getTotalBaby,
-  getMonthWiseMilkCollection,getMonthWiseMilkRequsition
+  getMonthWiseMilkCollection,getMonthWiseMilkRequsition , getDonorNumberMonthly
 } from 'src/services/apiService/dashboard/dashboardService'
 export default function Dashboard() {
   const [baby,setBaby] = useState(0);
@@ -128,6 +128,7 @@ export default function Dashboard() {
     }
     fetchData()
   },[])
+ 
 
   const [donor,setDonor] = useState(0);
   useEffect(()=>{
@@ -139,7 +140,14 @@ export default function Dashboard() {
     }
     fetchData()
   },[])
-
+const [donorNumber,setDonorNumber] = useState([]);
+useEffect(()=>{
+    async function fetchData (){
+      const response = await getDonorNumberMonthly();
+      setDonorNumber(response?.data)
+    }
+    fetchData()
+},[])
 
   const dashboarddata = [
     {
@@ -213,7 +221,7 @@ export default function Dashboard() {
     datasets: [
       {
         label: "Registration",
-        data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
+        data: donorNumber,
         borderColor: "#004a89",
         backgroundColor: "#004a89",
       },

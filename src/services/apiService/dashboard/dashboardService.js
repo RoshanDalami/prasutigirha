@@ -48,3 +48,11 @@ export async function getMonthWiseMilkRequsition(){
     )
     return response
 }
+
+export async function getDonorNumberMonthly(){
+    let resposne = await mainApi(
+        apiUrls.dashboard.getDonorNumber.method,
+        apiUrls.dashboard.getDonorNumber.url,
+    )
+    return resposne
+}

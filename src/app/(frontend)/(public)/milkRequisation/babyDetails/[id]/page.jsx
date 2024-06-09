@@ -69,6 +69,29 @@ export default function BabyDetailsById() {
     // Simulate click to trigger download
     link.click();
 };
+
+
+function combineQuantities(array) {
+  // Create a map to hold combined items
+  const combinedMap = new Map();
+
+  array?.forEach(item => {
+      const key = `${item.batchNumber}-${item.bottleName}`;
+      if (combinedMap.has(key)) {
+          // If the item exists, sum the quantities
+          combinedMap.get(key).quantity += item.quantity;
+      } else {
+          // If it doesn't exist, add the item to the map
+          combinedMap.set(key, { ...item });
+      }
+  });
+
+  // Convert the map values back to an array
+  return Array.from(combinedMap.values());
+}
+
+const newArray = combineQuantities(babyDetails?.milkComsumedDetail)
+
 const local = <div className=" px-10 pt-10 ">
 <div className="flex justify-between  text-lg leading-9">
   <p className="  text-lg">
@@ -106,7 +129,8 @@ Export to Excel
         </tr>
       </thead>
       <tbody>
-        {babyDetails?.milkComsumedDetail?.map((items, index) => {
+        {newArray?.map((items, index) => {
+        console.log(items,'response')
           return (
             <tr
               key={index}

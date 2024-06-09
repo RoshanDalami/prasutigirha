@@ -201,7 +201,7 @@ export default function ListVolume() {
                   />
                 </div> */}
                     <div>
-                      {row.culture == false && (
+                     
                         <div className="flex gap-1">
                           <button
                             className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
@@ -210,7 +210,7 @@ export default function ListVolume() {
                             Bottles
                           </button>
                         </div>
-                      )}
+                      
                     </div>
                     <div>
                       {row.culture == null && (
