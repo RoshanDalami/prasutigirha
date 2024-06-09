@@ -288,6 +288,10 @@ const apiUrls = {
       method: "GET",
       url: "/dashboard/getMilkRequsitionMonthWise",
     },
+    getDonorNumber:{
+      method:"GET",
+      url:"/dashboard/getDonorCountMonthly"
+    }
   },
 };
 export default apiUrls;

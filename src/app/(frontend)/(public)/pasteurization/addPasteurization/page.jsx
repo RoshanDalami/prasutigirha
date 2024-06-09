@@ -305,7 +305,7 @@ export default function AddPasteurization({ clickedIdData }) {
                               if (item.remaining != 0) {
                                 return (
                                   <option key={index} value={combinedValue}>
-                                    {item.donorName} ({item.hosRegNo})
+                                    {item.donorName} ({item.donorRegNo})
                                     {/* (Remaining Volume:
                                     {item.remaining}ml) */}
                                   </option>

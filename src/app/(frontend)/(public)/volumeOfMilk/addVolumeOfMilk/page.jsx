@@ -163,7 +163,7 @@ export default function AddVolume({ clickedData }) {
                         value={combinedValue}
                         selected={item?._id === clickedData?.donorId}
                       >
-                        {item.donorName}({item.hosRegNo})
+                        {item.donorName}({item.donorRegNo})
                       </option>
                     );
                   })}

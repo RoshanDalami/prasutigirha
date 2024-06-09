@@ -79,10 +79,30 @@ export default function BottleDetails() {
 
     content: () => componentRef.current,
   });
-  const donorDetail = pooling?.donorDetailsForPooling
+  function combineVolumes(array) {
+    // Create a map to hold combined items
+    const combinedMap = new Map();
+
+    array?.forEach(item => {
+        const key = item.donorId;
+        if (combinedMap.has(key)) {
+            // If the item exists, sum the volumes
+            combinedMap.get(key).volumeOfMilkPooled += item.volumeOfMilkPooled;
+        } else {
+            // If it doesn't exist, add the item to the map
+            combinedMap.set(key, { ...item });
+        }
+    });
+
+    // Convert the map values back to an array
+    return Array.from(combinedMap.values());
+}
+  const donorDetail = combineVolumes(pooling?.donorDetailsForPooling)
+
+
 
   for(let i = 0 ; i<donorDetail?.length;i++){
-    if(donorDetail[i]?.donorName == donorDetail[i+1]?.donorName){
+    if(donorDetail[i]?.donorId == donorDetail[i+1]?.donorId){
        let milkVolume =   donorDetail[i]?.volumeOfMilkPooled + donorDetail[i+1]?.volumeOfMilkPooled;
        donorDetail[i].volumeOfMilkPooled = milkVolume;
        donorDetail.splice(i + 1, 1)
@@ -120,7 +140,7 @@ export default function BottleDetails() {
                   )}
                 </div>
                 <p>
-                  Number of Donor : {pooling?.donorDetailsForPooling?.length}
+                  Number of Donor : {donorDetail?.length}
                 </p>
                 <p>Total Volume: {pooling?.collectedVolume}</p>
                 <p>Expire Date: {pooling?.expireDate}</p>
