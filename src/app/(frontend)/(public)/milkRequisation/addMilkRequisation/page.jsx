@@ -203,7 +203,9 @@ export default function AddMilkReq({ clickedIdData }) {
                   name=""
                   id=""
                   className="inputStyle"
-                  {...register("babyId")}
+                  {...register("babyId",{
+                    required:'Baby is required'
+                  })}
                 >
                   <option value={""} selected disabled>
                     --Select Baby--
@@ -217,6 +219,9 @@ export default function AddMilkReq({ clickedIdData }) {
                     );
                   })}
                 </select>
+                {
+                  errors.babyId && <p className="text-red-600">{errors.babyId.message}</p>
+                }
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
