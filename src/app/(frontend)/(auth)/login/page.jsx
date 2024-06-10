@@ -11,9 +11,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import {logo} from '../../../../../public/assets/images/amritkoshlogo.jpg'
+import { logo } from "../../../../../public/assets/images/amritkoshlogo.jpg";
 const Login = () => {
-
   const {
     register,
     handleSubmit,
@@ -30,7 +29,6 @@ const Login = () => {
     try {
       const response = await axios.post(`${urls.login}`, data);
       if (response.status === 200) {
-
         if (typeof localStorage !== "undefined") {
           // Save user information in local storage
           localStorage.setItem("user", JSON.stringify(response.data));
@@ -61,7 +59,7 @@ const Login = () => {
             height={200}
             width={350}
             src={
-              'https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkoshlogo.jpg?alt=media&token=f7dd3d3f-6f27-466c-9405-74bd08629c4a'
+              "https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkoshlogo.jpg?alt=media&token=5181005a-f072-4071-923a-eab7e29cfc54ss"
             }
             alt="amrit-kosh"
             className="rounded-lg hidden md:block w-full"
