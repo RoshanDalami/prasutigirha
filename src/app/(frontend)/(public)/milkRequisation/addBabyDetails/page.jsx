@@ -98,6 +98,14 @@ export default function AddBabyDetails({ clickedIdData }) {
     }
     fetchData();
   }, []);
+
+   const parityOptions = parityList?.map((item, index) => {
+     return (
+       <option key={index} value={item.parityName}>
+         {item.parityName}
+       </option>
+     );
+   });
   //mode of delivery
   const [modeOfDeliveryList, setModeOfDeliveryList] = useState([]);
   useEffect(() => {
@@ -230,22 +238,13 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   GestationalAge <span className="text-red-600">*</span>
                 </label>
-                <select
-                  className="inputStyle"
-                  {...register("gestationalAge", {
-                    required: "Gestational Age required",
-                  })}
-                >
-                  <option selected disabled value={""}>
-                    --Select Gestational Age--
-                  </option>
-                  {gestationalOption}
-                </select>
-                {errors?.gestationalAge && (
-                  <p className="errorMessages">
-                    {errors.gestationalAge.message}
-                  </p>
-                )}
+               <input type="text" className="inputStyle" {...register('gestationalAge',{
+                required:'Gestaional Age is required'
+               })}
+               placeholder="Gestational Age" />
+               {
+                errors?.gestationalAge && <p className="text-red-600">{errors.gestationalAge.message}</p>
+               }
               </div>
               <div className="flex flex-col">
                 <label>
@@ -269,11 +268,13 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Parity <span className="text-red-600">*</span>
                 </label>
-                <input
-                  className="inputStyle"
-                  {...register("parity", { required: "Parity is Required" })}
-                  placeholder="Parity"
-                />
+                <select className="inputStyle" {...register("parity", { required: "Parity is Required" })} >
+                  <option selected disabled value={''} >-- Select Parity --</option>
+                  {
+                    parityOptions
+                  }
+                </select>
+               
                 {errors.parity && (
                   <p className="errorMessages">{errors.parity.message}</p>
                 )}
