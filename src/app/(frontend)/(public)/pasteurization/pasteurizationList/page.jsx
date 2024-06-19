@@ -133,6 +133,24 @@ export default function ListVolume() {
     setRowPerPage(+e.target.value);
     setPage(0);
   }
+  function combineVolumes(array) {
+    // Create a map to hold combined items
+    const combinedMap = new Map();
+
+    array?.forEach(item => {
+        const key = item.donorId;
+        if (combinedMap.has(key)) {
+            // If the item exists, sum the volumes
+            combinedMap.get(key).volumeOfMilkPooled += item.volumeOfMilkPooled;
+        } else {
+            // If it doesn't exist, add the item to the map
+            combinedMap.set(key, { ...item });
+        }
+    });
+
+    // Convert the map values back to an array
+    return Array.from(combinedMap.values());
+}
 
   const local = (
     <div className=" my-5">
@@ -165,7 +183,7 @@ export default function ListVolume() {
                 key={index}
               >
                 <td className="py-3">{index + 1}</td>
-                <td className="py-3">{row?.donorDetailsForPooling?.length}</td>
+                <td className="py-3">{combineVolumes(row?.donorDetailsForPooling)?.length}</td>
                 <td className="py-3">{row?.date}</td>
                 {row.poolingCondition == 4 ? (
                   <td className="py-3">{"Colostrum"}</td>

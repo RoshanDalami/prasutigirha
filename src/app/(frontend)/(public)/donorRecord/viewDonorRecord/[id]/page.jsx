@@ -1,16 +1,17 @@
 "use client";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useRef } from "react";
 import TableBorder from "src/components/TableDesign";
 import { urls } from "src/services/apiHelpers";
 import { getMilkByDonorId } from "src/services/apiService/milkVolume/milkVolume";
-import { CSVLink } from "react-csv";
+import {usePDF} from 'react-to-pdf'
 import LoadingSpinner from "src/components/Loading";
 export default function Details() {
   const [donorDetails, setDonorDetails] = useState({});
   const [loading,setLoading] = useState(true)
   const { id } = useParams();
+  const { toPDF, targetRef } = usePDF({filename: 'page.pdf'});
   useEffect(() => {
 
     async function fetchData() {
@@ -86,14 +87,32 @@ export default function Details() {
     link.click();
 };
 
-const local = <div className=" px-10 pt-10 ">
-<div className="grid grid-cols-4  text-lg leading-9">
-  <p className="  text-lg">
+const [gestationalAgeList, setGestationalAgeList] = useState([]);
+useEffect(() => {
+  const fetchData = async () => {
+    const { data, status } = await axios.get(`${urls.getGestational}`);
+    if (status === 200) {
+      setGestationalAgeList(data?.data);
+    }
+  };
+  fetchData();
+}, []);
+const gestationalOptions = gestationalAgeList?.map((item, index) => {
+  return (
+    <option key={index} value={item.gestationalId}>
+      {item.gestationalName}
+    </option>
+  );
+});
+console.log(donorDetails,'response')
+const local = <div className=" px-10 pt-10 " ref={targetRef}>
+<div className="text-lg grid grid-cols-4 gap-5">
+  <p className="  text-lg ">
     Donor Name :{" "}
     <span className="font-bold">{donorDetails?.donorName}</span>
   </p>
   <p className=" text-lg">
-    Reg No : <span className="font-bold">{donorDetails?.donorRegNo}</span>
+    Reg No : {" "}<span className="font-bold">{donorDetails?.donorRegNo}{" "}</span>
   </p>
   <p className=" text-lg">
     Donor Age :{" "}
@@ -104,6 +123,23 @@ const local = <div className=" px-10 pt-10 ">
     <span className="font-bold">{donorDetails?.address?.stateId}</span>
   </p>
   <p>
+    Gestational Age : {" "}
+    <span className="font-bold">{gestationalAgeList?.map((age, index) => {
+                          if (age.gestationalId === donorDetails.gestationalAge) {
+                            
+                            return (
+                              <p className="" key={index}>
+                                {age.gestationalName}
+                              </p>
+                            );
+                          }
+                        })}</span>
+  </p>
+  <p>
+  Hospital Registration Numbe : {" "}
+    <span className="font-bold">{donorDetails?.hosRegNo}</span>
+  </p>
+  <p>
     Mode of Delivery :{" "}
     <span className="font-bold">{donorDetails?.modeOfDelivery}</span>
   </p>
@@ -111,9 +147,15 @@ const local = <div className=" px-10 pt-10 ">
 <TableBorder
   title={"Donor Details"}
   title2={
+    <div className="flex gap-4">
+
+    <button onClick={()=>toPDF()} className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white">
+      Download PDF
+    </button>
     <button onClick={()=>exportToExcel()} className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white">
       Export to Excel
     </button>
+    </div>
   }
 >
   <div>
@@ -123,7 +165,7 @@ const local = <div className=" px-10 pt-10 ">
           <td className="py-3">S.No</td>
           <td className="py-3">Stored By</td>
           <td className="py-3">Quantity</td>
-          <td className="py-3">Temperature</td>
+
           <td className="py-3">Time</td>
           <td className="py-3">Date</td>
         </tr>
@@ -135,7 +177,7 @@ const local = <div className=" px-10 pt-10 ">
               <td className="py-3">{index + 1}</td>
               <td className="py-3">{items?.storedBy}</td>
               <td className="py-3">{items?.quantity}</td>
-              <td className="py-3">{items?.temp}</td>
+
               <td className="py-3">{items?.time}</td>
               <td className="py-3">{items?.date}</td>
             </tr>

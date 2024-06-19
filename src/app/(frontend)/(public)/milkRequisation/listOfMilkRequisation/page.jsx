@@ -64,6 +64,25 @@ export default function ListVolume() {
       }
     }
   };
+  function combineQuantities(array) {
+    // Create a map to hold combined items
+    const combinedMap = new Map();
+  
+    array?.forEach(item => {
+        const key = `${item.batchNumber}-${item.bottleName}`;
+        if (combinedMap.has(key)) {
+            // If the item exists, sum the quantities
+            combinedMap.get(key).quantity += item.quantity;
+        } else {
+            // If it doesn't exist, add the item to the map
+            combinedMap.set(key, { ...item });
+        }
+    });
+  
+    // Convert the map values back to an array
+    return Array.from(combinedMap.values());
+  }
+  
   const onSubmit = async (data) => {
     console.log('test','response')
     try {
@@ -91,6 +110,7 @@ const local = <div className=" my-5">
     {/* <td className="py-3 ">Action</td> */}
   </tr>
   {requsitionList?.map((row, index) => {
+    console.log(combineQuantities(row?.requisitedMilk),'response')
     return (
       <tr
         className=" border border-x-gray text-center"
@@ -107,7 +127,7 @@ const local = <div className=" my-5">
             })
             .reduce((acc, amount) => acc + amount, 0)}
         </td>
-        <td className="py-3">{row.requisitedMilk.length}</td>
+        <td className="py-3">{combineQuantities(row?.requisitedMilk).length}</td>
         <td className="py-3 ">
           <div className="flex justify-evenly items-center text-xl">
             {/* <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">

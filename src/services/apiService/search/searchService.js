@@ -1,11 +1,11 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function searchDonor(donorName, number) {
+export async function searchDonor(donorName, number,regNumber) {
   let response = await mainApi(
     apiUrls.search.searchDonor.method,
     apiUrls.search.searchDonor.url +
-      `?donorName=${donorName}&number=${number}`
+      `?donorName=${donorName}&number=${number}&regNumber=${regNumber}`
   );
   return response;
 }
