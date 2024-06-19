@@ -119,6 +119,10 @@ const apiUrls = {
     discard:{
       method:"POST",
       url:"/donor/discard"
+    },
+    donorByGestationalAge:{
+      method:"GET",
+      url:"/donor/getDonorWithGestationalAge"
     }
   },
   milkVolume: {

@@ -53,10 +53,12 @@ export default function BabyDetail() {
         </thead>
         <tbody>
           {babyDetails?.map((items, index) => {
+            console.log(items,'response')
             return (
               <tr key={index} className={` ${!items?.status ? 'bg-red-400':''} border border-x-gray text-center`}>
                 <td className="py-3">{index + 1}</td>
-                <td className="py-3">{items?.babyName}</td>
+                <td className="py-3">{items?.babyName}({items.ipNumber
+                })</td>
                 <td className="py-3">{items?.dateOfBaby}</td>
                 <td className="py-3">{items?.babyWeight}</td>
                 <td className="py-3">{items?.indications}</td>

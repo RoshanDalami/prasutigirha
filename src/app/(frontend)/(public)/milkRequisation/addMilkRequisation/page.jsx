@@ -211,12 +211,14 @@ export default function AddMilkReq({ clickedIdData }) {
                     --Select Baby--
                   </option>
                   {babyList?.map((item, index) => {
-                    const combinedValue = `${item._id}/${item.babyName}`;
-                    return (
-                      <option key={index} value={combinedValue}>
-                        {item.babyName}{" "}({item.ipNumber})
-                      </option>
-                    );
+                    if(item.status === true){
+                      const combinedValue = `${item._id}/${item.babyName}`;
+                      return (
+                        <option key={index} value={combinedValue}>
+                          {item.babyName}{" "}({item.ipNumber})
+                        </option>
+                      );
+                    }
                   })}
                 </select>
                 {
@@ -282,7 +284,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       {poolingList?.map((items, index) => {
                         const combinedValue = `${items._id}/${items.batchName}/${items.date}`;
                         console.log(items,'response')
-                        if (items.culture === false) {
+                        if (items.culture === false && items.remaining > 0 ) {
                           return (
                             <option key={index} value={combinedValue}>
                               {items?.batchName}({items?.date})

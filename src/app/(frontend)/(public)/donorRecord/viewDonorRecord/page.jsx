@@ -29,7 +29,7 @@ export default function ViewDonor() {
   });
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
-  const [loading,setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowPerPage, setRowPerPage] = useState(8);
@@ -40,7 +40,7 @@ export default function ViewDonor() {
       const { status, data } = await getDonor();
       if (status === 200) {
         setDonorList(data);
-        setLoading(false)
+        setLoading(false);
       }
     }
     fetchData();
@@ -87,12 +87,12 @@ export default function ViewDonor() {
     }
   };
 
-  const handleOther = (id)=>{
-    router.push(`/donorRecord/viewDonorRecord/Other/${id}`)
-  }
-  const handleOtherView = (id)=>{
-    router.push(`/donorRecord/viewDonorRecord/Other/test/${id}`)
-  }
+  const handleOther = (id) => {
+    router.push(`/donorRecord/viewDonorRecord/Other/${id}`);
+  };
+  const handleOtherView = (id) => {
+    router.push(`/donorRecord/viewDonorRecord/Other/test/${id}`);
+  };
 
   const [gestationalAgeList, setGestationalAgeList] = useState([]);
   useEffect(() => {
@@ -113,10 +113,11 @@ export default function ViewDonor() {
   });
   const onSubmit = async (data) => {
     try {
-      console.log("test", "response");
+      console.log(data, "response");
       const response = await searchDonor(
         data.donorName,
-        data.number
+        data.number,
+        data.regNumber
       );
 
       if (response?.status === 200) {
@@ -127,100 +128,111 @@ export default function ViewDonor() {
     }
   };
 
-  const local = <div className=" my-5">
-  <table className="w-full">
-    <tr className="bg-[#004a89] text-white text-lg text-center">
-      {/* <td className="py-3">
+  const local = (
+    <div className=" my-5">
+      <table className="w-full">
+        <tr className="bg-[#004a89] text-white text-lg text-center">
+          {/* <td className="py-3">
         <input type="checkbox" name="" id="" />
       </td> */}
-      <td className="py-3">Reg. No</td>
-      <td className="py-3">Donar Name</td>
-      <td className="py-3">Age</td>
-      <td className="py-3">Address</td>
-      <td className="py-3">Contact</td>
-      <td className="py-3">Status</td>
-      <td className="py-3">Test</td>
-      <td></td>
-    </tr>
-    {donorList
-      ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
-      ?.map((item, index) => {
-        return (
-          <tr
-            className=" border border-x-gray text-center"
-            key={index}
-          >
-            {/* <td className="py-3 text-center">
+          <td className="py-3">Reg. No</td>
+          <td className="py-3">Donar Name</td>
+          <td className="py-3">Age</td>
+          <td className="py-3">Address</td>
+          <td className="py-3">Contact</td>
+          <td className="py-3">Status</td>
+          <td className="py-3">Details</td>
+          <td className="py-3">Test</td>
+          <td></td>
+        </tr>
+        {donorList
+          ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
+          ?.map((item, index) => {
+            return (
+              <tr className=" border border-x-gray text-center" key={index}>
+                {/* <td className="py-3 text-center">
         <input type="checkbox" name="" id="" />
       </td> */}
-            <td className="py-3">{item.donorRegNo}</td>
-            <td className="py-3">{item.donorName}</td>
-            <td className="py-3">{item.donorAge}</td>
-            <td className="py-3">{item?.address?.stateId}</td>
-            <td className="py-3">{item.contactNo}</td>
-            <td className="py-3">
-              <div className="flex justify-evenly text-xl">
-                {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
+                <td className="py-3">{item.donorRegNo}</td>
+                <td className="py-3">{item.donorName}</td>
+                <td className="py-3">{item.donorAge}</td>
+                <td className="py-3">{item?.address?.stateId}</td>
+                <td className="py-3">{item.contactNo}</td>
+                <td className="py-3">
+                  <div className="flex justify-evenly text-xl">
+                    {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
                 <PencilSquareIcon
                   className="h-6 w-6 text-white"
                   onClick={() => handleEdit(item._id)}
                 />
               </div> */}
-                {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
+                    {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
                 <TrashIcon
                   className="h-6 w-6 text-white"
                   onClick={() => handleDelete(item._id)}
                 />
               </div> */}
-                {/* <div>
-                <h1
-                  className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
-                  onClick={() => handleDetail(item._id)}
-                >
-                  Details
-                </h1>
-              </div> */}
+                   
 
-                <Switch
-                  {...label}
-                  onChange={async () => {
-                    const response = await updateDonorStatus(
-                      item._id
-                    );
-                    if (response.status === 200) {
-                      const { status, data } = await getDonor();
-                      if (status === 200) {
-                        setDonorList(data);
-                      }
-                    }
-                  }}
-                  checked={item.isDonorActive}
-                />
-              </div>
-            </td>
-            <td className="py-2">
-              <div className="flex gap-3 items-center justify-center">
-                <button className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white" onClick={()=>handleOther(item._id)}>Other</button>
-                {
-                  item?.other?.length > 0 &&
-                <button className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white" onClick={()=>handleOtherView(item._id)}>View Test</button>
-                }
-              </div>
-            </td>
-          </tr>
-        );
-      })}
-  </table>
-  <TablePagination
-    rowsPerPageOptions={[7]}
-    rowsPerPage={rowPerPage}
-    page={page}
-    count={donorList.length}
-    component={"div"}
-    onPageChange={handlePageChange}
-    onRowsPerPageChange={handlePerPage}
-  ></TablePagination>
-</div>
+                    <Switch
+                      {...label}
+                      onChange={async () => {
+                        const response = await updateDonorStatus(item._id);
+                        if (response.status === 200) {
+                          const { status, data } = await getDonor();
+                          if (status === 200) {
+                            setDonorList(data);
+                          }
+                        }
+                      }}
+                      checked={item.isDonorActive}
+                    />
+                    
+                  </div>
+                </td>
+                <td>
+                <div>
+                      <h1
+                        className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                        onClick={() => handleDetail(item._id)}
+                      >
+                        Details
+                      </h1>
+                    </div>
+                </td>
+                <td className="py-2">
+                  <div className="flex gap-3 items-center justify-center">
+                    <button
+                      className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white"
+                      onClick={() => handleOther(item._id)}
+                    >
+                      Other
+                    </button>
+                    {item?.other?.length > 0 && (
+                      <button
+                        className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white"
+                        onClick={() => handleOtherView(item._id)}
+                      >
+                        View Test
+                      </button>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+      </table>
+      <TablePagination
+        rowsPerPageOptions={[7]}
+        rowsPerPage={rowPerPage}
+        page={page}
+        count={donorList.length}
+        component={"div"}
+        onPageChange={handlePageChange}
+        onRowsPerPageChange={handlePerPage}
+      ></TablePagination>
+    </div>
+  );
 
   return (
     <>
@@ -244,6 +256,12 @@ export default function ViewDonor() {
               className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
               placeholder="Contact Number"
               {...register("number")}
+            />
+            <input
+              type="text"
+              className="border px-4 border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out"
+              placeholder="Hospital Regestration Number"
+              {...register("regNumber")}
             />
             <div className="flex gap-3">
               <button
@@ -274,7 +292,7 @@ export default function ViewDonor() {
               </div>
             }
           >
-            {loading ? <LoadingSpinner/> : local}
+            {loading ? <LoadingSpinner /> : local}
           </TableBorder>
         </div>
       </div>

@@ -101,17 +101,17 @@ export default function BottleDetails() {
 
 
 
-  for(let i = 0 ; i<donorDetail?.length;i++){
-    if(donorDetail[i]?.donorId == donorDetail[i+1]?.donorId){
-       let milkVolume =   donorDetail[i]?.volumeOfMilkPooled + donorDetail[i+1]?.volumeOfMilkPooled;
-       donorDetail[i].volumeOfMilkPooled = milkVolume;
-       donorDetail.splice(i + 1, 1)
-    }else{
-      console.log(false)
-    }
-  }
+  // for(let i = 0 ; i<donorDetail?.length;i++){
+  //   if(donorDetail[i]?.donorId == donorDetail[i+1]?.donorId){
+  //      let milkVolume =   donorDetail[i]?.volumeOfMilkPooled + donorDetail[i+1]?.volumeOfMilkPooled;
+  //      donorDetail[i].volumeOfMilkPooled = milkVolume;
+  //      donorDetail.splice(i + 1, 1)
+  //   }else{
+  //     console.log(false)
+  //   }
+  // }
 
-
+console.log(donorDetail,'response')
 
   return (
     <div>

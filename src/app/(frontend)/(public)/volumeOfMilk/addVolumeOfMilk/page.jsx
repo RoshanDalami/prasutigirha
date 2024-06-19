@@ -11,7 +11,11 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import { useParams } from "next/navigation";
-import {getDonor} from 'src/services/apiService/donorRecord/donor'
+import {
+  getDonor,
+  donorByGestationalAge,
+} from "src/services/apiService/donorRecord/donor";
+
 const aa = new BikramSambat(new Date()).toBS();
 export default function AddVolume({ clickedData }) {
   const [date, setDate] = useState(aa);
@@ -33,7 +37,7 @@ export default function AddVolume({ clickedData }) {
     control,
     name: "collectedMilk",
   });
-  
+
   const router = useRouter();
   const watchFields = watch();
   const [gestational, setGestational] = useState([]);
@@ -86,13 +90,35 @@ export default function AddVolume({ clickedData }) {
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await getDonor();
+      const { status, data } = await donorByGestationalAge(
+        watchFields?.id
+      );
       if (status === 200) {
         setDonorList(data);
       }
     }
     fetchData();
+  }, [watchFields?.id]);
+  console.log(donorList,'response')
+
+  //gestationalAge
+  const [gestationalAgeList, setGestationalAgeList] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, status } = await axios.get(`${urls.getGestational}`);
+      if (status === 200) {
+        setGestationalAgeList(data?.data);
+      }
+    };
+    fetchData();
   }, []);
+  const gestationalOptions = gestationalAgeList?.map((item, index) => {
+    return (
+      <option key={index} value={item.gestationalId}>
+        {item.gestationalName}
+      </option>
+    );
+  });
 
   const onSubmit = async (data) => {
     data = {
@@ -119,9 +145,9 @@ export default function AddVolume({ clickedData }) {
     e.preventDefault();
     append({ time: "", quantity: 0, storedBy: "" });
   }
-  const removeHandler = (index)=>{
-    remove(index)
-  }
+  const removeHandler = (index) => {
+    remove(index);
+  };
 
   return (
     <>
@@ -143,6 +169,26 @@ export default function AddVolume({ clickedData }) {
               </button>
             </div>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-4 md:gap-2">
+              <div className="font-normal flex flex-col">
+                <label htmlFor="" className="text-lg">
+                  Gestational Age
+                  <span className="text-lg text-red-600">*</span>
+                </label>
+                <select className="inputStyle" {...register("id")}>
+                  <option selected  disabled value={""}>
+                    -- Select Gestational Age --
+                  </option>
+                  {
+                    gestationalAgeList?.map((item, index) => {
+                      return (
+                        <option key={index} value={item.gestationalId}>
+                          {item.gestationalName}
+                        </option>
+                      );
+                    })
+                  }
+                </select>
+              </div>
               <div className="flex flex-col">
                 <label className="text-lg">
                   Select Donor
@@ -294,17 +340,16 @@ export default function AddVolume({ clickedData }) {
                     )}
                   </div>
                   <div className="">
-
-                  {fields.length > 1 && (
-                    <div className="font-bold text-lg flex justify-end">
-                      <button
-                        className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
-                        onClick={() => remove(index)}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  )}
+                    {fields.length > 1 && (
+                      <div className="font-bold text-lg flex justify-end">
+                        <button
+                          className="text-white bg-red-600 hover:bg-[#004a89] px-8 py-2 rounded-lg "
+                          onClick={() => remove(index)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

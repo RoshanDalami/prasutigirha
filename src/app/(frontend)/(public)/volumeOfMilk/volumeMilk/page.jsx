@@ -198,6 +198,7 @@ export default function ListVolume() {
                 {filteredVolumeList
                   ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)
                   ?.map((item, index) => {
+                    console.log(item)
                     return (
                       <tr
                         className=" border border-x-gray text-center"
@@ -207,7 +208,7 @@ export default function ListVolume() {
                     <input type="checkbox" name="" id="" />
                   </td> */}
                         <td className="py-3">{index + 1}</td>
-                        <td className="py-3">{item.donorName}</td>
+                        <td className="py-3">{item.donorName}({item.donorRegNo})</td>
                         {gestationalAgeList?.map((age, index) => {
                           if (age.gestationalId === item.gestationalAge) {
                             return (

@@ -91,7 +91,7 @@ function combineQuantities(array) {
 }
 
 const newArray = combineQuantities(babyDetails?.milkComsumedDetail)
-
+console.log(babyDetails,'response')
 const local = <div className=" px-10 pt-10 ">
 <div className="flex justify-between  text-lg leading-9">
   <p className="  text-lg">
@@ -105,6 +105,10 @@ const local = <div className=" px-10 pt-10 ">
   <p className=" text-lg">
     Gestational Age :{" "}
     <span className="font-bold">{babyDetails?.gestationalAge}</span>
+  </p>
+  <p className=" text-lg">
+    IP Number :{" "}
+    <span className="font-bold">{babyDetails?.ipNumber}</span>
   </p>
   <p>
     Baby Weight :{" "}

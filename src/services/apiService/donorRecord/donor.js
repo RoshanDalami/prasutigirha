@@ -49,3 +49,11 @@ export const discard = async (data)=>{
   )
   return response
 }
+
+export const donorByGestationalAge= async(id)=>{
+  let response = await mainApi(
+    apiUrls?.donor.donorByGestationalAge.method,
+    apiUrls?.donor.donorByGestationalAge.url+`/${id?id:''}`,
+  )
+  return response;
+}

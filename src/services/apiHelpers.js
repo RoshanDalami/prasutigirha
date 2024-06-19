@@ -15,6 +15,7 @@ const baseUrl = "https://prasuti-backend.onrender.com";
 // const baseUrl = "http://localhost:8000";
 
 export const urls = {
+  
   mainUrl: `${baseUrl}/api/v1`,
   login: `/api/user/login`,
   register: `/api/user/register`,
