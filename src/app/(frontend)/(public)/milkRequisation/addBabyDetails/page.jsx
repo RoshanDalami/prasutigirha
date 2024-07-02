@@ -118,18 +118,19 @@ export default function AddBabyDetails({ clickedIdData }) {
     fetchData();
   }, []);
   const diagnosis = [
-    { name: "Normal", id: 1 },
-    { name: "Premature delivery", id: 2 },
-    { name: "Perinatal Asphyxia", id: 3 },
-    { name: "Respiratory Distress syndrome", id: 4 },
-    { name: "Sepsis", id: 5 },
+
+    { name: "Perinatal Asphyxia", id: 2 },
+    { name: "Preterm", id: 3 },
+    { name: "PT+ other Complication", id: 4 },
+    { name: "Respiratory Distress ", id: 5 },
     { name: "Neonatal Jaundice", id: 6 },
-    { name: "Seizure disorders", id: 7 },
-    { name: "IUGR", id: 8 },
-    { name: "Congenital anomalies", id: 9 },
-    { name: "Hypoglycemia", id: 10 },
-    { name: "LBW", id: 11 },
-    { name: "Other", id: 12 },
+    { name: "Sepsis", id: 7 },
+    { name: " Meconium Aspiration Syndrome", id: 8 },
+    { name: "IUGR", id: 9 },
+    { name: "LBW", id: 10 },
+    { name: "Seizure", id: 11 },
+    { name: "Congenital Anomalies", id: 12 },
+    { name: "Other", id: 13 },
   ];
   const diagnosisOptions = diagnosis?.map((item, index) => {
     return (
@@ -140,13 +141,16 @@ export default function AddBabyDetails({ clickedIdData }) {
   });
   const indications = [
     // { id: 1, name: "Select Indication" },
-    { id: 2, name: "Preterm" },
-    { id: 4, name: "NEC" },
-    { id: 3, name: "Low Birth weight / IUGR " },
-    { id: 5, name: "Post-surgical" },
-    { id: 6, name: "Lactation failure" },
-    { id: 7, name: "NICU" },
-    { id: 8, name: "Other" },
+    { id: 2, name: "PT/LBW" },
+    { id: 4, name: "IUGR/LBW" },
+    { id: 3, name: "Sick mother admitted in MICU" },
+    { id: 5, name: " Lactation failure" },
+    { id: 6, name: "Multiple Deliveries with LBW" },
+    { id: 7, name: "OCMC Case" },
+    { id: 8, name: "Contraindication" },
+    { id: 9, name: "Necrotizing Enterocolitis" },
+    { id: 10, name: "Gastro-intestinal Surgeries" },
+    { id: 11, name: "Others" },
   ];
   const indicationOption = indications?.map((item, index) => {
     return (

@@ -56,3 +56,11 @@ export async function getDonorNumberMonthly(){
     )
     return resposne
 }
+
+export async function getAllRecords(){
+    let response = await mainApi(
+        apiUrls.dashboard.getAllRecords.method,
+        apiUrls.dashboard.getAllRecords.url,
+    )
+    return response
+}

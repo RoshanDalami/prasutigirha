@@ -295,6 +295,10 @@ const apiUrls = {
     getDonorNumber:{
       method:"GET",
       url:"/dashboard/getDonorCountMonthly"
+    },
+    getAllRecords:{
+      method:"GET",
+      url:"/dashboard/getAllRecords"
     }
   },
 };
