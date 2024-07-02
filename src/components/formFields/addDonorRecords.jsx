@@ -40,14 +40,13 @@ const currentTime = new Date().toLocaleTimeString([], {
 });
 
 const educationList = [
-  { name: "School Level", id: 1 },
-  { name: "High School", id: 2 },
-  { name: "Bachelor Degree", id: 3 },
-  { name: "Master Degree", id: 4 },
-  { name: "Doctorate", id: 5 },
-  { name: "Literate", id: 6 },
-  { name: "Illiterate", id: 7 },
-  { name: "Other", id: 8 },
+  { name: "Illiterate", id: 1 },
+  { name: "Can read and write", id: 2 },
+  { name: "Primary", id: 3 },
+  { name: "Secondary", id: 4 },
+  { name: "Higher Secondary", id: 5 },
+  { name: "Bachelors and Above", id: 6 },
+  { name: "Other", id: 7 },
 ];
 
 const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {

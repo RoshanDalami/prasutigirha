@@ -61,7 +61,20 @@ export const lineoptions = {
     },
   },
 };
-const labels = ["Baisakh", "Jestha", "Ashad", "Shrawn", "Bhadra", "Ashoj","Kartik","Mangshir","Paush","Magh","Falgun","Chaitra"];
+const labels = [
+  "Baisakh",
+  "Jestha",
+  "Ashad",
+  "Shrawn",
+  "Bhadra",
+  "Ashoj",
+  "Kartik",
+  "Mangshir",
+  "Paush",
+  "Magh",
+  "Falgun",
+  "Chaitra",
+];
 export const bardata = {
   labels,
   datasets: [
@@ -93,61 +106,73 @@ import {
   getMilkRequsitited,
   getNumberOfDonor,
   getTotalBaby,
-  getMonthWiseMilkCollection,getMonthWiseMilkRequsition , getDonorNumberMonthly
-} from 'src/services/apiService/dashboard/dashboardService'
+  getMonthWiseMilkCollection,
+  getMonthWiseMilkRequsition,
+  getDonorNumberMonthly,
+  getAllRecords
+} from "src/services/apiService/dashboard/dashboardService";
 export default function Dashboard() {
-  const [baby,setBaby] = useState(0);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await getTotalBaby();
-      if(status === 200){
-        setBaby(data)
+  const [baby, setBaby] = useState(0);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await getTotalBaby();
+      if (status === 200) {
+        setBaby(data);
       }
     }
-    fetchData()
+    fetchData();
+  }, []);
+  const [allRecords,setAllRecords] = useState([]);
+  useEffect(()=>{
+    async function fetchData(){
+      const {data,status} = await getAllRecords();
+      if(status === 200){
+        setAllRecords(data);
+      }
+    }
+    fetchData();
   },[])
+console.log(allRecords,'response')
+  const [milkCollected, setMilkCollected] = useState(0);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await getMilkCollected();
+      if (status === 200) {
+        setMilkCollected(data);
+      }
+    }
+    fetchData();
+  }, []);
 
-  const [milkCollected,setMilkCollected] = useState(0);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status}= await getMilkCollected();
-      if(status === 200){
-        setMilkCollected(data)
+  const [milkRequsition, setMilkRequsition] = useState(0);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await getMilkRequsitited();
+      if (status === 200) {
+        setMilkRequsition(data);
       }
     }
-    fetchData()
-  },[])
+    fetchData();
+  }, []);
 
-  const [milkRequsition,setMilkRequsition] = useState(0);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status}= await getMilkRequsitited();
-      if(status === 200){
-        setMilkRequsition(data)
+  const [donor, setDonor] = useState(0);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await getNumberOfDonor();
+      if (status === 200) {
+        setDonor(data);
       }
     }
-    fetchData()
-  },[])
- 
-
-  const [donor,setDonor] = useState(0);
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status}= await getNumberOfDonor();
-      if(status === 200){
-        setDonor(data)
-      }
-    }
-    fetchData()
-  },[])
-const [donorNumber,setDonorNumber] = useState([]);
-useEffect(()=>{
-    async function fetchData (){
+    fetchData();
+  }, []);
+  const [donorNumber, setDonorNumber] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
       const response = await getDonorNumberMonthly();
-      setDonorNumber(response?.data)
+      setDonorNumber(response?.data);
     }
-    fetchData()
-},[])
+    fetchData();
+  }, []);
 
   const dashboarddata = [
     {
@@ -155,53 +180,53 @@ useEffect(()=>{
       title: "Donor Records",
       recordAmount: donor,
       imageName: "/assets/images/mother.png",
-      units:''
+      units: "",
     },
     {
       id: 2,
       title: "Recipient Records",
       recordAmount: baby,
       imageName: "/assets/images/newborn.png",
-      units:''
+      units: "",
     },
     {
       id: 3,
       title: "Milk Requsition",
       recordAmount: milkRequsition,
       imageName: "/assets/images/record.png",
-      units:'ml'
+      units: "ml",
     },
     {
       id: 4,
       title: "Milk Collection",
       recordAmount: milkCollected,
       imageName: "/assets/images/feeding-bottle.png",
-      units:'ml'
+      units: "ml",
     },
   ];
-  const token = useRecoilValue(userAtomState)
-  console.log(store.getState(),'response')
-  const [milkCollectionMonthWise,setMilkCollectionMonthWise] = useState([])
-  useEffect(()=>{
-    async function fetchData(){
-      const {status , data} = await getMonthWiseMilkCollection();
-      if(status === 200){
-        setMilkCollectionMonthWise(data)
+  const token = useRecoilValue(userAtomState);
+  console.log(store.getState(), "response");
+  const [milkCollectionMonthWise, setMilkCollectionMonthWise] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await getMonthWiseMilkCollection();
+      if (status === 200) {
+        setMilkCollectionMonthWise(data);
       }
     }
-    fetchData()
-  },[])
-  const [milkRequsitionMonthWise,setMilkRequsitionMonthWise] = useState([])
-  useEffect(()=>{
-    async function fetchData(){
-      const {status , data} = await getMonthWiseMilkRequsition();
-      if(status === 200){
-        setMilkRequsitionMonthWise(data)
+    fetchData();
+  }, []);
+  const [milkRequsitionMonthWise, setMilkRequsitionMonthWise] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const { status, data } = await getMonthWiseMilkRequsition();
+      if (status === 200) {
+        setMilkRequsitionMonthWise(data);
       }
     }
-    fetchData()
-  },[])
-   const bardata = {
+    fetchData();
+  }, []);
+  const bardata = {
     labels,
     datasets: [
       {
@@ -216,7 +241,7 @@ useEffect(()=>{
       },
     ],
   };
-   const linedata = {
+  const linedata = {
     labels,
     datasets: [
       {
@@ -227,11 +252,11 @@ useEffect(()=>{
       },
     ],
   };
-  
+
   return (
     <div className="my-10 mx-10">
-      <div className="flex items-center justify-center gap-5  ">
-        {dashboarddata?.map((items) => {
+      <div className="grid md:grid-cols-4 items-center justify-center gap-5  ">
+        {allRecords?.map((items) => {
           return (
             <div
               key={items.id}
