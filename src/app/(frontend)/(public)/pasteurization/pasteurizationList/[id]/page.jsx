@@ -189,7 +189,7 @@ console.log(donorDetail,'response')
                     <div key={index} className="text-[8px] border border-black p-1" 
                     style={{width:"189px",height:"85px"}}
                     >
-                      <div className="flex justify-between  " >
+                      <div className="flex justify-between mt-2 " >
                         <div className="">
                           {item?.poolingCondition === 4 ? (
                             <p>PDHM: {"Colostrum"}</p>
