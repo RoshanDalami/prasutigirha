@@ -4,6 +4,7 @@ import DashboardCard from "src/components/card";
 import { useRecoilValue } from "recoil";
 import { userAtomState } from "src/recoil/user/userAtom";
 import { store } from "src/redux/store";
+import Loader from "src/components/Loader";
 import Cookies from "js-cookie";
 import {
   Chart as ChartJS,
@@ -113,6 +114,7 @@ import {
 } from "src/services/apiService/dashboard/dashboardService";
 export default function Dashboard() {
   const [baby, setBaby] = useState(0);
+  
   useEffect(() => {
     async function fetchData() {
       const { data, status } = await getTotalBaby();
@@ -123,11 +125,13 @@ export default function Dashboard() {
     fetchData();
   }, []);
   const [allRecords,setAllRecords] = useState([]);
+  const [isLoading,setIsLoading] = useState(true)
   useEffect(()=>{
     async function fetchData(){
       const {data,status} = await getAllRecords();
       if(status === 200){
         setAllRecords(data);
+        setIsLoading(false)
       }
     }
     fetchData();
@@ -253,7 +257,8 @@ console.log(allRecords,'response')
     ],
   };
 
-  return (
+  const body = 
+
     <div className="my-10 mx-10">
       <div className="grid md:grid-cols-4 items-center justify-center gap-5  ">
         {allRecords?.map((items) => {
@@ -280,6 +285,10 @@ console.log(allRecords,'response')
           <Line options={lineoptions} data={linedata} />
         </div>
       </div>
-    </div>
+    </div>;
+  return (
+<>
+{isLoading ? <Loader/> : body}
+</>
   );
 }
