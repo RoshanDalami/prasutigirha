@@ -186,10 +186,10 @@ console.log(donorDetail,'response')
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="text-[8px] border border-black p-1" 
+                    <div key={index} className="text-[8px] border border-black p-1 mt-2" 
                     style={{width:"189px",height:"85px"}}
                     >
-                      <div className="flex justify-between mt-2 " >
+                      <div className="flex justify-between  " >
                         <div className="">
                           {item?.poolingCondition === 4 ? (
                             <p>PDHM: {"Colostrum"}</p>
