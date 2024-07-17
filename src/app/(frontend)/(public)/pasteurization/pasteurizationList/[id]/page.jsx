@@ -186,7 +186,7 @@ console.log(donorDetail,'response')
               {bottles?.bottleList?.map((item, index) => {
                 return (
                   <>
-                    <div key={index} className="text-[8px]  mt-2" 
+                    <div key={index} className="text-[8px] p-1 mt-2" 
                     style={{width:"189px",height:"85px"}}
                     >
                       <div className="flex justify-between  " >
