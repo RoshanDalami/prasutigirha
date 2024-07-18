@@ -1,10 +1,10 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export const getDonor = async () => {
+export const getDonor = async (page,limit) => {
   let response = await mainApi(
     apiUrls.donor.getDonor.method,
-    apiUrls.donor.getDonor.url
+    apiUrls.donor.getDonor.url+`?page=${page}&limit=${limit}`
   );
   return response;
 };

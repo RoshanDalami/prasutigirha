@@ -189,7 +189,7 @@ console.log(donorDetail,'response')
                     <div key={index} className="text-[8px] p-1 mt-2" 
                     style={{width:"189px",height:"85px"}}
                     >
-                      <div className="flex justify-between  " >
+                      <div className="flex justify-between items-center " >
                         <div className="">
                           {item?.poolingCondition === 4 ? (
                             <p>PDHM: {"Colostrum"}</p>
@@ -232,9 +232,9 @@ console.log(donorDetail,'response')
                             value={JSON.stringify(item)}
                             viewBox={`0 0 256 256`}
                           />
-                          {/* <div className="w-10 ">
-               <Barcode value={JSON.stringify(item)}   />
-                </div> */}
+                          <div className="flex items-center justify-center" >
+                            <span className="text-[14px]">PMWH</span>
+                          </div>  
                         </div>
                       </div>
                     </div>

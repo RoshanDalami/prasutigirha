@@ -146,6 +146,7 @@ export default function SideBar() {
     { link: "/office/postList", name: "Post" },
     // { link: "/office/employee", name: "Employee Setup " },
     { link: "/office/employeeList", name: "Employee List " },
+    {link:"/office/donation",name:"Donation "}
   ];
   const report = [
     { link: "/report/donor", name: "Donor" },

@@ -35,7 +35,7 @@ export default function ViewDonor() {
     async function fetchData() {
       const { status, data } = await getDonor();
       if (status === 200) {
-        setDonorList(data);
+        setDonorList(data?.data);
       }
     }
     fetchData();

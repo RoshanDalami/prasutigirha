@@ -93,6 +93,22 @@ const apiUrls = {
     getEmployeeById:{
       method:"GET",
       url:"/office/employeeById"
+    },
+    getDonation:{
+      method:"GET",
+      url:"/donation/getAllDonation"
+    },
+    createDonation:{
+      method:"POST",
+      url:"/donation/createDonation"
+    },
+    getDonationById:{
+      method:"GET",
+      url:"/donation/getDonationById"
+    },
+    deleteDonation:{
+      method:"DELETE",
+      url:"/donation/deleteDonation"
     }
   },
   donor: {

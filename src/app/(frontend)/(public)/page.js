@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { userAtomState } from "src/recoil/user/userAtom";
 import { store } from "src/redux/store";
 import Loader from "src/components/Loader";
-import Cookies from "js-cookie";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,7 +18,7 @@ import {
   LineElement,
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -76,32 +76,8 @@ const labels = [
   "Falgun",
   "Chaitra",
 ];
-export const bardata = {
-  labels,
-  datasets: [
-    {
-      label: "Milk Collected",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "#004a89",
-    },
-    {
-      label: "Milk Requsition",
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      backgroundColor: "red",
-    },
-  ],
-};
-export const linedata = {
-  labels,
-  datasets: [
-    {
-      label: "Registration",
-      data: labels.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-      borderColor: "#004a89",
-      backgroundColor: "#004a89",
-    },
-  ],
-};
+
+
 import {
   getMilkCollected,
   getMilkRequsitited,
