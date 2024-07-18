@@ -7,7 +7,6 @@ import {useRouter} from "next/navigation";
 
 function CreateDonation({clickedDataId}) {
     const router = useRouter();
-    console.log(clickedDataId.name, 'response');
     const {
         register,
         handleSubmit,
