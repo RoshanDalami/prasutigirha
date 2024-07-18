@@ -187,3 +187,35 @@ export const GetEmployeeById = async (id) =>{
   return response 
 }
 
+export const CreateDonaton = async(data)=>{
+  let response = await mainApi(
+      apiUrls.office.createDonation.method,
+      apiUrls.office.createDonation.url,
+      data
+  )
+  return response;
+}
+
+export const GetDonation = async (id) => {
+  let response = await mainApi(
+      apiUrls.office.getDonation.method,
+      apiUrls.office.getDonation.url ,
+  )
+  return response;
+}
+
+export const GetDonationById = async (id) => {
+  let response = await mainApi(
+      apiUrls.office.getDonationById.method,
+      apiUrls.office.getDonationById.url+`/${id?id:''}`,
+  )
+  return response;
+}
+
+export const DeleteDonation = async (id) => {
+  let response = await mainApi(
+      apiUrls.office.deleteDonation.method,
+      apiUrls.office.deleteDonation.url+`/${id?id:''}`,
+  )
+  return response;
+}

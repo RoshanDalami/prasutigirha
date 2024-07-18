@@ -22,6 +22,7 @@ import { submittingAtom } from "src/recoil/isSubmiting/submittingAtom";
 import { useSetRecoilState } from "recoil";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
+import {GetDonation} from "../../services/apiService/officeService/office";
 const defaultValues = {
   mastitis: "",
   localLesions: "",
@@ -56,6 +57,23 @@ const PhysicalExamination = ({
   useEffect(() => {
     setSubmitting(isSubmitting);
   }, [isSubmitting, setSubmitting]);
+
+  const [donation,setDonation] = useState([]);
+  useEffect(() => {
+    const fetchData = async()=>{
+      const response = await GetDonation();
+      if(response.status === 200) {
+        setDonation(response?.data);
+      }
+    }
+    fetchData();
+  }, []);
+  const donationOptions = donation?.map((item,index)=>{
+    return(
+        <option key={index} value={item.name}>{item.name}</option>
+    )
+  })
+
 
   useEffect(() => {
     if (clickedIdData) {
@@ -92,6 +110,7 @@ const PhysicalExamination = ({
         herpesZoster: userData.herpesZoster || "",
         others: userData.others || "",
         doctorName: userData.doctorName || "",
+        hospital:userData.hospital || "",
         signature: userData.signature || "",
       });
       setValue("mastitis", userData.mastitis || ""); // pass setValue to the dependencies array and use it directly
@@ -100,6 +119,7 @@ const PhysicalExamination = ({
       setValue("herpesZoster", userData.herpesZoster || "");
       setValue("others", userData.others || "");
       setValue("doctorName", userData.doctorName || "");
+      setValue("hospital",userData.hospital || '');
       setValue("signature", userData.signature || "");
     } else {
       setDefaultValuesWithUserData(defaultValues);
@@ -115,6 +135,7 @@ const PhysicalExamination = ({
         fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
         herpesZoster: JSON.parse(data.herpesZoster),
         doctorName: data.doctorName,
+        hospital:data.hospital,
         donorRegisteredDate:aa
       },
     });
@@ -128,6 +149,7 @@ const PhysicalExamination = ({
           fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
           herpesZoster: JSON.parse(data.herpesZoster),
           doctorName: data.doctorName,
+          hospital:data.hospital,
           donorRegisteredDate:aa
         },
       })
@@ -140,6 +162,7 @@ const PhysicalExamination = ({
         fugalInNippleAreola: JSON.parse(data.fugalInNippleAreola),
         herpesZoster: JSON.parse(data.herpesZoster),
         doctorName: data.doctorName,
+        hospital:data.hospital,
         donorRegisteredDate:aa
       },
     };
@@ -314,7 +337,10 @@ const PhysicalExamination = ({
             {...register("signature")}
           />
         </div> */}
+        <div className="grid grid-cols-2 gap-5">
+
         <div className="flex flex-col mt-5">
+          <label htmlFor="">Collector</label>
           <input
             className="inputStyle"
             placeholder="BF Counsellor"
@@ -325,6 +351,14 @@ const PhysicalExamination = ({
           {errors.doctorName && (
             <p className="errorMessages">{errors.doctorName.message}</p>
           )}
+        </div>
+        <div className="flex flex-col mt-5">
+          <label htmlFor="">Donation From</label>
+          <select type="text" className="inputStyle" {...register("hospital",)} >
+            <option value={''} disabled selected>-- Select Donation --</option>
+            {donationOptions}
+          </select>
+        </div>
         </div>
       </FormBorder>
       <div className=" mt-5 ">
