@@ -222,6 +222,10 @@ const apiUrls = {
       method: "GET",
       url: "/baby/getBabyDetail",
     },
+    getInActiveBaby:{
+      method:"GET",
+      url:"/baby/getInactiveBaby"
+    },
     getBabyById: {
       method: "GET",
       url: "/baby/getBabyDetailId",
