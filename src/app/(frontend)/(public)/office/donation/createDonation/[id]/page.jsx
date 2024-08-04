@@ -21,7 +21,7 @@ const EditDonationPage = () => {
             }
         }
         fetchData();
-    }, [])
+    }, [id])
     const content = <div>
         <CreateDonation clickedDataId={apiData}/>
     </div>
@@ -33,5 +33,5 @@ const EditDonationPage = () => {
 
 
 }
-
+y
 export default EditDonationPage;

@@ -33,3 +33,12 @@ export async function updateBabyStatus(id){
     )
     return response
 }
+
+export async function getInactiveBaby(){
+    let response = await mainApi(
+        apiUrls.baby.getInActiveBaby.method,
+        apiUrls.baby.getInActiveBaby.url,
+    )
+    return response ;
+}
+

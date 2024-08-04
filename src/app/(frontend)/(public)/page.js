@@ -79,10 +79,6 @@ const labels = [
 
 
 import {
-  getMilkCollected,
-  getMilkRequsitited,
-  getNumberOfDonor,
-  getTotalBaby,
   getMonthWiseMilkCollection,
   getMonthWiseMilkRequsition,
   getDonorNumberMonthly,
@@ -90,16 +86,8 @@ import {
 } from "src/services/apiService/dashboard/dashboardService";
 export default function Dashboard() {
   const [baby, setBaby] = useState(0);
-  
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getTotalBaby();
-      if (status === 200) {
-        setBaby(data);
-      }
-    }
-    fetchData();
-  }, []);
+
+
   const [allRecords,setAllRecords] = useState([]);
   const [isLoading,setIsLoading] = useState(true)
   useEffect(()=>{
@@ -113,38 +101,9 @@ export default function Dashboard() {
     fetchData();
   },[])
 console.log(allRecords,'response')
-  const [milkCollected, setMilkCollected] = useState(0);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getMilkCollected();
-      if (status === 200) {
-        setMilkCollected(data);
-      }
-    }
-    fetchData();
-  }, []);
 
-  const [milkRequsition, setMilkRequsition] = useState(0);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getMilkRequsitited();
-      if (status === 200) {
-        setMilkRequsition(data);
-      }
-    }
-    fetchData();
-  }, []);
 
-  const [donor, setDonor] = useState(0);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getNumberOfDonor();
-      if (status === 200) {
-        setDonor(data);
-      }
-    }
-    fetchData();
-  }, []);
+
   const [donorNumber, setDonorNumber] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -154,36 +113,7 @@ console.log(allRecords,'response')
     fetchData();
   }, []);
 
-  const dashboarddata = [
-    {
-      id: 1,
-      title: "Donor Records",
-      recordAmount: donor,
-      imageName: "/assets/images/mother.png",
-      units: "",
-    },
-    {
-      id: 2,
-      title: "Recipient Records",
-      recordAmount: baby,
-      imageName: "/assets/images/newborn.png",
-      units: "",
-    },
-    {
-      id: 3,
-      title: "Milk Requsition",
-      recordAmount: milkRequsition,
-      imageName: "/assets/images/record.png",
-      units: "ml",
-    },
-    {
-      id: 4,
-      title: "Milk Collection",
-      recordAmount: milkCollected,
-      imageName: "/assets/images/feeding-bottle.png",
-      units: "ml",
-    },
-  ];
+
   const token = useRecoilValue(userAtomState);
   console.log(store.getState(), "response");
   const [milkCollectionMonthWise, setMilkCollectionMonthWise] = useState([]);
@@ -233,7 +163,7 @@ console.log(allRecords,'response')
     ],
   };
 
-  const body = 
+  const body =
 
     <div className="my-10 mx-10">
       <div className="grid md:grid-cols-4 items-center justify-center gap-5  ">

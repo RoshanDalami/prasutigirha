@@ -128,29 +128,7 @@ export default function AddPasteurization({ clickedIdData }) {
   const [milkList, setMilkList] = useState([]);
   const [random, setRandom] = useState(0);
   const newArray = [];
-  // useEffect(() => {
-  //   async function fetchMilkVolume() {
-  //     watchArray?.forEach(async (item, index) => {
-  //       if (item?.donorId?.split("/")[0] != "") {
-  //         const response = await getMilkListByDonor(
-  //           item?.donorId?.split("/")[0]
-  //         );
-  //         if (response?.status === 200) {
-  //           setMilkList((prevData) => [
-  //             ...prevData.slice(0, index),
-  //             response?.data,
-  //             ...prevData.slice(index + 1),
-  //           ]);
-  //         } else {
-  //           setMilkList([]);
-  //         }
-  //       }
-  //     });
-  //   }
-  //   fetchMilkVolume();
-  // }, [watchArray]);
 
-  // watchArray?.map((item) => item.donorId)
   useEffect(() => {
     if (watchFields?.gestationalAge) {
       async function fetchData() {
@@ -305,7 +283,7 @@ export default function AddPasteurization({ clickedIdData }) {
                               if (item.remaining != 0) {
                                 return (
                                   <option key={index} value={combinedValue}>
-                                    {item.donorName} ({item.donorRegNo})
+                                    {item.donorName} ({item.donorRegNo}){" "}({item.is28Days ? "More than 28 Days":"Under 28 Days"})
                                     {/* (Remaining Volume:
                                     {item.remaining}ml) */}
                                   </option>
