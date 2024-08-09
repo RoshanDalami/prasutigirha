@@ -84,6 +84,8 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
     { name: "Premature delivery", id: 2 },
     { name: "Perinatal Asphyxia", id: 3 },
     { name: "Respiratory Distress syndrome", id: 4 },
+    { name: "Mortality", id: 13 },
+
     { name: "Sepsis", id: 5 },
     { name: "Neonatal Jaundice", id: 6 },
     { name: "Seizure disorders", id: 7 },

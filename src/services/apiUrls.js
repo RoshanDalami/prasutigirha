@@ -280,6 +280,10 @@ const apiUrls = {
       method: "GET",
       url: "/search/searchRequsition",
     },
+    searchBaby:{
+      method:"GET",
+      url:"/baby/searchBaby"
+    }
   },
   culture: {
     createCulture: {

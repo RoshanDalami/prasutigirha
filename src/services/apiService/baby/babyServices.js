@@ -42,3 +42,10 @@ export async function getInactiveBaby(){
     return response ;
 }
 
+export async function searchBaby(term){
+    let response = await mainApi(
+        apiUrls.search.searchBaby.method,
+        apiUrls.search.searchBaby.url+`/${term?term:''}`,
+    )
+    return response;
+}

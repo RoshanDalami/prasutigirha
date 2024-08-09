@@ -271,7 +271,7 @@ export default function AddPasteurization({ clickedIdData }) {
                             setMilkList([]);
                           }
                         }}
-                      >
+                      > 
                         <option selected disabled value={""}>
                           --Select Donor--
                         </option>
@@ -283,7 +283,7 @@ export default function AddPasteurization({ clickedIdData }) {
                               if (item.remaining != 0) {
                                 return (
                                   <option key={index} value={combinedValue}>
-                                    {item.donorName} ({item.donorRegNo}){" "}({item.is28Days ? "More than 28 Days":"Under 28 Days"})
+                                    {item.donorName} ({item.donorRegNo}){" "}{" "}{item.is28Days ? item.gestationalId == 2? "PT" :"":""}
                                     {/* (Remaining Volume:
                                     {item.remaining}ml) */}
                                   </option>
