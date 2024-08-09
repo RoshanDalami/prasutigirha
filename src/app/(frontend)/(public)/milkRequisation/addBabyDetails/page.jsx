@@ -144,6 +144,7 @@ export default function AddBabyDetails({ clickedIdData }) {
     { id: 2, name: "PT/LBW" },
     { id: 4, name: "IUGR/LBW" },
     { id: 3, name: "Sick mother admitted in MICU" },
+    { id: 12, name: "Post Surgical" },
     { id: 5, name: " Lactation failure" },
     { id: 6, name: "Multiple Deliveries with LBW" },
     { id: 7, name: "OCMC Case" },
@@ -163,7 +164,8 @@ export default function AddBabyDetails({ clickedIdData }) {
     { id: 1, name: "NICU" },
     { id: 2, name: "SNCU" },
     { id: 3, name: "KMC" },
-    { id: 4, name: "Other" },
+    { id: 4, name: "Mortality" },
+    { id: 5, name: "Other" },
   ];
   const babyStatusOptions = babyStatus?.map((item, index) => {
     return (
@@ -314,7 +316,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                   {...register("ipNumber", {
                     required: "IP number is required",
                   })}
-                />
+                /> 
                 {errors?.ipNumber && (
                   <p className="errorMessages">{errors.ipNumber.message}</p>
                 )}
