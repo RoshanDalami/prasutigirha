@@ -42,7 +42,7 @@ export default function ViewDonor() {
   useEffect(() => {
     async function fetchData() {
       setLoading(true)
-      const { status, data } = await getDonor(page, rowPerPage);
+      const { status, data } = await getDonor();
       if (status === 200) {
         setDonorList(data?.data);
         setTotalCount(data.totalCount);
@@ -50,7 +50,7 @@ export default function ViewDonor() {
       }
     }
     fetchData();
-  }, [page, rowPerPage]);
+  }, []);
   const handlePageChange = (e, newpage) => {
     setPage(newpage);
   };
@@ -190,7 +190,7 @@ export default function ViewDonor() {
               <td className="py-3">Test</td>
               <td></td>
             </tr>}
-            { !dloader ? donorList?.map((item, index) => {
+            { !dloader ? donorList ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)?.map((item, index) => {
               return (
                 <tr
                   className=" border border-x-gray text-center"
@@ -227,7 +227,7 @@ export default function ViewDonor() {
                           );
                           if (response.status === 200) {
                             setDLoader(true);
-                            const { status, data } = await getDonor(page,rowPerPage);
+                            const { status, data } = await getDonor();
                             if (status === 200) {
                               setDonorList(data?.data);
                               setDLoader(false);
