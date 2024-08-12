@@ -32,6 +32,7 @@ export default function ViewDonor() {
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
   const [loading, setLoading] = useState(true);
+  const [dloader,setDLoader] = useState(false);
   const router = useRouter();
   const [page, setPage] = useState(0);
   const [rowPerPage, setRowPerPage] = useState(8);
@@ -175,7 +176,7 @@ export default function ViewDonor() {
       >
         <div className=" my-5">
           <table className="w-full">
-            <tr className="bg-[#004a89] text-white text-lg text-center">
+           { !dloader&& <tr className="bg-[#004a89] text-white text-lg text-center">
               {/* <td className="py-3">
     <input type="checkbox" name="" id="" />
   </td> */}
@@ -188,8 +189,8 @@ export default function ViewDonor() {
               <td className="py-3">Details</td>
               <td className="py-3">Test</td>
               <td></td>
-            </tr>
-            {donorList?.map((item, index) => {
+            </tr>}
+            { !dloader ? donorList?.map((item, index) => {
               return (
                 <tr
                   className=" border border-x-gray text-center"
@@ -225,9 +226,11 @@ export default function ViewDonor() {
                             item._id
                           );
                           if (response.status === 200) {
-                            const { status, data } = await getDonor();
+                            setDLoader(true);
+                            const { status, data } = await getDonor(page,rowPerPage);
                             if (status === 200) {
-                              setDonorList(data);
+                              setDonorList(data?.data);
+                              setDLoader(false);
                             }
                           }
                         }}
@@ -265,7 +268,12 @@ export default function ViewDonor() {
                   </td>
                 </tr>
               );
-            })}
+            }) : 
+              <div className=" w-[80vw] h-screen flex items-center justify-center">
+
+                <Loader/>
+              </div>
+             }
           </table>
           <TablePagination
             rowsPerPageOptions={[7]}
