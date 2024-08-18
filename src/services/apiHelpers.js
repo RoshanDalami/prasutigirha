@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 
 
 
-const baseUrl = "https://prasuti-backend.onrender.com";
+const baseUrl = "https://prasuti.palikasoft.com";
 // const baseUrl = "http://localhost:8000";
 
 export const urls = {
