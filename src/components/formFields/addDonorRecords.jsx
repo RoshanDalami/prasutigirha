@@ -6,7 +6,7 @@ import StepperControl from "../stepper/StepperControl";
 import { useRouter } from "next/navigation";
 import FormBorder from "../reusableForm";
 import Button from "../button";
-import { createDonor } from "src/services/apiService/donorRecord/donor";
+import { regList } from "src/services/apiService/donorRecord/donor";
 import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
@@ -76,6 +76,17 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       </option>
     );
   });
+
+  const [list,setList] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const response = await regList();
+      if(response?.status === 200) {
+        setList(response?.data);
+      }
+    }
+    fetchData();
+  },[])
 
   //gestationalAge
   const [gestationalAgeList, setGestationalAgeList] = useState([]);
@@ -355,9 +366,12 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
             {errors.hosRegNo && (
               <p className="errorMessages">{errors.hosRegNo.message}</p>
             )}
+            {
+              list?.includes(watch('hosRegNo')) ? <p className="errorMessages">Donor already exist</p> : <></>
+            }
           </div>
-          <div className="flex flex-col">
-            <label>
+        <div className="flex flex-col">
+        <label>
               {" "}
               Date<span className="text-red-600">*</span>
             </label>
@@ -507,7 +521,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <p className="errorMessages">{errors.ethnicity.message}</p>
             )}
           </div>
-        
+
           <div className="flex-col flex">
             <label>
               {" "}

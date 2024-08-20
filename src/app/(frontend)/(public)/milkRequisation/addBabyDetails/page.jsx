@@ -11,7 +11,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
-import { createBaby } from "src/services/apiService/baby/babyServices";
+import { createBaby , ipList } from "src/services/apiService/baby/babyServices";
 const aa = new BikramSambat(new Date()).toBS();
 
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -175,6 +175,17 @@ export default function AddBabyDetails({ clickedIdData }) {
     );
   });
 
+  const [ip,setIpList] = useState([]);
+  useEffect(()=>{
+    async function fetchData() {
+      const response = await ipList();
+      if(response?.status === 200){
+        setIpList(response?.data)
+      }
+    }
+    fetchData();
+  },[])
+
   const onSubmit = async (data) => {
     data = {
       ...data,
@@ -280,7 +291,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                     parityOptions
                   }
                 </select>
-               
+
                 {errors.parity && (
                   <p className="errorMessages">{errors.parity.message}</p>
                 )}
@@ -316,10 +327,13 @@ export default function AddBabyDetails({ clickedIdData }) {
                   {...register("ipNumber", {
                     required: "IP number is required",
                   })}
-                /> 
+                />
                 {errors?.ipNumber && (
                   <p className="errorMessages">{errors.ipNumber.message}</p>
                 )}
+                { ip?.includes(watch('ipNumber'))  ? (
+                  <p className="errorMessages">Baby already exist</p>
+                ) : <></> }
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
@@ -426,7 +440,7 @@ export default function AddBabyDetails({ clickedIdData }) {
               </div>
             </div>
             <div className="my-5 font-bold text-xl">
-              <Button isSubmitting={isSubmitting} date={ birthDate } aa={aa} >
+              <Button isSubmitting={isSubmitting} date={ birthDate } aa={aa} ip={ip?.includes(watch('ipNumber')) ? true : false} >
                 {isSubmitting ? "Submiting ..." : "Submit"}
               </Button>
             </div>
