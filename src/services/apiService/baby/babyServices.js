@@ -49,3 +49,10 @@ export async function searchBaby(term){
     )
     return response;
 }
+export async function ipList(){
+    let response = await mainApi(
+        apiUrls.baby.ipList.method,
+        apiUrls.baby.ipList.url,
+    )
+    return response;
+}

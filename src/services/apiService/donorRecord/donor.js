@@ -57,3 +57,10 @@ export const donorByGestationalAge= async(id)=>{
   )
   return response;
 }
+export const regList = async()=>{
+  let response = await mainApi(
+      apiUrls?.donor.regList.method,
+      apiUrls?.donor.regList.url,
+  )
+  return response;
+}

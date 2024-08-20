@@ -139,6 +139,10 @@ const apiUrls = {
     donorByGestationalAge:{
       method:"GET",
       url:"/donor/getDonorWithGestationalAge"
+    },
+    regList:{
+      method:"GET",
+      url:"/donor/regList"
     }
   },
   milkVolume: {
@@ -237,6 +241,10 @@ const apiUrls = {
     updateStatus:{
       method:"GET",
       url:"/baby/updateBaby"
+    },
+    ipList:{
+      method:"GET",
+      url:"/baby/ipList"
     }
   },
   bottle: {
@@ -248,6 +256,10 @@ const apiUrls = {
       method: "POST",
       url: "/bottle/generateBottles",
     },
+    updateBottleStatus:{
+      method:"GET",
+      url:"/bottle/updateStatus"
+    }
   },
   milkRequsition: {
     createMilkRequistion: {

@@ -9,12 +9,10 @@ import {
   getDonor,
   updateDonorStatus,
 } from "src/services/apiService/donorRecord/donor";
-import { BiEdit } from "react-icons/bi";
-import { MdDeleteForever } from "react-icons/md";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+
 import { useRouter } from "next/navigation";
 import { searchDonor } from "src/services/apiService/search/searchService";
-import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
@@ -22,35 +20,36 @@ import { useForm } from "react-hook-form";
 import TablePagination from "@mui/material/TablePagination";
 import Switch from "@mui/material/Switch";
 const label = { inputProps: { "aria-label": "Switch demo" } };
-import LoadingSpinner from "src/components/Loading";
+
 import Loader from "src/components/Loader";
 import TableBorder from "src/components/TableDesign";
 export default function ViewDonor() {
-  // const TableBorder = dynamic(() => import("@/components/TableDesign"), {
-  //   ssr: true,
-  // });
+
   const [date, setDate] = useState("");
   const engDate = new BikramSambat(date, "BS").toAD();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [dloader,setDLoader] = useState(false);
   const router = useRouter();
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [rowPerPage, setRowPerPage] = useState(8);
   const { register, handleSubmit } = useForm();
   const [totalCount, setTotalCount] = useState(0);
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      setLoading(true)
-      const { status, data } = await getDonor();
+      // setLoading(true)
+      setDLoader(true)
+      const { status, data } = await getDonor(page,rowPerPage);
       if (status === 200) {
         setDonorList(data?.data);
-        setTotalCount(data.totalCount);
-        setLoading(false);
+        setTotalCount(data?.totalCount);
+        // setLoading(false);
+        setDLoader(false)
+
       }
     }
     fetchData();
-  }, []);
+  }, [page,rowPerPage]);
   const handlePageChange = (e, newpage) => {
     setPage(newpage);
   };
@@ -190,15 +189,13 @@ export default function ViewDonor() {
               <td className="py-3">Test</td>
               <td></td>
             </tr>}
-            { !dloader ? donorList ?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)?.map((item, index) => {
+            { !dloader ? donorList ?.map((item, index) => {
               return (
                 <tr
                   className=" border border-x-gray text-center"
                   key={index}
                 >
-                  {/* <td className="py-3 text-center">
-    <input type="checkbox" name="" id="" />
-  </td> */}
+
                   <td className="py-3">{item.donorRegNo}</td>
                   <td className="py-3">{item.donorName}</td>
                   <td className="py-3">{item.donorAge}</td>
@@ -206,18 +203,7 @@ export default function ViewDonor() {
                   <td className="py-3">{item.contactNo}</td>
                   <td className="py-3">
                     <div className="flex justify-evenly text-xl">
-                      {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
-            <PencilSquareIcon
-              className="h-6 w-6 text-white"
-              onClick={() => handleEdit(item._id)}
-            />
-          </div> */}
-                      {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
-            <TrashIcon
-              className="h-6 w-6 text-white"
-              onClick={() => handleDelete(item._id)}
-            />
-          </div> */}
+
 
                       <Switch
                         {...label}
@@ -227,7 +213,7 @@ export default function ViewDonor() {
                           );
                           if (response.status === 200) {
                             setDLoader(true);
-                            const { status, data } = await getDonor();
+                            const { status, data } = await getDonor(page,rowPerPage);
                             if (status === 200) {
                               setDonorList(data?.data);
                               setDLoader(false);
@@ -267,10 +253,9 @@ export default function ViewDonor() {
                     </div>
                   </td>
                 </tr>
-              );
-            }) : 
+              )
+            }) :
               <div className=" w-[80vw] h-screen flex items-center justify-center">
-
                 <Loader/>
               </div>
              }

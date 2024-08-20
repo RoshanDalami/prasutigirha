@@ -162,9 +162,9 @@ export default function AddMilkReq({ clickedIdData }) {
   const removeHandler = (index)=>{
     remove(index);
     watchBottle?.splice(index,1)
-    
+
   }
- 
+
 
 
   return (
@@ -354,7 +354,7 @@ export default function AddMilkReq({ clickedIdData }) {
                       {bottleList?.map((item, index0) => (
                         <React.Fragment key={index}>
                           {index0 === index &&
-                            item?.map((subItem, subIndex) => {
+                            item?.filter(item=>item?.isActive === true)?.map((subItem, subIndex) => {
                               if (subItem?.remainingVoluem > 0) {
                                 const bottleCombValue = `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`;
                                 console.log(subItem,'response')
@@ -441,7 +441,7 @@ export default function AddMilkReq({ clickedIdData }) {
                     ? true
                     : false || remvol < quantity
                     ? true
-                    : false 
+                    : false
                 }
                 type="submit"
               >
