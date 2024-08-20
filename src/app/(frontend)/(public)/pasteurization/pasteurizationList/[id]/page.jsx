@@ -222,7 +222,7 @@ try{
                             <div className={'flex flex-col gap-3'}>
                                 {bottles?.bottleList?.map((bottle, index) => {
                                     return (
-                                        <div className={` ${bottle?.remainingVoluem == 0 ? 'bg-red-300':''} ${bottle?.isActive === false ? 'bg-red-600 text-white ' : ''}  flex items-center gap-3  bg-gray-200 px-3 py-2  rounded-md`}>
+                                        <div key={index} className={` ${bottle?.remainingVoluem == 0 ? 'bg-red-300':''} ${bottle?.isActive === false ? 'bg-red-600 text-white ' : ''}  flex items-center gap-3  bg-gray-200 px-3 py-2  rounded-md`}>
                                             <div className={''}>
                                                 <p>
                                                     Batch Id:
