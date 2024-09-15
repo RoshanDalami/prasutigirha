@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { store } from "src/redux/store";
 import axios from "axios";
@@ -6,16 +6,13 @@ import Cookies from "js-cookie";
 // const userInfo = typeof (localStorage != 'undefined')
 //   ? JSON.parse(localStorage.getItem("user"))
 //   : "";
-  const token = Cookies.get('token')
+const token = Cookies.get("token");
 
-
-
-
-const baseUrl = "https://prasuti.palikasoft.com";
+// const baseUrl = "https://prasuti.palikasoft.com";
+const baseUrl = "https://prasuti-backend.onrender.com";
 // const baseUrl = "http://localhost:8000";
 
 export const urls = {
-
   mainUrl: `${baseUrl}/api/v1`,
   login: `/api/user/login`,
   register: `/api/user/register`,
