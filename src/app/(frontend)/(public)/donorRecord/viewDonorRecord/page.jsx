@@ -260,15 +260,7 @@ export default function ViewDonor() {
               </div>
              }
           </table>
-          <TablePagination
-            rowsPerPageOptions={[7]}
-            rowsPerPage={rowPerPage}
-            page={page}
-            count={totalCount}
-            component={"div"}
-            onPageChange={handlePageChange}
-            onRowsPerPageChange={handlePerPage}
-          ></TablePagination>
+         
         </div>
       </TableBorder>
     </div>
