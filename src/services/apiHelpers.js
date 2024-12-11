@@ -1,6 +1,4 @@
 "use client";
-
-import { store } from "src/redux/store";
 import axios from "axios";
 import Cookies from "js-cookie";
 // const userInfo = typeof (localStorage != 'undefined')
@@ -9,7 +7,7 @@ import Cookies from "js-cookie";
 const token = Cookies.get("token");
 
 // const baseUrl = "https://prasuti.palikasoft.com";
-const baseUrl = "https://prasuti-backend.onrender.com";
+const baseUrl = "https://prasutighira-bnsru.ondigitalocean.app";
 // const baseUrl = "http://localhost:8000";
 
 export const urls = {

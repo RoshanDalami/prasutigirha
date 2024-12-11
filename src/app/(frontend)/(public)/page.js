@@ -1,9 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import DashboardCard from "src/components/card";
-import { useRecoilValue } from "recoil";
-import { userAtomState } from "src/recoil/user/userAtom";
-import { store } from "src/redux/store";
 import Loader from "src/components/Loader";
 
 import {
@@ -77,33 +74,25 @@ const labels = [
   "Chaitra",
 ];
 
-
 import {
   getMonthWiseMilkCollection,
   getMonthWiseMilkRequsition,
   getDonorNumberMonthly,
-  getAllRecords
+  getAllRecords,
 } from "src/services/apiService/dashboard/dashboardService";
 export default function Dashboard() {
-  const [baby, setBaby] = useState(0);
-
-
-  const [allRecords,setAllRecords] = useState([]);
-  const [isLoading,setIsLoading] = useState(true)
-  useEffect(()=>{
-    async function fetchData(){
-      const {data,status} = await getAllRecords();
-      if(status === 200){
+  const [allRecords, setAllRecords] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    async function fetchData() {
+      const { data, status } = await getAllRecords();
+      if (status === 200) {
         setAllRecords(data);
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
     fetchData();
-  },[])
-console.log(allRecords,'response')
-
-
-
+  }, []);
   const [donorNumber, setDonorNumber] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -112,10 +101,6 @@ console.log(allRecords,'response')
     }
     fetchData();
   }, []);
-
-
-  const token = useRecoilValue(userAtomState);
-  console.log(store.getState(), "response");
   const [milkCollectionMonthWise, setMilkCollectionMonthWise] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -163,8 +148,7 @@ console.log(allRecords,'response')
     ],
   };
 
-  const body =
-
+  const body = (
     <div className="my-10 mx-10">
       <div className="grid md:grid-cols-4 items-center justify-center gap-5  ">
         {allRecords?.map((items) => {
@@ -191,10 +175,7 @@ console.log(allRecords,'response')
           <Line options={lineoptions} data={linedata} />
         </div>
       </div>
-    </div>;
-  return (
-<>
-{isLoading ? <Loader/> : body}
-</>
+    </div>
   );
+  return <>{isLoading ? <Loader /> : body}</>;
 }
