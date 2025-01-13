@@ -65,7 +65,6 @@ export default function OtherReport() {
   return (
     <div className="mx-4">
       <FormBorder title={"Test Result"}>
-        
         <form action="" onSubmit={handleSubmit((data) => onSubmit(data))}>
           <div className=" flex  flex-col gap-3">
             <div className="flex justify-end my-3">
@@ -84,32 +83,40 @@ export default function OtherReport() {
                   className="flex items-center gap-3 justify-between"
                 >
                   <div className="flex flex-col">
-            <label>
-              Test Date<span className="text-red-600">*</span>
-            </label>
-            <Controller
-              control={control}
-              name={`other.${index}.testDate`}
-              render={({ field: { onChange, value } }) => (
-                <NepaliDatePicker
-                  inputClassName="form-control focus:outline-none"
-                  value={value}
-                  onChange={onChange}
-                  options={{ calenderLocale: "en", valueLocale: "en" }}
-                  className="inputStyle"
-                />
-              )}
-            />
-          </div>
+                    <label>
+                      Test Date<span className="text-red-600">*</span>
+                    </label>
+                    <Controller
+                      control={control}
+                      name={`other.${index}.testDate`}
+                      render={({ field: { onChange, value } }) => (
+                        <NepaliDatePicker
+                          inputClassName="form-control focus:outline-none"
+                          value={value}
+                          onChange={onChange}
+                          options={{ calenderLocale: "en", valueLocale: "en" }}
+                          className="inputStyle"
+                        />
+                      )}
+                    />
+                  </div>
                   <div className="flex flex-col w-full">
-                    <label htmlFor="">Test Name</label>
+                    <label htmlFor="">
+                      Test Name <span className="text-red-600">*</span>{" "}
+                    </label>
                     <input
                       type="text"
                       className="inputStyle"
-                      {...register(`other.${index}.testName`,{required:"Test Name is required"})}
+                      {...register(`other.${index}.testName`, {
+                        required: "Test Name is required",
+                      })}
                       placeholder="Test Name"
                     />
-                   
+                    {errors?.other?.[index]?.testName && (
+                      <p className="text-red-600">
+                        {errors?.other?.[index]?.testName.message}
+                      </p>
+                    )}
                   </div>
                   <div className="flex flex-col w-full">
                     <label htmlFor="">
@@ -117,8 +124,8 @@ export default function OtherReport() {
                     </label>
                     <select
                       className="inputStyle"
-                      {...register(`other.${index}.testResult`,{
-                        required:"Test result is required"
+                      {...register(`other.${index}.testResult`, {
+                        required: "Test result is required",
                       })}
                     >
                       <option value="" selected disabled>
@@ -127,6 +134,11 @@ export default function OtherReport() {
                       <option value={true}>Positive</option>
                       <option value={false}>Negative</option>
                     </select>
+                    {errors?.other?.[index]?.testResult && (
+                      <p className="text-red-600">
+                        {errors?.other?.[index]?.testResult.message}
+                      </p>
+                    )}
                   </div>
                   {fields?.length > 1 && (
                     <div>
