@@ -292,6 +292,10 @@ export default function AddVolume({ clickedData }) {
                           value: 0,
                           message: "Volume should not be negative",
                         },
+                        max:{
+                          value:160,
+                          message:"Volume should not be greater than 160"
+                        }
                       })}
                     />
                     {errors?.collectedMilk?.[index]?.quantity && (
@@ -300,26 +304,7 @@ export default function AddVolume({ clickedData }) {
                       </p>
                     )}
                   </div>
-                  {/* <div className="flex flex-col">
-                    <label className="text-lg">
-                      Temperature
-                      <span className="text-lg text-red-600">*</span>
-                    </label>
-                    <input
-                      className="inputStyle"
-                      type="Number"
-                      placeholder=""
-                      {...register(`collectedMilk.${index}.temp`, {
-                        required: "Temperature is required",
-                      })}
-                      readOnly
-                    />
-                    {errors?.temp && (
-                      <p className="errorMessages">
-                        {errors?.collectedMilk?.[index]?.temp?.message}
-                      </p>
-                    )}
-                  </div> */}
+                 
                   <div className="flex flex-col">
                     <label className="text-lg">
                       Store By

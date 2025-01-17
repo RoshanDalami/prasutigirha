@@ -8,8 +8,6 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
 import { createDonor } from "src/services/apiService/donorRecord/donor";
-import { urls } from "src/services/apiHelpers";
-import axios from "axios";
 import { useParams } from "next/navigation";
 const aa = new BikramSambat(new Date()).toBS();
 const defaultValues = {
@@ -30,7 +28,7 @@ import {
   serologyAtom2,
 } from "src/recoil/serology/serologyAtom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-const  SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
+const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [defaultValuesWithUserData, setDefaultValuesWithUserData] =
     useState("");
   const setSerologyPositive = useSetRecoilState(serologyAtom);
@@ -41,11 +39,12 @@ const  SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => 
   const router = useRouter();
   const { id } = useParams();
 
+  const [isSerologyPending, setIsSerologyPending] = useState(false);
+
   //Nepali date
   const [testDate, setTestDate] = useState(aa);
   const [hivTestDate, setHivTestDate] = useState(aa);
   const [hbsagTestDate, setHbsagTestDate] = useState(aa);
-  console.log(testDate,hivTestDate,hbsagTestDate,'response')
 
   const engTestDate = new BikramSambat(testDate, "BS").toAD();
 
@@ -188,9 +187,43 @@ const  SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => 
     }
   }, [setSerologyPositive2, watchAllFields?.vdrl]);
 
+  const handleSerologyPending = () => {
+    setIsSerologyPending(true);
+    setUserData({
+      ...userData,
+      serologyRecords: {
+        hiv: null,
+        hbsag: null,
+        vdrl: null,
+        dateOfTest: "",
+        engDateTest: "",
+        dateOfHivTest: "",
+        dateofHbsagTest: "",
+      },
+      isSerologyPending: true,
+    });
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        ...userData,
+        serologyRecords: {
+          hiv: null,
+          hbsag: null,
+          vdrl: null,
+          dateOfTest: "",
+          engDateTest: "",
+          dateOfHivTest: "",
+          dateofHbsagTest: "",
+        },
+        isSerologyPending: true,
+      })
+    );
+    handleClick("next");
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormBorder title={" Serelogy Records"}>
+      <FormBorder title={" Serology Records"}>
         <p className="font-bold text-xl py-5 ">Serology Screening Records:</p>
         <div className="grid grid-cols-2 gap-4 text-lg">
           <div className="grid">
@@ -306,7 +339,7 @@ const  SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => 
               Date of VDRL Test
               <span className="text-red-600">*</span>
             </label>
- 
+
             <NepaliDatePicker
               inputClassName="form-control  focus:outline-none"
               value={testDate}
@@ -319,6 +352,15 @@ const  SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => 
               <p className="errorMessages">{errors.dateOfTest.message}</p>
             )}
           </div>
+        </div>
+        <div className="py-3 flex justify-end">
+          <button
+            className="bg-blue-600 px-4 py-2 rounded-lg text-white"
+            type="button"
+            onClick={() => handleSerologyPending()}
+          >
+            {isSerologyPending ? "serology not pending" : "serology pending"}
+          </button>
         </div>
       </FormBorder>
       {serologyStatus == "false" ? (

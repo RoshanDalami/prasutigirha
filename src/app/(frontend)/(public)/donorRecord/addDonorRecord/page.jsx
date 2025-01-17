@@ -103,7 +103,7 @@ export default function CreateAddDonor({ clickedIdData }) {
         {/* Stepper */}
         <div className="horizontal container ">
           <Stepper steps={steps} currentStep={currentStep} />
-          <div className="my-10 p-10 ">
+          <div className="my-10 p-10">
             <UseContextProvider>{displayStep(currentStep)}</UseContextProvider>
           </div>
         </div>
