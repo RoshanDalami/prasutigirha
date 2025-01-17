@@ -82,34 +82,34 @@ const apiUrls = {
       method: "GET",
       url: "/fiscal/getFiscal",
     },
-    getDepartmentById:{
-      method:"GET",
-      url:"/office/departmentById"
+    getDepartmentById: {
+      method: "GET",
+      url: "/office/departmentById",
     },
-    getPostById:{
-      method:"GET",
-      url:"/office/postById"
+    getPostById: {
+      method: "GET",
+      url: "/office/postById",
     },
-    getEmployeeById:{
-      method:"GET",
-      url:"/office/employeeById"
+    getEmployeeById: {
+      method: "GET",
+      url: "/office/employeeById",
     },
-    getDonation:{
-      method:"GET",
-      url:"/donation/getAllDonation"
+    getDonation: {
+      method: "GET",
+      url: "/donation/getAllDonation",
     },
-    createDonation:{
-      method:"POST",
-      url:"/donation/createDonation"
+    createDonation: {
+      method: "POST",
+      url: "/donation/createDonation",
     },
-    getDonationById:{
-      method:"GET",
-      url:"/donation/getDonationById"
+    getDonationById: {
+      method: "GET",
+      url: "/donation/getDonationById",
     },
-    deleteDonation:{
-      method:"DELETE",
-      url:"/donation/deleteDonation"
-    }
+    deleteDonation: {
+      method: "DELETE",
+      url: "/donation/deleteDonation",
+    },
   },
   donor: {
     getDonor: {
@@ -128,22 +128,26 @@ const apiUrls = {
       method: "GET",
       url: "/donor/updateStatus",
     },
-    getDonorOtherTest:{
-      method:"GET",
-      url:"/donor/getOtherTest"
+    getDonorOtherTest: {
+      method: "GET",
+      url: "/donor/getOtherTest",
     },
-    discard:{
-      method:"POST",
-      url:"/donor/discard"
+    discard: {
+      method: "POST",
+      url: "/donor/discard",
     },
-    donorByGestationalAge:{
-      method:"GET",
-      url:"/donor/getDonorWithGestationalAge"
+    donorByGestationalAge: {
+      method: "GET",
+      url: "/donor/getDonorWithGestationalAge",
     },
-    regList:{
-      method:"GET",
-      url:"/donor/regList"
-    }
+    regList: {
+      method: "GET",
+      url: "/donor/regList",
+    },
+    updateSerologyRecord: {
+      method: "POST",
+      url: "/donor/updateSerologyRecord",
+    },
   },
   milkVolume: {
     getMilkVolumeByDonor: {
@@ -216,19 +220,19 @@ const apiUrls = {
       method: "PATCH",
       url: "/donor/updateOther",
     },
-    discard:{
-      method:"GET",
-      url:"/pasteurization/discard"
-    }
+    discard: {
+      method: "GET",
+      url: "/pasteurization/discard",
+    },
   },
   baby: {
     getBabyDetail: {
       method: "GET",
       url: "/baby/getBabyDetail",
     },
-    getInActiveBaby:{
-      method:"GET",
-      url:"/baby/getInactiveBaby"
+    getInActiveBaby: {
+      method: "GET",
+      url: "/baby/getInactiveBaby",
     },
     getBabyById: {
       method: "GET",
@@ -238,14 +242,14 @@ const apiUrls = {
       method: "POST",
       url: "/baby/createBabyDetail",
     },
-    updateStatus:{
-      method:"GET",
-      url:"/baby/updateBaby"
+    updateStatus: {
+      method: "GET",
+      url: "/baby/updateBaby",
     },
-    ipList:{
-      method:"GET",
-      url:"/baby/ipList"
-    }
+    ipList: {
+      method: "GET",
+      url: "/baby/ipList",
+    },
   },
   bottle: {
     getBottle: {
@@ -256,10 +260,10 @@ const apiUrls = {
       method: "POST",
       url: "/bottle/generateBottles",
     },
-    updateBottleStatus:{
-      method:"GET",
-      url:"/bottle/updateStatus"
-    }
+    updateBottleStatus: {
+      method: "GET",
+      url: "/bottle/updateStatus",
+    },
   },
   milkRequsition: {
     createMilkRequistion: {
@@ -292,10 +296,10 @@ const apiUrls = {
       method: "GET",
       url: "/search/searchRequsition",
     },
-    searchBaby:{
-      method:"GET",
-      url:"/baby/searchBaby"
-    }
+    searchBaby: {
+      method: "GET",
+      url: "/baby/searchBaby",
+    },
   },
   culture: {
     createCulture: {
@@ -328,14 +332,14 @@ const apiUrls = {
       method: "GET",
       url: "/dashboard/getMilkRequsitionMonthWise",
     },
-    getDonorNumber:{
-      method:"GET",
-      url:"/dashboard/getDonorCountMonthly"
+    getDonorNumber: {
+      method: "GET",
+      url: "/dashboard/getDonorCountMonthly",
     },
-    getAllRecords:{
-      method:"GET",
-      url:"/dashboard/getAllRecords"
-    }
+    getAllRecords: {
+      method: "GET",
+      url: "/dashboard/getAllRecords",
+    },
   },
 };
 export default apiUrls;
