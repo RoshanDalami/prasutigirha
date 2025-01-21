@@ -341,5 +341,15 @@ const apiUrls = {
       url: "/dashboard/getAllRecords",
     },
   },
+  report : {
+    getAllReports :{
+      method:"GET",
+      url:"/report/getAllReport",
+    },
+    getReportDateWise :{
+      method:"GET",
+      url:"/report/getAllReportDateWise"
+    }
+  }
 };
 export default apiUrls;
