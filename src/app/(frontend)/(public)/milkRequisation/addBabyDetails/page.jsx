@@ -366,7 +366,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                   input={<OutlinedInput label="Tag" />}
                   renderValue={(selected) => selected.join(", ")}
                   MenuProps={MenuProps}
-                  placeholder="-- Select Baby Status --"
+
                 >
                   {diagnosis.map((name) => (
                     <MenuItem key={name?.id} value={name?.name}>
@@ -393,7 +393,7 @@ export default function AddBabyDetails({ clickedIdData }) {
                   input={<OutlinedInput label="Tag" />}
                   renderValue={(selected) => selected.join(", ")}
                   MenuProps={MenuProps}
-                  placeholder="-- Select Baby Status --"
+
                 >
                   {indications.map((name) => (
                     <MenuItem key={name?.id} value={name?.name}>

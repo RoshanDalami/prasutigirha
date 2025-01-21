@@ -12,6 +12,9 @@
   .errorMessages {
     @apply text-red-600 text-[16px] pt-1;
   }
+  .tableBorder {
+    @apply border border-black px-4 py-2;
+  }
   .spinner {
     position: relative;
     width: 15.7px;
