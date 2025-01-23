@@ -3,66 +3,82 @@
 @tailwind utilities;
 
 @layer base {
-  .inputStyle {
-    @apply border border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out p-4;
-  }
-  .inputStyleError {
-    @apply border border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-red-300 hover:ring-2 hover:ring-red-300 transition duration-300 ease-in-out p-4;
-  }
-  .errorMessages {
-    @apply text-red-600 text-[16px] pt-1;
-  }
-  .tableBorder {
-    @apply border border-black px-4 py-2;
-  }
-  .spinner {
-    position: relative;
-    width: 15.7px;
-    height: 15.7px;
-  }
-
-  .spinner div {
-    animation: spinner-4t3wzl 1.875s infinite backwards;
-    background-color: #474bff;
-    border-radius: 50%;
-    height: 100%;
-    position: absolute;
-    width: 100%;
-  }
-
-  .spinner div:nth-child(1) {
-    animation-delay: 0.15s;
-    background-color: rgba(71, 75, 255, 0.9);
-  }
-
-  .spinner div:nth-child(2) {
-    animation-delay: 0.3s;
-    background-color: rgba(71, 75, 255, 0.8);
-  }
-
-  .spinner div:nth-child(3) {
-    animation-delay: 0.45s;
-    background-color: rgba(71, 75, 255, 0.7);
-  }
-
-  .spinner div:nth-child(4) {
-    animation-delay: 0.6s;
-    background-color: rgba(71, 75, 255, 0.6);
-  }
-
-  .spinner div:nth-child(5) {
-    animation-delay: 0.75s;
-    background-color: rgba(71, 75, 255, 0.5);
-  }
-
-  @keyframes spinner-4t3wzl {
-    0% {
-      transform: rotate(0deg) translateY(-200%);
+    .inputStyle {
+        @apply border border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out p-4;
     }
 
-    60%,
-    100% {
-      transform: rotate(360deg) translateY(-200%);
+    .inputStyleError {
+        @apply border border-gray-300 rounded-lg  focus:outline-none focus:ring focus:border-red-300 hover:ring-2 hover:ring-red-300 transition duration-300 ease-in-out p-4;
     }
-  }
+
+    .errorMessages {
+        @apply text-red-600 text-[16px] pt-1;
+    }
+
+    .tableBorder {
+        @apply border border-black px-4 py-2;
+    }
+
+    .spinner {
+        position: relative;
+        width: 15.7px;
+        height: 15.7px;
+    }
+
+    .spinner div {
+        animation: spinner-4t3wzl 1.875s infinite backwards;
+        background-color: #474bff;
+        border-radius: 50%;
+        height: 100%;
+        position: absolute;
+        width: 100%;
+    }
+
+    .spinner div:nth-child(1) {
+        animation-delay: 0.15s;
+        background-color: rgba(71, 75, 255, 0.9);
+    }
+
+    .spinner div:nth-child(2) {
+        animation-delay: 0.3s;
+        background-color: rgba(71, 75, 255, 0.8);
+    }
+
+    .spinner div:nth-child(3) {
+        animation-delay: 0.45s;
+        background-color: rgba(71, 75, 255, 0.7);
+    }
+
+    .spinner div:nth-child(4) {
+        animation-delay: 0.6s;
+        background-color: rgba(71, 75, 255, 0.6);
+    }
+
+    .spinner div:nth-child(5) {
+        animation-delay: 0.75s;
+        background-color: rgba(71, 75, 255, 0.5);
+    }
+
+    @keyframes spinner-4t3wzl {
+        0% {
+            transform: rotate(0deg) translateY(-200%);
+        }
+
+        60%,
+        100% {
+            transform: rotate(360deg) translateY(-200%);
+        }
+    }
+}
+
+@media print {
+    .printMargin {
+        padding-left: 2.5rem; /* px-10 */
+        padding-right: 2.5rem;
+        padding-top: 1.25rem; /* py-5 */
+        padding-bottom: 1.25rem;
+    }
+    .page-break {
+        page-break-before: always; /* Forces a page break before the element */
+    }
 }
