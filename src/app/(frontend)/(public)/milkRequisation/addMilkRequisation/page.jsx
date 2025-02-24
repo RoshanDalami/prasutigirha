@@ -18,6 +18,7 @@ import { createMilkRequistion } from "src/services/apiService/milkRequistion/req
 import { getBabyDetail } from "src/services/apiService/baby/babyServices";
 import { getPooling } from "src/services/apiService/pasteurization/pasteurization";
 import toast from "react-hot-toast";
+import Select from "react-select";
 export default function AddMilkReq({ clickedIdData }) {
   const router = useRouter();
   const { id } = useParams();
@@ -59,29 +60,6 @@ export default function AddMilkReq({ clickedIdData }) {
 
   const [bottleList, setBottleList] = useState([]);
 
-  // useEffect(() => {
-  //   async function fetchBottleList() {
-  //     watchArray?.forEach(async (item, index) => {
-  //       if (item?.batchNumber != "") {
-  //         const response = await getBottle(item.batchNumber.split("/")?.[0]);
-  //         if (response?.status === 200) {
-  //           // console.log(response?.data,'response')
-  //           setBottleList((prevData) => [
-  //             ...prevData.slice(0, index),
-  //             response?.data?.bottleList,
-  //             ...prevData.slice(index + 1),
-  //           ]);
-  //         } else {
-  //           setBabyList([]);
-  //         }
-  //       }
-  //     });
-  //   }
-
-  //   fetchBottleList();
-  // }, [watchArray]);
-  // watchArray?.map(item=>item.batchNumber)
-
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
   useEffect(() => {
@@ -112,6 +90,14 @@ export default function AddMilkReq({ clickedIdData }) {
     }
     fetchData();
   }, []);
+
+  const babyOptions = babyList?.map((item)=>{
+    return{
+      label: item.babyName,
+      value: `${item._id}/${item.babyName}`
+    }
+  })
+
   //poolingList batchname
   const [poolingList, setPoolingList] = useState([]);
   useEffect(() => {
@@ -123,21 +109,20 @@ export default function AddMilkReq({ clickedIdData }) {
     }
     fetchData();
   }, []);
-
+  const [babyId, setBabyId] = useState("");
   const onSubmit = async (data) => {
     data = {
       ...data,
-      babyId: watchFields?.babyId.split("/")[0],
-      babyName: watchFields?.babyId.split("/")[1],
+      babyId: babyId.split("/")[0],
+      babyName: babyId.split("/")[1],
       _id: data?._id,
       userId: userInfo?.userDetail?._id,
       feedingDate: feedingDate,
       engFeedingDate: engFeedingDate,
     };
-
+    console.log(data, "data");
     try {
       const response = await createMilkRequistion(data);
-      console.log(response, "response");
       if (response?.status === 200) {
         router.push("/milkRequisation/listOfMilkRequisation");
       }
@@ -158,14 +143,11 @@ export default function AddMilkReq({ clickedIdData }) {
   const [isValid, setIsValid] = useState(false);
   let remvol;
   let quantity;
-  const [someArray,setSomeArray] = useState(false)
-  const removeHandler = (index)=>{
+  const [someArray, setSomeArray] = useState(false);
+  const removeHandler = (index) => {
     remove(index);
-    watchBottle?.splice(index,1)
-
-  }
-
-
+    watchBottle?.splice(index, 1);
+  };
 
   return (
     <>
@@ -199,31 +181,36 @@ export default function AddMilkReq({ clickedIdData }) {
                 <label htmlFor="">
                   Baby <span className="text-red-600">*</span>
                 </label>
-                <select
+                <Select options={babyOptions} placeholder="Select Baby" 
+                onChange={(e)=>{
+                  setBabyId(e.value)
+                }}
+                />
+                {/* <select
                   name=""
                   id=""
                   className="inputStyle"
-                  {...register("babyId",{
-                    required:'Baby is required'
+                  {...register("babyId", {
+                    required: "Baby is required",
                   })}
                 >
                   <option value={""} selected disabled>
                     --Select Baby--
                   </option>
                   {babyList?.map((item, index) => {
-                    if(item.status === true){
+                    if (item.status === true) {
                       const combinedValue = `${item._id}/${item.babyName}`;
                       return (
                         <option key={index} value={combinedValue}>
-                          {item.babyName}{" "}({item.ipNumber})
+                          {item.babyName} ({item.ipNumber})
                         </option>
                       );
                     }
                   })}
-                </select>
-                {
-                  errors.babyId && <p className="text-red-600">{errors.babyId.message}</p>
-                }
+                </select> */}
+                {errors.babyId && (
+                  <p className="text-red-600">{errors.babyId.message}</p>
+                )}
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
@@ -283,8 +270,8 @@ export default function AddMilkReq({ clickedIdData }) {
                       </option>
                       {poolingList?.map((items, index) => {
                         const combinedValue = `${items._id}/${items.batchName}/${items.date}`;
-                        console.log(items,'response')
-                        if (items.culture === false && items.remaining > 0 ) {
+                        console.log(items, "response");
+                        if (items.culture === false && items.remaining > 0) {
                           return (
                             <option key={index} value={combinedValue}>
                               {items?.batchName}({items?.date})
@@ -354,21 +341,23 @@ export default function AddMilkReq({ clickedIdData }) {
                       {bottleList?.map((item, index0) => (
                         <React.Fragment key={index}>
                           {index0 === index &&
-                            item?.filter(item=>item?.isActive === true)?.map((subItem, subIndex) => {
-                              if (subItem?.remainingVoluem > 0) {
-                                const bottleCombValue = `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`;
-                                console.log(subItem,'response')
-                                return (
-                                  <option
-                                    key={subIndex}
-                                    value={bottleCombValue}
-                                  >
-                                    {subItem?.name}
-                                    {/* ({'Remaining Volume'}({subItem?.remainingVoluem}{'ml'})) */}
-                                  </option>
-                                );
-                              }
-                            })}
+                            item
+                              ?.filter((item) => item?.isActive === true)
+                              ?.map((subItem, subIndex) => {
+                                if (subItem?.remainingVoluem > 0) {
+                                  const bottleCombValue = `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`;
+                                  console.log(subItem, "response");
+                                  return (
+                                    <option
+                                      key={subIndex}
+                                      value={bottleCombValue}
+                                    >
+                                      {subItem?.name}
+                                      {/* ({'Remaining Volume'}({subItem?.remainingVoluem}{'ml'})) */}
+                                    </option>
+                                  );
+                                }
+                              })}
                         </React.Fragment>
                       ))}
                     </select>

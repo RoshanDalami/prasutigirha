@@ -250,6 +250,11 @@ const apiUrls = {
       method: "GET",
       url: "/baby/ipList",
     },
+    updateBabyOutcome:{
+      method:"PATCH",
+      url:"/baby/updateBabyOutcome"
+    }
+
   },
   bottle: {
     getBottle: {
@@ -350,6 +355,17 @@ const apiUrls = {
       method:"GET",
       url:"/report/getAllReportDateWise"
     }
+  },
+  dropdown:{
+    getGestationalTwo:{
+      method:"GET",
+      url:"/dropdown/getGestationalTwo"
+    },
+    getBabyOutCome:{
+      method:"GET",
+      url:"/dropdown/getBabyOutcome"
+    }
   }
+
 };
 export default apiUrls;

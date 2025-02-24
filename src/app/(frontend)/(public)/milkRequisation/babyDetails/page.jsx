@@ -3,29 +3,42 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import TableBorder from "src/components/TableDesign";
-import { urls } from "src/services/apiHelpers";
+
 import {
   getBabyDetail,
   getBabyById,
   updateBabyStatus,
   searchBaby,
+  updateBabyOutcome,
 } from "src/services/apiService/baby/babyServices";
+import { getBabyOutCome } from "src/services/apiService/dropdown/dropdownservices";
+
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import Loader from "src/components/Loader";
 import Switch from "@mui/material/Switch";
 const label = { inputProps: { "aria-label": "Switch demo" } };
+import Modal from "src/components/Modal";
+import toast from "react-hot-toast";
 export default function BabyDetail() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({});
+  const {
+    register: outcomeRegister,
+    handleSubmit: outcomeHandleSubmit,
+    formState: { outcomeErrors, outcomeIsSubmitting },
+    watch: outcomeWatch,
+    reset: outcomeReset,
+  } = useForm({});
   const [babyDetails, setBabyDetails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
   async function fetchData() {
-    setLoading(true)
+    setLoading(true);
     const { status, data } = await getBabyDetail();
     if (status === 200) {
       setBabyDetails(data);
@@ -42,7 +55,33 @@ export default function BabyDetail() {
     },
     [router]
   );
-
+  const [babyOutcome, setBabyOutcome] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getBabyOutCome();
+      if (response?.status === 200) {
+        setBabyOutcome(response?.data);
+      }
+    };
+    fetchData();
+  }, []);
+  const babyOutcomeOptions = babyOutcome?.map((item, index) => {
+    return (
+      <option key={index} value={item.name}>
+        {item.name}
+      </option>
+    );
+  });
+  const [babyId, setBabyId] = useState("");
+  const handleOutcomeModalOpen = (id) => {
+    setBabyId(id);
+    setOpenModal(true);
+  };
+  const handleOutcomeModalClose = () => {
+    setBabyId("");
+    setOpenModal(false);
+    outcomeReset();
+  };
   const onSubmit = async (data) => {
     try {
       const response = await searchBaby(data?.term);
@@ -52,8 +91,97 @@ export default function BabyDetail() {
     } catch (error) {}
   };
 
+  const onOutcomeSubmit = async (data) => {
+    try {
+      data = {
+        ...data,
+        babyId: babyId,
+      };
+      console.log(data, "data");
+      const response = await updateBabyOutcome(data);
+      if (response?.status === 200) {
+        toast.success("Baby Outcome updated successfully");
+        fetchData();
+        handleOutcomeModalClose();
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+  };
+
   const local = (
     <div className="pt-10 px-10">
+      {openModal && (
+        <Modal>
+          <div className="bg-white p-5 w-[50vw] rounded-xl">
+            <form
+              className="flex flex-col gap-4"
+              action=""
+              onSubmit={outcomeHandleSubmit((data) => onOutcomeSubmit(data))}
+            >
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="">
+                    {" "}
+                    Baby Outcome <span className="text-red-600">*</span>{" "}
+                  </label>
+                  <select
+                    className="inputStyle"
+                    {...outcomeRegister("babyOutcome", {
+                      required: "Baby Outcome is required",
+                      validate: (value) => value !== "",
+                    })}
+                  >
+                    <option value="">--Select Baby Outcome--</option>
+                    {babyOutcomeOptions}
+                  </select>
+                  {outcomeErrors?.babyOutcome && (
+                    <p className="text-red-600">
+                      {outcomeErrors?.babyOutcome?.message}
+                    </p>
+                  )}
+                </div>
+                {(outcomeWatch("babyOutcome") === "Refer" ||
+                  outcomeWatch("babyOutcome") === "Mortality") && (
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="">
+                      Reason <span className="text-red-600">*</span>
+                    </label>
+                    <textarea
+                      className="inputStyle"
+                      {...outcomeRegister("reason", {
+                        required: "Reason is required",
+                      })}
+                      placeholder="Enter Reason"
+                    ></textarea>
+                    {outcomeErrors?.reason && (
+                      <p className="text-red-600">
+                        {outcomeErrors?.reason?.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => handleOutcomeModalClose()}
+                  className="bg-gray-400 text-white px-4 py-2 rounded-md"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-red-600 text-white px-4 py-2 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={outcomeIsSubmitting}
+                >
+                  {outcomeIsSubmitting ? "Submitting..." : "Submit"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </Modal>
+      )}
       <form action="" onSubmit={handleSubmit((data) => onSubmit(data))}>
         <h1 className="text-xl font-bold my-2">Search Baby</h1>
         <div className="flex gap-3">
@@ -67,9 +195,10 @@ export default function BabyDetail() {
           />
           <button
             type="submit"
-            className="px-6 py-3 rounded-md bg-red-600 hover:bg-blue-600 text-white"
+            className="px-6 py-3 rounded-md bg-red-600 hover:bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
           >
-            Submit
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
           <button
             type="button"
@@ -132,25 +261,21 @@ export default function BabyDetail() {
                     <td className="py-3">{items?.babyStatus}</td>
                     <td className="py-3">{items?.milkConsumed}</td>
                     <td className="py-3">
-                      <div className="flex justify-evenly text-xl">
-                        {/* <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-lime-600">
-                  <PencilSquareIcon
-                    className="h-6 w-6 text-white"
-                    onClick={() => handleEdit(items._id)}
-                  />
-                </div>
-                <div className="px-2 cursor-pointer py-1 rounded-md shadow-md bg-red-600">
-                  <TrashIcon
-                    className="h-6 w-6 text-white"
-                    onClick={() => handleDelete(items._id)}
-                  />
-                </div> */}
+                      <div className="flex justify-evenly gap-3 text-xl">
                         <div>
                           <h1
                             className="cursor-pointer bg-indigo-600 font-semibold rounded-md text-white px-2 py-1.5"
                             onClick={() => handleDetail(items._id)}
                           >
                             Details
+                          </h1>
+                        </div>
+                        <div>
+                          <h1
+                            className="cursor-pointer bg-indigo-600 font-semibold rounded-md text-white px-2 py-1.5"
+                            onClick={() => handleOutcomeModalOpen(items._id)}
+                          >
+                            OutCome
                           </h1>
                         </div>
                       </div>

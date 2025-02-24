@@ -88,11 +88,10 @@ export default function ListVolume() {
   }
 
   const onSubmit = async (data) => {
-    console.log('test', 'response')
+
     try {
       const response = await searchRequsition(date);
-      console.log(response, "response");
-      console.log(date, "response");
+
       if (response?.status === 200) {
         setRequsitionList(response?.data);
       }
@@ -155,7 +154,6 @@ export default function ListVolume() {
               {/* <td className="py-3 ">Action</td> */}
             </tr>
             {requsitionList?.map((row, index) => {
-              console.log(combineQuantities(row?.requisitedMilk), 'response')
               return (
                   <tr
                       className=" border border-x-gray text-center"
@@ -173,23 +171,6 @@ export default function ListVolume() {
                           .reduce((acc, amount) => acc + amount, 0)}
                     </td>
                     <td className="py-3">{combineQuantities(row?.requisitedMilk).length}</td>
-                    <td className="py-3 ">
-                      <div className="flex justify-evenly items-center text-xl">
-                        {/* <div className="bg-lime-600 px-2 py-1 rounded-md shadow-md cursor-pointer">
-
-            <PencilSquareIcon
-              className="h-6 w-6 text-white "
-              onClick={() => handleEdit(row._id)}
-            />
-            </div> */}
-                        {/* <div className="bg-red-600 px-2 py-1 rounded-md shadow-md cursor-pointer ">
-              <TrashIcon
-                className="h-6 w-6 text-white"
-                onClick={() => handleDelete(row._id)}
-              />
-            </div> */}
-                      </div>
-                    </td>
                   </tr>
               );
             })}
