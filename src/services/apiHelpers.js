@@ -6,9 +6,14 @@ import Cookies from "js-cookie";
 //   : "";
 const token = Cookies.get("token");
 
-const baseUrl = "https://prasuti.palikasoft.com";
+// const baseUrl = "https://prasuti.palikasoft.com";
 // const baseUrl = "https://prasutighira-bnsru.ondigitalocean.app";
 // const baseUrl = "http://localhost:8000";
+
+const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://prasuti.palikasoft.com"
+    : "http://localhost:8000";
 
 export const urls = {
   mainUrl: `${baseUrl}/api/v1`,

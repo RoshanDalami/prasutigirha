@@ -11,7 +11,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
-import { createBaby , ipList } from "src/services/apiService/baby/babyServices";
+import { createBaby, ipList } from "src/services/apiService/baby/babyServices";
+import { getGestationalTwo } from "src/services/apiService/dropdown/dropdownservices";
 const aa = new BikramSambat(new Date()).toBS();
 
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -99,13 +100,13 @@ export default function AddBabyDetails({ clickedIdData }) {
     fetchData();
   }, []);
 
-   const parityOptions = parityList?.map((item, index) => {
-     return (
-       <option key={index} value={item.parityName}>
-         {item.parityName}
-       </option>
-     );
-   });
+  const parityOptions = parityList?.map((item, index) => {
+    return (
+      <option key={index} value={item.parityName}>
+        {item.parityName}
+      </option>
+    );
+  });
   //mode of delivery
   const [modeOfDeliveryList, setModeOfDeliveryList] = useState([]);
   useEffect(() => {
@@ -118,7 +119,6 @@ export default function AddBabyDetails({ clickedIdData }) {
     fetchData();
   }, []);
   const diagnosis = [
-
     { name: "Perinatal Asphyxia", id: 2 },
     { name: "Preterm", id: 3 },
     { name: "PT+ other Complication", id: 4 },
@@ -175,16 +175,34 @@ export default function AddBabyDetails({ clickedIdData }) {
     );
   });
 
-  const [ip,setIpList] = useState([]);
-  useEffect(()=>{
+  const [ip, setIpList] = useState([]);
+  useEffect(() => {
     async function fetchData() {
       const response = await ipList();
-      if(response?.status === 200){
-        setIpList(response?.data)
+      if (response?.status === 200) {
+        setIpList(response?.data);
       }
     }
     fetchData();
-  },[])
+  }, []);
+
+  const [gestationalAgeTwo, setGestationalAgeTwo] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await getGestationalTwo();
+      if (response?.status === 200) {
+        setGestationalAgeTwo(response?.data);
+      }
+    };
+    fetchData();
+  }, []);
+  const gestationalAgeTwoOptions = gestationalAgeTwo.map((item, index) => {
+    return (
+      <option key={index} value={item.gestationalName}>
+        {item.gestationalName}
+      </option>
+    );
+  });
 
   const onSubmit = async (data) => {
     data = {
@@ -194,8 +212,8 @@ export default function AddBabyDetails({ clickedIdData }) {
           ? data?.babyStatusOther
           : data?.babyStatus,
       _id: data?._id,
-      diagnosis:personName,
-      indications:indicationName,
+      diagnosis: personName,
+      indications: indicationName,
       dateOfBaby: birthDate,
       engDateOfBaby: engBirthDate,
       userId: userInfo?.userDetail._id,
@@ -255,13 +273,23 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   GestationalAge <span className="text-red-600">*</span>
                 </label>
-               <input type="text" className="inputStyle" {...register('gestationalAge',{
-                required:'Gestaional Age is required'
-               })}
-               placeholder="Gestational Age" />
-               {
-                errors?.gestationalAge && <p className="text-red-600">{errors.gestationalAge.message}</p>
-               }
+
+                <select
+                  className="inputStyle"
+                  {...register("gestationalAge", {
+                    required: "Gestaional Age is required",
+                  })}
+                >
+                  <option selected disabled value={""}>
+                    --Select Gestational Age--
+                  </option>
+                  {gestationalAgeTwoOptions}
+                </select>
+                {errors?.gestationalAge && (
+                  <p className="text-red-600">
+                    {errors.gestationalAge.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col">
                 <label>
@@ -285,11 +313,14 @@ export default function AddBabyDetails({ clickedIdData }) {
                 <label htmlFor="">
                   Parity <span className="text-red-600">*</span>
                 </label>
-                <select className="inputStyle" {...register("parity", { required: "Parity is Required" })} >
-                  <option selected disabled value={''} >-- Select Parity --</option>
-                  {
-                    parityOptions
-                  }
+                <select
+                  className="inputStyle"
+                  {...register("parity", { required: "Parity is Required" })}
+                >
+                  <option selected disabled value={""}>
+                    -- Select Parity --
+                  </option>
+                  {parityOptions}
                 </select>
 
                 {errors.parity && (
@@ -318,7 +349,8 @@ export default function AddBabyDetails({ clickedIdData }) {
                 )}
               </div>
               <div className="flex flex-col">
-                <label htmlFor="">IP Number <span className="text-red-600">*</span>
+                <label htmlFor="">
+                  IP Number <span className="text-red-600">*</span>
                 </label>
                 <input
                   type="text"
@@ -331,9 +363,11 @@ export default function AddBabyDetails({ clickedIdData }) {
                 {errors?.ipNumber && (
                   <p className="errorMessages">{errors.ipNumber.message}</p>
                 )}
-                { ip?.includes(watch('ipNumber'))  ? (
+                {ip?.includes(watch("ipNumber")) ? (
                   <p className="errorMessages">Baby already exist</p>
-                ) : <></> }
+                ) : (
+                  <></>
+                )}
               </div>
               <div className="flex flex-col">
                 <label htmlFor="">
@@ -366,7 +400,6 @@ export default function AddBabyDetails({ clickedIdData }) {
                   input={<OutlinedInput label="Tag" />}
                   renderValue={(selected) => selected.join(", ")}
                   MenuProps={MenuProps}
-
                 >
                   {diagnosis.map((name) => (
                     <MenuItem key={name?.id} value={name?.name}>
@@ -393,7 +426,6 @@ export default function AddBabyDetails({ clickedIdData }) {
                   input={<OutlinedInput label="Tag" />}
                   renderValue={(selected) => selected.join(", ")}
                   MenuProps={MenuProps}
-
                 >
                   {indications.map((name) => (
                     <MenuItem key={name?.id} value={name?.name}>
@@ -440,7 +472,12 @@ export default function AddBabyDetails({ clickedIdData }) {
               </div>
             </div>
             <div className="my-5 font-bold text-xl">
-              <Button isSubmitting={isSubmitting} date={ birthDate } aa={aa} ip={ip?.includes(watch('ipNumber')) ? true : false} >
+              <Button
+                isSubmitting={isSubmitting}
+                date={birthDate}
+                aa={aa}
+                ip={ip?.includes(watch("ipNumber")) ? true : false}
+              >
                 {isSubmitting ? "Submiting ..." : "Submit"}
               </Button>
             </div>
