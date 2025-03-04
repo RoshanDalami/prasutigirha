@@ -280,7 +280,7 @@ export default function ListVolume() {
                           <div>
                             <div className="flex gap-1">
                               <button
-                                className="bg-indigo-600 rounded-md text-white px-2 py-1 mr-2"
+                                className="bg-indigo-600 rounded-md text-sm text-white px-2 py-1 mr-2"
                                 onClick={() => handleBottleDetails(row._id)}
                               >
                                 Bottles
@@ -290,7 +290,7 @@ export default function ListVolume() {
                           <div>
                             {row.culture == null && (
                               <button
-                                className="bg-purple-600 rounded-md text-white px-2 py-1 mr-2"
+                                className="bg-purple-600 rounded-md text-sm text-white px-2 py-1 mr-2"
                                 onClick={() => handleCulture(row._id)}
                               >
                                 Culture

@@ -11,12 +11,12 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { logo } from "../../../../../public/assets/images/amritkoshlogo.jpg";
+
 const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = useForm();
   const [showPw, setShowPw] = useState(false);
   const router = useRouter();
@@ -78,25 +78,30 @@ const Login = () => {
           <div className="grid gap-6">
             <p className="text-2xl my-4">Sign In</p>
 
-            <div className="grid relative ">
+            <div className="grid gap-1 relative ">
               <label>
                 Email <span className="text-red-600">*</span>
               </label>
-              <input
-                className="border-gray-700  rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out p-4"
-                type="email"
-                {...register("email")}
-              />
-              <IoPersonCircleSharp className="absolute right-4 text-2xl top-10  " />
+              <div>
+                <input
+                  className="border-2 border-gray-200  rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out p-4 w-full"
+                  type="email"
+                  placeholder="email@example.com"
+                  {...register("email", { required: "Email is required" })}
+                />
+                <IoPersonCircleSharp className="absolute right-4 text-2xl top-10  " />
+              </div>
+              {errors.email &&  <span className="text-red-600">{errors.email.message}</span>}
             </div>
             <div className="grid relative">
               <label>
                 Password <span className="text-red-600">*</span>
               </label>
               <input
-                className="border-gray-700  rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out p-4"
+                className="border-2 border-gray-300  rounded-lg  focus:outline-none focus:ring focus:border-blue-300 hover:ring-2 hover:ring-blue-300 transition duration-300 ease-in-out p-4"
                 type={showPw ? "text" : "password"}
-                {...register("password")}
+                placeholder="password"
+                {...register("password",{required:"Password is required"})}
               />
               {showPw ? (
                 <IoEyeOffOutline
@@ -109,6 +114,9 @@ const Login = () => {
                   onClick={() => setShowPw(!showPw)}
                 />
               )}
+              {
+                errors.password && <span className="text-red-600">{errors.password.message}</span>
+              }
             </div>
           </div>
           <div className="flex justify-between my-4">
@@ -122,8 +130,9 @@ const Login = () => {
           </div>
           <div>
             <button
-              className="bg-red-600 text-white w-full rounded-md py-2 hover:bg-[#052c65]"
+              className="bg-red-600 text-white w-full rounded-md py-2 hover:bg-[#052c65] disabled:cursor-not-allowed disabled:bg-gray-300 "
               type="submit"
+              disabled={isSubmitting}
             >
               {isSubmitting ? "Submitting ..." : "Login"}
             </button>

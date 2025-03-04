@@ -264,7 +264,7 @@ export default function BabyDetail() {
                       <div className="flex justify-evenly gap-3 text-xl">
                         <div>
                           <h1
-                            className="cursor-pointer bg-indigo-600 font-semibold rounded-md text-white px-2 py-1.5"
+                            className="cursor-pointer bg-indigo-600 text-sm  rounded-md text-white px-2 py-1.5"
                             onClick={() => handleDetail(items._id)}
                           >
                             Details
@@ -272,7 +272,7 @@ export default function BabyDetail() {
                         </div>
                         <div>
                           <h1
-                            className="cursor-pointer bg-indigo-600 font-semibold rounded-md text-white px-2 py-1.5"
+                            className="cursor-pointer bg-indigo-600  text-sm rounded-md text-white px-2 py-1.5"
                             onClick={() => handleOutcomeModalOpen(items._id)}
                           >
                             OutCome

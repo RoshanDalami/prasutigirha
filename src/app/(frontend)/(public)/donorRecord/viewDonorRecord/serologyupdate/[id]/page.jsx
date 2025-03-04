@@ -36,6 +36,7 @@ function SerologyUpdatePage() {
             dateofHbsagTest: hbsagTestDate,
             donorId: id,
         };
+        console.log(finalData, "finalData");
         try {
             const response = await updateSerology(finalData);
             if (response?.status === 200) {
