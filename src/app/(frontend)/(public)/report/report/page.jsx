@@ -22,8 +22,8 @@ import {
   PageBreak,
 } from "docx";
 import { saveAs } from "file-saver";
-import { usePDF } from "react-to-pdf";
-
+import {useReactToPrint} from 'react-to-print'
+import { IoMdPrint } from "react-icons/io";
 const aa = new BikramSambat(new Date()).toBS();
 
 function ReportPage(props) {
@@ -33,8 +33,10 @@ function ReportPage(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [isReseting, setIsReseting] = useState(false);
-  const { toPDF, targetRef } = usePDF({ filename: "report.pdf" });
-  const pdfRef = useRef();
+  const contentRef = useRef();
+  const reactToPrintFn = useReactToPrint({
+    contentRef
+  })
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
@@ -1611,13 +1613,14 @@ function ReportPage(props) {
           Download Word File
         </button>
         <button
-          className={"bg-blue-600 px-6 py-2 rounded-lg text-white"}
-          onClick={() => toPDF()}
+          className={"bg-blue-600 px-6 py-2 rounded-lg text-white flex items-center gap-3"}
+          onClick={() => reactToPrintFn()}
         >
-          Download PDF
+            <span><IoMdPrint className="h-6" /></span>
+          Print
         </button>
       </div>
-      <div ref={targetRef} className={"printMargin p-10 page-break"}>
+      <div ref={contentRef} className={"printMargin p-10 page-break"}>
         <table className={"w-full  print:px-10 print:py-5 "}>
           <thead>
             <th className={"tableBorder"}>Description</th>
@@ -1634,8 +1637,12 @@ function ReportPage(props) {
               <td className={"tableBorder"}>{reportData?.totalMother}</td>
             </tr>
             <tr>
-              <td className="tableBorder">Total Eligible Donor</td>
+              <td className="tableBorder"> Eligible Donor</td>
               <td className="tableBorder">{reportData?.eligibleMother}</td>
+            </tr>
+            <tr>
+              <td className="tableBorder">Ineligible Donor</td>
+              <td className="tableBorder">{reportData?.unEligibleMother}</td>
             </tr>
             <tr>
               <td className="tableBorder"> Disqualified Donor</td>
@@ -1644,31 +1651,37 @@ function ReportPage(props) {
 
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
-                Disqualified Donor Reason wise
+                Disqualified Donor Reason
               </td>
             </tr>
             <tr>
-              <td className="tableBorder"> Due to HIV Positive</td>
+              <td className="tableBorder">HIV Positive</td>
               <td className="tableBorder">{reportData?.disQualifiedHIV}</td>
             </tr>
             <tr>
-              <td className="tableBorder"> Due to HBSAG Positive</td>
+              <td className="tableBorder">HBSAG Positive</td>
               <td className="tableBorder">{reportData?.disQualifiedHBSAG}</td>
             </tr>
             <tr>
-              <td className="tableBorder"> Due to VDRL Positive</td>
+              <td className="tableBorder">VDRL Positive</td>
               <td className="tableBorder">{reportData?.disQualifiedVDRL}</td>
             </tr>
             <tr>
-              <td className="tableBorder"> Due to Verbal Positive</td>
+              <td className="tableBorder">Verbal Positive</td>
               <td className="tableBorder">
                 {reportData?.disqulifiedCountVerbalStatus}
               </td>
             </tr>
             <tr>
-              <td className="tableBorder"> Due to Physical Positive</td>
+              <td className="tableBorder">Physical Positive</td>
               <td className="tableBorder">
                 {reportData?.disqualifiedPhysicalStatus}
+              </td>
+            </tr>
+            <tr>
+              <td className="tableBorder">Other Test Positive</td>
+              <td className="tableBorder">
+                {reportData?.disqulifiedWithOtherTest}
               </td>
             </tr>
 
@@ -1698,27 +1711,90 @@ function ReportPage(props) {
             )}
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
-                Donor Age Wise
+                Donor Age 
               </td>
             </tr>
             <tr>
-              <td className="tableBorder">Donor Under Twenty Years</td>
+              <td className="tableBorder">Under Twenty Years</td>
               <td className="tableBorder">{reportData?.donorUnderTwenty}</td>
             </tr>
             <tr>
               <td className="tableBorder">
-                Donor Between Twenty and Thirty Five Years
+                Between Twenty and Thirty Five Years
               </td>
               <td className="tableBorder">
                 {reportData?.donorBetweenTwentyAndThirtyYears}
               </td>
             </tr>
             <tr>
-              <td className="tableBorder">Donor Above Thirty Five Years</td>
+              <td className="tableBorder">Above Thirty Five Years</td>
               <td className="tableBorder">
                 {reportData?.donorAboveThirtyFiveYears}
               </td>
             </tr>
+
+            <tr>
+              <td className="tableBorder text-center font-bold" colSpan={2}>
+                Donor Child Condition
+              </td>
+            </tr>
+            {reportData?.donorChildAccordingToAdmitted?.length > 0 ? (
+              reportData?.donorChildAccordingToAdmitted?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="tableBorder">{item._id}</td>
+                    <td className="tableBorder">{item.count}</td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td
+                  className={"tableBorder text-center text-gray-500"}
+                  colSpan={2}
+                >
+                  No Data Found !!!
+                </td>
+              </tr>
+            )}
+
+            {/* <tr>
+                    <td className="tableBorder text-center font-bold " colSpan={2}>Donor Child Condition Wise</td>
+                </tr>
+                {reportData?.donorChildAccordingToStatus?.length > 0 ? reportData?.donorChildAccordingToStatus?.map((item, index) => {
+                    return (<tr key={index}>
+                        <td className="tableBorder">{item._id}</td>
+                        <td className="tableBorder">{item.totalDonors}</td>
+                    </tr>)
+                }) : <tr>
+                    <td className={'tableBorder text-center text-gray-500'} colSpan={2}>No Data Found !!!</td>
+                </tr>} */}
+            <tr>
+              <td className="tableBorder text-center font-bold" colSpan={2}>
+                Donor Child Feeding Status
+              </td>
+            </tr>
+            {reportData?.donorChildAccordingToFeedingStatus?.length > 0 ? (
+              reportData?.donorChildAccordingToFeedingStatus?.map(
+                (item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="tableBorder">{item._id}</td>
+                      <td className="tableBorder">{item.count}</td>
+                    </tr>
+                  );
+                }
+              )
+            ) : (
+              <tr>
+                <td
+                  className={"tableBorder text-center text-gray-500"}
+                  colSpan={2}
+                >
+                  No Data Found !!!
+                </td>
+              </tr>
+            )}
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Milk Collection
@@ -1764,69 +1840,6 @@ function ReportPage(props) {
                 {reportData?.milkCollectedAboveThirytFive} ml
               </td>
             </tr>
-            <tr>
-              <td className="tableBorder text-center font-bold" colSpan={2}>
-                Donor Child Condition
-              </td>
-            </tr>
-            {reportData?.donorChildAccordingToAdmitted?.length > 0 ? (
-              reportData?.donorChildAccordingToAdmitted?.map((item, index) => {
-                return (
-                  <tr key={index}>
-                    <td className="tableBorder">{item._id}</td>
-                    <td className="tableBorder">{item.count}</td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td
-                  className={"tableBorder text-center text-gray-500"}
-                  colSpan={2}
-                >
-                  No Data Found !!!
-                </td>
-              </tr>
-            )}
-
-            {/* <tr>
-                    <td className="tableBorder text-center font-bold " colSpan={2}>Donor Child Condition Wise</td>
-                </tr>
-                {reportData?.donorChildAccordingToStatus?.length > 0 ? reportData?.donorChildAccordingToStatus?.map((item, index) => {
-                    return (<tr key={index}>
-                        <td className="tableBorder">{item._id}</td>
-                        <td className="tableBorder">{item.totalDonors}</td>
-                    </tr>)
-                }) : <tr>
-                    <td className={'tableBorder text-center text-gray-500'} colSpan={2}>No Data Found !!!</td>
-                </tr>} */}
-            <tr>
-              <td className="tableBorder text-center font-bold" colSpan={2}>
-                Donor Child Feeding Status Wise
-              </td>
-            </tr>
-            {reportData?.donorChildAccordingToFeedingStatus?.length > 0 ? (
-              reportData?.donorChildAccordingToFeedingStatus?.map(
-                (item, index) => {
-                  return (
-                    <tr key={index}>
-                      <td className="tableBorder">{item._id}</td>
-                      <td className="tableBorder">{item.count}</td>
-                    </tr>
-                  );
-                }
-              )
-            ) : (
-              <tr>
-                <td
-                  className={"tableBorder text-center text-gray-500"}
-                  colSpan={2}
-                >
-                  No Data Found !!!
-                </td>
-              </tr>
-            )}
-
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Pasteurization
@@ -1876,6 +1889,21 @@ function ReportPage(props) {
               </td>
             </tr>
             <tr>
+                <td className="tableBorder text-center font-bold" colSpan={2}>Recipient Record</td>
+            </tr>
+            <tr>
+                <td className="tableBorder">Total Recipient</td>
+                <td className="tableBorder">{reportData?.totalBabyCount}</td>
+            </tr>
+            <tr>
+                <td className="tableBorder">Internal Recipient</td>
+                <td className="tableBorder">{reportData?.totalInternalBaby}</td>
+            </tr>
+            <tr>
+                <td className="tableBorder">External Recipient</td>
+                <td className="tableBorder">{reportData?.totalExternalBaby}</td>
+            </tr>
+            <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Milk Requsition
               </td>
@@ -1909,13 +1937,27 @@ function ReportPage(props) {
                 Milk Dispense According to Baby Status
               </td>
             </tr>
+            <tr>
+                <td className="tableBorder"></td>
+                <td className="tableBorder text-center font-bold">
+                {" "}
+                <div className="flex justify-evenly text-center">
+                  <p>ml</p>
+                  <p>Count</p>
+                </div>
+              </td>
+            </tr>
             {reportData?.totalMilkByStatus?.length > 0 ? (
               reportData?.totalMilkByStatus?.map((item, index) => {
                 return (
                   <tr key={index}>
                     <td className="tableBorder">{item.babyStatus}</td>
                     <td className="tableBorder">
-                      {item.totalRequisitedMilk} ml
+                      {" "}
+                      <div className="flex justify-evenly text-center  ">
+                        <p>{item.totalRequisitedMilk}{" "}ml</p>
+                        <p>{item.count}</p>
+                      </div>{" "}
                     </td>
                   </tr>
                 );
@@ -1933,7 +1975,7 @@ function ReportPage(props) {
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 {" "}
-                Recipient Diagnosis Wise
+                Recipient Diagnosis
               </td>
             </tr>
             {reportData?.diagnosisCounts?.length > 0 ? (
@@ -1958,7 +2000,7 @@ function ReportPage(props) {
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 {" "}
-                Recipient Indication Wise
+                Recipient Indication
               </td>
             </tr>
             {reportData?.indicationCounts?.length > 0 ? (
@@ -1966,6 +2008,72 @@ function ReportPage(props) {
                 return (
                   <tr key={index}>
                     <td className="tableBorder">{item.indications}</td>
+                    <td className="tableBorder">{item.count} </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td
+                  className={"tableBorder text-center text-gray-500"}
+                  colSpan={2}
+                >
+                  No Data Found !!!
+                </td>
+              </tr>
+            )}
+            <tr>
+              <td className="tableBorder text-center font-bold" colSpan={2}>
+                {" "}
+                Recipient Gestational Age
+              </td>
+            </tr>
+            <tr>
+              <td className="tableBorder "></td>
+              <td className="tableBorder text-center font-bold">
+                {" "}
+                <div className="flex justify-center gap-10">
+                  <p>Internal</p>
+                  <p>External</p>
+                </div>
+              </td>
+            </tr>
+            {reportData?.gestationalAgeWise?.length > 0 ? (
+              reportData?.gestationalAgeWise?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="tableBorder">{item.gestationalName}</td>
+                    <td className="tableBorder">
+                      {" "}
+                      <div className="flex justify-evenly text-center  ">
+                        <p>{item.internal}</p>
+                        <p>{item.external}</p>
+                      </div>{" "}
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td
+                  className={"tableBorder text-center text-gray-500"}
+                  colSpan={2}
+                >
+                  No Data Found !!!
+                </td>
+              </tr>
+            )}
+            <tr>
+              <td className="tableBorder text-center font-bold" colSpan={2}>
+                {" "}
+                Recipient Outcome
+              </td>
+            </tr>
+            {reportData?.babyOutCome?.length > 0 ? (
+              reportData?.babyOutCome?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="tableBorder">{item.name}</td>
                     <td className="tableBorder">{item.count} </td>
                   </tr>
                 );
