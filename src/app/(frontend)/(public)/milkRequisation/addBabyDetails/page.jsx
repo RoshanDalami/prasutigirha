@@ -164,7 +164,6 @@ export default function AddBabyDetails({ clickedIdData }) {
     { id: 1, name: "NICU" },
     { id: 2, name: "SNCU" },
     { id: 3, name: "KMC" },
-    { id: 4, name: "Mortality" },
     { id: 5, name: "Other" },
   ];
   const babyStatusOptions = babyStatus?.map((item, index) => {

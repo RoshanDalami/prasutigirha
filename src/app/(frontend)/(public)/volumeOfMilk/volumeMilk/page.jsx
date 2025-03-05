@@ -157,13 +157,13 @@ export default function ListVolume() {
 
         <div className="flex gap-3">
           <button
-              className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
+              className="text-white bg-red-600 hover:bg-[#004a89]  px-3 py-1 rounded-lg text-sm "
               type="submit"
           >
             SEARCH
           </button>
           <button
-              className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
+                    className="text-white bg-red-600 hover:bg-[#004a89]  rounded-lg text-sm px-3 py-1 "
               onClick={() => resetFilter()}
           >
             RESET
@@ -231,21 +231,10 @@ export default function ListVolume() {
                         <td className="py-3">{item.totalMilkCollected} ml</td>
                         <td className="py-3">
                           <div className="flex justify-evenly text-xl">
-                            {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-lime-600">
-                            <PencilSquareIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleEdit(item._id)}
-                            />
-                          </div> */}
-                            {/* <div className=" cursor-pointer px-2 py-1 rounded-md shadow-md bg-red-600">
-                            <TrashIcon
-                              className="h-6 w-6 text-white"
-                              onClick={() => handleDelete(item._id)}
-                            />
-                          </div> */}
+                         
                             <div>
                               <h1
-                                  className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white font-semibold "
+                                  className="cursor-pointer rounded-md px-2 py-1.5 bg-indigo-600 text-white text-sm "
                                   onClick={() => handleDetail(item.donorId)}
                               >
                                 Details

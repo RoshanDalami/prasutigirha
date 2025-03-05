@@ -93,11 +93,10 @@ export default function AddMilkReq({ clickedIdData }) {
 
   const babyOptions = babyList?.map((item)=>{
     return{
-      label: item.babyName,
+      label: `${item.babyName} (${item.ipNumber})`,
       value: `${item._id}/${item.babyName}`
     }
   })
-
   //poolingList batchname
   const [poolingList, setPoolingList] = useState([]);
   useEffect(() => {
