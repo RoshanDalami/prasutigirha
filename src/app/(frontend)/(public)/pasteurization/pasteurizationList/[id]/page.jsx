@@ -82,8 +82,7 @@ export default function BottleDetails() {
     // });
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
-
-        content: () => componentRef.current,
+        contentRef:componentRef
     });
 
     function combineVolumes(array) {
