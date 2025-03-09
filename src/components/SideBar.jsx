@@ -153,6 +153,7 @@ export default function SideBar() {
         {link:"/report/milkRequistion",name:"Requisition"},
         {link:"/report/baby",name:"Baby"},
         {link: "/report/report", name: "All Report"},
+        {link: "/report/discard", name: "Discard Report"},
 
     ];
 

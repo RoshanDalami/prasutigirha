@@ -26,7 +26,7 @@ export const createPooling = async (data) => {
 export const deletePooling = async (id) => {
   let response = await mainApi(
     apiUrls.pasteurization.deletePooling.method,
-    apiUrls.pasteurization.deletePooling.url+`/${id}`
+    apiUrls.pasteurization.deletePooling.url + `/${id}`
   );
   return response;
 };
@@ -60,37 +60,37 @@ export const getGestationalPooling = async (id) => {
   return response;
 };
 
-export const getDonorByGestationalAge = async (id)=>{
+export const getDonorByGestationalAge = async (id) => {
   let response = await mainApi(
     apiUrls.pasteurization.getDonorListById.method,
-    apiUrls.pasteurization.getDonorListById.url+`/${id}`,
-    
-  )
-  return response
-}
+    apiUrls.pasteurization.getDonorListById.url + `/${id}`
+  );
+  return response;
+};
 
-export const updateCulture = async (data) =>{
+export const updateCulture = async (data) => {
   let response = await mainApi(
     apiUrls.pasteurization.updateCulture.method,
     apiUrls.pasteurization.updateCulture.url,
     data
-  )
-  return response
-}
+  );
+  return response;
+};
 
-export const updateOther = async (data) =>{
+export const updateOther = async (data) => {
   let response = await mainApi(
     apiUrls.pasteurization.updateOther.method,
     apiUrls.pasteurization.updateOther.url,
     data
   );
-  return response
-}
+  return response;
+};
 
-export const Discard = async (id)=>{
+export const Discard = async (id, remarks) => {
   let response = await mainApi(
     apiUrls.pasteurization.discard.method,
-    apiUrls.pasteurization.discard.url+`/${id?id:''}`,
-  )
-  return response
-}
+    apiUrls.pasteurization.discard.url +
+      `?id=${id ? id : ""}&remarks=${remarks}`
+  );
+  return response;
+};

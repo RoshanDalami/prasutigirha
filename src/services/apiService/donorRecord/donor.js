@@ -73,3 +73,11 @@ export const updateSerology = async (data) => {
   );
   return response;
 };
+
+export const getAllDonorListForSelect = async () => {
+  const response = await mainApi(
+    apiUrls.donor.getAllActiveDonorListForSelect.method,
+    apiUrls.donor.getAllActiveDonorListForSelect.url
+  );
+  return response
+};

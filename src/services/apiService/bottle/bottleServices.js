@@ -17,10 +17,10 @@ export async function createBottle(data){
     )
     return response
 }
-export async function updateBottleStatus(id){
+export async function updateBottleStatus(id,remark){
     let response = await mainApi(
         apiUrls.bottle.updateBottleStatus.method,
-        apiUrls.bottle.updateBottleStatus.url+`/${id?id:''}`,
+        apiUrls.bottle.updateBottleStatus.url+`?id=${id?id:""}&remark=${remark}`,
     )
     return response;
 }

@@ -72,6 +72,9 @@
 }
 
 @media print {
+    @page{
+        margin-top: 20mm;
+    }
     .printMargin {
         padding-left: 2.5rem; /* px-10 */
         padding-right: 2.5rem;
@@ -80,5 +83,8 @@
     }
     .page-break {
         page-break-before: always; /* Forces a page break before the element */
+    }
+    .no-break{
+        page-break-inside: avoid;
     }
 }

@@ -22,11 +22,11 @@ import {
   PageBreak,
 } from "docx";
 import { saveAs } from "file-saver";
-import {useReactToPrint} from 'react-to-print'
+import { useReactToPrint } from "react-to-print";
 import { IoMdPrint } from "react-icons/io";
 const aa = new BikramSambat(new Date()).toBS();
 
-function ReportPage(props) {
+function ReportPage() {
   const [reportData, setReportData] = useState({});
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
@@ -35,8 +35,8 @@ function ReportPage(props) {
   const [isReseting, setIsReseting] = useState(false);
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({
-    contentRef
-  })
+    contentRef,
+  });
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
@@ -230,6 +230,33 @@ function ReportPage(props) {
                     right: { size: 2, color: "000000" },
                   },
                 }),
+                // Total Inactive Donor
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Total Eligible Donor")],
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.unEligibleMother || "N/A"}`
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                  borders: {
+                    top: { size: 2, color: "000000" },
+                    bottom: { size: 2, color: "000000" },
+                    left: { size: 2, color: "000000" },
+                    right: { size: 2, color: "000000" },
+                  },
+                }),
 
                 // Disqualified Donor
                 new TableRow({
@@ -258,6 +285,187 @@ function ReportPage(props) {
                     right: { size: 2, color: "000000" },
                   },
                 }),
+                //disqulified Donor Reason
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: "Disqualified Donor Reason",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+                // Milk Collection Data
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("HIV Positive")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(`${reportData?.disQualifiedHIV || "0"} `),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("HBSAG Positive")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.disQualifiedHBSAG || "0"} `
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("VDRL Positive")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.disQualifiedVDRL || "0"} `
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Verbal Positive")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.disqulifiedCountVerbalStatus || "0"} `
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Physical Positive")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.disqualifiedPhysicalStatus || "0"} `
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Other Test Positive")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.disqulifiedWithOtherTest || "0"} `
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
 
                 // Section Header: Donor According to Donation House
                 new TableRow({
@@ -268,7 +476,7 @@ function ReportPage(props) {
                           alignment: AlignmentType.CENTER,
                           children: [
                             new TextRun({
-                              text: "Donor According to Donation House",
+                              text: "Place of Donation",
                               bold: true,
                             }),
                           ],
@@ -348,7 +556,7 @@ function ReportPage(props) {
                           alignment: AlignmentType.CENTER,
                           children: [
                             new TextRun({
-                              text: "Donor Age Wise",
+                              text: "Donor Age",
                               bold: true,
                             }),
                           ],
@@ -444,6 +652,147 @@ function ReportPage(props) {
                     }),
                   ],
                 }),
+
+                // Section Header: Donor child condition
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER, // Center alignment for the paragraph
+                          children: [
+                            new TextRun({
+                              text: "Donor Child Condition ",
+                              bold: true, // Make the text bold
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2, // Span the column across 2 cells
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+                // Donor According to Donation House Data
+                ...(reportData?.donorChildAccordingToAdmitted?.length > 0
+                  ? reportData.donorChildAccordingToAdmitted.map(
+                      (item) =>
+                        new TableRow({
+                          children: [
+                            new TableCell({
+                              children: [new Paragraph(item._id || "N/A")],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                            new TableCell({
+                              children: [new Paragraph(`${item.count}`)],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                          ],
+                        })
+                    )
+                  : [
+                      new TableRow({
+                        children: [
+                          new TableCell(
+                            {
+                              children: [
+                                new Paragraph({
+                                  text: "No Data Found !!!",
+                                  alignment: AlignmentType.CENTER,
+                                }),
+                              ],
+                            },
+                            { columnSpan: 2 }
+                          ),
+                        ],
+                      }),
+                    ]),
+                //Donor Child Feeding Status
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: "Donor Child Feeding Status",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+                // Donor According to Donor Child Feeding Status
+                ...(reportData?.donorChildAccordingToFeedingStatus?.length > 0
+                  ? reportData.donorChildAccordingToFeedingStatus.map(
+                      (item) =>
+                        new TableRow({
+                          children: [
+                            new TableCell({
+                              children: [new Paragraph(item._id || "N/A")],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                            new TableCell({
+                              children: [new Paragraph(`${item.count}`)],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                          ],
+                        })
+                    )
+                  : [
+                      new TableRow({
+                        children: [
+                          new TableCell(
+                            {
+                              children: [
+                                new Paragraph({
+                                  text: "No Data Found !!!",
+                                  alignment: AlignmentType.CENTER,
+                                }),
+                              ],
+                            },
+                            { columnSpan: 2 }
+                          ),
+                        ],
+                      }),
+                    ]),
 
                 // Section Header: Milk Collection
                 new TableRow({
@@ -651,345 +1000,7 @@ function ReportPage(props) {
                   ],
                 }),
 
-                // Section Header: Donor According to Donation House
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER, // Center alignment for the paragraph
-                          children: [
-                            new TextRun({
-                              text: "Donor Child Admitted Wise",
-                              bold: true, // Make the text bold
-                            }),
-                          ],
-                        }),
-                      ],
-                      columnSpan: 2, // Span the column across 2 cells
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-
-                // Donor According to Donation House Data
-                ...(reportData?.donorChildAccordingToAdmitted?.length > 0
-                  ? reportData.donorChildAccordingToAdmitted.map(
-                      (item) =>
-                        new TableRow({
-                          children: [
-                            new TableCell({
-                              children: [new Paragraph(item._id || "N/A")],
-                              margins: {
-                                top: 200, // 200 twips = 10 points = 0.14 inches
-                                bottom: 200,
-                                left: 200,
-                                right: 200,
-                              },
-                            }),
-                            new TableCell({
-                              children: [new Paragraph(`${item.count}`)],
-                              margins: {
-                                top: 200, // 200 twips = 10 points = 0.14 inches
-                                bottom: 200,
-                                left: 200,
-                                right: 200,
-                              },
-                            }),
-                          ],
-                        })
-                    )
-                  : [
-                      new TableRow({
-                        children: [
-                          new TableCell(
-                            {
-                              children: [
-                                new Paragraph({
-                                  text: "No Data Found !!!",
-                                  alignment: AlignmentType.CENTER,
-                                }),
-                              ],
-                            },
-                            { columnSpan: 2 }
-                          ),
-                        ],
-                      }),
-                    ]), // Section Header: Donor According to Donation House
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [
-                            new TextRun({
-                              text: "Donor Child Condition Wise",
-                              bold: true,
-                            }),
-                          ],
-                        }),
-                      ],
-                      columnSpan: 2,
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-
-                // Donor According to Donation House Data
-                ...(reportData?.donorChildAccordingToStatus?.length > 0
-                  ? reportData.donorChildAccordingToStatus.map(
-                      (item) =>
-                        new TableRow({
-                          children: [
-                            new TableCell({
-                              children: [new Paragraph(item._id || "N/A")],
-                              margins: {
-                                top: 200, // 200 twips = 10 points = 0.14 inches
-                                bottom: 200,
-                                left: 200,
-                                right: 200,
-                              },
-                            }),
-                            new TableCell({
-                              children: [new Paragraph(`${item.totalDonors}`)],
-                              margins: {
-                                top: 200, // 200 twips = 10 points = 0.14 inches
-                                bottom: 200,
-                                left: 200,
-                                right: 200,
-                              },
-                            }),
-                          ],
-                        })
-                    )
-                  : [
-                      new TableRow({
-                        children: [
-                          new TableCell(
-                            {
-                              children: [
-                                new Paragraph({
-                                  text: "No Data Found !!!",
-                                  alignment: AlignmentType.CENTER,
-                                }),
-                              ],
-                            },
-                            { columnSpan: 2 }
-                          ),
-                        ],
-                      }),
-                    ]),
-
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [
-                            new TextRun({
-                              text: "Donor Child Feeding Status Wise",
-                              bold: true,
-                            }),
-                          ],
-                        }),
-                      ],
-                      columnSpan: 2,
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-
-                // Donor According to Donation House Data
-                ...(reportData?.donorChildAccordingToFeedingStatus?.length > 0
-                  ? reportData.donorChildAccordingToFeedingStatus.map(
-                      (item) =>
-                        new TableRow({
-                          children: [
-                            new TableCell({
-                              children: [new Paragraph(item._id || "N/A")],
-                              margins: {
-                                top: 200, // 200 twips = 10 points = 0.14 inches
-                                bottom: 200,
-                                left: 200,
-                                right: 200,
-                              },
-                            }),
-                            new TableCell({
-                              children: [new Paragraph(`${item.count}`)],
-                              margins: {
-                                top: 200, // 200 twips = 10 points = 0.14 inches
-                                bottom: 200,
-                                left: 200,
-                                right: 200,
-                              },
-                            }),
-                          ],
-                        })
-                    )
-                  : [
-                      new TableRow({
-                        children: [
-                          new TableCell(
-                            {
-                              children: [
-                                new Paragraph({
-                                  text: "No Data Found !!!",
-                                  alignment: AlignmentType.CENTER,
-                                }),
-                              ],
-                            },
-                            { columnSpan: 2 }
-                          ),
-                        ],
-                      }),
-                    ]),
-
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [
-                            new TextRun({
-                              text: "Disqualified Donor Reason wise",
-                              bold: true,
-                            }),
-                          ],
-                        }),
-                      ],
-                      columnSpan: 2,
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-
-                // Milk Collection Data
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [new Paragraph("Due to HIV Positive")],
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                    new TableCell({
-                      children: [
-                        new Paragraph(`${reportData?.disQualifiedHIV || "0"} `),
-                      ],
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [new Paragraph("Due to HBSAG Positive")],
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                    new TableCell({
-                      children: [
-                        new Paragraph(
-                          `${reportData?.disQualifiedHBSAG || "0"} `
-                        ),
-                      ],
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [new Paragraph("Due to VDRL Positive")],
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                    new TableCell({
-                      children: [
-                        new Paragraph(
-                          `${reportData?.disQualifiedVDRL || "0"} `
-                        ),
-                      ],
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-
-                new TableRow({
-                  children: [
-                    new TableCell({
-                      children: [
-                        new Paragraph({
-                          alignment: AlignmentType.CENTER,
-                          children: [
-                            new TextRun({
-                              text: "Donor Child Condition Wise",
-                              bold: true,
-                            }),
-                          ],
-                        }),
-                      ],
-                      columnSpan: 2,
-                      margins: {
-                        top: 200, // 200 twips = 10 points = 0.14 inches
-                        bottom: 200,
-                        left: 200,
-                        right: 200,
-                      },
-                    }),
-                  ],
-                }),
-
-                // Milk Collection Data
+                // Pasteurized milk
                 new TableRow({
                   children: [
                     new TableCell({
@@ -1190,7 +1201,7 @@ function ReportPage(props) {
                           alignment: AlignmentType.CENTER,
                           children: [
                             new TextRun({
-                              text: "Milk Requsition",
+                              text: "Recipient Record",
                               bold: true,
                             }),
                           ],
@@ -1208,6 +1219,113 @@ function ReportPage(props) {
                 }),
 
                 // Milk Collection Data
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Total Recipient")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.totalBabyCount || "0"} `
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("Internal Recipient")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.totalInternalBaby || "0"}`
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [new Paragraph("External Recipient")],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph(
+                          `${reportData?.totalExternalBaby || "0"}`
+                        ),
+                      ],
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+                //milk Requisition
+
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: "Milk Requsition",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+
                 new TableRow({
                   children: [
                     new TableCell({
@@ -1319,6 +1437,8 @@ function ReportPage(props) {
                   ],
                 }),
 
+
+                // milk Dispense According to baby Status
                 new TableRow({
                   children: [
                     new TableCell({
@@ -1341,6 +1461,50 @@ function ReportPage(props) {
                         right: 200,
                       },
                     }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.LEFT,
+                          children: [
+                            new TextRun({
+                              text: "ML",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.LEFT,
+                          children: [
+                            new TextRun({
+                              text: "Count",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    })
                   ],
                 }),
 
@@ -1372,6 +1536,17 @@ function ReportPage(props) {
                                 right: 200,
                               },
                             }),
+                            new TableCell({
+                              children: [
+                                new Paragraph(`${item.count}`),
+                              ],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            })
                           ],
                         })
                     )
@@ -1392,6 +1567,9 @@ function ReportPage(props) {
                         ],
                       }),
                     ]),
+
+
+                    //recipient diagnosis
                 new TableRow({
                   children: [
                     new TableCell({
@@ -1400,7 +1578,7 @@ function ReportPage(props) {
                           alignment: AlignmentType.CENTER,
                           children: [
                             new TextRun({
-                              text: "Recipient Diagnosis Wise",
+                              text: "Recipient Diagnosis",
                               bold: true,
                             }),
                           ],
@@ -1417,7 +1595,7 @@ function ReportPage(props) {
                   ],
                 }),
 
-                // Donor According to Donation House Data
+
                 ...(reportData?.diagnosisCounts?.length > 0
                   ? reportData.diagnosisCounts.map(
                       (item) =>
@@ -1463,6 +1641,7 @@ function ReportPage(props) {
                         ],
                       }),
                     ]),
+                    //recipient indication
                 new TableRow({
                   children: [
                     new TableCell({
@@ -1471,7 +1650,7 @@ function ReportPage(props) {
                           alignment: AlignmentType.CENTER,
                           children: [
                             new TextRun({
-                              text: "Recipient Indication Wise",
+                              text: "Recipient Indication",
                               bold: true,
                             }),
                           ],
@@ -1488,7 +1667,6 @@ function ReportPage(props) {
                   ],
                 }),
 
-                // Donor According to Donation House Data
                 ...(reportData?.indicationCounts?.length > 0
                   ? reportData.indicationCounts.map(
                       (item) =>
@@ -1497,6 +1675,181 @@ function ReportPage(props) {
                             new TableCell({
                               children: [
                                 new Paragraph(item.indications || "N/A"),
+                              ],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                            new TableCell({
+                              children: [new Paragraph(`${item.count}`)],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                          ],
+                        })
+                    )
+                  : [
+                      new TableRow({
+                        children: [
+                          new TableCell(
+                            {
+                              children: [
+                                new Paragraph({
+                                  text: "No Data Found !!!",
+                                  alignment: AlignmentType.CENTER,
+                                }),
+                              ],
+                            },
+                            { columnSpan: 2 }
+                          ),
+                        ],
+                      }),
+                    ]),
+
+                    // Recipient Gestational Age
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: "Recipient Gestational Age",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.LEFT,
+                          children: [
+                            new TextRun({
+                              text: "Internal",
+                              bold: true,
+                            }),
+                          ],
+                          children: [
+                            new TextRun({
+                              text: "External",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+                ...(reportData?.gestationalAgeWise?.length > 0
+                  ? reportData.gestationalAgeWise.map(
+                      (item) =>
+                        new TableRow({
+                          children: [
+                            new TableCell({
+                              children: [
+                                new Paragraph(item.gestationalName || "N/A"),
+                              ],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                            new TableCell({
+                              children: [new Paragraph(`${item.internal}`)],
+                              children: [new Paragraph(`${item.external}`)],
+                              margins: {
+                                top: 200, // 200 twips = 10 points = 0.14 inches
+                                bottom: 200,
+                                left: 200,
+                                right: 200,
+                              },
+                            }),
+                          ],
+                        })
+                    )
+                  : [
+                      new TableRow({
+                        children: [
+                          new TableCell(
+                            {
+                              children: [
+                                new Paragraph({
+                                  text: "No Data Found !!!",
+                                  alignment: AlignmentType.CENTER,
+                                }),
+                              ],
+                            },
+                            { columnSpan: 2 }
+                          ),
+                        ],
+                      }),
+                    ]),
+
+                     // outcome
+                new TableRow({
+                  children: [
+                    new TableCell({
+                      children: [
+                        new Paragraph({
+                          alignment: AlignmentType.CENTER,
+                          children: [
+                            new TextRun({
+                              text: "Recipient Outcome",
+                              bold: true,
+                            }),
+                          ],
+                        }),
+                      ],
+                      columnSpan: 2,
+                      margins: {
+                        top: 200, // 200 twips = 10 points = 0.14 inches
+                        bottom: 200,
+                        left: 200,
+                        right: 200,
+                      },
+                    }),
+                  ],
+                }),
+
+                ...(reportData?.babyOutCome?.length > 0
+                  ? reportData.babyOutCome.map(
+                      (item) =>
+                        new TableRow({
+                          children: [
+                            new TableCell({
+                              children: [
+                                new Paragraph(item.name || "N/A"),
                               ],
                               margins: {
                                 top: 200, // 200 twips = 10 points = 0.14 inches
@@ -1613,19 +1966,23 @@ function ReportPage(props) {
           Download Word File
         </button>
         <button
-          className={"bg-blue-600 px-6 py-2 rounded-lg text-white flex items-center gap-3"}
+          className={
+            "bg-blue-600 px-6 py-2 rounded-lg text-white flex items-center gap-3"
+          }
           onClick={() => reactToPrintFn()}
         >
-            <span><IoMdPrint className="h-6" /></span>
+          <span>
+            <IoMdPrint className="h-6" />
+          </span>
           Print
         </button>
       </div>
       <div ref={contentRef} className={"printMargin p-10 page-break"}>
         <table className={"w-full  print:px-10 print:py-5 "}>
-          <thead>
+          <tr>
             <th className={"tableBorder"}>Description</th>
             <th className={"tableBorder"}>Count / ML</th>
-          </thead>
+          </tr>
           <tbody>
             <tr>
               <td className={"tableBorder text-center font-bold"} colSpan={2}>
@@ -1641,7 +1998,7 @@ function ReportPage(props) {
               <td className="tableBorder">{reportData?.eligibleMother}</td>
             </tr>
             <tr>
-              <td className="tableBorder">Ineligible Donor</td>
+              <td className="tableBorder">Inactive Donor</td>
               <td className="tableBorder">{reportData?.unEligibleMother}</td>
             </tr>
             <tr>
@@ -1711,7 +2068,7 @@ function ReportPage(props) {
             )}
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
-                Donor Age 
+                Donor Age
               </td>
             </tr>
             <tr>
@@ -1732,7 +2089,7 @@ function ReportPage(props) {
                 {reportData?.donorAboveThirtyFiveYears}
               </td>
             </tr>
-
+            <div className="page-break"></div>
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Donor Child Condition
@@ -1795,6 +2152,7 @@ function ReportPage(props) {
                 </td>
               </tr>
             )}
+            <div className="page-break"></div>
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Milk Collection
@@ -1889,20 +2247,23 @@ function ReportPage(props) {
               </td>
             </tr>
             <tr>
-                <td className="tableBorder text-center font-bold" colSpan={2}>Recipient Record</td>
+              <td className="tableBorder text-center font-bold" colSpan={2}>
+                Recipient Record
+              </td>
             </tr>
             <tr>
-                <td className="tableBorder">Total Recipient</td>
-                <td className="tableBorder">{reportData?.totalBabyCount}</td>
+              <td className="tableBorder">Total Recipient</td>
+              <td className="tableBorder">{reportData?.totalBabyCount}</td>
             </tr>
             <tr>
-                <td className="tableBorder">Internal Recipient</td>
-                <td className="tableBorder">{reportData?.totalInternalBaby}</td>
+              <td className="tableBorder">Internal Recipient</td>
+              <td className="tableBorder">{reportData?.totalInternalBaby}</td>
             </tr>
             <tr>
-                <td className="tableBorder">External Recipient</td>
-                <td className="tableBorder">{reportData?.totalExternalBaby}</td>
+              <td className="tableBorder">External Recipient</td>
+              <td className="tableBorder">{reportData?.totalExternalBaby}</td>
             </tr>
+
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Milk Requsition
@@ -1932,14 +2293,15 @@ function ReportPage(props) {
                 {reportData?.sumTotalColstormRequisitedMilk} ml
               </td>
             </tr>
+            <div className="page-break"></div>
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 Milk Dispense According to Baby Status
               </td>
             </tr>
             <tr>
-                <td className="tableBorder"></td>
-                <td className="tableBorder text-center font-bold">
+              <td className="tableBorder"></td>
+              <td className="tableBorder text-center font-bold">
                 {" "}
                 <div className="flex justify-evenly text-center">
                   <p>ml</p>
@@ -1955,7 +2317,7 @@ function ReportPage(props) {
                     <td className="tableBorder">
                       {" "}
                       <div className="flex justify-evenly text-center  ">
-                        <p>{item.totalRequisitedMilk}{" "}ml</p>
+                        <p>{item.totalRequisitedMilk} ml</p>
                         <p>{item.count}</p>
                       </div>{" "}
                     </td>
@@ -1972,6 +2334,7 @@ function ReportPage(props) {
                 </td>
               </tr>
             )}
+            <div className="page-break"></div>
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 {" "}
@@ -1997,6 +2360,7 @@ function ReportPage(props) {
                 </td>
               </tr>
             )}
+            <div className="page-break"></div>
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 {" "}
@@ -2022,6 +2386,7 @@ function ReportPage(props) {
                 </td>
               </tr>
             )}
+            <div className="page-break"></div>
             <tr>
               <td className="tableBorder text-center font-bold" colSpan={2}>
                 {" "}

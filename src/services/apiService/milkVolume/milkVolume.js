@@ -31,19 +31,36 @@ export const createVolumeOfMilk = async (data) => {
   return response;
 };
 
-export const getMilkListByDonor = async (id)=>{
+export const getMilkListByDonor = async (id) => {
   let response = await mainApi(
     apiUrls?.milkVolume?.getMilkListByDonor?.method,
-    apiUrls?.milkVolume?.getMilkListByDonor?.url+`/${id}`,
-  )
-  return response
-}
+    apiUrls?.milkVolume?.getMilkListByDonor?.url + `/${id}`
+  );
+  return response;
+};
 
-
-export const getDonorWithTotalVolume = async()=>{
+export const getDonorWithTotalVolume = async () => {
   let response = await mainApi(
     apiUrls?.milkVolume?.getDonoWithTotalVolume?.method,
-    apiUrls?.milkVolume?.getDonoWithTotalVolume?.url,
-  )
+    apiUrls?.milkVolume?.getDonoWithTotalVolume?.url
+  );
   return response;
-}
+};
+
+export const getCollectedMilkListForDonor = async (donorId) => {
+  let response = await mainApi(
+    apiUrls.milkVolume.getCollectedMilkListForDonor.method,
+    apiUrls.milkVolume.getCollectedMilkListForDonor.url +
+      `/${donorId ? donorId : ""}`
+  );
+  return response;
+};
+
+export const discardMilkBeforePasturization = async (collectionId,remark) => {
+  let response = await mainApi(
+    apiUrls.milkVolume.discardMilkBeforePasturization.method,
+    apiUrls.milkVolume.discardMilkBeforePasturization.url +
+      `?collectedId=${collectionId ? collectionId : ""}&remark=${remark}`
+  );
+  return response;
+};
