@@ -148,6 +148,10 @@ const apiUrls = {
       method: "POST",
       url: "/donor/updateSerologyRecord",
     },
+    getAllActiveDonorListForSelect: {
+      method: "GET",
+      url: "/donor/allDonorListSelect",
+    },
   },
   milkVolume: {
     getMilkVolumeByDonor: {
@@ -174,6 +178,14 @@ const apiUrls = {
       method: "GET",
       url: "/milkVolume/donorWithTotalVolume",
     },
+    getCollectedMilkListForDonor: {
+      method: "GET",
+      url: "/milkVolume/getCollectedMilkListForDonor",
+    },
+    discardMilkBeforePasturization:{
+      method:"GET",
+      url:"/milkVolume/discardMilkBeforePasturization"
+    }
   },
   pasteurization: {
     createPooling: {
@@ -250,11 +262,10 @@ const apiUrls = {
       method: "GET",
       url: "/baby/ipList",
     },
-    updateBabyOutcome:{
-      method:"PATCH",
-      url:"/baby/updateBabyOutcome"
-    }
-
+    updateBabyOutcome: {
+      method: "PATCH",
+      url: "/baby/updateBabyOutcome",
+    },
   },
   bottle: {
     getBottle: {
@@ -346,26 +357,33 @@ const apiUrls = {
       url: "/dashboard/getAllRecords",
     },
   },
-  report : {
-    getAllReports :{
-      method:"GET",
-      url:"/report/getAllReport",
+  report: {
+    getAllReports: {
+      method: "GET",
+      url: "/report/getAllReport",
     },
-    getReportDateWise :{
+    getReportDateWise: {
+      method: "GET",
+      url: "/report/getAllReportDateWise",
+    },
+    getMilkDiscardReport :{
       method:"GET",
-      url:"/report/getAllReportDateWise"
-    }
+      url:"/report/getMilkDiscardReport"
+    },
+    getMilkDiscardReportDateWise :{
+      method:"GET",
+      url:"/report/getMilkDiscardReportDateWise"
+    },
   },
-  dropdown:{
-    getGestationalTwo:{
-      method:"GET",
-      url:"/dropdown/getGestationalTwo"
+  dropdown: {
+    getGestationalTwo: {
+      method: "GET",
+      url: "/dropdown/getGestationalTwo",
     },
-    getBabyOutCome:{
-      method:"GET",
-      url:"/dropdown/getBabyOutcome"
-    }
-  }
-
+    getBabyOutCome: {
+      method: "GET",
+      url: "/dropdown/getBabyOutcome",
+    },
+  },
 };
 export default apiUrls;

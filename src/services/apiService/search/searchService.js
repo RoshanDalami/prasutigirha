@@ -14,7 +14,7 @@ export async function searchMilkVolume(donorName) {
   let response = await mainApi(
     apiUrls.search.searchMilkVolume.method,
     apiUrls.search.searchMilkVolume.url +
-      `?donorName=${donorName}`
+      `?donorId=${donorName}`
   );
   return response;
 }
