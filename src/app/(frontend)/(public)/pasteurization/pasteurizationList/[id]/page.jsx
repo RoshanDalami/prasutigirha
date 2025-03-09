@@ -81,6 +81,7 @@ export default function BottleDetails() {
     } catch (error) {}
   };
 
+
   // const test = getDonor.filter((item, index) => {
   //   return pooling?.donorDetailsForPooling?.some(
   //     (donor) => item.donorId === donor.donorId
@@ -94,6 +95,11 @@ export default function BottleDetails() {
   function combineVolumes(array) {
     // Create a map to hold combined items
     const combinedMap = new Map();
+    // const test = getDonor.filter((item, index) => {
+    //   return pooling?.donorDetailsForPooling?.some(
+    //     (donor) => item.donorId === donor.donorId
+    //   );
+    // });
 
     array?.forEach((item) => {
       const key = item.donorId;
