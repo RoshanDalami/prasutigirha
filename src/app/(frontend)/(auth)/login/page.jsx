@@ -51,7 +51,7 @@ const Login = () => {
   return (
     <div className="flex gap-8 min-h-screen  justify-center items-center ">
       <form
-        className="md:w-[60%] w-full md:shadow-md  flex  items-center justify-center gap-8 "
+        className="md:w-[60%] w-full md:shadow-md  flex  items-center justify-center gap-8 bg-gray-50 "
         onSubmit={handleSubmit((data) => onSubmit(data))}
       >
         <div className="  md:block shadow-xl md:w-2/4 flex justify-center">
