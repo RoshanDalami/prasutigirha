@@ -7,7 +7,7 @@ import BikramSambat from "bikram-sambat-js";
 import FormBorder from "src/components/reusableForm";
 
 const aa = new BikramSambat(new Date()).toBS();
-import {useForm} from "react-hook-form";
+import {useForm,Controller} from "react-hook-form";
 import toast from "react-hot-toast";
 import {updateSerology} from "../../../../../../../services/apiService/donorRecord/donor";
 import {useRouter} from "next/navigation";
@@ -16,7 +16,7 @@ function SerologyUpdatePage() {
     const router = useRouter();
     const {id} = useParams();
     const {
-        register, handleSubmit, formState: {errors, isSubmitting},
+        register, handleSubmit, formState: {errors, isSubmitting},control
     } = useForm();
     //Nepali date
     const [testDate, setTestDate] = useState(aa);
@@ -81,15 +81,35 @@ function SerologyUpdatePage() {
                             <span className="text-red-600">*</span>
                         </label>
 
-                        <NepaliDatePicker
-                            inputClassName="form-control  focus:outline-none"
-                            value={hivTestDate}
-                            onChange={(e) => setHivTestDate(e)}
-                            options={{calenderLocale: "en", valueLocale: "en"}}
-                            className="inputStyle"
-                            // {...register("dateOfBirth", { required: true })}
+                        <Controller
+                            control={control}
+                            rules={{
+                                required:"required",
+                                validate:(value) =>{
+                                    return value <= aa || "Future dates are not allowed"
+                                }
+
+                            }}
+                            render={({field})=>(
+                                <NepaliDatePicker
+                                    inputClassName="form-control  focus:outline-none"
+                                    value={hivTestDate}
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        setHivTestDate(e)
+                                    }}
+                                    options={{ calenderLocale: "en", valueLocale: "en" }}
+                                    className="inputStyle"
+
+                                    // {...register("dateOfBirth", { required: true })}
+                                />
+                            )}
+                            name={"hivTestDate"}
                         />
-                        {errors.dateOfTest && (<p className="errorMessages">{errors.dateOfTest.message}</p>)}
+
+                        {errors.hivTestDate && (
+                            <p className="errorMessages">{errors.hivTestDate.message}</p>
+                        )}
                     </div>
                     <div className="flex flex-col">
                         <label>
@@ -119,15 +139,35 @@ function SerologyUpdatePage() {
                             <span className="text-red-600">*</span>
                         </label>
 
-                        <NepaliDatePicker
-                            inputClassName="form-control  focus:outline-none"
-                            value={hbsagTestDate}
-                            onChange={(e) => setHbsagTestDate(e)}
-                            options={{calenderLocale: "en", valueLocale: "en"}}
-                            className="inputStyle"
-                            // {...register("dateOfBirth", { required: true })}
+                        <Controller
+                            control={control}
+                            rules={{
+                                required:"required",
+                                validate:(value) =>{
+                                    return value <= aa || "Future dates are not allowed"
+                                }
+
+                            }}
+                            render={({field})=>(
+                                <NepaliDatePicker
+                                    inputClassName="form-control  focus:outline-none"
+                                    value={hbsagTestDate}
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        setHbsagTestDate(e)
+                                    }}
+                                    options={{ calenderLocale: "en", valueLocale: "en" }}
+                                    className="inputStyle"
+
+                                    // {...register("dateOfBirth", { required: true })}
+                                />
+                            )}
+                            name={"hbsagTestDate"}
                         />
-                        {errors.dateOfTest && (<p className="errorMessages">{errors.dateOfTest.message}</p>)}
+
+                        {errors.hbsagTestDate && (
+                            <p className="errorMessages">{errors.hbsagTestDate.message}</p>
+                        )}
                     </div>
                     <div className="flex flex-col">
                         <label>
@@ -156,16 +196,35 @@ function SerologyUpdatePage() {
                             Date of VDRL Test
                             <span className="text-red-600">*</span>
                         </label>
+                        <Controller
+                            control={control}
+                            rules={{
+                                required:"required",
+                                validate:(value) =>{
+                                    return value <= aa || "Future dates are not allowed"
+                                }
 
-                        <NepaliDatePicker
-                            inputClassName="form-control  focus:outline-none"
-                            value={testDate}
-                            onChange={(e) => setTestDate(e)}
-                            options={{calenderLocale: "en", valueLocale: "en"}}
-                            className="inputStyle"
-                            // {...register("dateOfBirth", { required: true })}
+                            }}
+                            render={({field})=>(
+                                <NepaliDatePicker
+                                    inputClassName="form-control  focus:outline-none"
+                                    value={testDate}
+                                    onChange={(e) => {
+                                        field.onChange(e);
+                                        setTestDate(e)
+                                    }}
+                                    options={{ calenderLocale: "en", valueLocale: "en" }}
+                                    className="inputStyle"
+
+                                    // {...register("dateOfBirth", { required: true })}
+                                />
+                            )}
+                            name={"testDate"}
                         />
-                        {errors.dateOfTest && (<p className="errorMessages">{errors.dateOfTest.message}</p>)}
+
+                        {errors.testDate && (
+                            <p className="errorMessages">{errors.testDate.message}</p>
+                        )}
                     </div>
                 </div>
                 <div className="py-5 flex justify-end gap-5">

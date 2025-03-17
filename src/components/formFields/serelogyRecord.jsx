@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm , Controller } from "react-hook-form";
 import { StepperContext } from "../stepper/StepperContext";
 import { useRouter } from "next/navigation";
 import StepperControl from "../stepper/StepperControl";
@@ -187,6 +187,18 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
     }
   }, [setSerologyPositive2, watchAllFields?.vdrl]);
 
+  const handleDateChange = (selectedDate) => {
+    const today = new Date(); // Get today's date
+    const selected = new Date(selectedDate); // Convert selected date to Date object
+
+    if (selected > today) {
+      alert("Future dates are not allowed!");
+      return; // Prevent setting future dates
+    }
+
+    setDate(selectedDate); // Set date if valid
+  };
+
   const handleSerologyPending = () => {
     setIsSerologyPending(true);
     setUserData({
@@ -256,17 +268,36 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <span className="text-red-600">*</span>
             </label>
 
-            <NepaliDatePicker
-              inputClassName="form-control  focus:outline-none"
-              value={hivTestDate}
-              onChange={(e) => setHivTestDate(e)}
-              options={{ calenderLocale: "en", valueLocale: "en" }}
-              className="inputStyle"
-              // {...register("dateOfBirth", { required: true })}
+            <Controller
+                control={control}
+                rules={{
+                  required:"required",
+                  validate:(value) =>{
+                    return value <= aa || "Future dates are not allowed"
+                  }
+
+                }}
+                render={({field})=>(
+                    <NepaliDatePicker
+                        inputClassName="form-control  focus:outline-none"
+                        value={hivTestDate}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setHivTestDate(e)
+                        }}
+                        options={{ calenderLocale: "en", valueLocale: "en" }}
+                        className="inputStyle"
+
+                        // {...register("dateOfBirth", { required: true })}
+                    />
+                )}
+                name={"hivTestDate"}
             />
-            {errors.dateOfTest && (
-              <p className="errorMessages">{errors.dateOfTest.message}</p>
+
+            {errors.hivTestDate && (
+                <p className="errorMessages">{errors.hivTestDate.message}</p>
             )}
+            
           </div>
           <div className="flex flex-col">
             <label>
@@ -298,17 +329,37 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               <span className="text-red-600">*</span>
             </label>
 
-            <NepaliDatePicker
-              inputClassName="form-control  focus:outline-none"
-              value={hbsagTestDate}
-              onChange={(e) => setHbsagTestDate(e)}
-              options={{ calenderLocale: "en", valueLocale: "en" }}
-              className="inputStyle"
-              // {...register("dateOfBirth", { required: true })}
+            <Controller
+                control={control}
+                rules={{
+                  required:"required",
+                  validate:(value) =>{
+                    return value <= aa || "Future dates are not allowed"
+                  }
+
+                }}
+                render={({field})=>(
+                    <NepaliDatePicker
+                        inputClassName="form-control  focus:outline-none"
+                        value={hbsagTestDate}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setHbsagTestDate(e)
+                        }}
+                        options={{ calenderLocale: "en", valueLocale: "en" }}
+                        className="inputStyle"
+
+                        // {...register("dateOfBirth", { required: true })}
+                    />
+                )}
+                name={"hbsagTestDate"}
             />
-            {errors.dateOfTest && (
-              <p className="errorMessages">{errors.dateOfTest.message}</p>
+
+            {errors.hbsagTestDate && (
+                <p className="errorMessages">{errors.hbsagTestDate.message}</p>
             )}
+
+
           </div>
           <div className="flex flex-col">
             <label>
@@ -339,17 +390,34 @@ const SerelogyRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
               Date of VDRL Test
               <span className="text-red-600">*</span>
             </label>
+            <Controller
+                control={control}
+                rules={{
+                  required:"required",
+                  validate:(value) =>{
+                    return value <= aa || "Future dates are not allowed"
+                  }
 
-            <NepaliDatePicker
-              inputClassName="form-control  focus:outline-none"
-              value={testDate}
-              onChange={(e) => setTestDate(e)}
-              options={{ calenderLocale: "en", valueLocale: "en" }}
-              className="inputStyle"
-              // {...register("dateOfBirth", { required: true })}
+                }}
+                render={({field})=>(
+                    <NepaliDatePicker
+                        inputClassName="form-control  focus:outline-none"
+                        value={testDate}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setTestDate(e)
+                        }}
+                        options={{ calenderLocale: "en", valueLocale: "en" }}
+                        className="inputStyle"
+
+                        // {...register("dateOfBirth", { required: true })}
+                    />
+                )}
+                name={"testDate"}
             />
-            {errors.dateOfTest && (
-              <p className="errorMessages">{errors.dateOfTest.message}</p>
+
+            {errors.testDate && (
+              <p className="errorMessages">{errors.testDate.message}</p>
             )}
           </div>
         </div>
