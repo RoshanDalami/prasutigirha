@@ -6,13 +6,13 @@ import Cookies from "js-cookie";
 //   : "";
 const token = Cookies.get("token");
 
-// const baseUrl = "https://prasuti.palikasoft.com";
+// const baseUrl = "https://www.prasuti.palikasoft.com";
 
 
 
 const baseUrl =
   process.env.NODE_ENV === "production"
-    ? "https://prasuti.palikasoft.com"
+    ? "https://www.prasuti.palikasoft.com"
     : "http://localhost:8000";
 
 export const urls = {
