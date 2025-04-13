@@ -438,7 +438,7 @@ export default function AddPasteurization({ clickedIdData }) {
                 disabled={
                   milkVolume > 2500
                     ? true
-                    : false || isSubmitting || isValid || date > aa
+                    : false || isSubmitting || isValid
                     ? true
                     : false || remVol < poolVol
                     ? true
