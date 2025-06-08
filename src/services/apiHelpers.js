@@ -12,7 +12,7 @@ const token = Cookies.get("token");
 
 const baseUrl =
   process.env.NODE_ENV === "production"
-    ? "https://www.prasuti.palikasoft.com"
+    ? "https://prasuti.palikasoft.com"
     : "http://localhost:8000";
 
 export const urls = {
