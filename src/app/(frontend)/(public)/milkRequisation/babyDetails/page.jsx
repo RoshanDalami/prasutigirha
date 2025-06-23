@@ -25,6 +25,7 @@ export default function BabyDetail() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset
   } = useForm({});
   const {
     register: outcomeRegister,
@@ -36,6 +37,7 @@ export default function BabyDetail() {
   const [babyDetails, setBabyDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
+  
   const router = useRouter();
   async function fetchData() {
     setLoading(true);
@@ -202,7 +204,10 @@ export default function BabyDetail() {
           </button>
           <button
             type="button"
-            onClick={() => fetchData()}
+            onClick={() => {
+              fetchData()
+              reset()
+            }}
             className="px-6 py-3 rounded-md bg-red-600 hover:bg-blue-600 text-white"
           >
             Reset

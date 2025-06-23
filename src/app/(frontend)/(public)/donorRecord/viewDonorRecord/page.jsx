@@ -57,9 +57,11 @@ export default function ViewDonor() {
   }
 
   const resetFilter = async () => {
-    const { status, data } = await getDonor();
+    setDLoader(true);
+    const { status, data } = await getDonor(page, rowPerPage);
     if (status === 200) {
-      setDonorList(data);
+      setDonorList(data?.data);
+      setDLoader(false);
     }
   };
 
@@ -154,6 +156,7 @@ export default function ViewDonor() {
               SEARCH
             </button>
             <button
+            type="button"
               className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg "
               onClick={() => resetFilter()}
             >
@@ -256,7 +259,7 @@ export default function ViewDonor() {
                             </button>
                           )}
 
-                          {item.isSerologyPending  && (
+                          {item.isSerologyPending && (
                             <button
                               className="bg-indigo-600 px-2 py-2 text-white rounded-lg"
                               type="button"
@@ -272,7 +275,7 @@ export default function ViewDonor() {
                   );
                 })
               ) : (
-                <div className=" w-[80vw] h-screen flex items-center justify-center">
+                <div className=" w-[80vw]  flex items-center justify-center">
                   <Loader />
                 </div>
               )}
