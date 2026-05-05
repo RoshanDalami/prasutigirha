@@ -320,7 +320,7 @@ export default function BottleDetails() {
               {/*print section */}
               <div>
                 <div
-                  className="flex flex-col items-center justify-center"
+                  className="flex flex-col items-center justify-center print-area"
                   ref={componentRef}
                 >
                   {bottles?.bottleList

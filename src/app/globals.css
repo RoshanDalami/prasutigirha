@@ -72,19 +72,75 @@
 }
 
 @media print {
-    @page{
+    /* Default print rules — for reports and other prints */
+    @page {
         margin-top: 20mm;
     }
+
     .printMargin {
-        padding-left: 2.5rem; /* px-10 */
+        padding-left: 2.5rem;
         padding-right: 2.5rem;
-        padding-top: 1.25rem; /* py-5 */
+        padding-top: 1.25rem;
         padding-bottom: 1.25rem;
     }
+
     .page-break {
-        page-break-before: always; /* Forces a page break before the element */
+        page-break-before: always;
     }
-    .no-break{
+
+    .no-break {
         page-break-inside: avoid;
+    }
+}
+
+/* Bottle label print — only active when .print-area is being printed */
+@media print {
+    /* When printing labels, override page size and margins */
+    @page label {
+        size: 50mm 25mm;
+        margin: 0;
+    }
+
+    .print-area {
+        page: label;
+    }
+
+    .print-area,
+    .print-area * {
+        visibility: visible;
+    }
+
+    /* When .print-area exists in DOM, hide everything else */
+    body:has(.print-area) * {
+        visibility: hidden;
+    }
+
+    body:has(.print-area) .print-area,
+    body:has(.print-area) .print-area * {
+        visibility: visible;
+    }
+
+    body:has(.print-area) .print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 50mm;
+    }
+
+    /* Each label child = exactly one page */
+    body:has(.print-area) .print-area > div {
+        width: 50mm !important;
+        height: 25mm !important;
+        margin: 0 !important;
+        padding: 1mm !important;
+        box-sizing: border-box;
+        page-break-after: always;
+        break-after: page;
+        overflow: hidden;
+    }
+
+    body:has(.print-area) .print-area > div:last-child {
+        page-break-after: auto;
+        break-after: auto;
     }
 }
