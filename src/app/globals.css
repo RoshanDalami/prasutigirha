@@ -132,7 +132,7 @@
     width: 50mm !important;
     height: 25mm !important;
     margin: 0 !important;
-    padding: 1mm 2mm !important;
+ padding: 1mm 1mm 1mm 4mm !important; 
     box-sizing: border-box;
     page-break-after: always;
     break-after: page;
