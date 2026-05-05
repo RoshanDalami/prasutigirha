@@ -128,16 +128,19 @@
     }
 
     /* Each label child = exactly one page */
-    body:has(.print-area) .print-area > div {
-        width: 50mm !important;
-        height: 25mm !important;
-        margin: 0 !important;
-        padding: 1mm 1mm 1mm 2mm !important;;
-        box-sizing: border-box;
-        page-break-after: always;
-        break-after: page;
-        overflow: hidden;
-    }
+  body:has(.print-area) .print-area > div {
+    width: 50mm !important;
+    height: 25mm !important;
+    margin: 0 !important;
+    padding: 1mm 2mm !important;
+    box-sizing: border-box;
+    page-break-after: always;
+    break-after: page;
+    overflow: hidden;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
 
     body:has(.print-area) .print-area > div:last-child {
         page-break-after: auto;
