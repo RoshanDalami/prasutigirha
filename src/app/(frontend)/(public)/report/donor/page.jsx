@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import {
   getDonor,
   getInActiveDonor,
+  getDiscardedDonor,
   updateDonorStatus,
 } from "src/services/apiService/donorRecord/donor";
 import { useRouter } from "next/navigation";
@@ -23,8 +24,10 @@ export default function ViewDonor() {
   const { register, handleSubmit } = useForm();
   const [donorList, setDonorList] = useState([]);
   const [inActiveDonorList, setInActiveDonorList] = useState([]);
+  const [discardedDonorList, setDiscardedDonorList] = useState([]);
   const [active, setActive] = useState(true);
   const [inActive, setInactive] = useState(false);
+  const [discarded, setDiscarded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setIsLoading(true);
@@ -33,10 +36,8 @@ export default function ViewDonor() {
         const { status, data } = await getDonor();
         if (status === 200) {
           setDonorList(data?.data);
-          setIsLoading(false);
         }
       } catch (error) {
-        setIsLoading(false);
         console.log(error);
       } finally {
         setIsLoading(false);
@@ -52,13 +53,23 @@ export default function ViewDonor() {
         const response = await getInActiveDonor();
         if (response?.status === 200) {
           setInActiveDonorList(response?.data);
-          setIsLoading(false);
         }
       } catch (error) {
-        setIsLoading(false);
         console.log(error);
-      } finally {
-        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getDiscardedDonor();
+        if (response?.status === 200) {
+          setDiscardedDonorList(response?.data);
+        }
+      } catch (error) {
+        console.log(error);
       }
     };
     fetchData();
@@ -132,6 +143,7 @@ export default function ViewDonor() {
                     onClick={() => {
                       setActive(true);
                       setInactive(false);
+                      setDiscarded(false);
                     }}
                   >
                     Active Donor
@@ -145,9 +157,24 @@ export default function ViewDonor() {
                     onClick={() => {
                       setActive(false);
                       setInactive(true);
+                      setDiscarded(false);
                     }}
                   >
                     Inactive Donor
+                  </button>
+                  <button
+                    className={` ${
+                      discarded
+                        ? "bg-green-500 rounded-md px-3 py-2 shadow-md text-white"
+                        : "bg-indigo-600 rounded-md px-3 py-2 shadow-md text-white"
+                    }`}
+                    onClick={() => {
+                      setActive(false);
+                      setInactive(false);
+                      setDiscarded(true);
+                    }}
+                  >
+                    Discarded Donor
                   </button>
                 </div>
               </div>
@@ -171,7 +198,7 @@ export default function ViewDonor() {
                     <td className="py-3">Status</td>
                     <td className="py-3">Action</td>
                   </tr>
-                  {(active ? donorList : inActiveDonorList)?.map(
+                  {((active && donorList) || (inActive && inActiveDonorList) || (discarded && discardedDonorList) || donorList)?.map(
                     (item, index) => {
                       return (
                         <tr

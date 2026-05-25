@@ -140,6 +140,11 @@ export default function Details() {
           Mode of Delivery :{" "}
           <span className="font-bold">{donorDetails?.modeOfDelivery}</span>
         </p>
+        {donorDetails?.remarks && (
+          <p>
+            Remarks : <span className="font-bold">{donorDetails?.remarks}</span>
+          </p>
+        )}
       </div>
       <TableBorder
         title={"Donor Details"}
@@ -175,7 +180,10 @@ export default function Details() {
             <tbody>
               {donorDetails?.donotedMilkList?.map((items, index) => {
                 return (
-                  <tr key={index} className={`border border-x-gray text-center ${items.isDiscarded ? "bg-red-300" :""} `}>
+                  <tr
+                    key={index}
+                    className={`border border-x-gray text-center ${items.isDiscarded ? "bg-red-300" : ""} `}
+                  >
                     <td className="py-3">{index + 1}</td>
                     <td className="py-3">{items?.storedBy}</td>
                     <td className="py-3">{items?.quantity}</td>

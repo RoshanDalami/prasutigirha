@@ -25,6 +25,14 @@ export const getInActiveDonor = async () => {
   return response;
 };
 
+export const getDiscardedDonor = async () => {
+  let response = await mainApi(
+    apiUrls?.donor?.getDiscardedDonor?.method,
+    apiUrls?.donor?.getDiscardedDonor?.url
+  );
+  return response;
+};
+
 export const updateDonorStatus = async (id) => {
   let response = await mainApi(
     apiUrls?.donor?.updateDonorStatus?.method,

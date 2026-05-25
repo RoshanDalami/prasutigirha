@@ -373,12 +373,19 @@ export default function AddBabyDetails({ clickedIdData }) {
                   Birth Weight (Gram) <span className="text-red-600">*</span>
                 </label>
                 <input
-                  type="Number"
+                  type="number"
+                  inputMode="decimal"
+                  step="0.01"
                   className="inputStyle"
                   placeholder="Enter Birth Weight"
                   {...register("babyWeight", {
                     required: "Birth weight required",
                     min: { value: 0, message: "Weight cannot be negative" },
+                    validate: (value) => {
+                      const valueString = value?.toString() || "";
+                      return /^\d{1,4}(?:\.\d+)?$/.test(valueString) ||
+                        "Weight must be up to 4 digits and may include a decimal";
+                    },
                   })}
                 />
                 {errors?.babyWeight && (

@@ -124,6 +124,10 @@ const apiUrls = {
       method: "GET",
       url: "/donor/getInActiveDonor",
     },
+    getDiscardedDonor:{
+      method:"GET",
+      url:"/donor/getDiscardedDonor"
+    },
     updateDonorStatus: {
       method: "GET",
       url: "/donor/updateStatus",

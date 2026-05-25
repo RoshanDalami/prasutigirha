@@ -59,6 +59,22 @@ export default function AddMilkReq({ clickedIdData }) {
   // const watchArray = watchFields?.requisitedMilk
 
   const [bottleList, setBottleList] = useState([]);
+  const [bottleLoading, setBottleLoading] = useState([]);
+  useEffect(() => {
+    // Keep bottle arrays aligned with the number of dynamic fields
+    setBottleList((prev) => {
+      const copy = Array.isArray(prev) ? [...prev] : [];
+      while (copy.length < fields.length) copy.push(undefined);
+      if (copy.length > fields.length) copy.splice(fields.length);
+      return copy;
+    });
+    setBottleLoading((prev) => {
+      const copy = Array.isArray(prev) ? [...prev] : [];
+      while (copy.length < fields.length) copy.push(false);
+      if (copy.length > fields.length) copy.splice(fields.length);
+      return copy;
+    });
+  }, [fields.length]);
 
   //gestationalAge
   const [gestationalAge, setGestationalAge] = useState([]);
@@ -81,11 +97,16 @@ export default function AddMilkReq({ clickedIdData }) {
   });
 
   const [babyList, setBabyList] = useState([]);
+  const [babyLoading, setBabyLoading] = useState(true);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await getBabyDetail();
-      if (status === 200) {
-        setBabyList(data);
+      try {
+        const { status, data } = await getBabyDetail();
+        if (status === 200) {
+          setBabyList(data);
+        }
+      } finally {
+        setBabyLoading(false);
       }
     }
     fetchData();
@@ -99,15 +120,27 @@ export default function AddMilkReq({ clickedIdData }) {
   })
   //poolingList batchname
   const [poolingList, setPoolingList] = useState([]);
+  const [poolingLoading, setPoolingLoading] = useState(true);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await getPooling();
-      if (status === 200) {
-        setPoolingList(data);
+      try {
+        const { data, status } = await getPooling();
+        if (status === 200) {
+          setPoolingList(data);
+        }
+      } finally {
+        setPoolingLoading(false);
       }
     }
     fetchData();
   }, []);
+
+  const poolingOptions = poolingList
+    ?.filter((items) => items.culture === false && items.remaining > 0)
+    ?.map((items) => ({
+      label: `${items?.batchName} (${items?.date})`,
+      value: `${items._id}/${items.batchName}/${items.date}`,
+    })) || [];
   const [babyId, setBabyId] = useState("");
   const onSubmit = async (data) => {
     data = {
@@ -145,7 +178,13 @@ export default function AddMilkReq({ clickedIdData }) {
   const [someArray, setSomeArray] = useState(false);
   const removeHandler = (index) => {
     remove(index);
-    watchBottle?.splice(index, 1);
+    setWatchBottle((prev) => {
+      const copy = Array.isArray(prev) ? [...prev] : [];
+      copy.splice(index, 1);
+      return copy;
+    });
+    setBottleList((prev) => (Array.isArray(prev) ? prev.filter((_, i) => i !== index) : []));
+    setBottleLoading((prev) => (Array.isArray(prev) ? prev.filter((_, i) => i !== index) : []));
   };
 
   return (
@@ -169,6 +208,8 @@ export default function AddMilkReq({ clickedIdData }) {
                       remainingVol: 0,
                       quantity: 0,
                     });
+                    setBottleList((prev) => [...(Array.isArray(prev) ? prev : []), undefined]);
+                    setBottleLoading((prev) => [...(Array.isArray(prev) ? prev : []), false]);
                   }}
                 >
                   Add More +
@@ -180,33 +221,20 @@ export default function AddMilkReq({ clickedIdData }) {
                 <label htmlFor="">
                   Baby <span className="text-red-600">*</span>
                 </label>
-                <Select options={babyOptions} placeholder="Select Baby" 
-                onChange={(e)=>{
-                  setBabyId(e.value)
-                }}
-                />
-                {/* <select
-                  name=""
-                  id=""
-                  className="inputStyle"
-                  {...register("babyId", {
-                    required: "Baby is required",
-                  })}
-                >
-                  <option value={""} selected disabled>
-                    --Select Baby--
-                  </option>
-                  {babyList?.map((item, index) => {
-                    if (item.status === true) {
-                      const combinedValue = `${item._id}/${item.babyName}`;
-                      return (
-                        <option key={index} value={combinedValue}>
-                          {item.babyName} ({item.ipNumber})
-                        </option>
-                      );
-                    }
-                  })}
-                </select> */}
+                {babyLoading ? (
+                  <div className="inputStyle flex items-center text-gray-500">
+                    Loading babies...
+                  </div>
+                ) : (
+                  <Select 
+                    options={babyOptions} 
+                    placeholder="Select Baby"
+                    isDisabled={babyLoading}
+                    onChange={(e) => {
+                      setBabyId(e.value);
+                    }}
+                  />
+                )}
                 {errors.babyId && (
                   <p className="text-red-600">{errors.babyId.message}</p>
                 )}
@@ -237,51 +265,64 @@ export default function AddMilkReq({ clickedIdData }) {
                     <label htmlFor="">
                       Batch Number <span className="text-red-600">*</span>
                     </label>
-                    {/* <Select options={newPoolingList} placeholder={'-- Select Batch Number --'} value={{...register(`requisitedMilk.${index}.batchNumber`, {
-                        required: "Batch number is required",
-                      })}}  /> */}
-                    <select
-                      type="Number"
-                      className="inputStyle"
-                      placeholder="Enter Batch Number"
-                      {...register(`requisitedMilk.${index}.batchNumber`, {
-                        required: "Batch number is required",
-                      })}
-                      onChange={async (e) => {
-                        const selectedId = e.target.value;
-                        const response = await getBottle(
-                          selectedId.split("/")?.[0]
-                        );
-                        if (response?.status === 200) {
-                          // console.log(response?.data,'response')
-                          setBottleList((prevData) => [
-                            ...prevData.slice(0, index),
-                            response?.data?.bottleList,
-                            ...prevData.slice(index + 1),
-                          ]);
-                        } else {
-                          setBabyList([]);
-                        }
-                      }}
-                    >
-                      <option value={""} selected disabled>
-                        --Select Batch Number--
-                      </option>
-                      {poolingList?.map((items, index) => {
-                        const combinedValue = `${items._id}/${items.batchName}/${items.date}`;
-                        console.log(items, "response");
-                        if (items.culture === false && items.remaining > 0) {
-                          return (
-                            <option key={index} value={combinedValue}>
-                              {items?.batchName}({items?.date})
-                            </option>
-                          );
-                        }
-                      })}
-                    </select>
-                    {errors?.batchNumber && (
+                    <Select
+                      options={poolingOptions}
+                      placeholder="-- Select Batch Number --"
+                      isLoading={poolingLoading}
+                      isClearable
+                      isSearchable
+                      onChange={async (option) => {
+                          if (option) {
+                            setValue(`requisitedMilk.${index}.batchNumber`, option.value);
+                            const selectedId = option.value;
+                            setBottleLoading((prev) => {
+                              const copy = Array.isArray(prev) ? [...prev] : [];
+                              copy[index] = true;
+                              return copy;
+                            });
+                            try {
+                              const response = await getBottle(
+                                selectedId.split("/")?.[0]
+                              );
+                              if (response?.status === 200) {
+                                setBottleList((prevData) => {
+                                  const copy = Array.isArray(prevData) ? [...prevData] : [];
+                                  copy[index] = response?.data?.bottleList;
+                                  return copy;
+                                });
+                              } else {
+                                setBottleList((prevData) => {
+                                  const copy = Array.isArray(prevData) ? [...prevData] : [];
+                                  copy[index] = undefined;
+                                  return copy;
+                                });
+                              }
+                            } catch (err) {
+                              setBottleList((prevData) => {
+                                const copy = Array.isArray(prevData) ? [...prevData] : [];
+                                copy[index] = undefined;
+                                return copy;
+                              });
+                            } finally {
+                              setBottleLoading((prev) => {
+                                const copy = Array.isArray(prev) ? [...prev] : [];
+                                copy[index] = false;
+                                return copy;
+                              });
+                            }
+                          } else {
+                            setValue(`requisitedMilk.${index}.batchNumber`, "");
+                            setBottleList((prevData) => {
+                              const copy = Array.isArray(prevData) ? [...prevData] : [];
+                              copy[index] = undefined;
+                              return copy;
+                            });
+                          }
+                        }}
+                    />
+                    {errors?.requisitedMilk?.[index]?.batchNumber && (
                       <p className="errorMessages">
-                        {errors.batchNumber.message}
+                        {errors.requisitedMilk[index].batchNumber.message}
                       </p>
                     )}
                   </div>
@@ -312,65 +353,46 @@ export default function AddMilkReq({ clickedIdData }) {
                     <label htmlFor="">
                       Bottle Name<span className="text-red-600">*</span>
                     </label>
-                    <select
-                      className="inputStyle"
-                      {...register(`requisitedMilk.${index}.bottleName`, {
-                        required: "Bottle name is required",
-                      })}
-                      onChange={(e) => {
-                        const selectedValue = e.target.value;
-                        setWatchBottle((prevData) => [
-                          ...prevData.slice(0, index),
-                          selectedValue?.split("/")[0],
-                          ...prevData.slice(index + 1),
-                        ]);
-                        setValue(
-                          `requisitedMilk.${index}.remainingVol`,
-                          selectedValue?.split("/")[2]
-                        );
-                        setIsValid(
-                          watchBottle.includes(selectedValue?.split("/")[0])
-                        );
+                    <Select
+                      options={
+                        bottleList[index]
+                          ?.filter((item) => item?.isActive === true)
+                          ?.filter((item) => item?.remainingVoluem > 0)
+                          ?.map((subItem) => ({
+                            label: `${subItem?.name}`,
+                            value: `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`,
+                          })) || []
+                      }
+                      placeholder={bottleLoading?.[index] ? "Loading bottles..." : bottleList[index] ? "-- Select bottle --" : "Select batch first"}
+                        isClearable
+                        isSearchable
+                        isDisabled={!bottleList[index] && !bottleLoading?.[index]}
+                        isLoading={!!bottleLoading?.[index]}
+                      onChange={(option) => {
+                        if (option) {
+                          const selectedValue = option.value;
+                          setValue(`requisitedMilk.${index}.bottleName`, selectedValue);
+                          setWatchBottle((prevData) => [
+                            ...prevData.slice(0, index),
+                            selectedValue?.split("/")[0],
+                            ...prevData.slice(index + 1),
+                          ]);
+                          setValue(
+                            `requisitedMilk.${index}.remainingVol`,
+                            selectedValue?.split("/")[2]
+                          );
+                          setIsValid(
+                            watchBottle.includes(selectedValue?.split("/")[0])
+                          );
+                        } else {
+                          setValue(`requisitedMilk.${index}.bottleName`, "");
+                          setValue(`requisitedMilk.${index}.remainingVol`, "");
+                        }
                       }}
-                    >
-                      <option value="" selected disabled>
-                        -- select bottle --
-                      </option>
-
-                      {bottleList?.map((item, index0) => (
-                        <React.Fragment key={index}>
-                          {index0 === index &&
-                            item
-                              ?.filter((item) => item?.isActive === true)
-                              ?.map((subItem, subIndex) => {
-                                if (subItem?.remainingVoluem > 0) {
-                                  const bottleCombValue = `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`;
-                                  console.log(subItem, "response");
-                                  return (
-                                    <option
-                                      key={subIndex}
-                                      value={bottleCombValue}
-                                    >
-                                      {subItem?.name}
-                                      {/* ({'Remaining Volume'}({subItem?.remainingVoluem}{'ml'})) */}
-                                    </option>
-                                  );
-                                }
-                              })}
-                        </React.Fragment>
-                      ))}
-                    </select>
-                    {/* <input
-                      type="text"
-                      className="inputStyle"
-                      placeholder="Enter Bottle Name"
-                      {...register(`requisitedMilk.${index}.bottleName`, {
-                        required: "Bottle name is required",
-                      })}
-                    /> */}
-                    {errors?.bottleName && (
+                    />
+                    {errors?.requisitedMilk?.[index]?.bottleName && (
                       <p className="errorMessages">
-                        {errors.bottleName.message}
+                        {errors.requisitedMilk[index].bottleName.message}
                       </p>
                     )}
                   </div>
