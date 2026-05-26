@@ -9,7 +9,7 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
 import { useForm } from "react-hook-form";
-import Loader from "src/components/Loader";
+import TableSkeleton from "src/components/TableSkeleton";
 import dynamic from "next/dynamic";
 import TablePagination from "@mui/material/TablePagination";
 import { useMilkRequisitionList } from "src/hooks/useMilkRequisition";
@@ -53,8 +53,6 @@ export default function ListVolume() {
     return Array.from(combinedMap.values());
   }
 
-  if (isLoading) return <Loader />;
-
   return (
     <div>
       <form className="my-5 mx-10" onSubmit={handleSubmit(onSubmit)}>
@@ -92,22 +90,28 @@ export default function ListVolume() {
         >
           <div className="my-5">
             <table className="w-full">
-              <tr className="bg-[#004a89] text-white text-lg text-center">
-                <td className="py-3">S.N</td>
-                <td className="py-3">Baby Name</td>
-                <td className="py-3">Feeding Date</td>
-                <td className="py-3">Total Milk Feeded</td>
-                <td className="py-3">No. of Bottle</td>
-              </tr>
-              {displayList?.map((row, index) => (
-                <tr className="border border-x-gray text-center" key={index}>
-                  <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
-                  <td className="py-3">{row?.babyName}</td>
-                  <td className="py-3">{row?.feedingDate}</td>
-                  <td className="py-3">{row.requisitedMilk.map((item) => item.quantity).reduce((acc, amount) => acc + amount, 0)}</td>
-                  <td className="py-3">{combineQuantities(row?.requisitedMilk).length}</td>
+              <thead>
+                <tr className="bg-[#004a89] text-white text-lg text-center">
+                  <td className="py-3">S.N</td>
+                  <td className="py-3">Baby Name</td>
+                  <td className="py-3">Feeding Date</td>
+                  <td className="py-3">Total Milk Feeded</td>
+                  <td className="py-3">No. of Bottle</td>
                 </tr>
-              ))}
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <TableSkeleton rows={8} cols={5} />
+                ) : displayList?.map((row, index) => (
+                  <tr className="border border-x-gray text-center" key={index}>
+                    <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
+                    <td className="py-3">{row?.babyName}</td>
+                    <td className="py-3">{row?.feedingDate}</td>
+                    <td className="py-3">{row.requisitedMilk.map((item) => item.quantity).reduce((acc, amount) => acc + amount, 0)}</td>
+                    <td className="py-3">{combineQuantities(row?.requisitedMilk).length}</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
             {!searchOverride && (
               <TablePagination

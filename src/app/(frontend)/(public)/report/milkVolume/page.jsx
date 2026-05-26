@@ -11,6 +11,7 @@ import { CSVLink } from "react-csv";
 import { useForm } from "react-hook-form";
 import TablePagination from "@mui/material/TablePagination";
 import { useMilkVolumeList, useDonorWithTotalVolume } from "src/hooks/useMilkVolume";
+import TableSkeleton from "src/components/TableSkeleton";
 import { useGestational } from "src/hooks/useDropdown";
 
 export default function ListVolume() {
@@ -21,7 +22,7 @@ export default function ListVolume() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { data: result = {} } = useMilkVolumeList(page + 1, rowsPerPage);
+  const { data: result = {}, isLoading } = useMilkVolumeList(page + 1, rowsPerPage);
   const { data: excelVolumeList = [] } = useDonorWithTotalVolume();
   const { data: gestationalAgeList = [] } = useGestational();
 
@@ -99,26 +100,32 @@ export default function ListVolume() {
           >
             <div className="my-5">
               <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">Id</td>
-                  <td className="py-3">Donor Name</td>
-                  <td className="py-3">Gestational Age</td>
-                  <td className="py-3">Date</td>
-                  <td className="py-3">Total Volume</td>
-                </tr>
-                {displayList?.map((item, index) => (
-                  <tr className="border border-x-gray text-center" key={index}>
-                    <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
-                    <td className="py-3">{item.donorName}</td>
-                    {gestationalAgeList?.map((age, index) => {
-                      if (age.gestationalId === item.gestationalAge) {
-                        return <td className="py-3" key={index}>{age.gestationalName}</td>;
-                      }
-                    })}
-                    <td className="py-3">{item.date}</td>
-                    <td className="py-3">{item.totalMilkCollected} ml</td>
+                <thead>
+                  <tr className="bg-[#004a89] text-white text-lg text-center">
+                    <td className="py-3">Id</td>
+                    <td className="py-3">Donor Name</td>
+                    <td className="py-3">Gestational Age</td>
+                    <td className="py-3">Date</td>
+                    <td className="py-3">Total Volume</td>
                   </tr>
-                ))}
+                </thead>
+                <tbody>
+                  {isLoading ? (
+                    <TableSkeleton rows={8} cols={5} />
+                  ) : displayList?.map((item, index) => (
+                    <tr className="border border-x-gray text-center" key={index}>
+                      <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
+                      <td className="py-3">{item.donorName}</td>
+                      {gestationalAgeList?.map((age, index) => {
+                        if (age.gestationalId === item.gestationalAge) {
+                          return <td className="py-3" key={index}>{age.gestationalName}</td>;
+                        }
+                      })}
+                      <td className="py-3">{item.date}</td>
+                      <td className="py-3">{item.totalMilkCollected} ml</td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
               {!searchOverride && (
                 <TablePagination

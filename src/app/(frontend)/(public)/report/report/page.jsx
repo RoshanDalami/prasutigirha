@@ -7,7 +7,7 @@ import { useAllReports } from "src/hooks/useReport";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { BSToAD } from "bikram-sambat-js";
-import Loader from "src/components/Loader";
+import ReportSkeleton from "src/components/ReportSkeleton";
 import toast from "react-hot-toast";
 import {
   Document,
@@ -1878,8 +1878,6 @@ function ReportPage() {
     saveAs(blob, "amritkosh_report_single_table.docx");
   };
 
-  if (isLoading) return <Loader />;
-
   return (
     <div className={"px-10 py-5"}>
       <div className={"flex items-center gap-5"}>
@@ -1944,6 +1942,7 @@ function ReportPage() {
         </button>
       </div>
       <div ref={contentRef} className={"printMargin p-10 page-break"}>
+        {isLoading ? <ReportSkeleton rows={25} /> : (
         <table className={"w-full  print:px-10 print:py-5 "}>
           <tr>
             <th className={"tableBorder"}>Description</th>
@@ -2421,6 +2420,7 @@ function ReportPage() {
             )}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   );

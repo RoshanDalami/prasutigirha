@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
 import TablePagination from "@mui/material/TablePagination";
 import { useMilkRequisitionList } from "src/hooks/useMilkRequisition";
+import TableSkeleton from "src/components/TableSkeleton";
 
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), { ssr: false });
@@ -21,7 +22,7 @@ export default function ListVolume() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { data: result = {} } = useMilkRequisitionList(page + 1, rowsPerPage);
+  const { data: result = {}, isLoading } = useMilkRequisitionList(page + 1, rowsPerPage);
   const baseList = result.data ?? [];
   const totalCount = result.totalCount ?? 0;
   const requsitionList = searchOverride ?? baseList;
@@ -91,24 +92,30 @@ export default function ListVolume() {
           >
             <div className="my-5">
               <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">S.N</td>
-                  <td className="py-3">Baby Name</td>
-                  <td className="py-3">Feeding Date</td>
-                  <td className="py-3">Total Milk Feeded</td>
-                  <td className="py-3">No. of Bottle</td>
-                </tr>
-                {requsitionList?.map((row, index) => (
-                  <tr className="border border-x-gray text-center" key={index}>
-                    <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
-                    <td className="py-3">{row?.babyName}</td>
-                    <td className="py-3">{row?.feedingDate}</td>
-                    <td className="py-3">
-                      {row.requisitedMilk.map((item) => item.quantity).reduce((acc, amount) => acc + amount, 0)}
-                    </td>
-                    <td className="py-3">{row.requisitedMilk.length}</td>
+                <thead>
+                  <tr className="bg-[#004a89] text-white text-lg text-center">
+                    <td className="py-3">S.N</td>
+                    <td className="py-3">Baby Name</td>
+                    <td className="py-3">Feeding Date</td>
+                    <td className="py-3">Total Milk Feeded</td>
+                    <td className="py-3">No. of Bottle</td>
                   </tr>
-                ))}
+                </thead>
+                <tbody>
+                  {isLoading ? (
+                    <TableSkeleton rows={8} cols={5} />
+                  ) : requsitionList?.map((row, index) => (
+                    <tr className="border border-x-gray text-center" key={index}>
+                      <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
+                      <td className="py-3">{row?.babyName}</td>
+                      <td className="py-3">{row?.feedingDate}</td>
+                      <td className="py-3">
+                        {row.requisitedMilk.map((item) => item.quantity).reduce((acc, amount) => acc + amount, 0)}
+                      </td>
+                      <td className="py-3">{row.requisitedMilk.length}</td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
               {!searchOverride && (
                 <TablePagination

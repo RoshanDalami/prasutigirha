@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { urls } from "src/services/apiHelpers";
 import AddVolume from "../page";
-import Loader from "src/components/Loader";
+import DetailSkeleton from "src/components/DetailSkeleton";
 
 const AddVolumeId = () => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const AddVolumeId = () => {
     enabled: !!id,
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return <DetailSkeleton gridCols={3} infoRows={6} tableCols={3} tableRows={6} />;
   return <AddVolume clickedData={milkVolume} />;
 };
 export default AddVolumeId;

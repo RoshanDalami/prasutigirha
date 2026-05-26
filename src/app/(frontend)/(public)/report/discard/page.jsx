@@ -4,7 +4,7 @@ import { GetMilkDiscardReportDateWise } from "../../../../../services/apiService
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { BSToAD } from "bikram-sambat-js";
-import Loader from "src/components/Loader";
+import ReportSkeleton from "src/components/ReportSkeleton";
 import toast from "react-hot-toast";
 import { useMilkDiscardReport } from "src/hooks/useReport";
 const aa = new BikramSambat(new Date()).toBS();
@@ -42,8 +42,6 @@ function DiscardReportPage() {
     setStartingDate("");
     setEndingDate("");
   };
-
-  if (isLoading) return <Loader />;
 
   return (
     <div className={"px-10 py-5"}>
@@ -94,6 +92,7 @@ function DiscardReportPage() {
       </div>
 
       <div className={"printMargin p-10 page-break"}>
+        {isLoading ? <ReportSkeleton rows={20} /> : (
         <table className={"w-full  print:px-10 print:py-5 "}>
           <tr>
             <th className={"tableBorder"}>Description</th>
@@ -210,6 +209,7 @@ function DiscardReportPage() {
             )}
           </tbody>
         </table>
+        )}
       </div>
     </div>
   );

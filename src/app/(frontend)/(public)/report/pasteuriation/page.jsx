@@ -12,6 +12,7 @@ import { CSVLink } from "react-csv";
 const aa = new BikramSambat(new Date()).toBS();
 import { searchPasteurization } from "src/services/apiService/search/searchService";
 import { usePasteurizationList, useDeletePooling, useUpdateCulture } from "src/hooks/usePasteurization";
+import TableSkeleton from "src/components/TableSkeleton";
 import { useGestational } from "src/hooks/useDropdown";
 
 export default function ListVolume() {
@@ -26,7 +27,7 @@ export default function ListVolume() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { data: result = {} } = usePasteurizationList(page + 1, rowsPerPage);
+  const { data: result = {}, isLoading } = usePasteurizationList(page + 1, rowsPerPage);
   const { data: gestationalAge = [] } = useGestational();
   const { mutateAsync: deletePooling } = useDeletePooling();
   const { mutateAsync: updateCulture } = useUpdateCulture();
@@ -125,16 +126,21 @@ export default function ListVolume() {
           >
             <div className="my-5">
               <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3 px-2">S.N</td>
-                  <td className="py-3 px-2">Number of Donor </td>
-                  <td className="py-3 px-2">Pooling Date</td>
-                  <td className="py-3 px-2">Pooling Condition</td>
-                  <td className="py-3 px-2">Volume Collected</td>
-                  <td className="py-3 px-2">Batch Name</td>
-                  <td className="py-3 px-2">Expiry Date</td>
-                </tr>
-                {poolingList?.map((row, index) => (
+                <thead>
+                  <tr className="bg-[#004a89] text-white text-lg text-center">
+                    <td className="py-3 px-2">S.N</td>
+                    <td className="py-3 px-2">Number of Donor</td>
+                    <td className="py-3 px-2">Pooling Date</td>
+                    <td className="py-3 px-2">Pooling Condition</td>
+                    <td className="py-3 px-2">Volume Collected</td>
+                    <td className="py-3 px-2">Batch Name</td>
+                    <td className="py-3 px-2">Expiry Date</td>
+                  </tr>
+                </thead>
+                <tbody>
+                {isLoading ? (
+                  <TableSkeleton rows={8} cols={7} />
+                ) : poolingList?.map((row, index) => (
                   <tr
                     className={`${row.culture ? "bg-rose-400/50" : row.culture === false ? "bg-lime-600/50" : ""} border border-x-gray text-center`}
                     key={index}
@@ -156,6 +162,7 @@ export default function ListVolume() {
                     <td className="py-3">{row.expireDate}</td>
                   </tr>
                 ))}
+                </tbody>
               </table>
               {!searchOverride && (
                 <TablePagination

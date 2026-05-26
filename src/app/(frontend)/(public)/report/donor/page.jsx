@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { CSVLink } from "react-csv";
-import Loader from "src/components/Loader";
+import TableSkeleton from "src/components/TableSkeleton";
 import Switch from "@mui/material/Switch";
 import TablePagination from "@mui/material/TablePagination";
 import { useDonorList, useInactiveDonors, useDiscardedDonors, useUpdateDonorStatus } from "src/hooks/useDonor";
@@ -103,8 +103,6 @@ export default function ViewDonor() {
       ? isInactiveLoading
       : isDiscardedLoading;
 
-  if (isLoading) return <Loader />;
-
   return (
     <>
       <div>
@@ -141,16 +139,21 @@ export default function ViewDonor() {
             <div className="flex gap-3 mt-5"></div>
             <div className=" my-5">
               <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3">Reg. No</td>
-                  <td className="py-3">Donar Name</td>
-                  <td className="py-3">Age</td>
-                  <td className="py-3">Address</td>
-                  <td className="py-3">Contact</td>
-                  <td className="py-3">Status</td>
-                  <td className="py-3">Action</td>
-                </tr>
-                {displayList?.map((item, index) => {
+                <thead>
+                  <tr className="bg-[#004a89] text-white text-lg text-center">
+                    <td className="py-3">Reg. No</td>
+                    <td className="py-3">Donar Name</td>
+                    <td className="py-3">Age</td>
+                    <td className="py-3">Address</td>
+                    <td className="py-3">Contact</td>
+                    <td className="py-3">Status</td>
+                    <td className="py-3">Action</td>
+                  </tr>
+                </thead>
+                <tbody>
+                {isLoading ? (
+                  <TableSkeleton rows={8} cols={7} />
+                ) : displayList?.map((item, index) => {
                   return (
                     <tr
                       className={`border border-x-gray text-center ${
@@ -187,6 +190,7 @@ export default function ViewDonor() {
                     </tr>
                   );
                 })}
+                </tbody>
               </table>
               {activeTab === "active" && (
                 <TablePagination

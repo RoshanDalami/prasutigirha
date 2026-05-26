@@ -8,7 +8,7 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import { useForm } from "react-hook-form";
 import TablePagination from "@mui/material/TablePagination";
 import Switch from "@mui/material/Switch";
-import Loader from "src/components/Loader";
+import TableSkeleton from "src/components/TableSkeleton";
 import TableBorder from "src/components/TableDesign";
 import { useDonorList, useUpdateDonorStatus } from "src/hooks/useDonor";
 import { useQueryClient } from "@tanstack/react-query";
@@ -115,7 +115,7 @@ export default function ViewDonor() {
         >
           <div className="my-5">
             <table className="w-full">
-              {!isLoading && (
+              <thead>
                 <tr className="bg-[#004a89] text-white text-lg text-center">
                   <td className="py-3">Reg. No</td>
                   <td className="py-3">Donar Name</td>
@@ -127,11 +127,10 @@ export default function ViewDonor() {
                   <td className="py-3">Test</td>
                   <td></td>
                 </tr>
-              )}
+              </thead>
+              <tbody>
               {isLoading ? (
-                <div className="w-[80vw] flex items-center justify-center">
-                  <Loader />
-                </div>
+                <TableSkeleton rows={8} cols={9} />
               ) : (
                 donorList?.map((item, index) => (
                   <tr className="border border-x-gray text-center" key={index}>
@@ -189,6 +188,7 @@ export default function ViewDonor() {
                   </tr>
                 ))
               )}
+              </tbody>
             </table>
             {!donorListOverride && (
               <TablePagination

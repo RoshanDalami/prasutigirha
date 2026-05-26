@@ -6,7 +6,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { searchBaby } from "src/services/apiService/baby/babyServices";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import Loader from "src/components/Loader";
+import TableSkeleton from "src/components/TableSkeleton";
 import Switch from "@mui/material/Switch";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 import Modal from "src/components/Modal";
@@ -63,8 +63,6 @@ export default function BabyDetail() {
   const babyOutcomeOptions = babyOutcome?.map((item, index) => (
     <option key={index} value={item.name}>{item.name}</option>
   ));
-
-  if (isLoading) return <Loader />;
 
   return (
     <div className="pt-10 px-10">
@@ -138,7 +136,9 @@ export default function BabyDetail() {
               </tr>
             </thead>
             <tbody>
-              {displayList?.map((items, index) => (
+              {isLoading ? (
+                <TableSkeleton rows={8} cols={9} />
+              ) : displayList?.map((items, index) => (
                 <tr key={index} className={`${!items?.status ? "bg-red-400" : ""} border border-x-gray text-center`}>
                   <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
                   <td className="py-3">{items?.babyName}({items.ipNumber})</td>

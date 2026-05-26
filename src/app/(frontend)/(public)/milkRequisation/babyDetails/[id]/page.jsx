@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import TableBorder from "src/components/TableDesign";
-import LoadingSpinner from "src/components/Loading";
+import DetailSkeleton from "src/components/DetailSkeleton";
 import { useBabyById } from "src/hooks/useBaby";
 
 function combineQuantities(array) {
@@ -50,7 +50,7 @@ export default function BabyDetailsById() {
     link.click();
   };
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <DetailSkeleton gridCols={4} infoRows={4} tableCols={4} tableRows={8} />;
 
   const newArray = combineQuantities(babyDetails?.milkComsumedDetail);
 

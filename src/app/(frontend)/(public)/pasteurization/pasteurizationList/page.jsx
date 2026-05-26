@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
-import Loader from "src/components/Loader";
+import TableSkeleton from "src/components/TableSkeleton";
 import { searchPasteurization } from "src/services/apiService/search/searchService";
 import Modal from "src/components/Modal";
 import { usePasteurizationList, useDiscardPasteurization } from "src/hooks/usePasteurization";
@@ -99,8 +99,6 @@ export default function ListVolume() {
     }
   };
 
-  if (isLoading) return <Loader />;
-
   return (
     <>
       {modalOpen && (
@@ -178,17 +176,22 @@ export default function ListVolume() {
           >
             <div className="my-5">
               <table className="w-full">
-                <tr className="bg-[#004a89] text-white text-lg text-center">
-                  <td className="py-3 px-2">S.N</td>
-                  <td className="py-3 px-2">Number of Donor</td>
-                  <td className="py-3 px-2">Pooling Date</td>
-                  <td className="py-3 px-2">Pooling Condition</td>
-                  <td className="py-3 px-2">Volume Collected</td>
-                  <td className="py-3 px-2">Batch Name</td>
-                  <td className="py-3 px-2">Expiry Date</td>
-                  <td className="py-3 px-2">Action</td>
-                </tr>
-                {displayList?.map((row, index) => (
+                <thead>
+                  <tr className="bg-[#004a89] text-white text-lg text-center">
+                    <td className="py-3 px-2">S.N</td>
+                    <td className="py-3 px-2">Number of Donor</td>
+                    <td className="py-3 px-2">Pooling Date</td>
+                    <td className="py-3 px-2">Pooling Condition</td>
+                    <td className="py-3 px-2">Volume Collected</td>
+                    <td className="py-3 px-2">Batch Name</td>
+                    <td className="py-3 px-2">Expiry Date</td>
+                    <td className="py-3 px-2">Action</td>
+                  </tr>
+                </thead>
+                <tbody>
+                {isLoading ? (
+                  <TableSkeleton rows={8} cols={8} />
+                ) : displayList?.map((row, index) => (
                   <tr
                     className={`${(row.culture || row.discard) ? "bg-rose-400/50" : (row.discard === false && row.culture === false) ? "bg-lime-600/50" : ""} border border-x-gray text-center`}
                     key={index}
@@ -227,6 +230,7 @@ export default function ListVolume() {
                     </td>
                   </tr>
                 ))}
+                </tbody>
               </table>
               <TablePagination
                 component="div"

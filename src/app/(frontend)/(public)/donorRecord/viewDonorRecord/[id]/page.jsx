@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import { useRef } from "react";
 import TableBorder from "src/components/TableDesign";
 import { usePDF } from "react-to-pdf";
-import LoadingSpinner from "src/components/Loading";
+import DetailSkeleton from "src/components/DetailSkeleton";
 import { useDonorMilkVolume } from "src/hooks/useDonor";
 import { useGestational } from "src/hooks/useDropdown";
 
@@ -45,7 +45,7 @@ export default function Details() {
     link.click();
   };
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading) return <DetailSkeleton gridCols={4} infoRows={8} tableCols={5} tableRows={8} />;
 
   return (
     <div className="px-10 pt-10" ref={targetRef}>

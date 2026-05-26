@@ -6,7 +6,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { CSVLink } from "react-csv";
 import Switch from "@mui/material/Switch";
 const label = { inputProps: { "aria-label": "Switch demo" } };
-import Loader from "src/components/Loader";
+import TableSkeleton from "src/components/TableSkeleton";
 import { useBabyList, useInactiveBabyList, useUpdateBabyStatus } from "src/hooks/useBaby";
 import { useGestational } from "src/hooks/useDropdown";
 
@@ -52,8 +52,6 @@ export default function BabyDetail() {
         Total_Milk_Consumed: item.milkConsumed
     }));
 
-    if (isLoading) return <Loader />;
-
     return (
         <div className="pt-10 px-10">
             <TableBorder title={"Baby Details Report"} title2={
@@ -93,7 +91,9 @@ export default function BabyDetail() {
                         </tr>
                         </thead>
                         <tbody>
-                        {babyDetails?.map((items, index) => (
+                        {isLoading ? (
+                          <TableSkeleton rows={8} cols={9} />
+                        ) : babyDetails?.map((items, index) => (
                             <tr key={index} className="border border-x-gray text-center">
                                 <td className="py-3">{page * rowsPerPage + index + 1}</td>
                                 <td className="py-3">{items?.babyName}</td>
