@@ -2,26 +2,22 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { RecoilRoot } from "recoil";
+import QueryProvider from "src/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// export const metadata = {
-//   title: "Amrit Kosh",
-//   description: "",
-// };
-
 export default function RootLayout({ children }) {
-  // const [isRehydrated, setIsRehydrated] = useState(false);
-
   return (
     <html lang="en">
       <head>
         <title>Amrit Kosh</title>
       </head>
 
-      <RecoilRoot>
-        <body className={inter.className}>{children}</body>
-      </RecoilRoot>
+      <QueryProvider>
+        <RecoilRoot>
+          <body className={inter.className}>{children}</body>
+        </RecoilRoot>
+      </QueryProvider>
     </html>
   );
 }

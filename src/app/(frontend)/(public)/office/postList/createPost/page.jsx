@@ -1,27 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { IoClose } from "react-icons/io5";
 import Button from "src/components/button";
-import {
-  createPost,
-  getDepartment,
-} from "src/services/apiService/officeService/office";
+import { createPost } from "src/services/apiService/officeService/office";
 import FormBorder from "src/components/reusableForm";
 import { useRouter } from "next/navigation";
+import { useDepartmentList } from "src/hooks/useOffice";
 export default function CreatePost({clickedDataId}) {
     const {register,handleSubmit,formState:{isSubmitting},setValue} = useForm()
-  const [department, setDepartment] = useState([]);
+  const { data: department = [] } = useDepartmentList();
   const router = useRouter()
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getDepartment();
-      if (status === 200) {
-        setDepartment(data);
-      }
-    }
-    fetchData();
-  }, []);
   useEffect(()=>{
     if(clickedDataId){
       setValue('id',clickedDataId?._id)

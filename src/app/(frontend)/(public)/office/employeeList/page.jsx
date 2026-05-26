@@ -1,32 +1,16 @@
 "use client";
-import dynamic from "next/dynamic";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Button from "src/components/button";
 import { useRouter } from "next/navigation";
-import {
-  getEmployee,
-  employeeStatus,
-} from "src/services/apiService/officeService/office";
 import TableBorder from "src/components/TableDesign";
 import Switch from "@mui/material/Switch";
-import Loader from "/src/components/Loader"
+import Loader from "/src/components/Loader";
+import { useEmployeeList, useUpdateEmployeeStatus } from "src/hooks/useOffice";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 export default function ViewDonor() {
   const router = useRouter();
-  const [employeeList, setEmployeeList] = useState([]);
-  const [isLoading,setIsLoading] = useState(true);
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      const {status, data} = await getEmployee();
-      if (status === 200) {
-        setEmployeeList(data);
-        setIsLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+  const { data: employeeList = [], isLoading } = useEmployeeList();
+  const { mutateAsync: toggleStatus } = useUpdateEmployeeStatus();
 
   const local = <div>
     <div className="mx-10">
@@ -81,15 +65,7 @@ export default function ViewDonor() {
                     <td className="py-3">
                       <Switch
                           {...label}
-                          onChange={async () => {
-                            const response = await employeeStatus(item._id);
-                            if (response?.status === 200) {
-                              const {data, status} = await getEmployee();
-                              if (status === 200) {
-                                setEmployeeList(data);
-                              }
-                            }
-                          }}
+                          onChange={() => toggleStatus(item._id)}
                           checked={item.isActive}
                       />
                     </td>

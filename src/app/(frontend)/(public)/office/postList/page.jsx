@@ -1,32 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import TableBorder from "src/components/TableDesign";
-import {
-  getPost,
-} from "src/services/apiService/officeService/office";
 import Link from "next/link";
 import Button from "src/components/button";
 import { useRouter } from "next/navigation";
 import Loader from "src/components/Loader";
+import { usePostList } from "src/hooks/useOffice";
 export default function Post() {
-  const router = useRouter()
-  const [apiData, setApiData] = useState([]);
-const [isLoading,setIsLoading] = useState(true);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setIsLoading(true);
-        const {data, status} = await getPost();
-        if (status === 200) {
-          setApiData(data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchData();
-  }, []);
+  const router = useRouter();
+  const { data: apiData = [], isLoading } = usePostList();
 
   const local = <div className="mx-6">
     <TableBorder

@@ -1,28 +1,11 @@
 "use client";
-import dynamic from "next/dynamic";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  getAllUser
-} from 'src/services/apiService/officeService/office'
 import TableBorder from '@/components/TableDesign';
 import Loader from "src/components/Loader";
+import { useAllUsers } from "src/hooks/useUser";
 export default function ViewDonor() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [employeeList, setEmployeeList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      const {status, data} = await getAllUser();
-      if (status === 200) {
-        setEmployeeList(data);
-        setIsLoading(false)
-      }
-    }
-
-    fetchData();
-  }, []);
+  const { data: employeeList = [], isLoading } = useAllUsers();
   const local = <div>
     <div className="mx-10">
       <TableBorder

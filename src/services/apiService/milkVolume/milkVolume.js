@@ -15,10 +15,11 @@ export const deleteMilkById = async (id) => {
   );
   return response;
 };
-export const getVolumeOfMilk = async () => {
+export const getVolumeOfMilk = async (page, limit) => {
+  const params = page != null ? `?page=${page}&limit=${limit}` : "";
   let response = await mainApi(
     apiUrls.milkVolume.getVolumeOfMilk.method,
-    apiUrls.milkVolume.getVolumeOfMilk.url
+    apiUrls.milkVolume.getVolumeOfMilk.url + params
   );
   return response;
 };

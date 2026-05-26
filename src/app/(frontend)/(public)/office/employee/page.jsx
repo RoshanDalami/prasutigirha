@@ -2,15 +2,10 @@
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { urls } from "src/services/apiHelpers";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  getDepartment,
-  getPost,
-  createEmpolyee
-} from 'src/services/apiService/officeService/office'
+import { createEmpolyee } from 'src/services/apiService/officeService/office';
+import { useDepartmentList, usePostList } from "src/hooks/useOffice";
 export default function Employee({clickedIdData}) {
   const [createUser,setCreateUser] = useState(false)
   const {
@@ -24,16 +19,9 @@ export default function Employee({clickedIdData}) {
       ? JSON.parse(localStorage.getItem("userInfo"))
       : "";
   const router = useRouter();
-  const [departmentList, setDepartmentList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getDepartment();
-      if (status === 200) {
-        setDepartmentList(data);
-      }
-    }
-    fetchData();
-  }, []);
+  const { data: departmentList = [] } = useDepartmentList();
+  const { data: postList = [] } = usePostList();
+
   const departmentOptions = departmentList?.map((item, index) => {
     return (
       <option key={index} value={item.departmentId}>
@@ -52,16 +40,6 @@ export default function Employee({clickedIdData}) {
     }
   },[clickedIdData, setValue])
 
-  const [postList, setPostList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getPost();
-      if (status === 200) {
-        setPostList(data);
-      }
-    }
-    fetchData();
-  }, []);
   const postOptions = postList?.map((item, index) => {
     return (
       <option key={index} value={item.postId}>

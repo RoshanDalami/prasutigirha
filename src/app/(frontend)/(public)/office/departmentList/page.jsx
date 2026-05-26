@@ -1,32 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-
 import Link from "next/link";
 import Button from "src/components/button";
 import { useRouter } from "next/navigation";
-import {
-  getDepartment,
-  getOffice
-} from 'src/services/apiService/officeService/office'
 import Loader from "src/components/Loader";
-import TableBorder from 'src/components/TableDesign'
+import TableBorder from 'src/components/TableDesign';
+import { useDepartmentList } from "src/hooks/useOffice";
 export default function ViewDonor() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [departmentList, setDepartmentList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      const {status, data} = await getDepartment();
-      if (status === 200) {
-        setDepartmentList(data);
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
+  const { data: departmentList = [], isLoading } = useDepartmentList();
   const local = <div>
     <div className="mx-10">
       <TableBorder

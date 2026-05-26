@@ -1,10 +1,11 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function getMilkRequsition (){
+export async function getMilkRequsition (page, limit){
+    const params = page != null ? `?page=${page}&limit=${limit}` : "";
     let response = await mainApi(
         apiUrls.milkRequsition.getRequistion.method,
-        apiUrls.milkRequsition.getRequistion.url
+        apiUrls.milkRequsition.getRequistion.url + params
     )
     return response
 }
@@ -16,6 +17,14 @@ let response = await mainApi(
     data
 )
 return response
+}
+
+export async function getMilkRequsitionById(id) {
+    let response = await mainApi(
+        apiUrls.milkRequsition.getRequistion.method,
+        apiUrls.milkRequsition.getRequistion.url + `/${id ? id : ""}`,
+    )
+    return response
 }
 
 export async function deleteMilkRequsition(id){

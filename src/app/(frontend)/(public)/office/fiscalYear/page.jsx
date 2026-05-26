@@ -1,38 +1,17 @@
 "use client";
-import dynamic from "next/dynamic";
-import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Button from "src/components/button";
 import { useRouter } from "next/navigation";
-import {
-  getFiscalYear,
-  updateFiscalYearStatus,
-} from "src/services/apiService/officeService/office";
 import Switch from "@mui/material/Switch";
 import { FaEdit } from "react-icons/fa";
 import Loader from "src/components/Loader";
 import TableBorder from "@/components/TableDesign";
+import { useFiscalYearList, useUpdateFiscalYearStatus } from "src/hooks/useOffice";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 export default function ViewDonor() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-  const [apiData, setApiData] = useState([]);
-  useEffect(() => {
-    async function getApiData() {
-      try {
-    setIsLoading(true);
-        const {data, status} = await getFiscalYear();
-        if (status === 200) {
-          setApiData(data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getApiData();
-  }, []);
+  const { data: apiData = [], isLoading } = useFiscalYearList();
+  const { mutateAsync: toggleStatus } = useUpdateFiscalYearStatus();
   const handleEdit = (id) => {
     router.push(`/office/fiscalYear/createFiscalYear/${id}`)
   }
@@ -84,17 +63,7 @@ export default function ViewDonor() {
                     <th className={`border border-black px-2 py-3  `}>
                       <Switch
                           {...label}
-                          onChange={async () => {
-                            const response = await updateFiscalYearStatus(
-                                item._id
-                            );
-                            if (response?.status === 200) {
-                              const {data, status} = await getFiscalYear();
-                              if (status === 200) {
-                                setApiData(data);
-                              }
-                            }
-                          }}
+                          onChange={() => toggleStatus(item._id)}
                           value={true}
                           checked={item.status}
                       />

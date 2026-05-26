@@ -1,23 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { getPoolingById } from "@/services/apiService/pasteurization/pasteurization";
+import React, { useState } from "react";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import BikramSambat from "bikram-sambat-js";
 import "nepali-datepicker-reactjs/dist/index.css";
 import { useRouter, useParams } from "next/navigation";
 import FormBorder from "src/components/reusableForm";
-import { useForm } from "react-hook-form";
-import {
-  updateOther,
-  Discard,
-} from "../../../../../../../services/apiService/pasteurization/pasteurization";
+import { useForm, useFieldArray } from "react-hook-form";
+import { useUpdateOther, useDiscardPasteurization } from "src/hooks/usePasteurization";
 const aa = new BikramSambat(new Date()).toBS();
-import { useFieldArray } from "react-hook-form";
 export default function OtherReport() {
   const { id } = useParams();
   const router = useRouter();
-  const [apiData, setApiData] = useState({});
   const [date, setDate] = useState(aa);
+  const { mutateAsync: updateOther } = useUpdateOther();
+  const { mutateAsync: discard } = useDiscardPasteurization();
   const {
     register,
     handleSubmit,
@@ -28,31 +24,15 @@ export default function OtherReport() {
       other: [{ testName: "", testResult: "" }],
     },
   });
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getPoolingById(id);
-      console.log(response);
-    }
-    fetchData();
-  }, [id]);
   const { fields, append, remove } = useFieldArray({
     control,
     name: "other",
   });
   const onSubmit = async (data) => {
-    data = {
-      ...data,
-      id: id,
-      otherTestDate: date,
-    };
-    console.log(data);
-    const response = await updateOther(data);
-    // if (response?.status === 200) {
-    //   // router.push("");
-    // }
+    await updateOther({ ...data, id, otherTestDate: date });
   };
   const handleDiscard = async () => {
-    const response = await Discard(id);
+    const response = await discard(id);
     if (response?.status === 200) {
       router.push("/pasteurization/pasteurizationList");
     }

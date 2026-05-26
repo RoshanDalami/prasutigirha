@@ -1,42 +1,22 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import {
-  GetMilkDiscardReport,
-  GetMilkDiscardReportDateWise,
-} from "../../../../../services/apiService/report/reportServices";
+import React, { useState } from "react";
+import { GetMilkDiscardReportDateWise } from "../../../../../services/apiService/report/reportServices";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { BSToAD } from "bikram-sambat-js";
 import Loader from "src/components/Loader";
 import toast from "react-hot-toast";
+import { useMilkDiscardReport } from "src/hooks/useReport";
 const aa = new BikramSambat(new Date()).toBS();
 
 function DiscardReportPage() {
-  const [reportData, setReportData] = useState({});
+  const [searchOverride, setSearchOverride] = useState(null);
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
-  const [isReseting, setIsReseting] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async () => {
-      try {
-        const response = await GetMilkDiscardReport();
-        if (response.status === 200) {
-          setReportData(response.data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const { data: baseReportData = {}, isLoading } = useMilkDiscardReport();
+  const reportData = searchOverride ?? baseReportData;
 
   const handleSearch = async () => {
     setIsSearchLoading(true);
@@ -46,34 +26,21 @@ function DiscardReportPage() {
         endingDate: BSToAD(endingDate),
       };
       const response = await GetMilkDiscardReportDateWise(data);
-      console.log(response, "data");
       if (response.status === 200) {
-        setReportData(response.data);
-        setIsSearchLoading(false);
+        setSearchOverride(response.data);
         toast.success(response?.message);
       }
     } catch (error) {
       toast.error(error.message);
-      setIsSearchLoading(false);
     } finally {
       setIsSearchLoading(false);
     }
   };
 
-  const handleReset = async () => {
-    setIsReseting(true);
-    try {
-      const response = await GetMilkDiscardReport();
-      if (response.status === 200) {
-        setReportData(response.data);
-        setIsReseting(false);
-      }
-    } catch (error) {
-      setIsReseting(false);
-      toast.error(error.message);
-    } finally {
-      setIsReseting(false);
-    }
+  const handleReset = () => {
+    setSearchOverride(null);
+    setStartingDate("");
+    setEndingDate("");
   };
 
   if (isLoading) return <Loader />;
@@ -118,14 +85,10 @@ function DiscardReportPage() {
             {isSearchLoading ? "searching ..." : "Search"}
           </button>
           <button
-            className={
-              "bg-red-600 px-4 py-2 rounded-lg text-white disabled:bg-gray-300" +
-              " disabled:cursor-not-allowed"
-            }
+            className="bg-red-600 px-4 py-2 rounded-lg text-white"
             onClick={() => handleReset()}
-            disabled={isReseting}
           >
-            {isReseting ? "resetting ..." : "Reset"}
+            Reset
           </button>
         </div>
       </div>

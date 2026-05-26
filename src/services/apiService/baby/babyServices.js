@@ -1,10 +1,11 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function getBabyDetail() {
+export async function getBabyDetail(page, limit) {
+  const params = page != null ? `?page=${page}&limit=${limit}` : "";
   let response = await mainApi(
     apiUrls.baby.getBabyDetail.method,
-    apiUrls.baby.getBabyDetail.url
+    apiUrls.baby.getBabyDetail.url + params
   );
   return response;
 }
@@ -33,10 +34,11 @@ export async function updateBabyStatus(id) {
   return response;
 }
 
-export async function getInactiveBaby() {
+export async function getInactiveBaby(page, limit) {
+  const params = page != null ? `?page=${page}&limit=${limit}` : "";
   let response = await mainApi(
     apiUrls.baby.getInActiveBaby.method,
-    apiUrls.baby.getInActiveBaby.url
+    apiUrls.baby.getInActiveBaby.url + params
   );
   return response;
 }

@@ -1,10 +1,11 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export const getPooling = async () => {
+export const getPooling = async (page, limit) => {
+  const params = page != null ? `?page=${page}&limit=${limit}` : "";
   let response = await mainApi(
     apiUrls.pasteurization.getPooling.method,
-    apiUrls.pasteurization.getPooling.url
+    apiUrls.pasteurization.getPooling.url + params
   );
   return response;
 };

@@ -1,15 +1,11 @@
 "use client";
 import dynamic from "next/dynamic";
-import { useState, useEffect, useCallback } from "react";
-import { urls } from "src/services/apiHelpers";
+import { useCallback } from "react";
 import Link from "next/link";
 import Button from "src/components/button";
-import axios from "axios";
-import { BiEdit } from "react-icons/bi";
-import { MdDeleteForever } from "react-icons/md";
-import { getOffice } from "src/services/apiService/officeService/office";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
+import { useOfficeList } from "src/hooks/useOffice";
 
 export default function ViewDonor() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), {
@@ -17,43 +13,8 @@ export default function ViewDonor() {
   });
   const router = useRouter();
 
-  const [officeList, setOfficeList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { status, data } = await getOffice();
-      if (status === 200) {
-        setOfficeList(data);
-      }
-    }
-    fetchData();
-  }, []);
+  const { data: officeList = [] } = useOfficeList();
 
-  const handleEdit = useCallback(
-    (id) => {
-      router.push(`/donorRecord/addDonorRecord/${id}`);
-    },
-    [router]
-  );
-  const handleDetail = useCallback(
-    (id) => {
-      router.push(`/donorRecord/viewDonorRecord/${id}`);
-    },
-    [router]
-  );
-  const handleDelete = async (id) => {
-    try {
-      const response = await axios.delete(`${urls.getDonor}/${id}`);
-      console.log(response, "deleted");
-      if (response.status === 200) {
-        const { status, data } = await axios.get(`${urls.getDonor}`);
-        if (status === 200) {
-          setDonorList(data);
-        }
-      }
-    } catch (error) {
-      console.error("Error deleteing:", error);
-    }
-  };
 
   return (
     <>

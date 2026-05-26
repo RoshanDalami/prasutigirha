@@ -1,10 +1,10 @@
 "use client";
 import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
-import {useEffect, useState} from "react";
-import {createOffice, getDistrict, getPalika, getState} from "src/services/apiService/officeService/office";
+import {createOffice} from "src/services/apiService/officeService/office";
 import {useForm} from "react-hook-form";
 import {useRouter} from "next/navigation";
+import { useStateList, useDistrictList, usePalikaList } from "src/hooks/useOffice";
 
 export default function Office() {
     const {
@@ -15,18 +15,10 @@ export default function Office() {
     } = useForm();
     const watchFields = watch();
     const router = useRouter();
-    //state
-    const [state, setState] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const {status, data} = await getState();
-            if (status === 200) {
-                setState(data);
-            }
-        };
-        fetchData();
-    }, []);
+    const { data: state = [] } = useStateList();
+    const { data: district = [] } = useDistrictList(watchFields?.stateId);
+    const { data: palika = [] } = usePalikaList(watchFields?.districtId);
 
     const stateOptions = state?.map((item, index) => {
         return (
@@ -36,19 +28,6 @@ export default function Office() {
         );
     });
 
-    //district
-    const [district, setDistrict] = useState([]);
-    useEffect(() => {
-        if (watchFields?.stateId) {
-            const fetchData = async () => {
-                const {data, status} = await getDistrict(watchFields?.stateId)
-                if (status === 200) {
-                    setDistrict(data);
-                }
-            };
-            fetchData();
-        }
-    }, [watchFields?.stateId]);
     const districtOptions = district?.map((item, index) => {
         return (
             <option key={index} value={item.districtId}>
@@ -56,19 +35,6 @@ export default function Office() {
             </option>
         );
     });
-    //palika
-    const [palika, setPalika] = useState([]);
-    useEffect(() => {
-        if (watchFields?.districtId) {
-            const fetchData = async () => {
-                const {status, data} = await getPalika(watchFields?.districtId)
-                if (status === 200) {
-                    setPalika(data);
-                }
-            };
-            fetchData();
-        }
-    }, [watchFields?.districtId]);
     const paliakOptions = palika?.map((item, index) => {
         return (
             <option key={index} value={item.palikaId}>

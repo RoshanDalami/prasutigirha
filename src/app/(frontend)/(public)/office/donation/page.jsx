@@ -1,40 +1,22 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import TableBorder from "src/components/TableDesign";
 import Link from "next/link";
 import Button from "src/components/button";
-import {DeleteDonation, GetDonation} from "../../../../../services/apiService/officeService/office";
 import Loader from "src/components/Loader";
-import {useRouter} from 'next/navigation'
+import {useRouter} from 'next/navigation';
+import { useDonationList, useDeleteDonation } from "src/hooks/useOffice";
 
 function DonationIndex() {
     const router = useRouter();
-    const [apiData, setApiData] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true)
-            const response = await GetDonation();
-            if (response.status === 200) {
-                setApiData((response?.data))
-                setIsLoading(false);
-            }
-        }
-        fetchData();
-    }, [])
+    const { data: apiData = [], isLoading } = useDonationList();
+    const { mutateAsync: deleteDonation } = useDeleteDonation();
+
     const handleEdit = (id) => {
         router.push(`/office/donation/createDonation/${id}`)
     }
     const handleDelete = async (id) => {
-        const hello = await DeleteDonation(id);
-        if (hello?.status === 200) {
-        setIsLoading(true)
-            const response = await GetDonation();
-            if (response.status === 200) {
-                setApiData(response?.data)
-                setIsLoading(false);
-            }
-        }
+        await deleteDonation(id);
     }
     const table =
         <div className="mx-5">

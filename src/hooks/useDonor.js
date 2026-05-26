@@ -1,0 +1,111 @@
+"use client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  getDonor,
+  getInActiveDonor,
+  getDiscardedDonor,
+  updateDonorStatus,
+  getDonorOtherTest,
+  discard,
+  donorByGestationalAge,
+  regList,
+  updateSerology,
+  getAllDonorListForSelect,
+} from "src/services/apiService/donorRecord/donor";
+import { getMilkByDonorId } from "src/services/apiService/milkVolume/milkVolume";
+import { keys } from "src/lib/queryKeys";
+
+export function useDonorList(page, limit, enabled = true) {
+  return useQuery({
+    queryKey: keys.donor.list(page, limit),
+    enabled,
+    queryFn: async () => {
+      const { data } = await getDonor(page, limit);
+      return data;
+    },
+  });
+}
+
+export function useInactiveDonors(enabled = true) {
+  return useQuery({
+    queryKey: keys.donor.inactive,
+    enabled,
+    queryFn: async () => {
+      const { data } = await getInActiveDonor();
+      return data ?? [];
+    },
+  });
+}
+
+export function useDiscardedDonors(enabled = true) {
+  return useQuery({
+    queryKey: keys.donor.discarded,
+    enabled,
+    queryFn: async () => {
+      const { data } = await getDiscardedDonor();
+      return data ?? [];
+    },
+  });
+}
+
+export function useDonorOtherTest(id) {
+  return useQuery({
+    queryKey: keys.donor.otherTest(id),
+    queryFn: async () => {
+      const { data } = await getDonorOtherTest(id);
+      return data;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useDonorMilkVolume(id) {
+  return useQuery({
+    queryKey: keys.milkVolume.byDonor(id),
+    queryFn: async () => {
+      const { data } = await getMilkByDonorId(id);
+      return data;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useAllDonorsForSelect() {
+  return useQuery({
+    queryKey: ["donor", "selectList"],
+    queryFn: async () => {
+      const response = await getAllDonorListForSelect();
+      return response?.data ?? [];
+    },
+  });
+}
+
+export function useUpdateDonorStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id) => updateDonorStatus(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["donor"] });
+    },
+  });
+}
+
+export function useDiscardDonor() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => discard(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["donor"] });
+    },
+  });
+}
+
+export function useUpdateSerology() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => updateSerology(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["donor"] });
+    },
+  });
+}

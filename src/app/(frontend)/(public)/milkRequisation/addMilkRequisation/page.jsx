@@ -8,17 +8,15 @@ import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat, { ADToBS, BSToAD } from "bikram-sambat-js";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
 import { getBottle } from "src/services/apiService/bottle/bottleServices";
 const aa = new BikramSambat(new Date()).toBS();
 import { createMilkRequistion } from "src/services/apiService/milkRequistion/requistionService";
-import { getBabyDetail } from "src/services/apiService/baby/babyServices";
-import { getPooling } from "src/services/apiService/pasteurization/pasteurization";
 import toast from "react-hot-toast";
 import Select from "react-select";
+import { useBabyList } from "src/hooks/useBaby";
+import { usePasteurizationList } from "src/hooks/usePasteurization";
 export default function AddMilkReq({ clickedIdData }) {
   const router = useRouter();
   const { id } = useParams();
@@ -56,12 +54,9 @@ export default function AddMilkReq({ clickedIdData }) {
   const watchFields = watch();
   const watchArray = watch("requisitedMilk");
 
-  // const watchArray = watchFields?.requisitedMilk
-
   const [bottleList, setBottleList] = useState([]);
   const [bottleLoading, setBottleLoading] = useState([]);
   useEffect(() => {
-    // Keep bottle arrays aligned with the number of dynamic fields
     setBottleList((prev) => {
       const copy = Array.isArray(prev) ? [...prev] : [];
       while (copy.length < fields.length) copy.push(undefined);
@@ -76,41 +71,10 @@ export default function AddMilkReq({ clickedIdData }) {
     });
   }, [fields.length]);
 
-  //gestationalAge
-  const [gestationalAge, setGestationalAge] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getGestational}`);
-      if (data?.status === 200) {
-        setGestationalAge(data?.data);
-      }
-    }
-    fetchData();
-  }, []);
-
-  const gestationalOption = gestationalAge?.map((item, index) => {
-    return (
-      <option key={index} value={item.gestationalId}>
-        {item.gestationalName}
-      </option>
-    );
-  });
-
-  const [babyList, setBabyList] = useState([]);
-  const [babyLoading, setBabyLoading] = useState(true);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const { status, data } = await getBabyDetail();
-        if (status === 200) {
-          setBabyList(data);
-        }
-      } finally {
-        setBabyLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
+  const { data: babyResult = {}, isLoading: babyLoading } = useBabyList(1, 500);
+  const { data: poolingResult = {}, isLoading: poolingLoading } = usePasteurizationList(1, 500);
+  const babyList = babyResult.data ?? [];
+  const poolingList = poolingResult.data ?? [];
 
   const babyOptions = babyList?.map((item)=>{
     return{
@@ -118,22 +82,6 @@ export default function AddMilkReq({ clickedIdData }) {
       value: `${item._id}/${item.babyName}`
     }
   })
-  //poolingList batchname
-  const [poolingList, setPoolingList] = useState([]);
-  const [poolingLoading, setPoolingLoading] = useState(true);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const { data, status } = await getPooling();
-        if (status === 200) {
-          setPoolingList(data);
-        }
-      } finally {
-        setPoolingLoading(false);
-      }
-    }
-    fetchData();
-  }, []);
 
   const poolingOptions = poolingList
     ?.filter((items) => items.culture === false && items.remaining > 0)

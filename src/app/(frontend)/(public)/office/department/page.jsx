@@ -4,15 +4,9 @@ import Button from "src/components/button";
 import FormBorder from "src/components/reusableForm";
 import { IoClose } from "react-icons/io5";
 import { useForm } from "react-hook-form";
-import { urls } from "src/services/apiHelpers";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  getOffice,
-  createDepartment,
-  getDepartment,
-  createPost,
-} from "src/services/apiService/officeService/office";
+import { createDepartment, createPost } from "src/services/apiService/officeService/office";
+import { useOfficeList, useDepartmentList } from "src/hooks/useOffice";
 export default function Department({ clickedIdData }) {
   const router = useRouter();
   const [openModel, setOpenModel] = useState(false);
@@ -27,16 +21,8 @@ export default function Department({ clickedIdData }) {
       ? JSON.parse(localStorage.getItem("userInfo"))
       : "";
 
-  const [officeList, setOfficeList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getOffice();
-      if (status === 200) {
-        setOfficeList(data);
-      }
-    }
-    fetchData();
-  }, []);
+  const { data: officeList = [] } = useOfficeList();
+  const { data: departmentList = [] } = useDepartmentList();
 
   useEffect(() => {
     if (clickedIdData) {
@@ -55,7 +41,6 @@ export default function Department({ clickedIdData }) {
 
     try {
       const response = await createDepartment(data);
-      console.log(response, "response");
       if (response.status === 200) {
         router.push("/office/departmentList");
       }
@@ -71,7 +56,6 @@ export default function Department({ clickedIdData }) {
     };
     try {
       const response = await createPost(data);
-      console.log(response, "response");
       if (response.status === 200) {
         router.push("/office/departmentList");
       }
@@ -79,16 +63,6 @@ export default function Department({ clickedIdData }) {
       console.log(error);
     }
   };
-  const [departmentList, setDepartmentList] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getDepartment();
-      if (status === 200) {
-        setDepartmentList(data);
-      }
-    }
-    fetchData();
-  }, []);
   const departmentOptions = departmentList?.map((item, index) => {
     return (
       <option key={index} value={item.departmentId}>

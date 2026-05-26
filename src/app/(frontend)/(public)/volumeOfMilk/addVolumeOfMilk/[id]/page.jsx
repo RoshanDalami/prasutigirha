@@ -1,23 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
-import AddVolume from "../page";
-import { urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-const AddVolumeId = () => {
-  const [milkVolume, setMilkVolume] = useState([]);
-  const { id } = useParams();
+import { urls } from "src/services/apiHelpers";
+import AddVolume from "../page";
+import Loader from "src/components/Loader";
 
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getVolumeOfMilk}/${id}`);
-      if (status === 200) {
-        setMilkVolume(data);
-      }
-    }
-    fetchData();
-  }, [id]);
-  console.log(milkVolume, "response");
+const AddVolumeId = () => {
+  const { id } = useParams();
+  const { data: milkVolume, isLoading } = useQuery({
+    queryKey: ["milkVolume", "edit", id],
+    queryFn: async () => {
+      const { data } = await axios.get(`${urls.getVolumeOfMilk}/${id}`);
+      return data;
+    },
+    enabled: !!id,
+  });
+
+  if (isLoading) return <Loader />;
   return <AddVolume clickedData={milkVolume} />;
 };
 export default AddVolumeId;

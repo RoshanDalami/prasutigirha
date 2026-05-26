@@ -2,15 +2,12 @@
 import React, { useEffect, useState } from "react";
 import TableBorder from "src/components/TableDesign";
 import { useForm } from "react-hook-form";
-import {
-  giveAccess,
-  getOneUser,
-  GetAllModule,
-} from "../../../../../services/apiService/officeService/office";
+import { giveAccess } from "../../../../../services/apiService/officeService/office";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
+import { useOneUser, useAllModules } from "src/hooks/useUser";
 export default function AccessManager() {
   const {
     register,
@@ -23,39 +20,23 @@ export default function AccessManager() {
       : { username: "Softech" };
   const router = useRouter();
   const { id } = useParams();
-  const [oneuser, setOneuser] = useState([]);
-  useEffect(() => {
-    async function fetchData() {
-      const { data, status } = await getOneUser(id);
-      if (status === 200) {
-        setOneuser(data?.assignedModule);
-      }
-    }
-    fetchData();
-  }, [id]);
+
+  const { data: oneUserData } = useOneUser(id);
+  const { data: rawModules = [] } = useAllModules();
+  const oneuser = oneUserData?.assignedModule ?? [];
 
   const [allModule, setAllModule] = useState([]);
+
   useEffect(() => {
-    async function fetchData() {
-      const response = await GetAllModule();
-      if (response?.status === 200) {
-        console.log(response?.data);
-        setAllModule(
-          response?.data?.map((model) => {
-            return {
-              title: model.title,
-              isChecked: oneuser.find((item) => item.title === model.title)
-                ? true
-                : false,
-            };
-          })
-        );
-      }
+    if (rawModules.length > 0) {
+      setAllModule(
+        rawModules.map((model) => ({
+          title: model.title,
+          isChecked: oneuser.find((item) => item.title === model.title) ? true : false,
+        }))
+      );
     }
-    if (oneuser) {
-      fetchData();
-    }
-  }, [oneuser]);
+  }, [rawModules, oneUserData]);
 
   const logoutHandler = async () => {
     try {
@@ -86,7 +67,6 @@ export default function AccessManager() {
         console.log(error);
       }
     }
-    console.log(data, "response");
   };
 
   const handleCheckboxChange = (index) => {
