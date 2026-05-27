@@ -124,9 +124,9 @@ const apiUrls = {
       method: "GET",
       url: "/donor/getInActiveDonor",
     },
-    getDiscardedDonor:{
-      method:"GET",
-      url:"/donor/getDiscardedDonor"
+    getDiscardedDonor: {
+      method: "GET",
+      url: "/donor/getDiscardedDonor",
     },
     updateDonorStatus: {
       method: "GET",
@@ -186,10 +186,10 @@ const apiUrls = {
       method: "GET",
       url: "/milkVolume/getCollectedMilkListForDonor",
     },
-    discardMilkBeforePasturization:{
-      method:"GET",
-      url:"/milkVolume/discardMilkBeforePasturization"
-    }
+    discardMilkBeforePasturization: {
+      method: "GET",
+      url: "/milkVolume/discardMilkBeforePasturization",
+    },
   },
   pasteurization: {
     createPooling: {
@@ -370,13 +370,21 @@ const apiUrls = {
       method: "GET",
       url: "/report/getAllReportDateWise",
     },
-    getMilkDiscardReport :{
-      method:"GET",
-      url:"/report/getMilkDiscardReport"
+    getMilkDiscardReport: {
+      method: "GET",
+      url: "/report/getMilkDiscardReport",
     },
-    getMilkDiscardReportDateWise :{
-      method:"GET",
-      url:"/report/getMilkDiscardReportDateWise"
+    getMilkDiscardReportDateWise: {
+      method: "GET",
+      url: "/report/getMilkDiscardReportDateWise",
+    },
+    getMilkDiscardDetailedReport: {
+      method: "GET",
+      url: "/report/getMilkDiscardDetailedReport",
+    },
+    getMilkDiscardDetailedReportDateWise: {
+      method: "GET",
+      url: "/report/getMilkDiscardDetailedReportDateWise",
     },
   },
   dropdown: {

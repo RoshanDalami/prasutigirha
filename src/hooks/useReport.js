@@ -39,3 +39,41 @@ export function useMilkDiscardReport() {
     },
   });
 }
+
+async function getMilkDiscardDetailedReport() {
+  const response = await mainApi(
+    apiUrls.report.getMilkDiscardDetailedReport.method,
+    apiUrls.report.getMilkDiscardDetailedReport.url
+  );
+  return response;
+}
+
+async function getMilkDiscardDetailedReportDateWise(startingDate, endingDate) {
+  const response = await mainApi(
+    apiUrls.report.getMilkDiscardDetailedReportDateWise.method,
+    apiUrls.report.getMilkDiscardDetailedReportDateWise.url +
+      `?startDate=${startingDate}&endDate=${endingDate}`
+  );
+  return response;
+}
+
+export function useMilkDiscardDetailedReport() {
+  return useQuery({
+    queryKey: keys.report.milkDiscardDetailed,
+    queryFn: async () => {
+      const { data } = await getMilkDiscardDetailedReport();
+      return data ?? [];
+    },
+  });
+}
+
+export function useMilkDiscardDetailedReportDateWise({ startingDate, endingDate }) {
+  return useQuery({
+    queryKey: keys.report.milkDiscardDetailedDateWise(startingDate, endingDate),
+    queryFn: async () => {
+      const { data } = await getMilkDiscardDetailedReportDateWise(startingDate, endingDate);
+      return data ?? [];
+    },
+    enabled: !!startingDate && !!endingDate,
+  });
+}

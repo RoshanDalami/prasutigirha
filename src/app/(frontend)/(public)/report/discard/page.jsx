@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { GetMilkDiscardReportDateWise } from "../../../../../services/apiService/report/reportServices";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
@@ -45,8 +46,14 @@ function DiscardReportPage() {
 
   return (
     <div className={"px-10 py-5"}>
-      <div className="py-5">
-        <h1 className="text-3xl font-bold text-red-600">Discard Report </h1>
+      <div className="py-5 flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-red-600">Discard Report</h1>
+        <Link
+          href="/report/discard/detailed"
+          className="bg-blue-600 px-4 py-2 rounded-lg text-white text-sm hover:bg-blue-700"
+        >
+          View Detailed Report
+        </Link>
       </div>
       <div className={"flex items-center gap-5"}>
         <div className={"flex  gap-3 items-center"}>

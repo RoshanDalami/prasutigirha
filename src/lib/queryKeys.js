@@ -79,6 +79,8 @@ export const keys = {
     dateWise: (from, to) => ["report", "dateWise", from, to],
     milkDiscard: ["report", "milkDiscard"],
     milkDiscardDateWise: (from, to) => ["report", "milkDiscardDateWise", from, to],
+    milkDiscardDetailed: ["report", "milkDiscardDetailed"],
+    milkDiscardDetailedDateWise: (from, to) => ["report", "milkDiscardDetailedDateWise", from, to],
   },
   bottle: {
     byId: (id) => ["bottle", id],
