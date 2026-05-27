@@ -1,11 +1,17 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function getBabyDetail(page, limit) {
-  const params = page != null ? `?page=${page}&limit=${limit}` : "";
+export async function getBabyDetail(page = 1, limit = 10, q) {
+  const params = new URLSearchParams();
+  params.append("page", page);
+  params.append("limit", limit);
+  if (q === "true") {
+    params.append("all", "true");
+  }
+
   let response = await mainApi(
     apiUrls.baby.getBabyDetail.method,
-    apiUrls.baby.getBabyDetail.url + params
+    apiUrls.baby.getBabyDetail.url + "?" + params.toString()
   );
   return response;
 }

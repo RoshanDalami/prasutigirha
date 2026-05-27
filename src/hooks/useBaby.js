@@ -11,11 +11,11 @@ import {
 } from "src/services/apiService/baby/babyServices";
 import { keys } from "src/lib/queryKeys";
 
-export function useBabyList(page, limit) {
+export function useBabyList(page, limit, q) {
   return useQuery({
-    queryKey: [...keys.baby.list, page, limit],
+    queryKey: [...keys.baby.list, page, limit, q],
     queryFn: async () => {
-      const { data } = await getBabyDetail(page, limit);
+      const { data } = await getBabyDetail(page, limit, q);
       return data ?? {};
     },
   });

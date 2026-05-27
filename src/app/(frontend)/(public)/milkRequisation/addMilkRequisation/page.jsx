@@ -71,24 +71,30 @@ export default function AddMilkReq({ clickedIdData }) {
     });
   }, [fields.length]);
 
-  const { data: babyResult = {}, isLoading: babyLoading } = useBabyList(1, 500);
-  const { data: poolingResult = {}, isLoading: poolingLoading } = usePasteurizationList(1, 500);
+  const { data: babyResult = {}, isLoading: babyLoading } = useBabyList(
+    1,
+    500,
+    "true",
+  );
+  const { data: poolingResult = {}, isLoading: poolingLoading } =
+    usePasteurizationList(1, 500);
   const babyList = babyResult.data ?? [];
   const poolingList = poolingResult.data ?? [];
 
-  const babyOptions = babyList?.map((item)=>{
-    return{
+  const babyOptions = babyList?.map((item) => {
+    return {
       label: `${item.babyName} (${item.ipNumber})`,
-      value: `${item._id}/${item.babyName}`
-    }
-  })
+      value: `${item._id}/${item.babyName}`,
+    };
+  });
 
-  const poolingOptions = poolingList
-    ?.filter((items) => items.culture === false && items.remaining > 0)
-    ?.map((items) => ({
-      label: `${items?.batchName} (${items?.date})`,
-      value: `${items._id}/${items.batchName}/${items.date}`,
-    })) || [];
+  const poolingOptions =
+    poolingList
+      ?.filter((items) => items.culture === false && items.remaining > 0)
+      ?.map((items) => ({
+        label: `${items?.batchName} (${items?.date})`,
+        value: `${items._id}/${items.batchName}/${items.date}`,
+      })) || [];
   const [babyId, setBabyId] = useState("");
   const onSubmit = async (data) => {
     data = {
@@ -131,8 +137,12 @@ export default function AddMilkReq({ clickedIdData }) {
       copy.splice(index, 1);
       return copy;
     });
-    setBottleList((prev) => (Array.isArray(prev) ? prev.filter((_, i) => i !== index) : []));
-    setBottleLoading((prev) => (Array.isArray(prev) ? prev.filter((_, i) => i !== index) : []));
+    setBottleList((prev) =>
+      Array.isArray(prev) ? prev.filter((_, i) => i !== index) : [],
+    );
+    setBottleLoading((prev) =>
+      Array.isArray(prev) ? prev.filter((_, i) => i !== index) : [],
+    );
   };
 
   return (
@@ -156,8 +166,14 @@ export default function AddMilkReq({ clickedIdData }) {
                       remainingVol: 0,
                       quantity: 0,
                     });
-                    setBottleList((prev) => [...(Array.isArray(prev) ? prev : []), undefined]);
-                    setBottleLoading((prev) => [...(Array.isArray(prev) ? prev : []), false]);
+                    setBottleList((prev) => [
+                      ...(Array.isArray(prev) ? prev : []),
+                      undefined,
+                    ]);
+                    setBottleLoading((prev) => [
+                      ...(Array.isArray(prev) ? prev : []),
+                      false,
+                    ]);
                   }}
                 >
                   Add More +
@@ -174,8 +190,8 @@ export default function AddMilkReq({ clickedIdData }) {
                     Loading babies...
                   </div>
                 ) : (
-                  <Select 
-                    options={babyOptions} 
+                  <Select
+                    options={babyOptions}
                     placeholder="Select Baby"
                     isDisabled={babyLoading}
                     onChange={(e) => {
@@ -220,53 +236,64 @@ export default function AddMilkReq({ clickedIdData }) {
                       isClearable
                       isSearchable
                       onChange={async (option) => {
-                          if (option) {
-                            setValue(`requisitedMilk.${index}.batchNumber`, option.value);
-                            const selectedId = option.value;
-                            setBottleLoading((prev) => {
-                              const copy = Array.isArray(prev) ? [...prev] : [];
-                              copy[index] = true;
-                              return copy;
-                            });
-                            try {
-                              const response = await getBottle(
-                                selectedId.split("/")?.[0]
-                              );
-                              if (response?.status === 200) {
-                                setBottleList((prevData) => {
-                                  const copy = Array.isArray(prevData) ? [...prevData] : [];
-                                  copy[index] = response?.data?.bottleList;
-                                  return copy;
-                                });
-                              } else {
-                                setBottleList((prevData) => {
-                                  const copy = Array.isArray(prevData) ? [...prevData] : [];
-                                  copy[index] = undefined;
-                                  return copy;
-                                });
-                              }
-                            } catch (err) {
+                        if (option) {
+                          setValue(
+                            `requisitedMilk.${index}.batchNumber`,
+                            option.value,
+                          );
+                          const selectedId = option.value;
+                          setBottleLoading((prev) => {
+                            const copy = Array.isArray(prev) ? [...prev] : [];
+                            copy[index] = true;
+                            return copy;
+                          });
+                          try {
+                            const response = await getBottle(
+                              selectedId.split("/")?.[0],
+                            );
+                            if (response?.status === 200) {
                               setBottleList((prevData) => {
-                                const copy = Array.isArray(prevData) ? [...prevData] : [];
+                                const copy = Array.isArray(prevData)
+                                  ? [...prevData]
+                                  : [];
+                                copy[index] = response?.data?.bottleList;
+                                return copy;
+                              });
+                            } else {
+                              setBottleList((prevData) => {
+                                const copy = Array.isArray(prevData)
+                                  ? [...prevData]
+                                  : [];
                                 copy[index] = undefined;
                                 return copy;
                               });
-                            } finally {
-                              setBottleLoading((prev) => {
-                                const copy = Array.isArray(prev) ? [...prev] : [];
-                                copy[index] = false;
-                                return copy;
-                              });
                             }
-                          } else {
-                            setValue(`requisitedMilk.${index}.batchNumber`, "");
+                          } catch (err) {
                             setBottleList((prevData) => {
-                              const copy = Array.isArray(prevData) ? [...prevData] : [];
+                              const copy = Array.isArray(prevData)
+                                ? [...prevData]
+                                : [];
                               copy[index] = undefined;
                               return copy;
                             });
+                          } finally {
+                            setBottleLoading((prev) => {
+                              const copy = Array.isArray(prev) ? [...prev] : [];
+                              copy[index] = false;
+                              return copy;
+                            });
                           }
-                        }}
+                        } else {
+                          setValue(`requisitedMilk.${index}.batchNumber`, "");
+                          setBottleList((prevData) => {
+                            const copy = Array.isArray(prevData)
+                              ? [...prevData]
+                              : [];
+                            copy[index] = undefined;
+                            return copy;
+                          });
+                        }
+                      }}
                     />
                     {errors?.requisitedMilk?.[index]?.batchNumber && (
                       <p className="errorMessages">
@@ -311,15 +338,24 @@ export default function AddMilkReq({ clickedIdData }) {
                             value: `${subItem?._id}/${subItem?.name}/${subItem?.remainingVoluem}`,
                           })) || []
                       }
-                      placeholder={bottleLoading?.[index] ? "Loading bottles..." : bottleList[index] ? "-- Select bottle --" : "Select batch first"}
-                        isClearable
-                        isSearchable
-                        isDisabled={!bottleList[index] && !bottleLoading?.[index]}
-                        isLoading={!!bottleLoading?.[index]}
+                      placeholder={
+                        bottleLoading?.[index]
+                          ? "Loading bottles..."
+                          : bottleList[index]
+                            ? "-- Select bottle --"
+                            : "Select batch first"
+                      }
+                      isClearable
+                      isSearchable
+                      isDisabled={!bottleList[index] && !bottleLoading?.[index]}
+                      isLoading={!!bottleLoading?.[index]}
                       onChange={(option) => {
                         if (option) {
                           const selectedValue = option.value;
-                          setValue(`requisitedMilk.${index}.bottleName`, selectedValue);
+                          setValue(
+                            `requisitedMilk.${index}.bottleName`,
+                            selectedValue,
+                          );
                           setWatchBottle((prevData) => [
                             ...prevData.slice(0, index),
                             selectedValue?.split("/")[0],
@@ -327,10 +363,10 @@ export default function AddMilkReq({ clickedIdData }) {
                           ]);
                           setValue(
                             `requisitedMilk.${index}.remainingVol`,
-                            selectedValue?.split("/")[2]
+                            selectedValue?.split("/")[2],
                           );
                           setIsValid(
-                            watchBottle.includes(selectedValue?.split("/")[0])
+                            watchBottle.includes(selectedValue?.split("/")[0]),
                           );
                         } else {
                           setValue(`requisitedMilk.${index}.bottleName`, "");
@@ -396,10 +432,10 @@ export default function AddMilkReq({ clickedIdData }) {
                   validVolume > 150
                     ? true
                     : false || isSubmitting || feedingDate > aa
-                    ? true
-                    : false || remvol < quantity
-                    ? true
-                    : false
+                      ? true
+                      : false || remvol < quantity
+                        ? true
+                        : false
                 }
                 type="submit"
               >
