@@ -232,7 +232,6 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       setDefaultValuesWithUserData(defaultValues);
     }
   }, [userData, clickedIdData, setValue]);
-  console.log(clickedIdData, "donordata");
   const onSubmit = (data) => {
     setUserData({
       ...userData,
@@ -252,7 +251,6 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
       JSON.stringify({ ...userData, ...data, date: date, engDate })
     );
     handleClick("next");
-    console.log(userData, "response");
   };
   const [isExternal, setIsExternal] = useState(false);
   function handleExternal(e) {
