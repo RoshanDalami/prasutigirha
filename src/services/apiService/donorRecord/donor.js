@@ -82,10 +82,11 @@ export const updateSerology = async (data) => {
   return response;
 };
 
-export const getAllDonorListForSelect = async () => {
+export const getAllDonorListForSelect = async (status = "active") => {
+  const params = new URLSearchParams({ status });
   const response = await mainApi(
     apiUrls.donor.getAllActiveDonorListForSelect.method,
-    apiUrls.donor.getAllActiveDonorListForSelect.url
+    `${apiUrls.donor.getAllActiveDonorListForSelect.url}?${params.toString()}`,
   );
-  return response
+  return response;
 };

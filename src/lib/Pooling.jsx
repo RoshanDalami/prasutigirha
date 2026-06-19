@@ -5,9 +5,8 @@
 import FormBorder from "@/components/reusableForm";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import { urls } from "src/services/apiHelpers";
+import { apiClient, urls } from "src/services/apiHelpers";
 export default function AddPasteurization() {
   const router = useRouter();
   const {
@@ -40,7 +39,7 @@ export default function AddPasteurization() {
   let milkVolume = sum(watchVolume);
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(`${urls.createPooling}`, data);
+      const response = await apiClient.post(`${urls.createPooling}`, data);
       if (response.status === 200) {
         router.push("/pasteurization/pasteurizationList");
       }
@@ -62,7 +61,7 @@ export default function AddPasteurization() {
   const [donorList, setDonorList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getVolumeOfMilk}`);
+      const { status, data } = await apiClient.get(`${urls.getVolumeOfMilk}`);
       if (status === 200) {
         setDonorList(data);
       }
@@ -81,7 +80,7 @@ export default function AddPasteurization() {
   useEffect(() => {
     watchArray?.forEach((item) => {
       async function fetchData() {
-        const { data, status } = await axios.get(
+        const { data, status } = await apiClient.get(
           `${urls.remainingVolumeByDonorId}/${item.donorId}`
         );
         if (status === 200) {

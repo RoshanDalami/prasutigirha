@@ -70,11 +70,11 @@ export function useDonorMilkVolume(id) {
   });
 }
 
-export function useAllDonorsForSelect() {
+export function useAllDonorsForSelect(status = "active") {
   return useQuery({
-    queryKey: ["donor", "selectList"],
+    queryKey: ["donor", "selectList", status],
     queryFn: async () => {
-      const response = await getAllDonorListForSelect();
+      const response = await getAllDonorListForSelect(status);
       return response?.data ?? [];
     },
   });

@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { urls } from "src/services/apiHelpers";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useOneUser, useAllModules } from "src/hooks/useUser";
 export default function AccessManager() {
   const {
@@ -42,11 +43,15 @@ export default function AccessManager() {
     try {
       const { data } = await axios.get(`${urls.logout}`);
       if (data.success === true) {
+        Cookies.remove("token");
         localStorage.removeItem("user");
         router.push("/login");
       }
     } catch (error) {
       console.log(error);
+      Cookies.remove("token");
+      localStorage.removeItem("user");
+      router.push("/login");
     }
   };
 
@@ -60,11 +65,15 @@ export default function AccessManager() {
       try {
         const { data } = await axios.get(`${urls.logout}`);
         if (data.success === true) {
+          Cookies.remove("token");
           localStorage.removeItem("user");
           router.push("/login");
         }
       } catch (error) {
         console.log(error);
+        Cookies.remove("token");
+        localStorage.removeItem("user");
+        router.push("/login");
       }
     }
   };

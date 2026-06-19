@@ -1,8 +1,9 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 import { keys } from "src/lib/queryKeys";
+import { getMotherMilkReport } from "src/services/apiService/report/reportServices";
 
 async function getAllReports() {
   const response = await mainApi(
@@ -75,5 +76,18 @@ export function useMilkDiscardDetailedReportDateWise({ startingDate, endingDate 
       return data ?? [];
     },
     enabled: !!startingDate && !!endingDate,
+  });
+}
+
+export function useMotherMilkReport({ donorId, startDate, endDate, motherStatus = "all" }) {
+  return useQuery({
+    queryKey: keys.report.motherMilk(donorId, startDate, endDate, motherStatus),
+    queryFn: async () => {
+      const { data } = await getMotherMilkReport(donorId, startDate, endDate, motherStatus);
+      return data ?? {};
+    },
+    enabled: !!donorId && !!startDate && !!endDate,
+    retry: false,
+    placeholderData: keepPreviousData,
   });
 }

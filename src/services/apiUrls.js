@@ -386,6 +386,10 @@ const apiUrls = {
       method: "GET",
       url: "/report/getMilkDiscardDetailedReportDateWise",
     },
+    getMotherMilkReport: {
+      method: "GET",
+      url: "/report/getMotherMilkReport",
+    },
   },
   dropdown: {
     getGestationalTwo: {

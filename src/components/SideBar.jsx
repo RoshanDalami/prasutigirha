@@ -149,6 +149,7 @@ export default function SideBar() {
     const report = [
         {link:"/report/donor",name:"Donor"},
         {link:"/report/milkVolume",name:"Milk Volume"},
+        {link:"/report/motherMilkVolume",name:"Mother Milk Volume"},
         {link:"/report/pasteuriation",name:"Pasteurization"},
         {link:"/report/milkRequistion",name:"Requisition"},
         {link:"/report/baby",name:"Baby"},

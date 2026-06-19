@@ -6,8 +6,8 @@ import {
   IoEyeOutline,
   IoEyeOffOutline,
 } from "react-icons/io5";
-import { urls } from "src/services/apiHelpers";
-import axios from "axios";
+import { loginApi } from "src/services/apiHelpers";
+import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -25,26 +25,33 @@ const Login = () => {
       ...data,
       email: data?.email?.trim(),
     };
-    // tets
     try {
-      const response = await axios.post(`${urls.login}`, data);
-      if (response.status === 200) {
+      const response = await loginApi("POST", "/user/login", data);
+      if (response?.status === 200 && response?.data?.token) {
+        Cookies.set("token", response.data.token, {
+          expires: 1,
+          sameSite: "Lax",
+        });
         if (typeof localStorage !== "undefined") {
-          // Save user information in local storage
-          localStorage.setItem("user", JSON.stringify(response.data));
-        } else {
-          console.error("localStorage is not available in this environment");
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              userDetail: response.data.user,
+              token: response.data.token,
+              data: response.data,
+            }),
+          );
         }
-
         router.push("/");
         toast.success("Login successfull");
         window.location.reload();
       } else {
-        toast.error("Invalid Credentials");
+        toast.error(response?.message ?? "Invalid Credentials");
       }
     } catch (error) {
-      toast.error("Invalid Credentials");
-      console.log(error);
+      toast.error(
+        error?.response?.data?.message ?? "Invalid Credentials",
+      );
     }
   };
 
@@ -58,9 +65,7 @@ const Login = () => {
           <Image
             height={200}
             width={350}
-            src={
-              "https://firebasestorage.googleapis.com/v0/b/sahidsmritihospital-9ea35.appspot.com/o/amritkoshlogo.jpg?alt=media&token=5181005a-f072-4071-923a-eab7e29cfc54ss"
-            }
+            src="/assets/images/amritkoshlogo.jpg"
             alt="amrit-kosh"
             className="rounded-lg hidden md:block w-full"
           />

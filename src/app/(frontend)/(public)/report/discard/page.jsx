@@ -4,11 +4,9 @@ import Link from "next/link";
 import { GetMilkDiscardReportDateWise } from "../../../../../services/apiService/report/reportServices";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
-import BikramSambat, { BSToAD } from "bikram-sambat-js";
 import ReportSkeleton from "src/components/ReportSkeleton";
 import toast from "react-hot-toast";
 import { useMilkDiscardReport } from "src/hooks/useReport";
-const aa = new BikramSambat(new Date()).toBS();
 
 function DiscardReportPage() {
   const [searchOverride, setSearchOverride] = useState(null);
@@ -23,8 +21,8 @@ function DiscardReportPage() {
     setIsSearchLoading(true);
     try {
       const data = {
-        startingDate: BSToAD(startingDate),
-        endingDate: BSToAD(endingDate),
+        startingDate: startingDate,
+        endingDate: endingDate,
       };
       const response = await GetMilkDiscardReportDateWise(data);
       if (response.status === 200) {

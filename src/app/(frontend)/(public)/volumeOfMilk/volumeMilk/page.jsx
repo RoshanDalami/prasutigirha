@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState, useCallback } from "react";
-import { getAllDonorListForSelect } from "../../../../../services/apiService/donorRecord/donor";
 import TablePagination from "@mui/material/TablePagination";
-import { useQuery } from "@tanstack/react-query";
 import { searchMilkVolume } from "src/services/apiService/search/searchService";
 import "nepali-datepicker-reactjs/dist/index.css";
 import { useForm } from "react-hook-form";
@@ -11,10 +10,13 @@ import TableSkeleton from "src/components/TableSkeleton";
 import TableBorder from "@/components/TableDesign";
 import Modal from "src/components/Modal";
 import toast from "react-hot-toast";
-import Select from "react-select";
 import { useRouter } from "next/navigation";
 import { useDonorWithTotalVolume, useCollectedMilkForDonor, useDiscardMilkBeforePasteurization } from "src/hooks/useMilkVolume";
 import { useGestational } from "src/hooks/useDropdown";
+import { useAllDonorsForSelect } from "src/hooks/useDonor";
+import { getGestationalName } from "src/lib/gestational";
+
+const Select = dynamic(() => import("react-select"), { ssr: false });
 
 export default function ListVolume() {
   const router = useRouter();
@@ -30,14 +32,7 @@ export default function ListVolume() {
   const { data: filteredVolumeList = [], isLoading, refetch } = useDonorWithTotalVolume();
   const { data: gestationalAgeList = [] } = useGestational();
   const { data: collectedMilkData } = useCollectedMilkForDonor(selectedDonorId, modelOpen);
-
-  const { data: donorList = [] } = useQuery({
-    queryKey: ["donor", "selectList"],
-    queryFn: async () => {
-      const response = await getAllDonorListForSelect();
-      return response?.data ?? [];
-    },
-  });
+  const { data: donorList = [] } = useAllDonorsForSelect("all");
 
   const { mutateAsync: discardMilk } = useDiscardMilkBeforePasteurization();
 
@@ -57,7 +52,9 @@ export default function ListVolume() {
       if (response?.status === 200) {
         setFilteredOverride(response?.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error?.response?.data?.message ?? "Search failed");
+    }
   };
 
   const handlePageChange = (e, newpage) => setPage(newpage);
@@ -146,7 +143,14 @@ export default function ListVolume() {
         <form className="my-5 mx-10" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-4">
             <div>
-              <Select options={donorList} onChange={(e) => setSelectedDonorId(e.value)} placeholder={"Select Donor Name"} />
+              <Select
+                instanceId="volume-milk-donor-select"
+                options={donorList}
+                onChange={(option) => setSelectedDonorId(option?.value ?? "")}
+                placeholder="Select Donor Name"
+                isClearable
+                isSearchable
+              />
             </div>
             <div className="flex gap-3">
               <button className="text-white bg-red-600 hover:bg-[#004a89] disabled:bg-gray-400 disabled:cursor-not-allowed px-3 py-3 rounded-lg text-sm" type="submit" disabled={!selectedDonorId}>
@@ -185,14 +189,12 @@ export default function ListVolume() {
                 {isLoading ? (
                   <TableSkeleton rows={8} cols={6} />
                 ) : displayList?.slice(page * rowPerPage, page * rowPerPage + rowPerPage)?.map((item, index) => (
-                  <tr className="border border-x-gray text-center" key={index}>
+                  <tr className="border border-x-gray text-center" key={item.donorId ?? item._id ?? index}>
                     <td className="py-3">{index + 1}</td>
                     <td className="py-3">{item.donorName}({item.donorRegNo})</td>
-                    {gestationalAgeList?.map((age, i) => {
-                      if (age.gestationalId === item.gestationalAge) {
-                        return <td className="py-3" key={i}>{age.gestationalName}</td>;
-                      }
-                    })}
+                    <td className="py-3">
+                      {getGestationalName(gestationalAgeList, item.gestationalAge)}
+                    </td>
                     <td className="py-3">{item.totalMilkCollected} ml</td>
                     <td className="py-3">{item.remaining} ml</td>
                     <td className="py-3 flex items-center justify-center">

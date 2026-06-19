@@ -7,8 +7,7 @@ import FormBorder from "../reusableForm";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
-import { urls } from "src/services/apiHelpers";
-import axios from "axios";
+import { apiClient, urls } from "src/services/apiHelpers";
 import { useParams } from "next/navigation";
 
 const aa = new BikramSambat(new Date()).toBS();
@@ -106,7 +105,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [babyStatusList, setBabyStatusList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getBabyStatus}`);
+      const { data, status } = await apiClient.get(`${urls.getBabyStatus}`);
       if (status === 200) {
         setBabyStatusList(data.data);
       }
@@ -124,7 +123,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [babyTransferList, setBabyTranferList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getBabyTransfer}`);
+      const { data, status } = await apiClient.get(`${urls.getBabyTransfer}`);
       if (status === 200) {
         setBabyTranferList(data?.data);
       }
@@ -142,7 +141,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [breastFeedingList, setBreastFeedingList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getBreastFeeding}`);
+      const { data, status } = await apiClient.get(`${urls.getBreastFeeding}`);
       if (status === 200) {
         setBreastFeedingList(data?.data);
       }
@@ -256,7 +255,7 @@ const StatusOfBaby = ({ handleClick, currentStep, steps, clickedIdData }) => {
         },
       };
       try {
-        const response = await axios.post(`${urls.createDanaDarta}`, data);
+        const response = await apiClient.post(`${urls.createDanaDarta}`, data);
         console.log(response, "response");
         if (response.status === 200) {
           router.push("/donorRecord/viewDonorRecord");

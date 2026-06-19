@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { urls } from "src/services/apiHelpers";
-import axios from "axios";
+import { apiClient, urls } from "src/services/apiHelpers";
 import QRCode from "react-qr-code";
 export default function BottleDetails() {
   const { id } = useParams();
@@ -10,7 +9,7 @@ export default function BottleDetails() {
   const [loading,setLoading] = useState(true);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getPooling}/${id}`);
+      const { status, data } = await apiClient.get(`${urls.getPooling}/${id}`);
       if (status === 200) {
         setPooling(data);
         setLoading(false)
@@ -23,7 +22,7 @@ export default function BottleDetails() {
   useEffect(() => {
     if (pooling) {
       async function fetchData() {
-        const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
+        const { data, status } = await apiClient.get(`${urls.getBottle}/${id}`);
         if (status === 200) {
           setBottles(data);
           setLoading(false)
@@ -36,7 +35,7 @@ export default function BottleDetails() {
   const [getDonor, setGetDonor] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getVolumeOfMilk}`);
+      const { data, status } = await apiClient.get(`${urls.getVolumeOfMilk}`);
       if (status === 200) {
         setGetDonor(data);
         setLoading(false)
@@ -47,7 +46,7 @@ export default function BottleDetails() {
   const [gestational, setGestational] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getGestational}`);
+      const { data, status } = await apiClient.get(`${urls.getGestational}`);
       if (status === 200) {
         setGestational(data);
         setLoading(false)
@@ -64,9 +63,9 @@ export default function BottleDetails() {
       totalVolume: pooling.collectedVolume,
     };
     try {
-      const response = await axios.post(`${urls.createBottle}`, data);
+      const response = await apiClient.post(`${urls.createBottle}`, data);
       if (response.status === 200) {
-        const { data, status } = await axios.get(`${urls.getBottle}/${id}`);
+        const { data, status } = await apiClient.get(`${urls.getBottle}/${id}`);
         if (status === 200) {
           setBottles(data);
           setLoading(false)

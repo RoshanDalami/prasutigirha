@@ -1,8 +1,7 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { urls } from "src/services/apiHelpers";
-import axios from "axios";
+import { apiClient, urls } from "src/services/apiHelpers";
 import { updateBottleStatus } from "src/services/apiService/bottle/bottleServices";
 import QRCode from "react-qr-code";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -24,7 +23,7 @@ export default function BottleDetails() {
   const { data: pooling, isLoading: poolingLoading } = useQuery({
     queryKey: ["pooling", id],
     queryFn: async () => {
-      const { data } = await axios.get(`${urls.getPoolingById}/${id}`);
+      const { data } = await apiClient.get(`${urls.getPoolingById}/${id}`);
       return data?.data;
     },
     enabled: !!id,
@@ -33,7 +32,7 @@ export default function BottleDetails() {
   const { data: bottles, refetch: refetchBottles } = useQuery({
     queryKey: ["bottles", id],
     queryFn: async () => {
-      const { data } = await axios.get(`${urls.getBottle}/${id}`);
+      const { data } = await apiClient.get(`${urls.getBottle}/${id}`);
       return data?.status === 200 ? data?.data : null;
     },
     enabled: !!pooling,
@@ -50,7 +49,7 @@ export default function BottleDetails() {
       poolingDate: pooling.date,
     };
     try {
-      const response = await axios.post(`${urls.createBottle}`, data);
+      const response = await apiClient.post(`${urls.createBottle}`, data);
       if (response?.data?.status === 200) {
         refetchBottles();
       }

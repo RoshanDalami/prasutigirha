@@ -10,11 +10,15 @@ export async function searchDonor(donorName, number,regNumber) {
   return response;
 }
 
-export async function searchMilkVolume(donorName) {
-  let response = await mainApi(
+export async function searchMilkVolume(donorId, gestationalAge, date) {
+  const params = new URLSearchParams();
+  if (donorId) params.set("donorId", donorId);
+  if (gestationalAge) params.set("gestationalAge", gestationalAge);
+  if (date) params.set("date", date);
+
+  const response = await mainApi(
     apiUrls.search.searchMilkVolume.method,
-    apiUrls.search.searchMilkVolume.url +
-      `?donorId=${donorName}`
+    `${apiUrls.search.searchMilkVolume.url}?${params.toString()}`,
   );
   return response;
 }

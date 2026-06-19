@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import FormBorder from "../reusableForm";
 import Button from "../button";
 import { regList } from "src/services/apiService/donorRecord/donor";
-import axios from "axios";
-import { urls } from "src/services/apiHelpers";
+import { apiClient, urls } from "src/services/apiHelpers";
 
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
@@ -63,7 +62,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [ethnicityList, setEthnicity] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getEthnicity}`);
+      const { status, data } = await apiClient.get(`${urls.getEthnicity}`);
       if (status === 200) {
         setEthnicity(data?.data);
       }
@@ -93,7 +92,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [gestationalAgeList, setGestationalAgeList] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const { data, status } = await axios.get(`${urls.getGestational}`);
+      const { data, status } = await apiClient.get(`${urls.getGestational}`);
       if (status === 200) {
         setGestationalAgeList(data?.data);
       }
@@ -112,7 +111,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [modeOfDeliveryList, setModeOfDeliveryList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { data, status } = await axios.get(`${urls.getDelivery}`);
+      const { data, status } = await apiClient.get(`${urls.getDelivery}`);
       if (status === 200) {
         setModeOfDeliveryList(data?.data);
       }
@@ -132,7 +131,7 @@ const AddDonorRecord = ({ handleClick, currentStep, steps, clickedIdData }) => {
   const [parityList, setParityList] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const { status, data } = await axios.get(`${urls.getParity}`);
+      const { status, data } = await apiClient.get(`${urls.getParity}`);
       if (status === 200) {
         setParityList(data?.data);
       }

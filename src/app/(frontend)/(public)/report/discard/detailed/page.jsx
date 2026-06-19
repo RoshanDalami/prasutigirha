@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
-import { BSToAD } from "bikram-sambat-js";
 import ReportSkeleton from "src/components/ReportSkeleton";
 import Link from "next/link";
 import {
@@ -54,8 +53,8 @@ function DiscardDetailedReportPage() {
 
   const handleSearch = () => {
     if (!startingDate || !endingDate) return;
-    setAppliedStart(BSToAD(startingDate));
-    setAppliedEnd(BSToAD(endingDate));
+    setAppliedStart(startingDate);
+    setAppliedEnd(endingDate);
   };
 
   const handleReset = () => {

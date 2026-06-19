@@ -1,14 +1,6 @@
 "use client";
 import axios from "axios";
 import Cookies from "js-cookie";
-// const userInfo = typeof (localStorage != 'undefined')
-//   ? JSON.parse(localStorage.getItem("user"))
-//   : "";
-const token = Cookies.get("token");
-
-// const baseUrl = "https://www.prasuti.palikasoft.com";
-
-
 
 const baseUrl =
   process.env.NODE_ENV === "production"
@@ -20,8 +12,6 @@ export const urls = {
   login: `/api/user/login`,
   register: `/api/user/register`,
   logout: `/api/user/logout`,
-  // createOffice: `${baseUrl}/api/v1/office/registerOffice`,
-  // getOffice: `${baseUrl}/api/v1/office/getOffice`,
   getStates: `${baseUrl}/api/v1/office/getState`,
   getDistrict: `${baseUrl}/api/v1/office/getdistrict`,
   getPalika: `${baseUrl}/api/v1/office/getPalika`,
@@ -40,12 +30,10 @@ export const urls = {
   getBreastFeeding: `${baseUrl}/api/v1/dropdown/getBreastFeeding`,
   getGestational: `${baseUrl}/api/v1/dropdown/getGestational`,
   getParity: `${baseUrl}/api/v1/dropdown/getParity`,
-  //milkvolume
   getMilkByDonorId: `${baseUrl}/api/v1/milkVolume/getMilkVolumeByDonor`,
   deleteMilkById: `${baseUrl}/api/v1/milkVolume/deleteMilkById`,
   getVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/getMilkVolume`,
   createVolumeOfMilk: `${baseUrl}/api/v1/milkVolume/registerMilkVolume`,
-  //pooling
   createPooling: `${baseUrl}/api/v1/pasteurization/createPasteurization`,
   getPooling: `${baseUrl}/api/v1/pasteurization/getPasteurization`,
   getPoolingById: `${baseUrl}/api/v1/pasteurization/getPasteurizationById`,
@@ -66,14 +54,54 @@ export const urls = {
   getFiscal: `${baseUrl}/api/v1/fiscal/getFiscal`,
 };
 
-export const mainApi = async (method, url, data) => {
-  let response = await axios({
+export function getAuthToken() {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = JSON.parse(localStorage.getItem("user") || "{}");
+    return Cookies.get("token") ?? stored?.data?.token ?? stored?.token ?? null;
+  } catch {
+    return Cookies.get("token") ?? null;
+  }
+}
+
+export const apiClient = axios.create({
+  baseURL: urls.mainUrl,
+});
+
+apiClient.interceptors.request.use((config) => {
+  const token = getAuthToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+apiClient.interceptors.response.use(
+  (res) => res,
+  (err) => {
+    if (err.response?.status === 401 && typeof window !== "undefined") {
+      Cookies.remove("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    return Promise.reject(err);
+  },
+);
+
+export const loginApi = async (method, url, data) => {
+  const response = await axios({
     method,
     url: `${urls.mainUrl}${url}`,
     data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  });
+  return response.data;
+};
+
+export const mainApi = async (method, url, data) => {
+  const response = await apiClient({
+    method,
+    url,
+    data,
   });
   return response.data;
 };

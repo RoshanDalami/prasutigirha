@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { urls } from "src/services/apiHelpers";
@@ -20,12 +21,16 @@ export default function Navbar() {
       setLoading(true)
       const { data } = await axios.get(`${urls.logout}`);
       if (data.success === true) {
+        Cookies.remove("token");
         localStorage.removeItem('user')
         router.push("/login");
         setLoading(false)
       }
     } catch (error) {
       console.log(error);
+      Cookies.remove("token");
+      localStorage.removeItem("user");
+      router.push("/login");
     }finally{
       setLoading(false)
     }

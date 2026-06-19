@@ -1,7 +1,6 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { urls } from "src/services/apiHelpers";
+import { apiClient } from "src/services/apiHelpers";
 import { getGestationalTwo, getBabyOutCome } from "src/services/apiService/dropdown/dropdownservices";
 import { keys } from "src/lib/queryKeys";
 
@@ -9,7 +8,7 @@ export function useGestational() {
   return useQuery({
     queryKey: keys.dropdown.gestational,
     queryFn: async () => {
-      const { data } = await axios.get(urls.getGestational);
+      const { data } = await apiClient.get("/dropdown/getGestational");
       return data?.data ?? [];
     },
   });
@@ -29,7 +28,7 @@ export function useParity() {
   return useQuery({
     queryKey: keys.dropdown.parity,
     queryFn: async () => {
-      const { data } = await axios.get(urls.getParity);
+      const { data } = await apiClient.get("/dropdown/getParity");
       return data?.data ?? [];
     },
   });
@@ -39,7 +38,7 @@ export function useDelivery() {
   return useQuery({
     queryKey: keys.dropdown.delivery,
     queryFn: async () => {
-      const { data } = await axios.get(urls.getDelivery);
+      const { data } = await apiClient.get("/dropdown/getDelivery");
       return data?.data ?? [];
     },
   });

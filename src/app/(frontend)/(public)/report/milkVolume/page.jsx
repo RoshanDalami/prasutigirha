@@ -13,6 +13,8 @@ import TablePagination from "@mui/material/TablePagination";
 import { useMilkVolumeList, useDonorWithTotalVolume } from "src/hooks/useMilkVolume";
 import TableSkeleton from "src/components/TableSkeleton";
 import { useGestational } from "src/hooks/useDropdown";
+import { getGestationalName } from "src/lib/gestational";
+import toast from "react-hot-toast";
 
 export default function ListVolume() {
   const TableBorder = dynamic(() => import("@/components/TableDesign"), { ssr: false });
@@ -44,12 +46,14 @@ export default function ListVolume() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await searchMilkVolume(data.gestationalAge, date);
+      const response = await searchMilkVolume(null, data.gestationalAge, date);
       if (response?.status === 200) {
         setSearchOverride(response?.data);
         setPage(0);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error?.response?.data?.message ?? "Search failed");
+    }
   };
 
   return (
@@ -116,11 +120,9 @@ export default function ListVolume() {
                     <tr className="border border-x-gray text-center" key={index}>
                       <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
                       <td className="py-3">{item.donorName}</td>
-                      {gestationalAgeList?.map((age, index) => {
-                        if (age.gestationalId === item.gestationalAge) {
-                          return <td className="py-3" key={index}>{age.gestationalName}</td>;
-                        }
-                      })}
+                      <td className="py-3">
+                        {getGestationalName(gestationalAgeList, item.gestationalAge)}
+                      </td>
                       <td className="py-3">{item.date}</td>
                       <td className="py-3">{item.totalMilkCollected} ml</td>
                     </tr>

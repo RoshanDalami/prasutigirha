@@ -51,3 +51,17 @@ export const GetMilkDiscardDetailedReportDateWise = async (data) => {
   );
   return response;
 };
+
+export const getMotherMilkReport = async (donorId, startDate, endDate, motherStatus = "all") => {
+  const params = new URLSearchParams({
+    donorId: String(donorId),
+    startDate: String(startDate),
+    endDate: String(endDate),
+    motherStatus: String(motherStatus),
+  });
+  const response = await mainApi(
+    apiUrls.report.getMotherMilkReport.method,
+    `${apiUrls.report.getMotherMilkReport.url}?${params.toString()}`,
+  );
+  return response;
+};
