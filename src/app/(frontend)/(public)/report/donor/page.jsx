@@ -6,6 +6,9 @@ import { CSVLink } from "react-csv";
 import TableSkeleton from "src/components/TableSkeleton";
 import Switch from "@mui/material/Switch";
 import TablePagination from "@mui/material/TablePagination";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import toast from "react-hot-toast";
 import { useDonorList, useInactiveDonors, useDiscardedDonors, useUpdateDonorStatus } from "src/hooks/useDonor";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
@@ -15,28 +18,34 @@ const tabs = [
   { id: "discarded", label: "Discarded Donor" },
 ];
 
-export default function ViewDonor() {
-  const TableBorder = dynamic(() => import("@/components/TableDesign"), {
-    ssr: false,
-  });
+const TableBorder = dynamic(() => import("@/components/TableDesign"), {
+  ssr: false,
+});
 
+export default function ViewDonor() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("active");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [startingDate, setStartingDate] = useState("");
+  const [endingDate, setEndingDate] = useState("");
+  const [appliedStart, setAppliedStart] = useState("");
+  const [appliedEnd, setAppliedEnd] = useState("");
+
+  const isFiltered = !!appliedStart && !!appliedEnd;
 
   const {
     data: donorRaw = {},
     isLoading: isActiveLoading,
-  } = useDonorList(page + 1, rowsPerPage, activeTab === "active");
+  } = useDonorList(page + 1, rowsPerPage, activeTab === "active", appliedStart, appliedEnd, isFiltered);
   const {
     data: inActiveDonorList = [],
     isLoading: isInactiveLoading,
-  } = useInactiveDonors(activeTab === "inactive");
+  } = useInactiveDonors(activeTab === "inactive", appliedStart, appliedEnd);
   const {
     data: discardedDonorList = [],
     isLoading: isDiscardedLoading,
-  } = useDiscardedDonors(activeTab === "discarded");
+  } = useDiscardedDonors(activeTab === "discarded", appliedStart, appliedEnd);
   const { mutateAsync: toggleStatus } = useUpdateDonorStatus();
 
   const donorList = useMemo(() => donorRaw?.data ?? [], [donorRaw]);
@@ -57,10 +66,33 @@ export default function ViewDonor() {
     [router]
   );
 
+  const handleSearch = () => {
+    if (!startingDate || !endingDate) return;
+    if (startingDate > endingDate) {
+      toast.error("Starting date must be before or equal to ending date.");
+      return;
+    }
+    setAppliedStart(startingDate);
+    setAppliedEnd(endingDate);
+    setPage(0);
+  };
+
+  const handleResetDateFilter = () => {
+    setStartingDate("");
+    setEndingDate("");
+    setAppliedStart("");
+    setAppliedEnd("");
+    setPage(0);
+  };
+
+  const excelFilename = isFiltered
+    ? `Donor_list_${appliedStart}_to_${appliedEnd}.csv`
+    : "Donor_list.csv";
+
   const excelData = useMemo(
     () =>
       displayList?.map((item, index) => ({
-        sn: activeTab === "active" ? page * rowsPerPage + index + 1 : index + 1,
+        sn: activeTab === "active" && !isFiltered ? page * rowsPerPage + index + 1 : index + 1,
         hosRegNo: item.hosRegNo,
         DonorRegNo: item.donorRegNo,
         Donor_Name: item.donorName,
@@ -93,7 +125,7 @@ export default function ViewDonor() {
         FugalInNippleAreola: item?.donorPhysicalExamination?.fugalInNippleAreola,
         Herpes: item?.donorPhysicalExamination?.herpesZoster,
       })),
-    [displayList, activeTab, page, rowsPerPage]
+    [displayList, activeTab, page, rowsPerPage, isFiltered]
   );
 
   const isLoading =
@@ -107,13 +139,50 @@ export default function ViewDonor() {
     <>
       <div>
         <div className="mx-10">
+          <div className="flex flex-wrap items-end gap-4 mb-5 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">Starting Date</label>
+              <NepaliDatePicker
+                inputClassName="form-control focus:outline-none"
+                value={startingDate}
+                onChange={(e) => setStartingDate(e)}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-gray-600">Ending Date</label>
+              <NepaliDatePicker
+                inputClassName="form-control focus:outline-none"
+                value={endingDate}
+                onChange={(e) => setEndingDate(e)}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+            </div>
+            <button
+              type="button"
+              className="text-white bg-red-600 hover:bg-[#004a89] disabled:bg-gray-400 disabled:cursor-not-allowed px-7 py-2.5 rounded-lg text-sm font-semibold"
+              onClick={handleSearch}
+              disabled={!startingDate || !endingDate}
+            >
+              SEARCH
+            </button>
+            <button
+              type="button"
+              className="text-white bg-gray-500 hover:bg-gray-600 px-7 py-2.5 rounded-lg text-sm font-semibold"
+              onClick={handleResetDateFilter}
+            >
+              RESET
+            </button>
+          </div>
           <TableBorder
             title={"Donar Report"}
             title2={
               <div className="flex flex-col gap-3">
                 <div className="flex flex-wrap justify-end gap-3">
                   <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
-                    <CSVLink data={excelData} filename="Donor_list.csv">
+                    <CSVLink data={excelData} filename={excelFilename}>
                       Export to Excel
                     </CSVLink>
                   </button>
@@ -192,7 +261,7 @@ export default function ViewDonor() {
                 })}
                 </tbody>
               </table>
-              {activeTab === "active" && (
+              {activeTab === "active" && !isFiltered && (
                 <TablePagination
                   component="div"
                   count={totalCount}

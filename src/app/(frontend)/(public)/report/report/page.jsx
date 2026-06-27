@@ -24,6 +24,7 @@ import {
 import { saveAs } from "file-saver";
 import { useReactToPrint } from "react-to-print";
 import { IoMdPrint } from "react-icons/io";
+import { CSVLink } from "react-csv";
 const aa = new BikramSambat(new Date()).toBS();
 
 function ReportPage() {
@@ -38,6 +39,7 @@ function ReportPage() {
 
   const { data: baseReportData = {}, isLoading } = useAllReports();
   const reportData = searchOverride ?? baseReportData;
+  const isFiltered = !!searchOverride;
 
   const handleSearch = async () => {
     setIsSearchLoading(true);
@@ -1878,6 +1880,79 @@ function ReportPage() {
     saveAs(blob, "amritkosh_report_single_table.docx");
   };
 
+  const excelData = [
+    { Description: "Mother Willing to Donate", Value: reportData?.totalMother ?? 0 },
+    { Description: "Eligible Donor", Value: reportData?.eligibleMother ?? 0 },
+    { Description: "Inactive Donor", Value: reportData?.unEligibleMother ?? 0 },
+    { Description: "Disqualified Donor", Value: reportData?.disQualifiedMother ?? 0 },
+    { Description: "Disqualified Donor Reason - HIV Positive", Value: reportData?.disQualifiedHIV ?? 0 },
+    { Description: "Disqualified Donor Reason - HBSAG Positive", Value: reportData?.disQualifiedHBSAG ?? 0 },
+    { Description: "Disqualified Donor Reason - VDRL Positive", Value: reportData?.disQualifiedVDRL ?? 0 },
+    { Description: "Disqualified Donor Reason - Verbal Positive", Value: reportData?.disqulifiedCountVerbalStatus ?? 0 },
+    { Description: "Disqualified Donor Reason - Physical Positive", Value: reportData?.disqualifiedPhysicalStatus ?? 0 },
+    { Description: "Disqualified Donor Reason - Other Test Positive", Value: reportData?.disqulifiedWithOtherTest ?? 0 },
+    ...(reportData?.donationHouse ?? []).map((item) => ({
+      Description: `Place of Donation - ${item._id ?? "N/A"}`,
+      Value: item.count,
+    })),
+    { Description: "Donor Age - Under Twenty Years", Value: reportData?.donorUnderTwenty ?? 0 },
+    { Description: "Donor Age - Between Twenty and Thirty Five Years", Value: reportData?.donorBetweenTwentyAndThirtyYears ?? 0 },
+    { Description: "Donor Age - Above Thirty Five Years", Value: reportData?.donorAboveThirtyFiveYears ?? 0 },
+    ...(reportData?.donorChildAccordingToAdmitted ?? []).map((item) => ({
+      Description: `Donor Child Condition - ${item._id ?? "N/A"}`,
+      Value: item.count,
+    })),
+    ...(reportData?.donorChildAccordingToFeedingStatus ?? []).map((item) => ({
+      Description: `Donor Child Feeding Status - ${item._id ?? "N/A"}`,
+      Value: item.count,
+    })),
+    { Description: "Total Milk Collected (ml)", Value: reportData?.totalMilkCollected ?? 0 },
+    { Description: "Pre Term Milk Collected (ml)", Value: reportData?.milkCollectedAccordingToGestationalAge?.Preterm ?? 0 },
+    { Description: "Term Milk Collected (ml)", Value: reportData?.milkCollectedAccordingToGestationalAge?.Term ?? 0 },
+    { Description: "Milk Collected From <20 years (ml)", Value: reportData?.milkCollectedUnderTwentyYears ?? 0 },
+    { Description: "Milk Collected From >=20 and <35 years (ml)", Value: reportData?.milkCollectedBetweenTwentyAndThirtyYears ?? 0 },
+    { Description: "Milk Collected From >35 years (ml)", Value: reportData?.milkCollectedAboveThirytFive ?? 0 },
+    { Description: "Total Milk Pasteurized (ml)", Value: reportData?.totalMilkPasturized ?? 0 },
+    { Description: "Total Pre term Milk Pasteurized (ml)", Value: reportData?.totalPreTermPasturized ?? 0 },
+    { Description: "Total Term Milk Pasteurized (ml)", Value: reportData?.totalTermPasturized ?? 0 },
+    { Description: "Total Colostrum Milk Pasteurized (ml)", Value: reportData?.totalColstormPasturized ?? 0 },
+    { Description: "Positive Culture (ml)", Value: reportData?.culturePositiveMilk ?? 0 },
+    { Description: "Positive Culture (%)", Value: reportData?.culturePositiveMilkPercentage ?? 0 },
+    { Description: "Negative Culture (ml)", Value: reportData?.cultureNegativeMilk ?? 0 },
+    { Description: "Negative Culture (%)", Value: reportData?.cultureNegativeMilkPercentage ?? 0 },
+    { Description: "Total Recipient", Value: reportData?.totalBabyCount ?? 0 },
+    { Description: "Internal Recipient", Value: reportData?.totalInternalBaby ?? 0 },
+    { Description: "External Recipient", Value: reportData?.totalExternalBaby ?? 0 },
+    { Description: "Total Milk Dispense (ml)", Value: reportData?.totalMilkDespense ?? 0 },
+    { Description: "Total Pre term milk dispense (ml)", Value: reportData?.sumTotalPreTermRequisitedMilk ?? 0 },
+    { Description: "Total Term milk dispense (ml)", Value: reportData?.sumTotalTermRequisitedMilk ?? 0 },
+    { Description: "Total Colostrum milk dispense (ml)", Value: reportData?.sumTotalColstormRequisitedMilk ?? 0 },
+    ...(reportData?.totalMilkByStatus ?? []).map((item) => ({
+      Description: `Milk Dispense By Baby Status - ${item.babyStatus ?? "N/A"} (ml / count)`,
+      Value: `${item.totalRequisitedMilk} ml / ${item.count}`,
+    })),
+    ...(reportData?.diagnosisCounts ?? []).map((item) => ({
+      Description: `Recipient Diagnosis - ${item.diagnosis ?? "N/A"}`,
+      Value: item.count,
+    })),
+    ...(reportData?.indicationCounts ?? []).map((item) => ({
+      Description: `Recipient Indication - ${item.indications ?? "N/A"}`,
+      Value: item.count,
+    })),
+    ...(reportData?.gestationalAgeWise ?? []).map((item) => ({
+      Description: `Recipient Gestational Age - ${item.gestationalName ?? "N/A"} (Internal / External)`,
+      Value: `${item.internal} / ${item.external}`,
+    })),
+    ...(reportData?.babyOutCome ?? []).map((item) => ({
+      Description: `Recipient Outcome - ${item.name ?? "N/A"}`,
+      Value: item.count,
+    })),
+  ];
+
+  const excelFilename = isFiltered
+    ? `Amrit_Kosh_Report_${startingDate}_to_${endingDate}.csv`
+    : "Amrit_Kosh_Report.csv";
+
   return (
     <div className={"px-10 py-5"}>
       <div className={"flex items-center gap-5"}>
@@ -1923,6 +1998,11 @@ function ReportPage() {
         </div>
       </div>
       <div className={"flex items-center gap-5 mt-5 justify-end"}>
+        <button className={"bg-indigo-600 px-6 py-2 rounded-lg text-white"}>
+          <CSVLink data={excelData} filename={excelFilename}>
+            Export to Excel
+          </CSVLink>
+        </button>
         <button
           className={"bg-blue-600 px-6 py-2 rounded-lg text-white"}
           onClick={() => generateNewDocumentSecond()}

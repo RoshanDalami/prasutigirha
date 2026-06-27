@@ -16,10 +16,12 @@ import { useGestational } from "src/hooks/useDropdown";
 import { getGestationalName } from "src/lib/gestational";
 import toast from "react-hot-toast";
 
+const TableBorder = dynamic(() => import("@/components/TableDesign"), { ssr: false });
+
 export default function ListVolume() {
-  const TableBorder = dynamic(() => import("@/components/TableDesign"), { ssr: false });
   const { register, handleSubmit, reset } = useForm();
-  const [date, setDate] = useState("");
+  const [startingDate, setStartingDate] = useState("");
+  const [endingDate, setEndingDate] = useState("");
   const [searchOverride, setSearchOverride] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -31,6 +33,10 @@ export default function ListVolume() {
   const volumeList = result.data ?? [];
   const totalCount = result.totalCount ?? 0;
   const displayList = searchOverride ?? volumeList;
+  const exportData = searchOverride ?? excelVolumeList;
+  const exportFilename = searchOverride
+    ? `Milk_volume_${startingDate}_to_${endingDate}.csv`
+    : "Milk_volume.csv";
 
   const router = useRouter();
   const handleEdit = useCallback(
@@ -38,15 +44,32 @@ export default function ListVolume() {
     [router]
   );
 
-  const resetFilter = () => { setSearchOverride(null); setPage(0); reset(); };
+  const resetFilter = () => {
+    setSearchOverride(null);
+    setPage(0);
+    setStartingDate("");
+    setEndingDate("");
+    reset();
+  };
 
   const gestationalOptions = gestationalAgeList?.map((item, index) => (
     <option key={index} value={item.gestationalId}>{item.gestationalName}</option>
   ));
 
   const onSubmit = async (data) => {
+    if (!startingDate || !endingDate) return;
+    if (startingDate > endingDate) {
+      toast.error("Starting date must be before or equal to ending date.");
+      return;
+    }
     try {
-      const response = await searchMilkVolume(null, data.gestationalAge, date);
+      const response = await searchMilkVolume(
+        null,
+        data.gestationalAge,
+        null,
+        startingDate,
+        endingDate,
+      );
       if (response?.status === 200) {
         setSearchOverride(response?.data);
         setPage(0);
@@ -61,24 +84,40 @@ export default function ListVolume() {
       <div>
         <form className="my-5 mx-10" onSubmit={handleSubmit((data) => onSubmit(data))}>
           <p className="text-red-600 text-2xl font-bold my-5">Volume of Milk</p>
-          <div className="grid grid-cols-4 gap-4">
-            <div>
+          <div className="grid grid-cols-5 gap-4 items-end">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Gestational Age</label>
               <select {...register("gestationalAge")} className="inputStyle">
                 <option value={""}>--select gestational age--</option>
                 {gestationalOptions}
               </select>
             </div>
-            <div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Starting Date</label>
               <NepaliDatePicker
                 inputClassName="form-control focus:outline-none"
-                value={date}
-                onChange={(e) => setDate(e)}
+                value={startingDate}
+                onChange={(e) => setStartingDate(e)}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Ending Date</label>
+              <NepaliDatePicker
+                inputClassName="form-control focus:outline-none"
+                value={endingDate}
+                onChange={(e) => setEndingDate(e)}
                 options={{ calenderLocale: "en", valueLocale: "en" }}
                 className="inputStyle"
               />
             </div>
             <div className="flex gap-3">
-              <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg" type="submit">
+              <button
+                className="text-white bg-red-600 hover:bg-[#004a89] disabled:bg-gray-400 disabled:cursor-not-allowed px-7 py-3 rounded-lg"
+                type="submit"
+                disabled={!startingDate || !endingDate}
+              >
                 SEARCH
               </button>
               <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg" type="button" onClick={resetFilter}>
@@ -94,7 +133,7 @@ export default function ListVolume() {
               <div className="flex flex-col">
                 <div className="flex justify-end gap-3">
                   <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
-                    <CSVLink data={excelVolumeList} filename="Milk_volume.csv">
+                    <CSVLink data={exportData} filename={exportFilename}>
                       Export to Excel
                     </CSVLink>
                   </button>

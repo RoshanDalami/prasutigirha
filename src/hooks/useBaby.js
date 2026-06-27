@@ -11,21 +11,21 @@ import {
 } from "src/services/apiService/baby/babyServices";
 import { keys } from "src/lib/queryKeys";
 
-export function useBabyList(page, limit, q) {
+export function useBabyList(page, limit, q, startDate = "", endDate = "") {
   return useQuery({
-    queryKey: [...keys.baby.list, page, limit, q],
+    queryKey: [...keys.baby.list, page, limit, q, startDate, endDate],
     queryFn: async () => {
-      const { data } = await getBabyDetail(page, limit, q);
+      const { data } = await getBabyDetail(page, limit, q, startDate, endDate);
       return data ?? {};
     },
   });
 }
 
-export function useInactiveBabyList(page, limit) {
+export function useInactiveBabyList(page, limit, startDate = "", endDate = "", includeAll = false) {
   return useQuery({
-    queryKey: [...keys.baby.inactive, page, limit],
+    queryKey: [...keys.baby.inactive, page, limit, startDate, endDate, includeAll],
     queryFn: async () => {
-      const { data } = await getInactiveBaby(page, limit);
+      const { data } = await getInactiveBaby(page, limit, startDate, endDate, includeAll);
       return data ?? {};
     },
   });

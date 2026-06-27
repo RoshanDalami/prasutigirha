@@ -122,6 +122,7 @@ export default function MotherMilkVolumeReport() {
   };
 
   const excelData = useMemo(() => {
+    const dailyRecords = reportData?.dailyRecords ?? [];
     if (!isFiltered || isError || dailyRecords.length === 0) return [];
 
     const rows = [];
@@ -175,7 +176,7 @@ export default function MotherMilkVolumeReport() {
     });
 
     return rows;
-  }, [isFiltered, isError, dailyRecords, reportData]);
+  }, [isFiltered, isError, reportData]);
 
   return (
     <div className="px-10 py-5">

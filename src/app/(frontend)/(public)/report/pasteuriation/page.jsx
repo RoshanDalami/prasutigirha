@@ -9,6 +9,7 @@ import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
 import { CSVLink } from "react-csv";
+import toast from "react-hot-toast";
 const aa = new BikramSambat(new Date()).toBS();
 import { searchPasteurization } from "src/services/apiService/search/searchService";
 import { usePasteurizationList, useDeletePooling, useUpdateCulture } from "src/hooks/usePasteurization";
@@ -22,7 +23,8 @@ export default function ListVolume() {
     formState: { isSubmitting },
   } = useForm();
   const router = useRouter();
-  const [date, setDate] = useState("");
+  const [startingDate, setStartingDate] = useState("");
+  const [endingDate, setEndingDate] = useState("");
   const [searchOverride, setSearchOverride] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -53,8 +55,20 @@ export default function ListVolume() {
   ));
 
   const submit = async (data) => {
+    if (!startingDate || !endingDate) {
+      return;
+    }
+    if (startingDate > endingDate) {
+      toast.error("Starting date must be before or equal to ending date.");
+      return;
+    }
     try {
-      const response = await searchPasteurization(data.gestationalAge, date);
+      const response = await searchPasteurization(
+        data.gestationalAge,
+        null,
+        startingDate,
+        endingDate,
+      );
       if (response?.status === 200) {
         setSearchOverride(response?.data);
         setPage(0);
@@ -81,28 +95,43 @@ export default function ListVolume() {
       <div>
         <form className="my-5 mx-10" onSubmit={handleSubmit((data) => submit(data))}>
           <p className="text-red-600 text-2xl font-bold my-5">Pasteurization</p>
-          <div className="grid grid-cols-4 gap-4">
-            <div>
+          <div className="grid grid-cols-5 gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Gestational Age</label>
               <select {...register("gestationalAge")} className="inputStyle">
                 <option value={""}>--select gestational age--</option>
                 {gestationalOptions}
               </select>
             </div>
-            <div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Starting Date</label>
               <NepaliDatePicker
                 inputClassName="form-control focus:outline-none"
-                value={date}
-                onChange={(e) => setDate(e)}
+                value={startingDate}
+                onChange={(e) => setStartingDate(e)}
                 options={{ calenderLocale: "en", valueLocale: "en" }}
                 className="inputStyle"
               />
             </div>
-            <div className="flex gap-3">
-              <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Ending Date</label>
+              <NepaliDatePicker
+                inputClassName="form-control focus:outline-none"
+                value={endingDate}
+                onChange={(e) => setEndingDate(e)}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+            </div>
+            <div className="flex gap-3 items-end">
+              <button
+                className="text-white bg-red-600 hover:bg-[#004a89] disabled:bg-gray-400 disabled:cursor-not-allowed px-7 py-3 rounded-lg"
+                disabled={!startingDate || !endingDate}
+              >
                 SEARCH
               </button>
               {searchOverride && (
-                <button type="button" className="text-white bg-blue-600 hover:bg-blue-700 px-7 py-3 rounded-lg" onClick={() => { setSearchOverride(null); setPage(0); }}>
+                <button type="button" className="text-white bg-blue-600 hover:bg-blue-700 px-7 py-3 rounded-lg" onClick={() => { setSearchOverride(null); setPage(0); setStartingDate(""); setEndingDate(""); }}>
                   Reset
                 </button>
               )}

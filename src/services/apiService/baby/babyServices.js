@@ -1,13 +1,15 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export async function getBabyDetail(page = 1, limit = 10, q) {
+export async function getBabyDetail(page = 1, limit = 10, q, startDate, endDate) {
   const params = new URLSearchParams();
   params.append("page", page);
   params.append("limit", limit);
   if (q === "true") {
     params.append("all", "true");
   }
+  if (startDate) params.append("startDate", startDate);
+  if (endDate) params.append("endDate", endDate);
 
   let response = await mainApi(
     apiUrls.baby.getBabyDetail.method,
@@ -40,11 +42,19 @@ export async function updateBabyStatus(id) {
   return response;
 }
 
-export async function getInactiveBaby(page, limit) {
-  const params = page != null ? `?page=${page}&limit=${limit}` : "";
+export async function getInactiveBaby(page, limit, startDate, endDate, includeAll) {
+  const params = new URLSearchParams();
+  if (page != null) {
+    params.set("page", page);
+    params.set("limit", limit);
+  }
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  if (includeAll) params.set("all", "true");
+  const qs = params.toString();
   let response = await mainApi(
     apiUrls.baby.getInActiveBaby.method,
-    apiUrls.baby.getInActiveBaby.url + params
+    apiUrls.baby.getInActiveBaby.url + (qs ? `?${qs}` : "")
   );
   return response;
 }

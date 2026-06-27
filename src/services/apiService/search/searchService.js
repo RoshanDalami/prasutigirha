@@ -10,11 +10,13 @@ export async function searchDonor(donorName, number,regNumber) {
   return response;
 }
 
-export async function searchMilkVolume(donorId, gestationalAge, date) {
+export async function searchMilkVolume(donorId, gestationalAge, date, startDate, endDate) {
   const params = new URLSearchParams();
   if (donorId) params.set("donorId", donorId);
   if (gestationalAge) params.set("gestationalAge", gestationalAge);
   if (date) params.set("date", date);
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
 
   const response = await mainApi(
     apiUrls.search.searchMilkVolume.method,
@@ -23,20 +25,29 @@ export async function searchMilkVolume(donorId, gestationalAge, date) {
   return response;
 }
 
-export async function searchPasteurization(poolingCondition, poolingDate) {
+export async function searchPasteurization(poolingCondition, poolingDate, startDate, endDate) {
+  const params = new URLSearchParams();
+  if (poolingCondition) params.set("poolingCondition", poolingCondition);
+  if (poolingDate) params.set("poolingDate", poolingDate);
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+
   let response = await mainApi(
     apiUrls.search.searchPasteurization.method,
-    apiUrls.search.searchPasteurization.url +
-      `?poolingCondition=${poolingCondition}&poolingDate=${poolingDate}`
+    `${apiUrls.search.searchPasteurization.url}?${params.toString()}`
   );
   return response;
 }
 
-export async function searchRequsition(date) {
+export async function searchRequsition(date, startDate, endDate) {
+  const params = new URLSearchParams();
+  if (date) params.set("date", date);
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+
   let response = await mainApi(
-    apiUrls.search.searchRequsition.method ,
-      apiUrls.search.searchRequsition.url +
-      `?date=${date}`
+    apiUrls.search.searchRequsition.method,
+    `${apiUrls.search.searchRequsition.url}?${params.toString()}`
   );
   return response;
 }

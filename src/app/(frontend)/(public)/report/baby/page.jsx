@@ -5,6 +5,9 @@ import TableBorder from "src/components/TableDesign";
 import TablePagination from "@mui/material/TablePagination";
 import { CSVLink } from "react-csv";
 import Switch from "@mui/material/Switch";
+import { NepaliDatePicker } from "nepali-datepicker-reactjs";
+import "nepali-datepicker-reactjs/dist/index.css";
+import toast from "react-hot-toast";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 import TableSkeleton from "src/components/TableSkeleton";
 import { useBabyList, useInactiveBabyList, useUpdateBabyStatus } from "src/hooks/useBaby";
@@ -15,9 +18,27 @@ export default function BabyDetail() {
     const [showActive, setShowActive] = useState(true);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [startingDate, setStartingDate] = useState("");
+    const [endingDate, setEndingDate] = useState("");
+    const [appliedStart, setAppliedStart] = useState("");
+    const [appliedEnd, setAppliedEnd] = useState("");
 
-    const { data: activeResult = {}, isLoading: activeLoading } = useBabyList(page + 1, rowsPerPage);
-    const { data: inactiveResult = {}, isLoading: inactiveLoading } = useInactiveBabyList(page + 1, rowsPerPage);
+    const isFiltered = !!appliedStart && !!appliedEnd;
+
+    const { data: activeResult = {}, isLoading: activeLoading } = useBabyList(
+        page + 1,
+        rowsPerPage,
+        isFiltered ? "true" : undefined,
+        appliedStart,
+        appliedEnd,
+    );
+    const { data: inactiveResult = {}, isLoading: inactiveLoading } = useInactiveBabyList(
+        page + 1,
+        rowsPerPage,
+        appliedStart,
+        appliedEnd,
+        isFiltered,
+    );
     const { data: gestationalAgeList = [] } = useGestational();
     const { mutateAsync: toggleStatus } = useUpdateBabyStatus();
 
@@ -28,6 +49,25 @@ export default function BabyDetail() {
     const isLoading = showActive ? activeLoading : inactiveLoading;
 
     const handleTabSwitch = (active) => { setShowActive(active); setPage(0); };
+
+    const handleSearch = () => {
+        if (!startingDate || !endingDate) return;
+        if (startingDate > endingDate) {
+            toast.error("Starting date must be before or equal to ending date.");
+            return;
+        }
+        setAppliedStart(startingDate);
+        setAppliedEnd(endingDate);
+        setPage(0);
+    };
+
+    const handleReset = () => {
+        setStartingDate("");
+        setEndingDate("");
+        setAppliedStart("");
+        setAppliedEnd("");
+        setPage(0);
+    };
 
     const handleDetail = useCallback(
         (id) => {
@@ -52,12 +92,53 @@ export default function BabyDetail() {
         Total_Milk_Consumed: item.milkConsumed
     }));
 
+    const excelFilename = isFiltered
+        ? `Recipient_${appliedStart}_to_${appliedEnd}.csv`
+        : "Recipient.csv";
+
     return (
         <div className="pt-10 px-10">
+            <div className="flex flex-wrap items-end gap-4 mb-5 bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-600">Starting Date</label>
+                    <NepaliDatePicker
+                        inputClassName="form-control focus:outline-none"
+                        value={startingDate}
+                        onChange={(e) => setStartingDate(e)}
+                        options={{ calenderLocale: "en", valueLocale: "en" }}
+                        className="inputStyle"
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm font-medium text-gray-600">Ending Date</label>
+                    <NepaliDatePicker
+                        inputClassName="form-control focus:outline-none"
+                        value={endingDate}
+                        onChange={(e) => setEndingDate(e)}
+                        options={{ calenderLocale: "en", valueLocale: "en" }}
+                        className="inputStyle"
+                    />
+                </div>
+                <button
+                    type="button"
+                    className="text-white bg-red-600 hover:bg-[#004a89] disabled:bg-gray-400 disabled:cursor-not-allowed px-7 py-2.5 rounded-lg text-sm font-semibold"
+                    onClick={handleSearch}
+                    disabled={!startingDate || !endingDate}
+                >
+                    SEARCH
+                </button>
+                <button
+                    type="button"
+                    className="text-white bg-gray-500 hover:bg-gray-600 px-7 py-2.5 rounded-lg text-sm font-semibold"
+                    onClick={handleReset}
+                >
+                    RESET
+                </button>
+            </div>
             <TableBorder title={"Baby Details Report"} title2={
                 <div className={'flex gap-4'}>
                     <button className="bg-indigo-600 rounded-md shadow-md px-3 py-2 text-white">
-                        <CSVLink data={excelData} filename="Recipient.csv">
+                        <CSVLink data={excelData} filename={excelFilename}>
                             Export to Excel
                         </CSVLink>
                     </button>
@@ -95,7 +176,7 @@ export default function BabyDetail() {
                           <TableSkeleton rows={8} cols={9} />
                         ) : babyDetails?.map((items, index) => (
                             <tr key={index} className="border border-x-gray text-center">
-                                <td className="py-3">{page * rowsPerPage + index + 1}</td>
+                                <td className="py-3">{isFiltered ? index + 1 : page * rowsPerPage + index + 1}</td>
                                 <td className="py-3">{items?.babyName}</td>
                                 <td className="py-3">{items?.dateOfBaby}</td>
                                 <td className="py-3">{items?.babyWeight}</td>
@@ -123,15 +204,17 @@ export default function BabyDetail() {
                         ))}
                         </tbody>
                     </table>
-                    <TablePagination
-                        component="div"
-                        count={totalCount}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        onPageChange={(_, newPage) => setPage(newPage)}
-                        onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value)); setPage(0); }}
-                        rowsPerPageOptions={[10, 25, 50]}
-                    />
+                    {!isFiltered && (
+                        <TablePagination
+                            component="div"
+                            count={totalCount}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
+                            onPageChange={(_, newPage) => setPage(newPage)}
+                            onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value)); setPage(0); }}
+                            rowsPerPageOptions={[10, 25, 50]}
+                        />
+                    )}
                 </div>
             </TableBorder>
         </div>

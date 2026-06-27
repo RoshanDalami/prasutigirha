@@ -9,16 +9,19 @@ import BikramSambat from "bikram-sambat-js";
 const aa = new BikramSambat(new Date()).toBS();
 import { useForm } from "react-hook-form";
 import { CSVLink } from "react-csv";
+import toast from "react-hot-toast";
 import TablePagination from "@mui/material/TablePagination";
 import { useMilkRequisitionList } from "src/hooks/useMilkRequisition";
 import TableSkeleton from "src/components/TableSkeleton";
 
+const TableBorder = dynamic(() => import("@/components/TableDesign"), { ssr: false });
+
 export default function ListVolume() {
-  const TableBorder = dynamic(() => import("@/components/TableDesign"), { ssr: false });
   const { register, handleSubmit } = useForm();
   const router = useRouter();
   const [searchOverride, setSearchOverride] = useState(null);
-  const [date, setDate] = useState("");
+  const [startingDate, setStartingDate] = useState("");
+  const [endingDate, setEndingDate] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -32,9 +35,14 @@ export default function ListVolume() {
     [router]
   );
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
+    if (!startingDate || !endingDate) return;
+    if (startingDate > endingDate) {
+      toast.error("Starting date must be before or equal to ending date.");
+      return;
+    }
     try {
-      const response = await searchRequsition(date);
+      const response = await searchRequsition(null, startingDate, endingDate);
       if (response?.status === 200) {
         setSearchOverride(response?.data);
         setPage(0);
@@ -55,21 +63,36 @@ export default function ListVolume() {
       <div>
         <form className="my-5 mx-10" onSubmit={handleSubmit((data) => onSubmit(data))}>
           <p className="text-red-600 text-2xl font-bold my-5">Milk Requisition Form</p>
-          <div className="grid grid-cols-4 gap-4">
-            <div>
+          <div className="grid grid-cols-4 gap-4 items-end">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Starting Date</label>
               <NepaliDatePicker
                 inputClassName="form-control focus:outline-none"
-                value={date}
-                onChange={(e) => setDate(e)}
+                value={startingDate}
+                onChange={(e) => setStartingDate(e)}
                 options={{ calenderLocale: "en", valueLocale: "en" }}
                 className="inputStyle"
               />
             </div>
-            <button className="text-white bg-red-600 hover:bg-[#004a89] px-7 py-3 rounded-lg" type="submit">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-600">Ending Date</label>
+              <NepaliDatePicker
+                inputClassName="form-control focus:outline-none"
+                value={endingDate}
+                onChange={(e) => setEndingDate(e)}
+                options={{ calenderLocale: "en", valueLocale: "en" }}
+                className="inputStyle"
+              />
+            </div>
+            <button
+              className="text-white bg-red-600 hover:bg-[#004a89] disabled:bg-gray-400 disabled:cursor-not-allowed px-7 py-3 rounded-lg"
+              type="submit"
+              disabled={!startingDate || !endingDate}
+            >
               SEARCH
             </button>
             {searchOverride && (
-              <button type="button" className="text-white bg-blue-600 hover:bg-blue-700 px-7 py-3 rounded-lg" onClick={() => { setSearchOverride(null); setPage(0); }}>
+              <button type="button" className="text-white bg-blue-600 hover:bg-blue-700 px-7 py-3 rounded-lg" onClick={() => { setSearchOverride(null); setPage(0); setStartingDate(""); setEndingDate(""); }}>
                 Reset
               </button>
             )}

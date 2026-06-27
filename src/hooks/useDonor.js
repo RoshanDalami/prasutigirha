@@ -15,34 +15,34 @@ import {
 import { getMilkByDonorId } from "src/services/apiService/milkVolume/milkVolume";
 import { keys } from "src/lib/queryKeys";
 
-export function useDonorList(page, limit, enabled = true) {
+export function useDonorList(page, limit, enabled = true, startDate = "", endDate = "", includeAll = false) {
   return useQuery({
-    queryKey: keys.donor.list(page, limit),
+    queryKey: [...keys.donor.list(page, limit), startDate, endDate, includeAll],
     enabled,
     queryFn: async () => {
-      const { data } = await getDonor(page, limit);
+      const { data } = await getDonor(page, limit, startDate, endDate, includeAll);
       return data;
     },
   });
 }
 
-export function useInactiveDonors(enabled = true) {
+export function useInactiveDonors(enabled = true, startDate = "", endDate = "") {
   return useQuery({
-    queryKey: keys.donor.inactive,
+    queryKey: [...keys.donor.inactive, startDate, endDate],
     enabled,
     queryFn: async () => {
-      const { data } = await getInActiveDonor();
+      const { data } = await getInActiveDonor(startDate, endDate);
       return data ?? [];
     },
   });
 }
 
-export function useDiscardedDonors(enabled = true) {
+export function useDiscardedDonors(enabled = true, startDate = "", endDate = "") {
   return useQuery({
-    queryKey: keys.donor.discarded,
+    queryKey: [...keys.donor.discarded, startDate, endDate],
     enabled,
     queryFn: async () => {
-      const { data } = await getDiscardedDonor();
+      const { data } = await getDiscardedDonor(startDate, endDate);
       return data ?? [];
     },
   });

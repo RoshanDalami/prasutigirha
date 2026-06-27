@@ -1,10 +1,14 @@
 import { mainApi } from "src/services/apiHelpers";
 import apiUrls from "src/services/apiUrls";
 
-export const getDonor = async (page, limit) => {
+export const getDonor = async (page, limit, startDate, endDate, includeAll) => {
+  const params = new URLSearchParams({ page, limit });
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  if (includeAll) params.set("all", "true");
   let response = await mainApi(
     apiUrls.donor.getDonor.method,
-    apiUrls.donor.getDonor.url + `?page=${page}&limit=${limit}`
+    `${apiUrls.donor.getDonor.url}?${params.toString()}`
   );
   return response;
 };
@@ -17,18 +21,26 @@ export const createDonor = async (data) => {
   return response;
 };
 
-export const getInActiveDonor = async () => {
+export const getInActiveDonor = async (startDate, endDate) => {
+  const params = new URLSearchParams();
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  const qs = params.toString();
   let response = await mainApi(
     apiUrls?.donor?.getInActiveDonor?.method,
-    apiUrls?.donor?.getInActiveDonor?.url
+    apiUrls?.donor?.getInActiveDonor?.url + (qs ? `?${qs}` : "")
   );
   return response;
 };
 
-export const getDiscardedDonor = async () => {
+export const getDiscardedDonor = async (startDate, endDate) => {
+  const params = new URLSearchParams();
+  if (startDate) params.set("startDate", startDate);
+  if (endDate) params.set("endDate", endDate);
+  const qs = params.toString();
   let response = await mainApi(
     apiUrls?.donor?.getDiscardedDonor?.method,
-    apiUrls?.donor?.getDiscardedDonor?.url
+    apiUrls?.donor?.getDiscardedDonor?.url + (qs ? `?${qs}` : "")
   );
   return response;
 };

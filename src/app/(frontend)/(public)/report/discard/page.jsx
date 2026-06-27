@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { GetMilkDiscardReportDateWise } from "../../../../../services/apiService/report/reportServices";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
+import { CSVLink } from "react-csv";
 import ReportSkeleton from "src/components/ReportSkeleton";
 import toast from "react-hot-toast";
 import { useMilkDiscardReport } from "src/hooks/useReport";
@@ -16,6 +17,47 @@ function DiscardReportPage() {
 
   const { data: baseReportData = {}, isLoading } = useMilkDiscardReport();
   const reportData = searchOverride ?? baseReportData;
+  const isFiltered = !!searchOverride;
+
+  const excelData = useMemo(() => {
+    const rows = [];
+    (reportData?.milkDiscardBeforePastrizution ?? []).forEach((item) => {
+      rows.push({
+        Section: "Discard Before Pasteurization",
+        Description: item.discardRemark ?? "",
+        Volume_ml: item.milkDiscardedBeforePasturization ?? 0,
+      });
+    });
+    (reportData?.milkDiscardAfterPastrizution ?? []).forEach((item) => {
+      rows.push({
+        Section: "Discard After Pasteurization",
+        Description: item.discardRemark ?? "",
+        Volume_ml: item.milkDiscardedAfterPasturizationWithoutCulture ?? 0,
+      });
+    });
+    (reportData?.milkDiscardAfterPastrizutionWithCulture ?? []).forEach((item) => {
+      rows.push({
+        Section: "Discard After Pasteurization and Culture",
+        Description: item.discardRemark ?? "",
+        Volume_ml: item.milkDiscardAfterCulture ?? 0,
+      });
+    });
+    (reportData?.bottleDiscardWithReason ?? []).forEach((item) => {
+      rows.push({
+        Section: "Discarded Bottle Reason Wise",
+        Description:
+          item.reason === null || item.reason === "undefined"
+            ? "Before Reason"
+            : item.reason,
+        Volume_ml: item.volume ?? 0,
+      });
+    });
+    return rows;
+  }, [reportData]);
+
+  const exportFilename = isFiltered
+    ? `Discard_Report_${startingDate}_to_${endingDate}.csv`
+    : "Discard_Report.csv";
 
   const handleSearch = async () => {
     setIsSearchLoading(true);
@@ -46,12 +88,23 @@ function DiscardReportPage() {
     <div className={"px-10 py-5"}>
       <div className="py-5 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-red-600">Discard Report</h1>
-        <Link
-          href="/report/discard/detailed"
-          className="bg-blue-600 px-4 py-2 rounded-lg text-white text-sm hover:bg-blue-700"
-        >
-          View Detailed Report
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={excelData.length === 0}
+          >
+            <CSVLink data={excelData} filename={exportFilename}>
+              Export to Excel
+            </CSVLink>
+          </button>
+          <Link
+            href="/report/discard/detailed"
+            className="bg-blue-600 px-4 py-2 rounded-lg text-white text-sm hover:bg-blue-700"
+          >
+            View Detailed Report
+          </Link>
+        </div>
       </div>
       <div className={"flex items-center gap-5"}>
         <div className={"flex  gap-3 items-center"}>

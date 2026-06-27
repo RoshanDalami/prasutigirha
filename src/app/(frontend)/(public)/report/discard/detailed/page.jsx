@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
+import { CSVLink } from "react-csv";
 import ReportSkeleton from "src/components/ReportSkeleton";
 import Link from "next/link";
 import {
@@ -68,6 +69,57 @@ function DiscardDetailedReportPage() {
   const afterPast = reportData?.milkDiscardedAfterPasteurization ?? [];
   const bottleDiscard = reportData?.bottleDiscardDetails ?? [];
 
+  const excelData = useMemo(() => {
+    const beforePast = reportData?.milkDiscardedBeforePasteurization ?? [];
+    const afterPast = reportData?.milkDiscardedAfterPasteurization ?? [];
+    const bottleDiscard = reportData?.bottleDiscardDetails ?? [];
+    const rows = [];
+    beforePast.forEach((item) => {
+      rows.push({
+        Section: "Discarded Before Pasteurization",
+        Donor_Name: item.donorName ?? "",
+        Date_BS: item.nepaliDate ?? "",
+        Date_AD: item.engDate ?? "",
+        Time: item.collectionTime ?? "",
+        Quantity_ml: item.quantity ?? "",
+        Stored_By: item.storedBy ?? "",
+        Discard_Remark: item.discardRemark ?? "",
+      });
+    });
+    afterPast.forEach((item) => {
+      rows.push({
+        Section: "Discarded After Pasteurization",
+        Batch_Name: item.batchName ?? "",
+        Date_BS: item.nepaliDate ?? "",
+        Date_AD: item.engDate ?? "",
+        Expire_Date: item.expireDate ?? "",
+        Volume_ml: item.collectedVolume ?? "",
+        Culture_Result:
+          item.cultureResult === null || item.cultureResult === undefined
+            ? "N/A"
+            : item.cultureResult
+            ? "Positive"
+            : "Negative",
+        Discard_Remark: item.discardRemarks ?? "",
+      });
+    });
+    bottleDiscard.forEach((item) => {
+      rows.push({
+        Section: "Discarded Bottles",
+        Bottle_Name: item.bottleName ?? "",
+        Date_BS: item.nepaliDate ?? "",
+        Expire_Date: item.expireDate ?? "",
+        Volume_ml: item.volume ?? "",
+        Discard_Remark: item.discardRemark ?? "",
+      });
+    });
+    return rows;
+  }, [reportData]);
+
+  const exportFilename = isFiltered
+    ? `Discard_Detailed_Report_${appliedStart}_to_${appliedEnd}.csv`
+    : "Discard_Detailed_Report.csv";
+
   return (
     <div className="px-10 py-5">
       {/* Header */}
@@ -82,12 +134,23 @@ function DiscardDetailedReportPage() {
             </p>
           )}
         </div>
-        <Link
-          href="/report/discard"
-          className="bg-gray-200 px-4 py-2 rounded-lg text-gray-700 text-sm hover:bg-gray-300"
-        >
-          ← Back to Summary
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={excelData.length === 0}
+          >
+            <CSVLink data={excelData} filename={exportFilename}>
+              Export to Excel
+            </CSVLink>
+          </button>
+          <Link
+            href="/report/discard"
+            className="bg-gray-200 px-4 py-2 rounded-lg text-gray-700 text-sm hover:bg-gray-300"
+          >
+            ← Back to Summary
+          </Link>
+        </div>
       </div>
 
       {/* Date Filter */}
