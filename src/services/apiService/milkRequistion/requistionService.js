@@ -10,6 +10,26 @@ export async function getMilkRequsition (page, limit){
     return response
 }
 
+export async function getAllMilkRequsition(){
+    let response = await mainApi(
+        apiUrls.milkRequsition.getRequistion.method,
+        apiUrls.milkRequsition.getRequistion.url + "?all=true"
+    )
+    return response
+}
+
+export async function getBatchUsageReport(startDate, endDate){
+    const params = new URLSearchParams();
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
+    const query = params.toString();
+    let response = await mainApi(
+        apiUrls.milkRequsition.getBatchUsageReport.method,
+        apiUrls.milkRequsition.getBatchUsageReport.url + (query ? `?${query}` : "")
+    )
+    return response
+}
+
 export async function createMilkRequistion(data){
 let response = await mainApi(
     apiUrls.milkRequsition.createMilkRequistion.method,

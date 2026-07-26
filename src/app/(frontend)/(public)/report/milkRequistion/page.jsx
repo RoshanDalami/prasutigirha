@@ -1,8 +1,9 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { searchRequsition } from "src/services/apiService/search/searchService";
+import { getAllMilkRequsition } from "src/services/apiService/milkRequistion/requistionService";
 import { NepaliDatePicker } from "nepali-datepicker-reactjs";
 import "nepali-datepicker-reactjs/dist/index.css";
 import BikramSambat from "bikram-sambat-js";
@@ -52,11 +53,56 @@ export default function ListVolume() {
     }
   };
 
-  const excelData = requsitionList?.map((item) => ({
-    Baby_Name: item.babyName,
-    Feeding_Date: item.feedingDate,
-    Requisited_Milk: item.totalRequisitedMilk,
-  }));
+  const getBatchNames = (item) =>
+    [
+      ...new Set(
+        item.requisitedMilk
+          ?.map((subItem) => {
+            const [, batchName, batchDate] = subItem.batchNumber?.split("/") ?? [];
+            return batchName ? `${batchName}(${batchDate})` : null;
+          })
+          .filter(Boolean)
+      ),
+    ].join(", ");
+
+  const buildExcelRows = (list) =>
+    list?.map((item) => ({
+      Baby_Name: item.babyName,
+      Feeding_Date: item.feedingDate,
+      Batch_Name: getBatchNames(item),
+      Requisited_Milk: item.totalRequisitedMilk,
+      No_of_Bottle: item.requisitedMilk?.length ?? 0,
+    })) ?? [];
+
+  // The on-screen table only holds the current page (or the date-searched
+  // subset); export needs every matching record, so it's fetched separately
+  // on demand rather than reusing whatever happens to be rendered.
+  const csvLinkRef = useRef(null);
+  const [exportData, setExportData] = useState([]);
+  const [isExporting, setIsExporting] = useState(false);
+
+  useEffect(() => {
+    if (exportData.length > 0 && csvLinkRef.current) {
+      csvLinkRef.current.link.click();
+    }
+  }, [exportData]);
+
+  const handleExport = async () => {
+    if (searchOverride) {
+      // searchRequsition already returns every record in the date range, unpaginated.
+      setExportData(buildExcelRows(searchOverride));
+      return;
+    }
+    setIsExporting(true);
+    try {
+      const response = await getAllMilkRequsition();
+      setExportData(buildExcelRows(response?.data?.data ?? []));
+    } catch (error) {
+      toast.error("Failed to prepare export");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   return (
     <>
@@ -104,11 +150,20 @@ export default function ListVolume() {
             title2={
               <div className="flex flex-col">
                 <div className="flex justify-end gap-3">
-                  <button className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2">
-                    <CSVLink data={excelData} filename="Milk_requistion.csv">
-                      Export to Excel
-                    </CSVLink>
+                  <button
+                    type="button"
+                    className="bg-indigo-600 rounded-md text-white font-bold px-3 py-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    onClick={handleExport}
+                    disabled={isExporting}
+                  >
+                    {isExporting ? "Preparing..." : "Export to Excel"}
                   </button>
+                  <CSVLink
+                    data={exportData}
+                    filename="Milk_requistion.csv"
+                    className="hidden"
+                    ref={csvLinkRef}
+                  />
                 </div>
               </div>
             }
@@ -120,18 +175,20 @@ export default function ListVolume() {
                     <td className="py-3">S.N</td>
                     <td className="py-3">Baby Name</td>
                     <td className="py-3">Feeding Date</td>
+                    <td className="py-3">Batch Name</td>
                     <td className="py-3">Total Milk Feeded</td>
                     <td className="py-3">No. of Bottle</td>
                   </tr>
                 </thead>
                 <tbody>
                   {isLoading ? (
-                    <TableSkeleton rows={8} cols={5} />
+                    <TableSkeleton rows={8} cols={6} />
                   ) : requsitionList?.map((row, index) => (
                     <tr className="border border-x-gray text-center" key={index}>
                       <td className="py-3">{searchOverride ? index + 1 : page * rowsPerPage + index + 1}</td>
                       <td className="py-3">{row?.babyName}</td>
                       <td className="py-3">{row?.feedingDate}</td>
+                      <td className="py-3">{getBatchNames(row)}</td>
                       <td className="py-3">
                         {row.requisitedMilk.map((item) => item.quantity).reduce((acc, amount) => acc + amount, 0)}
                       </td>

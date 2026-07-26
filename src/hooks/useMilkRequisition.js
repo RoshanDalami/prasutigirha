@@ -5,6 +5,7 @@ import {
   getMilkRequsitionById,
   createMilkRequistion,
   deleteMilkRequsition,
+  getBatchUsageReport,
 } from "src/services/apiService/milkRequistion/requistionService";
 import { keys } from "src/lib/queryKeys";
 
@@ -26,6 +27,16 @@ export function useRequisitionById(id) {
       return data ?? {};
     },
     enabled: !!id,
+  });
+}
+
+export function useBatchUsageReport(startDate, endDate) {
+  return useQuery({
+    queryKey: keys.milkRequisition.batchUsage(startDate, endDate),
+    queryFn: async () => {
+      const { data } = await getBatchUsageReport(startDate, endDate);
+      return data ?? [];
+    },
   });
 }
 
