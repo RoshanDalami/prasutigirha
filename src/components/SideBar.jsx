@@ -153,6 +153,7 @@ export default function SideBar() {
         {link:"/report/pasteuriation",name:"Pasteurization"},
         {link:"/report/milkRequistion",name:"Requisition"},
         {link:"/report/batchUsage",name:"Batch Usage"},
+        {link:"/report/bottleUsage",name:"Bottle Usage"},
         {link:"/report/baby",name:"Baby"},
         {link: "/report/report", name: "All Report"},
         {link: "/report/discard", name: "Discard Report"},

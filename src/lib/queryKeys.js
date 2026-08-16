@@ -36,6 +36,7 @@ export const keys = {
     list: ["milkRequisition", "list"],
     byId: (id) => ["milkRequisition", id],
     batchUsage: (startDate, endDate) => ["milkRequisition", "batchUsage", startDate, endDate],
+    bottleUsage: (startDate, endDate) => ["milkRequisition", "bottleUsage", startDate, endDate],
   },
   office: {
     list: ["office", "list"],

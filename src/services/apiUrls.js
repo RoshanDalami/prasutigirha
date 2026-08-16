@@ -298,6 +298,10 @@ const apiUrls = {
       method: "GET",
       url: "/milkRequsition/getBatchUsageReport",
     },
+    getBottleUsageReport: {
+      method: "GET",
+      url: "/milkRequsition/getBottleUsageReport",
+    },
     deleteRequistion: {
       method: "DELETE",
       url: "/milkRequsition/deleteMilkRequsition",

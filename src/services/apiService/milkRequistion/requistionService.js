@@ -30,6 +30,18 @@ export async function getBatchUsageReport(startDate, endDate){
     return response
 }
 
+export async function getBottleUsageReport(startDate, endDate){
+    const params = new URLSearchParams();
+    if (startDate) params.set("startDate", startDate);
+    if (endDate) params.set("endDate", endDate);
+    const query = params.toString();
+    let response = await mainApi(
+        apiUrls.milkRequsition.getBottleUsageReport.method,
+        apiUrls.milkRequsition.getBottleUsageReport.url + (query ? `?${query}` : "")
+    )
+    return response
+}
+
 export async function createMilkRequistion(data){
 let response = await mainApi(
     apiUrls.milkRequsition.createMilkRequistion.method,
